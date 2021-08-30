@@ -16,9 +16,9 @@ Provide your availabilities: https://www.when2meet.com/?12688170-Af7d9
 ## Key Features
 
 
-* Full screen mode
-  - Write distraction free.
-* Cross platform
+* Awesome feature
+  - Explain feature
+* Cool Feature
   - Windows, macOS and Linux ready.
 
 ## How To Use
