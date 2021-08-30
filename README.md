@@ -1,7 +1,5 @@
 # CS-307-Project
 
-Provide your availabilities: https://www.when2meet.com/?12688170-Af7d9
-
 <p align="center">
   <a href="#key-features">Key Features</a> •
   <a href="#how-to-use">How To Use</a> •
