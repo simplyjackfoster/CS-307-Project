@@ -6,8 +6,6 @@ Provide your availabilities: https://www.when2meet.com/?12688170-Af7d9
   <a href="#key-features">Key Features</a> •
   <a href="#how-to-use">How To Use</a> •
   <a href="#download">Download</a> •
-  <a href="#credits">Credits</a> •
-  <a href="#related">Related</a> •
   <a href="#license">License</a>
 </p>
 
