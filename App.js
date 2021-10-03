@@ -17,6 +17,7 @@ import Settings from "./screens/Settings";
 
 
 const AuthStack = createStackNavigator();
+const ProStack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -24,11 +25,25 @@ const Drawer = createDrawerNavigator();
 
 const Home = () => (
   <Tabs.Navigator>
-    <Tabs.Screen name="Profile" component={Profile} options={{ headerShown: false}}></Tabs.Screen>
+    <Tabs.Screen name="ProfileStack" component={ProfileStack}
+     options={{ title: "Profile", headerShown: false}}></Tabs.Screen>
     <Tabs.Screen name="Feed" component={Feed} options={{ headerShown: false}}></Tabs.Screen>
     <Tabs.Screen name="Messages" component={Messages} options={{ headerShown: false}}></Tabs.Screen>
   </Tabs.Navigator>
 );
+
+
+const ProfileStack = () => (
+  <ProStack.Navigator>
+    <ProStack.Screen name="Profile" component={Profile}
+     options={{ title: "Profile", headerShown: false} }/>
+
+    <ProStack.Screen name="EditProfile" component={EditProfile} 
+     options={{ title: "Edit Profile", headerShown: false}}/>
+  </ProStack.Navigator>
+);
+
+
 
 
 

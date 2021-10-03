@@ -7,10 +7,11 @@ import Colors from "../constants/Colors";
 /*
  * This is the screen where the user can edit their profile.
  */
-export default () => {
+export default ( {navigation} ) => {
 	return (
-		<View>
+		<View style={styles.container}>
 			<Text>This is the Edit Profile Screen</Text>
+      <Button title={"Save"} onPress={() => navigation.pop()}></Button>
 		</View>
 	);
 }
