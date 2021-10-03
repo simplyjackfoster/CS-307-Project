@@ -5,12 +5,12 @@ import Colors from '../constants/Colors';
 
 
 /*
- * This is the screen where the user can view their profile.
+ * This is the home screen
  */
 export default () => {
 	return (
 		<View style={styles.container}>
-			<Text>This is the Profile Screen</Text>
+			<Text>This is the Home Screen</Text>
 		</View>
 	);
 }

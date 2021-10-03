@@ -15,7 +15,7 @@ export default ({ navigation }) => {
 		<View style={styles.container}>
 			<Text>This is the Log In Screen</Text>
 			<Button title="Log In" ></Button>
-			<Button title="Sign Up" onPress={() => navigation.navigate("Signup")}></Button>
+			<Button title="Sign Up" onPress={() => navigation.push("Signup")}></Button>
 		</View>
 	);
 }
