@@ -5,12 +5,12 @@ import Colors from '../constants/Colors';
 
 
 /*
- * This is the home screen
+ * This is the settings screen
  */
 export default () => {
 	return (
 		<View style={styles.container}>
-			<Text>This is the Home Screen</Text>
+			<Text>This is the Settings Screen</Text>
 		</View>
 	);
 }
