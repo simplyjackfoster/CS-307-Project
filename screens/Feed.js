@@ -9,23 +9,24 @@ import Colors from "../constants/Colors";
  * users profiles.
  */
 export default () => {
-
 	return (
-		
-		<View>
+		<View style={styles.container}>
 			<Text>This is the Feed Screen</Text>
 		</View>
-
 	);
-
 }
+
+
 
 
 // styles
 const styles = StyleSheet.create({
 
-	container: {
-
-	},
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 
 });

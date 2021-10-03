@@ -9,17 +9,24 @@ import Colors from "../constants/Colors";
  * about themselves.
  */
 export default () => {
-
 	return (
-		<View>
+		<View style={styles.container}>
 			<Text>This is the Questionnaire Screen</Text>
 		</View>
 	);
-
 }
+
+
 
 
 // styles
 const styles = StyleSheet.create({
+
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 
 });

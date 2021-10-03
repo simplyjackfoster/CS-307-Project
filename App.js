@@ -15,7 +15,6 @@ const AuthStack = createStackNavigator();
 
 
 export default function App() {
-
   return (
     <NavigationContainer>
       <AuthStack.Navigator>
@@ -23,10 +22,10 @@ export default function App() {
         <AuthStack.Screen name="Signup" component={Signup}/>
       </AuthStack.Navigator>
     </NavigationContainer>
-
   );
-
 }
+
+
 
 
 // Create styles
