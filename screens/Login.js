@@ -1,5 +1,6 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React from 'react';
+import { StyleSheet, Text, View, Button } from 'react-native';
+
 import Colors from "../constants/Colors";
 
 
@@ -11,9 +12,11 @@ import Colors from "../constants/Colors";
 export default () => {
 
 	return (
+		
 		<View>
 			<Text>This is the Log In Screen</Text>
 		</View>
+
 	);
 
 }
@@ -21,5 +24,9 @@ export default () => {
 
 // styles
 const styles = StyleSheet.create({
+
+	container: {
+
+	},
 
 });
