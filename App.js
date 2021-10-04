@@ -16,7 +16,7 @@ import Profile from "./screens/Profile";
 import EditProfile from "./screens/EditProfile";
 import Account from "./screens/Account";
 import Settings from "./screens/Settings";
-
+import FAQ from "./screens/FAQ";
 
 
 // Create navigators
@@ -45,6 +45,7 @@ const HomeDrawer = () => (
     <Drawer.Screen name="UniRoom" component={HomeTabs}/>
     <Drawer.Screen name="Account" component={Account}/>
     <Drawer.Screen name="Settings" component={Settings}/>
+    <Drawer.Screen name="FAQ" component={FAQ}/>
   </Drawer.Navigator>
 );
 
