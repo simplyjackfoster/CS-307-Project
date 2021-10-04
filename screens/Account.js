@@ -10,12 +10,13 @@ import Colors from "../constants/Colors";
  */
 export default ( {navigation} ) => {
 
-	const { signOut } = React.useContext(AuthContext);
+	const { userToken, setUserToken } = React.useContext(AuthContext);
 
 	return (
+		// If user clicks "Sign Out", set userToken to null.
 		<View style={styles.container}>
 			<Text>This is the Account Screen</Text>
-			<Button title="Sign Out" onPress={() => signOut()}></Button>
+			<Button title="Sign Out" onPress={() => setUserToken(null)}></Button>
 		</View>
 	);
 }

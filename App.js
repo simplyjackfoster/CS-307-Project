@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer'
 
+import { AuthContext } from "./context"
 import Colors from "./constants/Colors";
 import Login from "./screens/Login";
 import Signup from "./screens/Signup";
@@ -13,11 +14,13 @@ import Feed from "./screens/Feed";
 import Messages from "./screens/Messages";
 import Profile from "./screens/Profile";
 import EditProfile from "./screens/EditProfile";
+import Account from "./screens/Account";
 import Settings from "./screens/Settings";
 
 
 
 // Create navigators
+const AuthStack = createStackNavigator();
 const MainStack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -40,6 +43,7 @@ const HomeTabs = () => (
 const HomeDrawer = () => (
   <Drawer.Navigator>
     <Drawer.Screen name="UniRoom" component={HomeTabs}/>
+    <Drawer.Screen name="Account" component={Account}/>
     <Drawer.Screen name="Settings" component={Settings}/>
   </Drawer.Navigator>
 );
@@ -59,20 +63,34 @@ const HomeStack = () => (
 
 
 
-
-
 /*
  * This is the default export for the App.
- * 
- * Starts with
  */
 export default function App() {
+
+  // Set up a state variable to tell whether we are signed in or not
+  const [userToken, setUserToken] = React.useState(null);
+  
   return (
-    <NavigationContainer>
-      <MainStack.Navigator>
-        <MainStack.Screen name="Home" component={HomeStack} options={{ headerShown: false}}/>
-      </MainStack.Navigator>
-    </NavigationContainer>
+    <AuthContext.Provider value={ {userToken, setUserToken} }>
+
+      <NavigationContainer>
+        {userToken ? ( // If we have a userToken, then render the Home page. 
+          <MainStack.Navigator>
+            <MainStack.Screen name="Home" component={HomeStack} options={{ headerShown: false}}/>
+          </MainStack.Navigator>
+        ) : ( // If we DON'T have a userToken, then render the Login page.
+          <AuthStack.Navigator>
+            <AuthStack.Screen name="Login"
+            component={Login} options={{ title: "UniRoom" }}/>
+
+            <AuthStack.Screen name="Signup" component={Signup}
+            options={{ title: "Create Account", headerBackTitle: "Log In" }}/>
+          </AuthStack.Navigator>
+        )}
+      </NavigationContainer>
+
+    </AuthContext.Provider>
   );
 }
 
