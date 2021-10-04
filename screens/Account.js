@@ -17,6 +17,7 @@ export default ( {navigation} ) => {
 		<View style={styles.container}>
 			<Text>This is the Account Screen</Text>
 			<Button title="Sign Out" onPress={() => setUserToken(null)}></Button>
+			<Button title="Delete Account" onPress={() => setUserToken(null)}></Button>
 		</View>
 	);
 }
