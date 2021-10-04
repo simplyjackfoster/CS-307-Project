@@ -16,11 +16,13 @@ import Profile from "./screens/Profile";
 import EditProfile from "./screens/EditProfile";
 import Account from "./screens/Account";
 import ResetPassword from "./screens/ResetPassword";
+import DeleteAccount from './screens/DeleteAccount';
 import Settings from "./screens/Settings";
 import CodeOfConduct from "./screens/CodeOfConduct";
 import PrivacyPolicy from "./screens/PrivacyPolicy";
 import FAQ from "./screens/FAQ";
 import Help from "./screens/Help";
+
 
 
 // Create navigators
@@ -69,6 +71,8 @@ const HomeStackScreen = () => (
      options={{ headerTitle: "Edit Profile", headerBackTitle: "Back" }}/>
     <HomeStack.Screen name="ResetPassword" component={ResetPassword}
      options={{ headerTitle: "Reset Password", headerBackTitle: "Back" }}/>
+    <HomeStack.Screen name="DeleteAccount" component={DeleteAccount}
+     options={{ headerTitle: "Delete Account", headerBackTitle: "Back" }}/>
   </HomeStack.Navigator>
 );
 
