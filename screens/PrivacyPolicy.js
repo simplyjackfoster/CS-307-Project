@@ -1,21 +1,19 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
-import Colors from '../constants/Colors';
+import Colors from "../constants/Colors";
 
 
 /*
- * This is the screen where the user can view their profile.
+ * This is the screen where the user can view the privacy policy.
  */
-export default ( {navigation} ) => {
+export default ({ navigation }) => {
 	return (
 		<View style={styles.container}>
-			<Text>This is the Profile Screen</Text>
-			<Button title="Edit Profile" onPress={() => navigation.push("EditProfile")}></Button>
+			<Text>This is the Privacy Policy Screen</Text>
 		</View>
 	);
 }
-
 
 
 

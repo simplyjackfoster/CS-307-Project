@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 
 import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
-import ResetPassword from './ResetPassword';
 
 
 /*
