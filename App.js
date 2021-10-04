@@ -17,6 +17,8 @@ import EditProfile from "./screens/EditProfile";
 import Account from "./screens/Account";
 import ResetPassword from "./screens/ResetPassword";
 import Settings from "./screens/Settings";
+import CodeOfConduct from "./screens/CodeOfConduct";
+import PrivacyPolicy from "./screens/PrivacyPolicy";
 import FAQ from "./screens/FAQ";
 
 
@@ -46,6 +48,10 @@ const HomeDrawer = () => (
     <Drawer.Screen name="UniRoom" component={HomeTabs}/>
     <Drawer.Screen name="Account" component={Account}/>
     <Drawer.Screen name="Settings" component={Settings}/>
+    <Drawer.Screen name="CodeOfConduct" component={CodeOfConduct}
+     options={{ title: "Code of Conduct"}}/>
+    <Drawer.Screen name="PrivacyPolicy" component={PrivacyPolicy}
+     options={{ title: "Privacy Policy"}}/>
     <Drawer.Screen name="FAQ" component={FAQ}/>
   </Drawer.Navigator>
 );
