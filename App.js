@@ -50,7 +50,7 @@ const HomeTabs = () => (
 // Drawer on the left that includes "HomeTabs" and "Settings" 
 const HomeDrawer = () => (
   <Drawer.Navigator>
-    <Drawer.Screen name="UniRoom" component={HomeTabs}/>
+    <Drawer.Screen name="Home" component={HomeTabs} options={{ headerTitle: "UniRoom" }}/>
     <Drawer.Screen name="Account" component={Account}/>
     <Drawer.Screen name="Settings" component={Settings}/>
     <Drawer.Screen name="CodeOfConduct" component={CodeOfConduct}
