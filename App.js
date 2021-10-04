@@ -15,6 +15,7 @@ import Messages from "./screens/Messages";
 import Profile from "./screens/Profile";
 import EditProfile from "./screens/EditProfile";
 import Account from "./screens/Account";
+import ResetPassword from "./screens/ResetPassword";
 import Settings from "./screens/Settings";
 import FAQ from "./screens/FAQ";
 
@@ -58,6 +59,8 @@ const HomeStack = () => (
      options={{ headerShown: false }}/>
     <Stack.Screen name="EditProfile" component={EditProfile}
      options={{ headerTitle: "Edit Profile", headerBackTitle: "Back" }}/>
+    <Stack.Screen name="ResetPassword" component={ResetPassword}
+     options={{ headerTitle: "Reset Password", headerBackTitle: "Back" }}/>
   </Stack.Navigator>
 );
 
