@@ -16,31 +16,44 @@ import EditProfile from "./screens/EditProfile";
 import Settings from "./screens/Settings";
 
 
-const AuthStack = createStackNavigator();
-const ProStack = createStackNavigator();
+
+// Create navigators
+const MainStack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
+const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 
 
-const Home = () => (
+// Create the tabs at the bottom that include "Profile", "Feed", and "Messages" 
+const HomeTabs = () => (
   <Tabs.Navigator>
-    <Tabs.Screen name="ProfileStack" component={ProfileStack}
-     options={{ title: "Profile", headerShown: false}}></Tabs.Screen>
-    <Tabs.Screen name="Feed" component={Feed} options={{ headerShown: false}}></Tabs.Screen>
-    <Tabs.Screen name="Messages" component={Messages} options={{ headerShown: false}}></Tabs.Screen>
+    <Tabs.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
+    <Tabs.Screen name="Feed" component={Feed} options={{ headerShown: false }}/>
+    <Tabs.Screen name="Messages" component={Messages} options={{ headerShown: false }}/>
   </Tabs.Navigator>
 );
 
 
-const ProfileStack = () => (
-  <ProStack.Navigator>
-    <ProStack.Screen name="Profile" component={Profile}
-     options={{ title: "Profile", headerShown: false} }/>
 
-    <ProStack.Screen name="EditProfile" component={EditProfile} 
-     options={{ title: "Edit Profile", headerShown: false}}/>
-  </ProStack.Navigator>
+// Drawer on the left that includes "HomeTabs" and "Settings" 
+const HomeDrawer = () => (
+  <Drawer.Navigator>
+    <Drawer.Screen name="UniRoom" component={HomeTabs}/>
+    <Drawer.Screen name="Settings" component={Settings}/>
+  </Drawer.Navigator>
+);
+
+
+
+// Stack that allows us to move between the Drawer and Edit Profile
+const HomeStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen name="HomeDrawer" component={HomeDrawer}
+     options={{ headerShown: false }}/>
+    <Stack.Screen name="EditProfile" component={EditProfile}
+     options={{ headerTitle: "Edit Profile", headerBackTitle: "Back" }}/>
+  </Stack.Navigator>
 );
 
 
@@ -48,27 +61,25 @@ const ProfileStack = () => (
 
 
 
+/*
+ * This is the default export for the App.
+ * 
+ * Starts with
+ */
 export default function App() {
   return (
     <NavigationContainer>
-      <Drawer.Navigator>
-        <Drawer.Screen name="UniRoom" component={Home}/>
-        <Drawer.Screen name="Settings" component={Settings}/>
-      </Drawer.Navigator>        
+      <MainStack.Navigator>
+        <MainStack.Screen name="Home" component={HomeStack} options={{ headerShown: false}}/>
+      </MainStack.Navigator>
     </NavigationContainer>
   );
 }
 
-/*
-      <AuthStack.Navigator>
-        <AuthStack.Screen name="Login" component={Login} options={{ title: "Sign In" }}/>
-        <AuthStack.Screen name="Signup" component={Signup} options={{ title: "Create Account"}}/>
-      </AuthStack.Navigator>
- */     
 
 
 
-// Create styles
+// styles
 const styles = StyleSheet.create({
 
   container: {
