@@ -11,6 +11,7 @@ import Login from "./screens/Login";
 import Signup from "./screens/Signup";
 import Questionnaire from "./screens/Questionnaire";
 import Feed from "./screens/Feed";
+import Matches from "./screens/Matches";
 import Messages from "./screens/Messages";
 import Profile from "./screens/Profile";
 import EditProfile from "./screens/EditProfile";
@@ -39,6 +40,7 @@ const HomeTabs = () => (
   <Tabs.Navigator>
     <Tabs.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
     <Tabs.Screen name="Feed" component={Feed} options={{ headerShown: false }}/>
+    <Tabs.Screen name="Matches" component={Matches} options={{ headerShown: false }}/>
     <Tabs.Screen name="Messages" component={Messages} options={{ headerShown: false }}/>
   </Tabs.Navigator>
 );
