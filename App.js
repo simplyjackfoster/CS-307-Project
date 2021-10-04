@@ -20,6 +20,7 @@ import Settings from "./screens/Settings";
 import CodeOfConduct from "./screens/CodeOfConduct";
 import PrivacyPolicy from "./screens/PrivacyPolicy";
 import FAQ from "./screens/FAQ";
+import Help from "./screens/Help";
 
 
 // Create navigators
@@ -53,6 +54,7 @@ const HomeDrawer = () => (
     <Drawer.Screen name="PrivacyPolicy" component={PrivacyPolicy}
      options={{ title: "Privacy Policy"}}/>
     <Drawer.Screen name="FAQ" component={FAQ}/>
+    <Drawer.Screen name="Help" component={Help}/>
   </Drawer.Navigator>
 );
 
