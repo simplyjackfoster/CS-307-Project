@@ -24,10 +24,10 @@ import Help from "./screens/Help";
 
 
 // Create navigators
+const RootStack = createStackNavigator();
 const AuthStack = createStackNavigator();
-const MainStack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
-const Stack = createStackNavigator();
+const HomeStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 
@@ -60,16 +60,44 @@ const HomeDrawer = () => (
 
 
 
-// Stack that allows us to move between the Drawer and Edit Profile
-const HomeStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen name="HomeDrawer" component={HomeDrawer}
+// Stack that allows us to move between the Drawer, Edit Profile, and Reset Password
+const HomeStackScreen = () => (
+  <HomeStack.Navigator>
+    <HomeStack.Screen name="HomeDrawer" component={HomeDrawer}
      options={{ headerShown: false }}/>
-    <Stack.Screen name="EditProfile" component={EditProfile}
+    <HomeStack.Screen name="EditProfile" component={EditProfile}
      options={{ headerTitle: "Edit Profile", headerBackTitle: "Back" }}/>
-    <Stack.Screen name="ResetPassword" component={ResetPassword}
+    <HomeStack.Screen name="ResetPassword" component={ResetPassword}
      options={{ headerTitle: "Reset Password", headerBackTitle: "Back" }}/>
-  </Stack.Navigator>
+  </HomeStack.Navigator>
+);
+
+
+// Stack that allows us to navigate during authentication
+const AuthStackScreen = () => (
+  <AuthStack.Navigator>
+    <AuthStack.Screen name="Login"
+    component={Login} options={{ title: "UniRoom" }}/>
+
+    <AuthStack.Screen name="Signup" component={Signup}
+    options={{ title: "Create Account", headerBackTitle: "Log In" }}/>
+  </AuthStack.Navigator>
+);
+
+
+
+// The root stack for the authentication screen and the home screen
+const RootStackScreen = ({ userToken }) => (
+  // If we have a userToken, render home screen. Otherwise render auth screen.
+  <RootStack.Navigator>
+    {userToken ? (
+      <RootStack.Screen name="Home" component={HomeStackScreen}
+       options={{ headerShown: false, animationEnabled: false}}/>
+    ) : (
+      <RootStack.Screen name="Auth" component={AuthStackScreen}
+       options={{ headerShown: false, animationEnabled: false}}/>
+    )}
+  </RootStack.Navigator>
 );
 
 
@@ -85,23 +113,9 @@ export default function App() {
   
   return (
     <AuthContext.Provider value={ {userToken, setUserToken} }>
-
       <NavigationContainer>
-        {userToken ? ( // If we have a userToken, then render the Home page. 
-          <MainStack.Navigator>
-            <MainStack.Screen name="Home" component={HomeStack} options={{ headerShown: false}}/>
-          </MainStack.Navigator>
-        ) : ( // If we DON'T have a userToken, then render the Login page.
-          <AuthStack.Navigator>
-            <AuthStack.Screen name="Login"
-            component={Login} options={{ title: "UniRoom" }}/>
-
-            <AuthStack.Screen name="Signup" component={Signup}
-            options={{ title: "Create Account", headerBackTitle: "Log In" }}/>
-          </AuthStack.Navigator>
-        )}
+        <RootStackScreen userToken={userToken}/>
       </NavigationContainer>
-
     </AuthContext.Provider>
   );
 }
