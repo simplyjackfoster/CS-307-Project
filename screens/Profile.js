@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, Image } from 'react-native';
 
 import Colors from '../constants/Colors';
+import EditProfile from './EditProfile';
 
 
 /*
@@ -10,8 +11,17 @@ import Colors from '../constants/Colors';
 export default ( {navigation} ) => {
 	return (
 		<View style={styles.container}>
-			<Text>This is the Profile Screen</Text>
-			<Button title="Edit Profile" onPress={() => navigation.push("EditProfile")}></Button>
+
+			<View style={styles.container}>
+				<Image source={ require("../images/default-profile-picture.jpeg") } style={styles.profilePic} 
+				options={{ }}/>			
+				<Button title="Edit Profile" onPress={() => navigation.push("EditProfile")}></Button>
+			</View>
+
+			<View style={styles.container}>
+				<Text>This is the Profile Screen</Text>
+			</View>
+
 		</View>
 	);
 }
@@ -28,5 +38,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
+	profilePic: {
+		width: 75,
+		height: 75,
+		borderRadius: 200, // makes image circular
+	},
+
 
 });
