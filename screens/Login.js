@@ -17,14 +17,28 @@ export default ({ navigation }) => {
 	return (
 		// If the user clicks "Log In", then set userToken to a non-null value.
 		<View style={styles.container}>
+
+			{/* UniRoom logo */}
+
+			{/* Log In (text) */}
 			<Text>This is the Log In Screen</Text>
+			
+			{/* Email (text), email (field) */}
+			
+			{/* Password (text), password (field, with black dots) */}
+			
+			{/* Log In (button) */}
 			<Button title="Log In" onPress={() => setUserToken('asdf')}></Button>
+
+			{/* New to UniRoom? (text), Sign Up (button) */}
+			<Text>New to UniRoom?</Text>
 			<Button title="Sign Up" onPress={() => navigation.push("Signup")}></Button>
+
+
 		</View>
 	);
 }
 
-// testing login-ui branch
 
 
 // styles
