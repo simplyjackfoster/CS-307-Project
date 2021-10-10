@@ -87,6 +87,9 @@ const AuthStackScreen = () => (
 
     <AuthStack.Screen name="Signup" component={Signup}
     options={{ title: "Create Account", headerBackTitle: "Log In" }}/>
+
+    <HomeStack.Screen name="ResetPassword" component={ResetPassword}
+     options={{ headerTitle: "Reset Password", headerBackTitle: "Back" }}/>
   </AuthStack.Navigator>
 );
 

@@ -12,6 +12,10 @@ import {
 import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
 import { render } from 'react-dom';
+<<<<<<< HEAD
+=======
+import ResetPassword from './ResetPassword';
+>>>>>>> login-ui
 
 
 
@@ -28,8 +32,11 @@ export default ({ navigation }) => {
 	const [email, onChangeEmail] = React.useState("email");
 	const [password, onChangePassword] = React.useState("password");
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> login-ui
 	return (
 		// If the user clicks "Log In", then set userToken to a non-null value.
 		<View style={styles.container}>
@@ -73,8 +80,14 @@ export default ({ navigation }) => {
 			<Text>New to UniRoom?</Text>
 			<Button title="Sign Up" onPress={() => navigation.push("Signup")}></Button>
 
+<<<<<<< HEAD
 			{/* Forgot password (button) */}
 			
+=======
+			{/* Forgot password button */}
+			<Button title="Forgot password?" onPress={() => navigation.push("ResetPassword")}></Button>
+
+>>>>>>> login-ui
 
 
 		</View>
@@ -92,6 +105,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
+<<<<<<< HEAD
     // justifyContent: 'center',
   },
 
@@ -112,6 +126,27 @@ const styles = StyleSheet.create({
 	fontSize: 20,
   },
 
+=======
+  },
+
+  logo: {
+	height: 250,
+	width: 350,
+	margin: 25,
+	borderRadius: 50,
+  },
+
+  login: {
+	fontSize: 35,
+	textAlign: 'left',
+	
+  },
+
+  email: {
+	fontSize: 20,
+  },
+
+>>>>>>> login-ui
   emailInput: {
 	height: 40,
 	width: 200,
