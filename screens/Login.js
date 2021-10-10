@@ -75,11 +75,24 @@ export default ({ navigation }) => {
 		
 
 				{/* New to UniRoom? (text), Sign Up (button) */}
-				<Text>New to UniRoom?</Text>
-				<Button title="Sign Up" onPress={() => navigation.push("Signup")}></Button>
+				<Text style={styles.signupPrompt}>New to UniRoom?</Text>
+				<TouchableOpacity
+					style={styles.signupButton}
+					onPress={() => navigation.push("Signup")}				
+				>
+					<Text>Sign Up</Text>
+				</TouchableOpacity>
+
 
 				{/* Forgot password button */}
-				<Button title="Forgot password?" onPress={() => navigation.push("ResetPassword")}></Button>
+				{/* <Button style={styles.forgotButton} title="Forgot password?" onPress={() => navigation.push("ResetPassword")}></Button> */}
+
+				<TouchableOpacity
+					style={styles.forgotButton}
+					onPress={() => navigation.push("ResetPassword")}				
+				>
+					<Text style={styles.forgotText}>Forgot Password?</Text>
+				</TouchableOpacity>
 			</View>
 
 		</View>
@@ -155,11 +168,38 @@ const styles = StyleSheet.create({
 	borderRadius: 5,
 	margin: 10,
 	padding: 5,
-	width: 60,
+	width: 55,
 	alignSelf: 'flex-end',
+	textAlign: 'center',
   },
 
+  signupPrompt: {
+	fontSize: 18,
+	marginLeft: 12,
+	
+  },
 
+  signupButton: {
+	backgroundColor: '#66a3dd',
+	borderWidth: 2,
+	borderRadius: 5,
+	margin: 10,
+	padding: 5,
+	width: 65,
+	alignSelf: 'flex-end',
+	textAlign: 'center',
+  },
+
+  forgotButton: {
+	margin: 12,
+	alignSelf: 'flex-start',
+  },
+
+  forgotText: {
+	fontSize: 18, 
+	color: '#66a3ff',
+	textDecorationLine: 'underline',
+  },
 
 
 });
