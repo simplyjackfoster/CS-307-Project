@@ -12,6 +12,7 @@ import {
 import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
 import { render } from 'react-dom';
+import ResetPassword from './ResetPassword';
 
 
 
@@ -27,8 +28,6 @@ export default ({ navigation }) => {
 	/* Functions to handle text input changes */
 	const [email, onChangeEmail] = React.useState("email");
 	const [password, onChangePassword] = React.useState("password");
-
-
 
 	return (
 		// If the user clicks "Log In", then set userToken to a non-null value.
@@ -73,6 +72,10 @@ export default ({ navigation }) => {
 			<Text>New to UniRoom?</Text>
 			<Button title="Sign Up" onPress={() => navigation.push("Signup")}></Button>
 
+			{/* Forgot password button */}
+			<Button title="Forgot password?" onPress={() => navigation.push("ResetPassword")}></Button>
+
+
 
 		</View>
 	);
@@ -89,7 +92,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    // justifyContent: 'center',
   },
 
   logo: {
