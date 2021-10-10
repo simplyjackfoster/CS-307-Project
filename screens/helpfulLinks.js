@@ -1,3 +1,4 @@
+import React from 'react';
 import { Linking } from 'react-native';
 <Text style={{color: 'blue'}}
       onPress={() => Linking.openURL('https://www.housing.purdue.edu/')}>
