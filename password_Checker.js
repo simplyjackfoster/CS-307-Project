@@ -1,13 +1,24 @@
-//import React from "react";
+import React from "react";
+import {StyleSheet, TextInput} from "react-native";
 
-// Password Strength Checker Script - Will need to be modified for usage with iOS UI
+// Password Strength Checker Script - Being modified for usage with iOS UI
 userPassword = "";
 substringLib = ["pass", "password", "word", "purdue", "boiler", "boilermaker", "daniels", "123", "123456789"];
-const r = require("readline");
-const rInt = r.createInterface({input: process.stdin, output: process.stdout});
+//const r = require("readline");
+//const rInt = r.createInterface({input: process.stdin, output: process.stdout});
 invalidPassword = 0;
 
-do
+/*
+ * Create a universal password checking user interface that can be extended to the Login screen and 
+ * the password reset screen.
+ */
+const PasswordCheck = () => {
+    //HANDLE USER INPUT -- used commented out logic below to handle the information.
+    return;
+};
+
+
+/*do
 {
     rInt.question("Enter your password: ", (userPassword) =>
     {
@@ -50,4 +61,4 @@ do
     });
 } while (invalidPassword == 1);
 
-console.log("Your password has been successfully set!\n");
+console.log("Your password has been successfully set!\n");*/
