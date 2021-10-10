@@ -41,8 +41,6 @@ export default ({ navigation }) => {
 			/>
 
 			<View style={styles.form}>
-				{/* Log In (text) */}
-				{/* <Text style={styles.login}>Log In</Text> */}
 				
 				{/* Email (text), email (field) */}
 				<Text style={styles.email}>Email</Text>
@@ -53,7 +51,6 @@ export default ({ navigation }) => {
 					placeholder={email}
 					/>
 				</SafeAreaView>
-
 
 				
 				{/* Password (text), password (field, with black dots) */}
@@ -75,13 +72,7 @@ export default ({ navigation }) => {
 					<Text>Log In</Text>
 				</TouchableOpacity>
 
-				{/* 				
-				<Button
-				 	style={styles.loginButton} 
-					color="#66a3ff"
-					title="Log In" 
-					onPress={() => setUserToken('asdf')}
-				/> */}
+		
 
 				{/* New to UniRoom? (text), Sign Up (button) */}
 				<Text>New to UniRoom?</Text>
@@ -105,7 +96,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    // alignItems: 'center',
   },
 
   logo: {
@@ -126,7 +116,6 @@ const styles = StyleSheet.create({
   login: {
 	fontSize: 35,
 	textAlign: 'left',
-	
   },
 
   email: {
@@ -170,7 +159,7 @@ const styles = StyleSheet.create({
 	alignSelf: 'flex-end',
   },
 
-  
+
 
 
 });
