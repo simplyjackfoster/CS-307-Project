@@ -7,15 +7,13 @@ import {
 	Image,
 	TextInput,
 	SafeAreaView,
+	TouchableOpacity
 } from 'react-native';
 
 import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
 import { render } from 'react-dom';
-<<<<<<< HEAD
-=======
-import ResetPassword from './ResetPassword';
->>>>>>> login-ui
+import { color } from 'react-native-reanimated';
 
 
 
@@ -32,11 +30,6 @@ export default ({ navigation }) => {
 	const [email, onChangeEmail] = React.useState("email");
 	const [password, onChangePassword] = React.useState("password");
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> login-ui
 	return (
 		// If the user clicks "Log In", then set userToken to a non-null value.
 		<View style={styles.container}>
@@ -47,48 +40,56 @@ export default ({ navigation }) => {
 				source={require('../images/logo.png')}
 			/>
 
-			{/* Log In (text) */}
-			<Text style={styles.login}>Log In</Text>
-			
-			{/* Email (text), email (field) */}
-			<Text style={styles.email}>Email</Text>
-			<SafeAreaView>
-				<TextInput
-				style={styles.emailInput}
-				onChangeText={onChangeEmail}
-				placeholder={email}
-				/>
-			</SafeAreaView>
+			<View style={styles.form}>
+				{/* Log In (text) */}
+				{/* <Text style={styles.login}>Log In</Text> */}
+				
+				{/* Email (text), email (field) */}
+				<Text style={styles.email}>Email</Text>
+				<SafeAreaView>
+					<TextInput
+					style={styles.emailInput}
+					onChangeText={onChangeEmail}
+					placeholder={email}
+					/>
+				</SafeAreaView>
 
 
-			
-			{/* Password (text), password (field, with black dots) */}
-			<Text style={styles.password}>Password</Text>
-			<SafeAreaView>
-				<TextInput
-				style={styles.passwordInput}
-				onChangeText={onChangePassword}
-				placeholder={password}
-				/>
-			</SafeAreaView>
+				
+				{/* Password (text), password (field, with black dots) */}
+				<Text style={styles.password}>Password</Text>
+				<SafeAreaView>
+					<TextInput
+					style={styles.passwordInput}
+					onChangeText={onChangePassword}
+					placeholder={password}
+					/>
+				</SafeAreaView>
 
-			
-			{/* Log In (button) */}
-			<Button title="Log In" onPress={() => setUserToken('asdf')}></Button>
+				
+				{/* Log In (button) */}
+				<TouchableOpacity
+					style={styles.loginButton}
+					onPress={() => setUserToken('asdf')}
+				>
+					<Text>Log In</Text>
+				</TouchableOpacity>
 
-			{/* New to UniRoom? (text), Sign Up (button) */}
-			<Text>New to UniRoom?</Text>
-			<Button title="Sign Up" onPress={() => navigation.push("Signup")}></Button>
+				{/* 				
+				<Button
+				 	style={styles.loginButton} 
+					color="#66a3ff"
+					title="Log In" 
+					onPress={() => setUserToken('asdf')}
+				/> */}
 
-<<<<<<< HEAD
-			{/* Forgot password (button) */}
-			
-=======
-			{/* Forgot password button */}
-			<Button title="Forgot password?" onPress={() => navigation.push("ResetPassword")}></Button>
+				{/* New to UniRoom? (text), Sign Up (button) */}
+				<Text>New to UniRoom?</Text>
+				<Button title="Sign Up" onPress={() => navigation.push("Signup")}></Button>
 
->>>>>>> login-ui
-
+				{/* Forgot password button */}
+				<Button title="Forgot password?" onPress={() => navigation.push("ResetPassword")}></Button>
+			</View>
 
 		</View>
 	);
@@ -104,16 +105,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-<<<<<<< HEAD
-    // justifyContent: 'center',
+    // alignItems: 'center',
   },
 
   logo: {
 	height: 250,
 	width: 350,
-	margin: 25,
+	margin: 20,
 	borderRadius: 50,
+	alignSelf: 'center',
+  },
+
+  form: {
+	margin: 20,
+	textAlign: 'left',
+	alignSelf: 'center',
+
   },
 
   login: {
@@ -124,32 +131,14 @@ const styles = StyleSheet.create({
 
   email: {
 	fontSize: 20,
+	margin: 12,
+	marginBottom: 0,
+
   },
 
-=======
-  },
-
-  logo: {
-	height: 250,
-	width: 350,
-	margin: 25,
-	borderRadius: 50,
-  },
-
-  login: {
-	fontSize: 35,
-	textAlign: 'left',
-	
-  },
-
-  email: {
-	fontSize: 20,
-  },
-
->>>>>>> login-ui
   emailInput: {
 	height: 40,
-	width: 200,
+	width: 250,
 	margin: 10,
 	padding: 10,
 	borderWidth: 1,
@@ -158,16 +147,30 @@ const styles = StyleSheet.create({
 
   password: {
 	fontSize: 20,
+	margin: 12,
+	marginBottom: 0,
   },
 
   passwordInput: {
 	height: 40,
-	width: 200,
+	width: 250,
 	margin: 10,
 	padding: 10,
 	borderWidth: 1,
 	borderRadius: 10,
   },
+
+  loginButton: {
+	backgroundColor: '#66a3dd',
+	borderWidth: 2,
+	borderRadius: 5,
+	margin: 10,
+	padding: 5,
+	width: 60,
+	alignSelf: 'flex-end',
+  },
+
+  
 
 
 });
