@@ -1,8 +1,23 @@
-import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import React, {Component} from 'react';
+import { 
+	StyleSheet, 
+	Text, 
+	View, 
+	Button,
+	Image
+} from 'react-native';
 
 import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
+import { render } from 'react-dom';
+
+
+
+
+
+
+
+
 
 
 /*
@@ -14,29 +29,38 @@ export default ({ navigation }) => {
 
 	const { userToken, setUserToken } = React.useContext(AuthContext);
 
-	return (
-		// If the user clicks "Log In", then set userToken to a non-null value.
-		<View style={styles.container}>
+	// render() {
 
-			{/* UniRoom logo */}
+		return (
+			// If the user clicks "Log In", then set userToken to a non-null value.
+			<View style={styles.container}>
+				<Image
+					style={styles.logo}
+					source={require('../images/logo.png')}
+				/>
+	
+				{/* UniRoom logo */}
+	
+				{/* Log In (text) */}
+				<Text>This is the Log In Screen</Text>
+				
+				{/* Email (text), email (field) */}
+				
+				{/* Password (text), password (field, with black dots) */}
+				
+				{/* Log In (button) */}
+				<Button title="Log In" onPress={() => setUserToken('asdf')}></Button>
+	
+				{/* New to UniRoom? (text), Sign Up (button) */}
+				<Text>New to UniRoom?</Text>
+				<Button title="Sign Up" onPress={() => navigation.push("Signup")}></Button>
+	
+	
+			</View>
+		);
 
-			{/* Log In (text) */}
-			<Text>This is the Log In Screen</Text>
-			
-			{/* Email (text), email (field) */}
-			
-			{/* Password (text), password (field, with black dots) */}
-			
-			{/* Log In (button) */}
-			<Button title="Log In" onPress={() => setUserToken('asdf')}></Button>
+	// }
 
-			{/* New to UniRoom? (text), Sign Up (button) */}
-			<Text>New to UniRoom?</Text>
-			<Button title="Sign Up" onPress={() => navigation.push("Signup")}></Button>
-
-
-		</View>
-	);
 }
 
 
@@ -48,7 +72,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    // justifyContent: 'center',
+  },
+
+  logo: {
+	height: 200,
+	width: 250,
+	margin: 25,
+	borderRadius: 50
+	
   },
 
 });

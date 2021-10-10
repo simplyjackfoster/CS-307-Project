@@ -11,7 +11,7 @@ import Colors from "../constants/Colors";
 export default ( {navigation} ) => {
 
 	const { userToken, setUserToken } = React.useContext(AuthContext);
-
+	
 	return (
 		// If user clicks "Sign Out", set userToken to null.
 		<View style={styles.container}>
