@@ -1,12 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, Image, TouchableOpacity } from 'react-native';
- import {
-// 	Avatar,
- 	Title,
-// 	Caption,
-// 	Text,
-// 	TouchableRipple
- } from 'react-native-paper';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 /*
@@ -14,32 +8,31 @@ import { StyleSheet, Text, View, Button, Image, TouchableOpacity } from 'react-n
  */
 export default ( {navigation} ) => {
 	return (
-		<View style={styles.container}>
+		<ScrollView style={styles.container}>
 			<TouchableOpacity
 					style={styles.editProfile}
 					onPress={() => navigation.push("EditProfile")}				
 			>
-				<Text style={styles.textEditProfile}>Edit Profile</Text>
+				<Text style={styles.textEditProfile}>Edit Profile...</Text>
 			</TouchableOpacity>
 			<View style={styles.imageWrapper}>
 				<Image source={ require("../images/default-profile-picture.jpeg") } style={styles.profilePic} />
+				<Text style={styles.imageName}> John Doe</Text>
+			</View>
+
+			<View style={{marginTop: 40}}/>
+
+			<View style={styles.infoWrapper}>
+				<Icon name="envelope" size={25} color={'#2b31d4'} style={styles.icon}/>
+				<Text style={styles.infoHeader}>Email:</Text>
+				<Text style={styles.infoContent}>johnDoe@purdue.edu</Text>
 			</View>
 			<View style={styles.infoWrapper}>
-				<Text style={styles.information}>Name: John Doe</Text>
-				<Text style={styles.information}>Email: johnDoe@purdue.edu</Text>
+				<Icon name="phone-square" size={25} color={'#2b31d4'} style={styles.icon}/>
+				<Text style={styles.infoHeader}>Phone:</Text>
+				<Text style={styles.infoContent}>123-456-7890</Text>
 			</View>
-		</View>
-		// <View style={styles.container}>
-
-		// 	<View style={styles.container}>
-		// 		
-				
-		// 		options={{ }}/>
-
-		// 		<Text>Name: </Text>
-		// 		<Text styles={styles.name}>John Doe</Text>
-		// 	</View>
-		// </View>
+		</ScrollView>
 	);
 }
 
@@ -64,7 +57,12 @@ textEditProfile: {
 },
 
 imageWrapper: {
-	marginBottom: 20,
+},
+
+imageName: {
+	textAlign: 'center',
+	fontSize: 25,
+	fontWeight: 'bold',
 },
 
 profilePic: {
@@ -76,14 +74,25 @@ profilePic: {
 
 infoWrapper: {
 	textAlign: 'left',
-	alignSelf: 'flex-start',
-	marginLeft: 15,
+	flexDirection: 'row',
+	marginLeft: 25,
+	marginBottom: 25,
 },
 
-information: {
-	margin: 20,
-	fontSize: 20,
+icon: {
 },
+
+infoHeader: {
+	fontSize: 20,
+	marginLeft: 8,
+	marginRight: 8,
+	fontWeight: 'bold',
+},
+
+infoContent: {
+	alignSelf: 'flex-start',
+	fontSize: 20,
+}
 
 
 });
