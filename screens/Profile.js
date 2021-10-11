@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
-
-import Colors from '../constants/Colors';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 /*
@@ -9,10 +8,31 @@ import Colors from '../constants/Colors';
  */
 export default ( {navigation} ) => {
 	return (
-		<View style={styles.container}>
-			<Text>This is the Profile Screen</Text>
-			<Button title="Edit Profile" onPress={() => navigation.push("EditProfile")}></Button>
-		</View>
+		<ScrollView style={styles.container}>
+			<TouchableOpacity
+					style={styles.editProfile}
+					onPress={() => navigation.push("EditProfile")}				
+			>
+				<Text style={styles.textEditProfile}>Edit Profile...</Text>
+			</TouchableOpacity>
+			<View style={styles.imageWrapper}>
+				<Image source={ require("../images/default-profile-picture.jpeg") } style={styles.profilePic} />
+				<Text style={styles.imageName}> John Doe</Text>
+			</View>
+
+			<View style={{marginTop: 40}}/>
+
+			<View style={styles.infoWrapper}>
+				<Icon name="envelope" size={25} color={'#2b31d4'} style={styles.icon}/>
+				<Text style={styles.infoHeader}>Email:</Text>
+				<Text style={styles.infoContent}>johnDoe@purdue.edu</Text>
+			</View>
+			<View style={styles.infoWrapper}>
+				<Icon name="phone-square" size={25} color={'#2b31d4'} style={styles.icon}/>
+				<Text style={styles.infoHeader}>Phone:</Text>
+				<Text style={styles.infoContent}>123-456-7890</Text>
+			</View>
+		</ScrollView>
 	);
 }
 
@@ -22,11 +42,57 @@ export default ( {navigation} ) => {
 // styles
 const styles = StyleSheet.create({
 
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+container: {
+	backgroundColor: '#fff',
+},
+
+editProfile: {
+	alignSelf: 'flex-end',
+},
+
+textEditProfile: {
+	margin: 20,
+	fontSize: 18,
+	color: '#66a3ff',
+},
+
+imageWrapper: {
+},
+
+imageName: {
+	textAlign: 'center',
+	fontSize: 25,
+	fontWeight: 'bold',
+},
+
+profilePic: {
+	width: 300,
+	height: 300,
+	borderRadius: 200, // makes image circular
+	alignSelf: 'center',
+},
+
+infoWrapper: {
+	textAlign: 'left',
+	flexDirection: 'row',
+	marginLeft: 25,
+	marginBottom: 25,
+},
+
+icon: {
+},
+
+infoHeader: {
+	fontSize: 20,
+	marginLeft: 8,
+	marginRight: 8,
+	fontWeight: 'bold',
+},
+
+infoContent: {
+	alignSelf: 'flex-start',
+	fontSize: 20,
+}
+
 
 });
