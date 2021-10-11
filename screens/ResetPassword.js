@@ -16,8 +16,6 @@ export default ( {navigation} ) => {
 	);
 }
 
-
-
 // styles
 const styles = StyleSheet.create({
 

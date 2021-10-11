@@ -1,8 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, Image } from 'react-native';
-
-import Colors from '../constants/Colors';
-import EditProfile from './EditProfile';
+import { StyleSheet, Text, View, Button, Image, TouchableOpacity } from 'react-native';
+ import {
+// 	Avatar,
+ 	Title,
+// 	Caption,
+// 	Text,
+// 	TouchableRipple
+ } from 'react-native-paper';
 
 
 /*
@@ -11,18 +15,31 @@ import EditProfile from './EditProfile';
 export default ( {navigation} ) => {
 	return (
 		<View style={styles.container}>
-
-			<View style={styles.container}>
-				<Image source={ require("../images/default-profile-picture.jpeg") } style={styles.profilePic} 
-				options={{ }}/>			
-				<Button title="Edit Profile" onPress={() => navigation.push("EditProfile")}></Button>
+			<TouchableOpacity
+					style={styles.editProfile}
+					onPress={() => navigation.push("EditProfile")}				
+			>
+				<Text style={styles.textEditProfile}>Edit Profile</Text>
+			</TouchableOpacity>
+			<View style={styles.imageWrapper}>
+				<Image source={ require("../images/default-profile-picture.jpeg") } style={styles.profilePic} />
 			</View>
-
-			<View style={styles.container}>
-				<Text>This is the Profile Screen</Text>
+			<View style={styles.infoWrapper}>
+				<Text style={styles.information}>Name: John Doe</Text>
+				<Text style={styles.information}>Email: johnDoe@purdue.edu</Text>
 			</View>
-
 		</View>
+		// <View style={styles.container}>
+
+		// 	<View style={styles.container}>
+		// 		
+				
+		// 		options={{ }}/>
+
+		// 		<Text>Name: </Text>
+		// 		<Text styles={styles.name}>John Doe</Text>
+		// 	</View>
+		// </View>
 	);
 }
 
@@ -32,18 +49,41 @@ export default ( {navigation} ) => {
 // styles
 const styles = StyleSheet.create({
 
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+container: {
+	backgroundColor: '#fff',
+},
 
-	profilePic: {
-		width: 75,
-		height: 75,
-		borderRadius: 200, // makes image circular
-	},
+editProfile: {
+	alignSelf: 'flex-end',
+},
+
+textEditProfile: {
+	margin: 20,
+	fontSize: 18,
+	color: '#66a3ff',
+},
+
+imageWrapper: {
+	marginBottom: 20,
+},
+
+profilePic: {
+	width: 300,
+	height: 300,
+	borderRadius: 200, // makes image circular
+	alignSelf: 'center',
+},
+
+infoWrapper: {
+	textAlign: 'left',
+	alignSelf: 'flex-start',
+	marginLeft: 15,
+},
+
+information: {
+	margin: 20,
+	fontSize: 20,
+},
 
 
 });
