@@ -72,7 +72,6 @@ export default ({ navigation }) => {
 					<Text>Log In</Text>
 				</TouchableOpacity>
 
-		
 
 				{/* New to UniRoom? (text), Sign Up (button) */}
 				<Text style={styles.signupPrompt}>New to UniRoom?</Text>
@@ -85,7 +84,6 @@ export default ({ navigation }) => {
 
 
 				{/* Forgot password button */}
-				{/* <Button style={styles.forgotButton} title="Forgot password?" onPress={() => navigation.push("ResetPassword")}></Button> */}
 
 				<TouchableOpacity
 					style={styles.forgotButton}
@@ -108,7 +106,7 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
   },
 
   logo: {
@@ -119,11 +117,12 @@ const styles = StyleSheet.create({
 	alignSelf: 'center',
   },
 
+  /* Form styles */
+
   form: {
 	margin: 20,
 	textAlign: 'left',
 	alignSelf: 'center',
-
   },
 
   login: {
@@ -135,7 +134,6 @@ const styles = StyleSheet.create({
 	fontSize: 20,
 	margin: 12,
 	marginBottom: 0,
-
   },
 
   emailInput: {
@@ -163,7 +161,7 @@ const styles = StyleSheet.create({
   },
 
   loginButton: {
-	backgroundColor: '#66a3dd',
+	backgroundColor: Colors.lightBlue,
 	borderWidth: 2,
 	borderRadius: 5,
 	margin: 10,
@@ -173,14 +171,16 @@ const styles = StyleSheet.create({
 	textAlign: 'center',
   },
 
+
+  /* Bottom section titles */
+
   signupPrompt: {
 	fontSize: 18,
 	marginLeft: 12,
-	
   },
 
   signupButton: {
-	backgroundColor: '#66a3dd',
+	backgroundColor: Colors.lightBlue,
 	borderWidth: 2,
 	borderRadius: 5,
 	margin: 10,
@@ -197,9 +197,11 @@ const styles = StyleSheet.create({
 
   forgotText: {
 	fontSize: 18, 
-	color: '#66a3ff',
+	color: Colors.lightBlue,
 	textDecorationLine: 'underline',
   },
+
+
 
 
 });
