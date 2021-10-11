@@ -7,6 +7,7 @@
 export default {
 
 	white: "#fff",
+	lightBlue: "#66a3ff",
 	black: "#333",
 	darkGray: "#555",
 	gray: "#888",
@@ -20,7 +21,6 @@ export default {
 	red: "#e74c3c",
 	pink: "#fd79a8",
 	olive: "#badc58",
-	yellow: "#f9ca24",
-	lightBlue: "#66a3ff",
+	yellow: "#f9ca24"
 
 }
