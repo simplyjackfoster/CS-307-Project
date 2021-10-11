@@ -13,7 +13,6 @@ import {
 import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
 import { render } from 'react-dom';
-import { color } from 'react-native-reanimated';
 
 
 
@@ -46,9 +45,9 @@ export default ({ navigation }) => {
 				<Text style={styles.email}>Email</Text>
 				<SafeAreaView>
 					<TextInput
-					style={styles.emailInput}
-					onChangeText={onChangeEmail}
-					placeholder={email}
+						style={styles.emailInput}
+						onChangeText={onChangeEmail}
+						placeholder={email}
 					/>
 				</SafeAreaView>
 
@@ -57,9 +56,10 @@ export default ({ navigation }) => {
 				<Text style={styles.password}>Password</Text>
 				<SafeAreaView>
 					<TextInput
-					style={styles.passwordInput}
-					onChangeText={onChangePassword}
-					placeholder={password}
+						style={styles.passwordInput}
+						onChangeText={onChangePassword}
+						placeholder={password}
+						secureTextEntry={true}
 					/>
 				</SafeAreaView>
 
@@ -78,7 +78,7 @@ export default ({ navigation }) => {
 				<Text style={styles.signupPrompt}>New to UniRoom?</Text>
 				<TouchableOpacity
 					style={styles.signupButton}
-					onPress={() => navigation.push("Signup")}				
+					onPress={() => navigation.push("Signup")}			
 				>
 					<Text>Sign Up</Text>
 				</TouchableOpacity>
