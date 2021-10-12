@@ -56,20 +56,23 @@ export default ( {navigation} ) => {
     //check if there are any characters besides uppercase and lowercase letters, apostrophes, and hyphens
     for (const c of name) {
 
-      // 8217 is the acsii value for apostrophe for iOS
+      // 8217 and 8216 are the acsii values for apostrophes in iOS
 
-      if ((c.charCodeAt(0) == 8217) || (c === '-') || (c === ' ') || 
-          (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
+      if ((c.charCodeAt(0) == 8217) || (c.charCodeAt(0) == 8216) || (c === '-') || 
+          (c === ' ') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
         // valid character
         console.log(c + " is a valid character");
       }
       else {
         // invalid character
-        console.log(c + " is NOT a valid character");
+        console.log(c.charCodeAt(0) + " is NOT a valid character");
         return false;
       }
     }
-  }
+
+    console.log("Name Validated");
+    return true;
+  } // isValidName
 
 
   /*
@@ -114,9 +117,77 @@ export default ( {navigation} ) => {
       }
     }
 
+    console.log("Email Validated");
     return true;
   } // isValidEmail
+
+
+  /*
+   * isValidPhone()
+   * function to make sure the phone number only consists of 10 numbers
+   * $$ Issue with interpreting '.' as the same value as numbers $$
+   */
+  const isValidPhone = () => {
+    console.log(phone);
+    
+
+    if (phone.length !== 10) {
+      console.log("Phone number not 10 characters long");
+      return false;
+    }
+
+    for (const c in phone) {
+      console.log(c.charCodeAt(0));
+      if (c < '0' || c > '9' || c == '.') {
+        console.log("Non-numeric character found");
+        return false;
+      }
+    }
+
+    console.log("Phone Number Validated");
+    return true;
+  } // isValidPhone
   
+
+
+  /*
+   * isValidBirthday()
+   *  
+   */
+  /* const isValidBirthday = () => {
+    if(birthday.length != 10){
+      console.log("Not a valid length for a date")
+      return false;
+    }
+    const birthdate = moment(birthday, 'MM-DD-YYYY');
+    if(!birthdate.isValid()){
+      console.log("Not a valid date")
+      return false;
+    }
+  } */
+
+
+
+  /*
+   * isValidPassword()
+   * function to check if the password entered is the same in both password fields
+   * and also have the length within the specified range of 8 to 28 
+   */
+  const isValidPassword = () => {
+    if (password !== confirmPassword) {
+      console.log("Passwords do not match");
+      //alert the user that passwords do not match
+      return false;
+    }
+    if (password.length > 28 || password.length < 8) {
+      console.log("Password is not a valid length");
+      return false;
+    }
+
+    console.log("Password Validated");
+    return true;
+  } // isValidPassword
+
 
 
 	return (
@@ -156,6 +227,7 @@ export default ( {navigation} ) => {
               style={styles.input}
               onChangeText={onChangePhone}
               placeholder={phone}
+              keyboardType='numeric'
             />
           </SafeAreaView>
 
@@ -172,7 +244,7 @@ export default ( {navigation} ) => {
 
           
           {/* Password (text), password (field, with black dots) */}
-          <Text style={styles.label}>Password</Text>
+          <Text style={styles.label}>Password (8 to 28 characters)</Text>
           <SafeAreaView>
             <TextInput
               style={styles.input}
@@ -219,7 +291,9 @@ export default ( {navigation} ) => {
 
 
           {/* Button to test validation functions */}
-			    <Button title="Validate Email" onPress={isValidEmail}></Button>
+			    {/* <Button title="Validate Email" onPress={isValidEmail}></Button> */}
+			    {/* <Button title="Validate Phone" onPress={isValidPhone}></Button> */}
+          <Button title="Validate Password" onPress={isValidPassword}></Button>
           
 
 
