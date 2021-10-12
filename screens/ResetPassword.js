@@ -1,8 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, TextInput, StyleSheet, Text, View, Button, SafeAreaView, Alert } from 'react-native';
-import { AuthContext } from "../context";
-import Colors from "../constants/Colors";
-import Mailer from 'react-native-mail';
+import { TouchableOpacity, TextInput, StyleSheet, Text, View, SafeAreaView, Alert } from 'react-native';
 
 /*
  * This is the screen where the user resets their password.
