@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Colors from "../constants/Colors";
+
 
 
 /*
@@ -43,7 +45,7 @@ export default ( {navigation} ) => {
 const styles = StyleSheet.create({
 
 container: {
-	backgroundColor: '#fff',
+	backgroundColor: Colors.white,
 },
 
 editProfile: {
@@ -53,7 +55,7 @@ editProfile: {
 textEditProfile: {
 	margin: 20,
 	fontSize: 18,
-	color: '#66a3ff',
+	color: Colors.lightBlue,
 },
 
 imageWrapper: {
