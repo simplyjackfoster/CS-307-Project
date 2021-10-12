@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Login from '../screens/Login';
 import Signup from '../screens/Signup';
 import ResetPassword from '../screens/ResetPassword';
+import Questionnaire from '../screens/Questionnaire';
 
 const Stack = createStackNavigator();
 
@@ -18,6 +19,9 @@ const AuthStack = () => {
 
 			<Stack.Screen name="ResetPassword" component={ResetPassword}
 			options={{ headerTitle: "Reset Password", headerBackTitle: "Back" }}/>
+
+			<Stack.Screen name="Questionnaire" component={Questionnaire}
+			options={{ headerTitle: "Questionnaire", headerBackTitle: "Back" }}/>
  		</Stack.Navigator>
 	);
 }

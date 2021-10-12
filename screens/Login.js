@@ -3,6 +3,7 @@ import {
 	StyleSheet, 
 	Text, 
 	View, 
+	ScrollView,
 	Button,
 	Image,
 	TextInput,
@@ -94,7 +95,7 @@ export default ({ navigation }) => {
 
 
 	return (
-		<View style={styles.container}>
+		<ScrollView style={styles.container}>
 
 			{/* UniRoom logo */}
 			<Image
@@ -156,7 +157,7 @@ export default ({ navigation }) => {
 
 			</View>
 
-		</View>
+		</ScrollView>
 	);
 
 
