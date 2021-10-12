@@ -22,10 +22,20 @@ export default ( {navigation} ) => {
 
 
   /* Functions to handle text input changes */
-  const [name, onChangeName] = React.useState("name");
-  const [email, onChangeEmail] = React.useState("email");
-  const [password, onChangePassword] = React.useState("password");
-  const [confirmPassword, onChangeConfirmPassword] = React.useState("confirmPassword");
+  const [name, onChangeName] = React.useState("");
+  const [email, onChangeEmail] = React.useState("");
+  const [phone, onChangePhone] = React.useState("");
+  const [birthday, onChangeBirthday] = React.useState("");
+  const [password, onChangePassword] = React.useState("");
+  const [confirmPassword, onChangeConfirmPassword] = React.useState("");
+
+
+
+  /*
+   * 
+   * 
+   *  
+   */
 
 
 
@@ -38,10 +48,10 @@ export default ( {navigation} ) => {
         <View style={styles.form}>
 
           {/* Name (text), name (field) */}
-          <Text style={styles.name}>Name</Text>
+          <Text style={styles.label}>Name</Text>
           <SafeAreaView>
             <TextInput
-              style={styles.nameInput}
+              style={styles.input}
               onChangeText={onChangeName}
               placeholder={name}
             />
@@ -49,10 +59,10 @@ export default ( {navigation} ) => {
 
 
           {/* Email (text), email (field) */}
-          <Text style={styles.email}>Purdue Email</Text>
+          <Text style={styles.label}>Purdue Email</Text>
           <SafeAreaView>
             <TextInput
-              style={styles.emailInput}
+              style={styles.input}
               onChangeText={onChangeEmail}
               placeholder={email}
             />
@@ -60,16 +70,32 @@ export default ( {navigation} ) => {
 
 
           {/* Phone number (text), phone number (field, only takes numbers) */}
+          <Text style={styles.label}>Phone Number (10 #'s only)</Text>
+          <SafeAreaView>
+            <TextInput
+              style={styles.input}
+              onChangeText={onChangePhone}
+              placeholder={phone}
+            />
+          </SafeAreaView>
 
 
-          {/* Date of birth (text), date of birth (field) */}
+          {/* Date of birthday (text), date of birth (field) */}
+          <Text style={styles.label}>Date of Birth (MM/DD/YYYY)</Text>
+          <SafeAreaView>
+            <TextInput
+              style={styles.input}
+              onChangeText={onChangeBirthday}
+              placeholder={birthday}
+            />
+          </SafeAreaView>
 
           
           {/* Password (text), password (field, with black dots) */}
-          <Text style={styles.password}>Password</Text>
+          <Text style={styles.label}>Password</Text>
           <SafeAreaView>
             <TextInput
-              style={styles.passwordInput}
+              style={styles.input}
               onChangeText={onChangePassword}
               placeholder={password}
               secureTextEntry={true}
@@ -78,10 +104,10 @@ export default ( {navigation} ) => {
 
 
           {/* Confirm password (text), password (field, with black dots) */}
-          <Text style={styles.confirmPassword}>Confirm Password</Text>
+          <Text style={styles.label}>Confirm Password</Text>
           <SafeAreaView>
             <TextInput
-              style={styles.confirmPasswordInput}
+              style={styles.input}
               onChangeText={onChangeConfirmPassword}
               placeholder={confirmPassword}
               secureTextEntry={true}
@@ -124,7 +150,7 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
   },
 
   intro: {
@@ -134,74 +160,34 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
+  /* Form styles */
+
   form: {
     margin: 20,
     textAlign: 'left',
     alignSelf: 'center',
   },
 
-  name: {
+  label: {
     fontSize: 20,
     margin: 12,
     marginBottom: 0,
   },
-  
-  nameInput: {
+
+  input: {
     height: 40,
-    width: 250,
+    width: 290,
     margin: 10,
     padding: 10,
     borderWidth: 1,
     borderRadius: 10,
   },
 
-  email: {
-    fontSize: 20,
-    margin: 12,
-    marginBottom: 0,
-  },
-  
-  emailInput: {
-    height: 40,
-    width: 250,
-    margin: 10,
-    padding: 10,
-    borderWidth: 1,
-    borderRadius: 10,
-  },
 
-  password: {
-    fontSize: 20,
-    margin: 12,
-    marginBottom: 0,
-  },
-  
-  passwordInput: {
-    height: 40,
-    width: 250,
-    margin: 10,
-    padding: 10,
-    borderWidth: 1,
-    borderRadius: 10,
-  },
-
-  confirmPassword: {
-    fontSize: 20,
-    margin: 12,
-    marginBottom: 0,
-  },
-  
-  confirmPasswordInput: {
-    height: 40,
-    width: 250,
-    margin: 10,
-    padding: 10,
-    borderWidth: 1,
-    borderRadius: 10,
-  },
+  /* Button styles */
 
   createButton: {
-    backgroundColor: '#66a3dd',
+    backgroundColor: Colors.lightBlue,
     borderWidth: 2,
     borderRadius: 5,
     margin: 10,
