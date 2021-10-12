@@ -281,10 +281,12 @@ export default ( {navigation} ) => {
       // validate passwords
       if (!isValidPassword()) return;
   
-      // All fields have valid inputs, so create the account
+      // All fields have valid inputs, so create the account by inputting data to the database
   
   
-      // on successful login, set userToken to a non-null value
+      // on successful login, display success message and set userToken to a non-null value
+      Alert.alert("Congratulations!", "You have successfully created your account on UniRoom!", 
+      [{ text: "Let's Go!" }]);
       setUserToken('Arbitrary text');
   
       console.log("Successful Signup!")
