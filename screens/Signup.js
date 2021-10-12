@@ -98,13 +98,16 @@ export default ( {navigation} ) => {
 
 
 
-          {/* Create account (button) */}
+          {/* Continue to Questionnaire (button) */}
           <TouchableOpacity
-					style={styles.createButton}
+					style={styles.continueButton}
           // check if questionnaire has been completed and run setUserToken
-          onPress={() => setUserToken('asdsf')}
+          onPress={() => {
+            navigation.push("Questionnaire");
+            //setUserToken('asdsf')
+          }}
 				>
-					<Text>Create Account</Text>
+					<Text>Continue</Text>
 				</TouchableOpacity>
 
         </View>
@@ -200,13 +203,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 
-  createButton: {
+  continueButton: {
     backgroundColor: '#66a3dd',
     borderWidth: 2,
     borderRadius: 5,
     margin: 10,
     padding: 5,
-    width: 120,
+    width: 75,
     alignSelf: 'center',
   },
   
