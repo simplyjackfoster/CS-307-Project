@@ -283,13 +283,11 @@ export default ( {navigation} ) => {
   
       // All fields have valid inputs, so create the account by inputting data to the database
   
+
+      // go to the questionnnaire screen
+      navigation.push("Questionnaire");
   
-      // on successful login, display success message and set userToken to a non-null value
-      Alert.alert("Congratulations!", "You have successfully created your account on UniRoom!", 
-      [{ text: "Let's Go!" }]);
-      setUserToken('Arbitrary text');
-  
-      console.log("Successful Signup!");
+      console.log("Moving to Questionnaire!");
   
     } // validateInputs
 
@@ -372,35 +370,16 @@ export default ( {navigation} ) => {
           </SafeAreaView>
 
 
-          {/* Merge the buttons */}
 
-          {/* Fill out this questionnaire (text), Button for questionnaire (button) */}
-            {/* push Questionnaire.js */}
-            {/* toggle a state/context to confirm submission of questionnaire */}
-          <Text style={styles.questPrompt}>Take this quiz to get a customized feed of other students!</Text>
+          {/* Continue to Questionnaire (button) */}
           <TouchableOpacity
-            style={styles.questButton}
-            onPress={goToQuest}
+					  style={styles.continueButton}
+            onPress={validateInputs}
 				  >
-            <Text>Take Quiz</Text>
+            <Text>Continue</Text>
 				  </TouchableOpacity>
-
-
-          {/* Create your account (text), Create account (button) */}
-          <Text style={styles.createPrompt}>Once you take the quiz, you're all set to create your account!</Text>
-          <TouchableOpacity
-					style={styles.createButton}
-          // check if questionnaire has been completed and run setUserToken
-          onPress={validateInputs}
-				  >
-            <Text>Create Account</Text>
-				  </TouchableOpacity>
-
 
         </View>
-
-
-
 
 		</ScrollView>
 	);
@@ -454,37 +433,13 @@ const styles = StyleSheet.create({
 
   /* Button styles */
 
-  questPrompt: {
-    fontSize: 16,
-    margin: 5,
-    marginTop: 25,
-    textAlign: 'center',
-  },
-
-  questButton: {
+  continueButton: {
     backgroundColor: Colors.lightBlue,
     borderWidth: 2,
     borderRadius: 5,
     margin: 10,
     padding: 5,
-    width: 80,
-    alignSelf: 'center',
-  },
-
-  createPrompt: {
-    fontSize: 16,
-    margin: 5,
-    marginTop: 25,
-    textAlign: 'center',
-  },
-
-  createButton: {
-    backgroundColor: Colors.lightBlue,
-    borderWidth: 2,
-    borderRadius: 5,
-    margin: 10,
-    padding: 5,
-    width: 120,
+    width: 75,
     alignSelf: 'center',
   },
   

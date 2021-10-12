@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, TextInput, StyleSheet, Text, View, Button, SafeAreaView, Alert } from 'react-native';
 import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
-import Mailer from 'react-native-mail';
+//import Mailer from 'react-native-mail';
 
 /*
  * This is the screen where the user resets their password.
@@ -31,7 +31,7 @@ const [email, onChangeEmail] = React.useState("");
                   {
                     text: "Ok",
                     onPress: () => { 
-                      handleEmail
+                      //handleEmail
                       navigation.pop()}
                   }
                 ]

@@ -17,11 +17,12 @@ const AuthStack = () => {
 			<Stack.Screen name="Signup" component={Signup}
 			options={{ title: "Create Account", headerBackTitle: "Log In" }}/>
 
+			<Stack.Screen name="Questionnaire" component={Questionnaire}
+			options={{ title: "Create Account", headerBackTitle: "Back"}}/>
+
 			<Stack.Screen name="ResetPassword" component={ResetPassword}
 			options={{ headerTitle: "Reset Password", headerBackTitle: "Back" }}/>
 
-			<Stack.Screen name="Questionnaire" component={Questionnaire}
-			options={{ headerTitle: "Questionnaire", headerBackTitle: "Back" }}/>
  		</Stack.Navigator>
 	);
 }
