@@ -372,6 +372,8 @@ export default ( {navigation} ) => {
           </SafeAreaView>
 
 
+          {/* Merge the buttons */}
+
           {/* Fill out this questionnaire (text), Button for questionnaire (button) */}
             {/* push Questionnaire.js */}
             {/* toggle a state/context to confirm submission of questionnaire */}
@@ -398,7 +400,7 @@ export default ( {navigation} ) => {
           {/* Button to test validation functions */}
 			    {/* <Button title="Validate Email" onPress={isValidEmail}></Button> */}
 			    {/* <Button title="Validate Phone" onPress={isValidPhone}></Button> */}
-          <Button title="Validate Password" onPress={isValidPassword}></Button>
+          {/* <Button title="Validate Password" onPress={isValidPassword}></Button> */}
           
 
 
