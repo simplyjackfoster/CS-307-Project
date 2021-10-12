@@ -3,6 +3,7 @@ import {
 	StyleSheet, 
 	Text, 
 	View, 
+	ScrollView,
 	Button,
 	Image,
 	TextInput,
@@ -38,8 +39,11 @@ export default ({ navigation }) => {
 	}
 
 
-	// function that attempts to login, it will check if the inputs have been filled out
-		// and make an alert if they haven't, will also do authenticaton(not implemented)
+	/* 	
+	 * attemptLogin()
+	 * function that attempts to login, it will check if the inputs have been filled out
+	 * and make an alert if they haven't, will also do authenticaton(not implemented) 
+	 */
 	const attemptLogin = () => {
 		// log inputs for testing
 		logInputs();
@@ -75,8 +79,11 @@ export default ({ navigation }) => {
 	}
 
 
-	// function to check if the email and password combination is valid
-		// return true if the login is valid, false if not (not implemented)
+	/* 	
+	 * isValidLogin(email, password)
+	 * function to check if the email and password combination is valid
+	 * return true if the login is valid, false if not (not implemented) 
+	 */
 	const isValidLogin = (email, password) => {
 		console.log("...Authenticating login...");
 
@@ -88,7 +95,7 @@ export default ({ navigation }) => {
 
 
 	return (
-		<View style={styles.container}>
+		<ScrollView style={styles.container}>
 
 			{/* UniRoom logo */}
 			<Image
@@ -99,10 +106,10 @@ export default ({ navigation }) => {
 			<View style={styles.form}>
 				
 				{/* Email (text), email (field) */}
-				<Text style={styles.email}>Email</Text>
+				<Text style={styles.label}>Email</Text>
 				<SafeAreaView>
 					<TextInput
-						style={styles.emailInput}
+						style={styles.input}
 						onChangeText={onChangeEmail}
 						placeholder={email}
 					/>
@@ -110,10 +117,10 @@ export default ({ navigation }) => {
 
 				
 				{/* Password (text), password (field, with black dots) */}
-				<Text style={styles.password}>Password</Text>
+				<Text style={styles.label}>Password</Text>
 				<SafeAreaView>
 					<TextInput
-						style={styles.passwordInput}
+						style={styles.input}
 						onChangeText={onChangePassword}
 						placeholder={password}
 						secureTextEntry={true}
@@ -150,7 +157,7 @@ export default ({ navigation }) => {
 
 			</View>
 
-		</View>
+		</ScrollView>
 	);
 
 
@@ -187,34 +194,19 @@ const styles = StyleSheet.create({
 	textAlign: 'left',
   },
 
-  email: {
-	fontSize: 20,
-	margin: 12,
-	marginBottom: 0,
+  label: {
+    fontSize: 20,
+    margin: 12,
+    marginBottom: 0,
   },
 
-  emailInput: {
-	height: 40,
-	width: 250,
-	margin: 10,
-	padding: 10,
-	borderWidth: 1,
-	borderRadius: 10,
-  },
-
-  password: {
-	fontSize: 20,
-	margin: 12,
-	marginBottom: 0,
-  },
-
-  passwordInput: {
-	height: 40,
-	width: 250,
-	margin: 10,
-	padding: 10,
-	borderWidth: 1,
-	borderRadius: 10,
+  input: {
+    height: 40,
+    width: 290,
+    margin: 10,
+    padding: 10,
+    borderWidth: 1,
+    borderRadius: 10,
   },
 
   loginButton: {
@@ -229,7 +221,7 @@ const styles = StyleSheet.create({
   },
 
 
-  /* Bottom section titles */
+  /* Bottom section styles */
 
   signupPrompt: {
 	fontSize: 18,

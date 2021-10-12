@@ -20,7 +20,7 @@ export default ( {navigation} ) => {
 	
 	return (
 		// If user clicks "Sign Out", set userToken to null.
-		<ScrollView style={styles.container}>
+		<View style={styles.container}>
 
 			{/* Reset Password (button) */}
 			<TouchableOpacity
@@ -48,7 +48,7 @@ export default ( {navigation} ) => {
 				<Text>Delete Account</Text>
 			</TouchableOpacity>
 
-		</ScrollView>
+		</View>
 	);
 }
 
@@ -61,6 +61,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   resetPassButton: {
