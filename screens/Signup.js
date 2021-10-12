@@ -289,7 +289,7 @@ export default ( {navigation} ) => {
       [{ text: "Let's Go!" }]);
       setUserToken('Arbitrary text');
   
-      console.log("Successful Signup!")
+      console.log("Successful Signup!");
   
     } // validateInputs
 
@@ -395,13 +395,6 @@ export default ( {navigation} ) => {
 				  >
             <Text>Create Account</Text>
 				  </TouchableOpacity>
-
-
-          {/* Button to test validation functions */}
-			    {/* <Button title="Validate Email" onPress={isValidEmail}></Button> */}
-			    {/* <Button title="Validate Phone" onPress={isValidPhone}></Button> */}
-          {/* <Button title="Validate Password" onPress={isValidPassword}></Button> */}
-          
 
 
         </View>
