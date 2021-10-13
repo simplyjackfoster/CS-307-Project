@@ -3,16 +3,18 @@ import {
 	StyleSheet, 
 	Text, 
 	View, 
+	ScrollView,
 	Button,
 	Image,
 	TextInput,
 	SafeAreaView,
+	TouchableOpacity,
+	Alert,
 } from 'react-native';
 
 import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
 import { render } from 'react-dom';
-import ResetPassword from './ResetPassword';
 
 
 
@@ -26,12 +28,74 @@ export default ({ navigation }) => {
 	const { userToken, setUserToken } = React.useContext(AuthContext);
 
 	/* Functions to handle text input changes */
-	const [email, onChangeEmail] = React.useState("email");
-	const [password, onChangePassword] = React.useState("password");
+	const [email, onChangeEmail] = React.useState(null);
+	const [password, onChangePassword] = React.useState(null);
+
+
+	// function to test grabbing the inputs
+	const logInputs = () => {
+		console.log("\nEmail: " + email);
+		console.log("Password: " + password);
+	}
+
+
+	/* 	
+	 * attemptLogin()
+	 * function that attempts to login, it will check if the inputs have been filled out
+	 * and make an alert if they haven't, will also do authenticaton(not implemented) 
+	 */
+	const attemptLogin = () => {
+		// log inputs for testing
+		logInputs();
+
+		if (!email || !password) {
+			// at least one of the fields has not been filled out
+			
+			// alert user to fill out both fields and return
+			Alert.alert("Error", "Please enter your email and password before logging in.", 
+			[{ text: "Ok" }]);
+
+			console.log("Please fill out all fields!");
+		}
+		else {
+			// fields were both filled out
+
+			// call a function to check if the email and password combination is valid
+			if (isValidLogin(email, password)) {
+				// on successful login, set userToken to a non-null value
+				setUserToken('Arbitrary text');
+
+				console.log("Successful Login!");
+			}
+			else {
+				// on failed login, alert user to type correct login and return
+				Alert.alert("Error", "Incorrect email or password, please try again.", 
+				[{ text: "Ok" }]);
+
+				console.log("Failed Login!");
+			}
+
+		}
+	}
+
+
+	/* 	
+	 * isValidLogin(email, password)
+	 * function to check if the email and password combination is valid
+	 * return true if the login is valid, false if not (not implemented) 
+	 */
+	const isValidLogin = (email, password) => {
+		console.log("...Authenticating login...");
+
+		//find user with the specified email in database and check if the password matches
+		
+		// for now, return true for testing purposes
+		return true;
+	}
+
 
 	return (
-		// If the user clicks "Log In", then set userToken to a non-null value.
-		<View style={styles.container}>
+		<ScrollView style={styles.container}>
 
 			{/* UniRoom logo */}
 			<Image
@@ -39,43 +103,61 @@ export default ({ navigation }) => {
 				source={require('../images/logo.png')}
 			/>
 
-			{/* Log In (text) */}
-			<Text style={styles.login}>Log In</Text>
-			
-			{/* Email (text), email (field) */}
-			<Text style={styles.email}>Email</Text>
-			<SafeAreaView>
-				<TextInput
-				style={styles.emailInput}
-				onChangeText={onChangeEmail}
-				placeholder={email}
-				/>
-			</SafeAreaView>
+			<View style={styles.form}>
+				
+				{/* Email (text), email (field) */}
+				<Text style={styles.label}>Email</Text>
+				<SafeAreaView>
+					<TextInput
+						style={styles.input}
+						onChangeText={onChangeEmail}
+						placeholder={email}
+					/>
+				</SafeAreaView>
+
+				
+				{/* Password (text), password (field, with black dots) */}
+				<Text style={styles.label}>Password</Text>
+				<SafeAreaView>
+					<TextInput
+						style={styles.input}
+						onChangeText={onChangePassword}
+						placeholder={password}
+						secureTextEntry={true}
+					/>
+				</SafeAreaView>
+
+				
+				{/* Log In (button) */}
+				<TouchableOpacity
+					style={styles.loginButton}
+					onPress={attemptLogin} 
+				>
+					<Text>Log In</Text>
+				</TouchableOpacity>
 
 
-			
-			{/* Password (text), password (field, with black dots) */}
-			<Text style={styles.password}>Password</Text>
-			<SafeAreaView>
-				<TextInput
-				style={styles.passwordInput}
-				onChangeText={onChangePassword}
-				placeholder={password}
-				/>
-			</SafeAreaView>
+				{/* New to UniRoom? (text), Sign Up (button) */}
+				<Text style={styles.signupPrompt}>New to UniRoom?</Text>
+				<TouchableOpacity
+					style={styles.signupButton}
+					onPress={() => navigation.push("Signup")}			
+				>
+					<Text>Sign Up</Text>
+				</TouchableOpacity>
 
-			
-			{/* Log In (button) */}
-			<Button title="Log In" onPress={() => setUserToken('asdf')}></Button>
 
-			{/* New to UniRoom? (text), Sign Up (button) */}
-			<Text>New to UniRoom?</Text>
-			<Button title="Sign Up" onPress={() => navigation.push("Signup")}></Button>
+				{/* Forgot password button */}
+				<TouchableOpacity
+					style={styles.forgotButton}
+					onPress={() => navigation.push("ResetPassword")}				
+				>
+					<Text style={styles.forgotText}>Forgot Password?</Text>
+				</TouchableOpacity>
 
-			{/* Forgot password button */}
-			<Button title="Forgot password?" onPress={() => navigation.push("ResetPassword")}></Button>
+			</View>
 
-		</View>
+		</ScrollView>
 	);
 
 
@@ -88,47 +170,87 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    backgroundColor: Colors.white,
   },
 
   logo: {
-		height: 250,
-		width: 350,
-		margin: 25,
-		borderRadius: 50,
+	height: 250,
+	width: 350,
+	margin: 20,
+	borderRadius: 50,
+	alignSelf: 'center',
+  },
+
+  /* Form styles */
+
+  form: {
+	margin: 20,
+	textAlign: 'left',
+	alignSelf: 'center',
   },
 
   login: {
-		fontSize: 35,
-		textAlign: 'left',
+	fontSize: 35,
+	textAlign: 'left',
   },
 
-  email: {
-		fontSize: 20,
+  label: {
+    fontSize: 20,
+    margin: 12,
+    marginBottom: 0,
   },
 
-  emailInput: {
-		height: 40,
-		width: 200,
-		margin: 10,
-		padding: 10,
-		borderWidth: 1,
-		borderRadius: 10,
+  input: {
+    height: 40,
+    width: 290,
+    margin: 10,
+    padding: 10,
+    borderWidth: 1,
+    borderRadius: 10,
   },
 
-  password: {
-		fontSize: 20,
+  loginButton: {
+	backgroundColor: Colors.lightBlue,
+	borderWidth: 2,
+	borderRadius: 5,
+	margin: 10,
+	padding: 5,
+	width: 55,
+	alignSelf: 'flex-end',
+	textAlign: 'center',
   },
 
-  passwordInput: {
-		height: 40,
-		width: 200,
-		margin: 10,
-		padding: 10,
-		borderWidth: 1,
-		borderRadius: 10,
+
+  /* Bottom section styles */
+
+  signupPrompt: {
+	fontSize: 18,
+	marginLeft: 12,
   },
+
+  signupButton: {
+	backgroundColor: Colors.lightBlue,
+	borderWidth: 2,
+	borderRadius: 5,
+	margin: 10,
+	padding: 5,
+	width: 65,
+	alignSelf: 'flex-end',
+	textAlign: 'center',
+  },
+
+  forgotButton: {
+	margin: 12,
+	alignSelf: 'flex-start',
+  },
+
+  forgotText: {
+	fontSize: 18, 
+	color: Colors.lightBlue,
+	textDecorationLine: 'underline',
+  },
+
+
 
 
 });
