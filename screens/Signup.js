@@ -382,7 +382,8 @@ export default ( {navigation} ) => {
       if (!isValidCheckbox()) return;
   
       // All fields have valid inputs, so create the account by inputting data to the database
-      
+      // storeLoginData()
+      // storeCriticalData()
 
       // go to the questionnnaire screen
       navigation.push("Questionnaire");
