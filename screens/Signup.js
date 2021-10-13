@@ -14,6 +14,7 @@ import {
 import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
 import { NavigationContainer } from '@react-navigation/native';
+import { Checkbox } from 'react-native-paper';
 
 
 /*
@@ -24,13 +25,18 @@ export default ( {navigation} ) => {
   const { userToken, setUserToken }  = React.useContext(AuthContext);
 
 
-  /* Functions to handle text input changes */
+  // hooks for input fields
   const [name, onChangeName] = React.useState(null);
   const [email, onChangeEmail] = React.useState(null);
   const [phone, onChangePhone] = React.useState(null);
   const [birthday, onChangeBirthday] = React.useState(null);
   const [password, onChangePassword] = React.useState(null);
   const [confirmPassword, onChangeConfirmPassword] = React.useState(null);
+
+  // hooks for code of conduct and privacy policy checkboxes
+  const [checkedCoc, setCheckedCoc] = React.useState(false);
+  const [checkedPp, setCheckedPp] = React.useState(false);
+
 
 
   /*
@@ -349,8 +355,31 @@ export default ( {navigation} ) => {
             />
           </SafeAreaView>
 
+          
+          <View style={styles.checkbox}>
+            {/* Checkbox for code of conduct */}
+            <Text style={styles.checkboxPrompt}>I have read the Code of Conduct</Text>
+            <Checkbox.Android
+              status={checkedCoc ? 'checked' : 'unchecked'}
+              onPress={() => setCheckedCoc(!checkedCoc)}
+              uncheckedColor={Colors.darkGray}
+              color={Colors.lightBlue}
+            />
+          </View>
 
 
+          <View style={styles.checkbox}>
+            {/* Checkbox for privacy policy */}
+            <Text style={styles.checkboxPrompt}>I have read the Privacy Policy</Text>
+            <Checkbox.Android
+              status={checkedPp ? 'checked' : 'unchecked'}
+              onPress={() => setCheckedPp(!checkedPp)}
+              uncheckedColor={Colors.darkGray}
+              color={Colors.lightBlue}
+            />
+          </View>
+
+          
           {/* Continue to Questionnaire (button) */}
           <TouchableOpacity
 					  style={styles.continueButton}
@@ -395,7 +424,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 20,
     margin: 10,
-    marginLeft: 28,
+    marginLeft: 15,
     marginBottom: 0,
     textAlign: 'left',
   },
@@ -411,7 +440,18 @@ const styles = StyleSheet.create({
   },
 
 
-  /* Button styles */
+  /* Button and checkbox styles */
+
+  checkboxPrompt: {
+    alignSelf: 'baseline',
+    marginLeft: 12,
+    marginTop: 15,
+    fontSize: 16,
+  },
+
+  checkbox: {
+    alignItems: 'flex-end',
+  },
 
   continueButton: {
     backgroundColor: Colors.lightBlue,
