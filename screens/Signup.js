@@ -33,22 +33,6 @@ export default ( {navigation} ) => {
   const [confirmPassword, onChangeConfirmPassword] = React.useState(null);
 
 
-
-  /*
-   * goToQuest()
-   * function to keep track of whether the user has filled out the questionnaire
-   * and navigate them to the questionnaire in the process
-   */
-  const goToQuest = () => {
-    // keep track of whether the user went to the questionnaire (not implemented)
-    
-
-    // navigate the user to the questionnaire screen
-    navigation.push("Questionnaire");
-  } // goToQuest
-
-
-
   /*
    * IsValidName()
    * function to check whether the name is valid, will return true if there are only
@@ -238,15 +222,11 @@ export default ( {navigation} ) => {
     if (password !== confirmPassword) {
       Alert.alert("Error", "Passwords do not match, please try again.", 
 				[{ text: "Ok" }]);
-
-      // console.log("Passwords do not match");
       return false;
     }
     if (password.length > 28 || password.length < 8) {
       Alert.alert("Error", "Password must be within range 8-28 characters, please try again.", 
 				[{ text: "Ok" }]);
-
-      // console.log("Password is not a valid length");
       return false;
     }
 
