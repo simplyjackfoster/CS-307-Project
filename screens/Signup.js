@@ -14,6 +14,7 @@ import {
 import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
 import { NavigationContainer } from '@react-navigation/native';
+import { Checkbox } from 'react-native-paper';
 
 
 /*
@@ -24,13 +25,18 @@ export default ( {navigation} ) => {
   const { userToken, setUserToken }  = React.useContext(AuthContext);
 
 
-  /* Functions to handle text input changes */
+  // hooks for input fields
   const [name, onChangeName] = React.useState(null);
   const [email, onChangeEmail] = React.useState(null);
   const [phone, onChangePhone] = React.useState(null);
   const [birthday, onChangeBirthday] = React.useState(null);
   const [password, onChangePassword] = React.useState(null);
   const [confirmPassword, onChangeConfirmPassword] = React.useState(null);
+
+  // hooks for code of conduct and privacy policy checkboxes
+  const [checkedCoc, setCheckedCoc] = React.useState(false);
+  const [checkedPp, setCheckedPp] = React.useState(false);
+
 
 
   /*
@@ -236,7 +242,35 @@ export default ( {navigation} ) => {
 
 
 
-    /*
+  /*
+   * isValidCheckbox()
+   * function to check if the code of conduct and the privacy policy
+   * checkboxes have been read by the user, return true if both are checked
+   */
+  const isValidCheckbox = () => {
+    console.log("Validating the checkboxes...");
+
+    if (!checkedCoc) {
+      // didn't check the code of conduct checkbox
+      Alert.alert("Error", "Please read the Code of Conduct before continuing.", 
+				[{ text: "Ok" }]);
+      return false;
+    }
+
+    if (!checkedPp) {
+      // didn't check the privacy policy checkbox
+      Alert.alert("Error", "Please read the Privacy Policy before continuing.", 
+				[{ text: "Ok" }]);
+      return false;
+    }
+
+    console.log("Checkboxes Validated");
+    return true;
+  }
+
+
+
+  /*
    * validateInputs()
    * function to check all of the input fields and send the appropriate alert
    * if there is an issue with one of the fields. This function will utilize helper
@@ -260,9 +294,12 @@ export default ( {navigation} ) => {
   
       // validate passwords
       if (!isValidPassword()) return;
+
+      // validate checkboxes
+      if (!isValidCheckbox()) return;
   
       // All fields have valid inputs, so create the account by inputting data to the database
-  
+      
 
       // go to the questionnnaire screen
       navigation.push("Questionnaire");
@@ -356,7 +393,30 @@ export default ( {navigation} ) => {
           {/* View Privacy Policy Button */}
           <Button title={"Privacy Policy"} onPress={() => navigation.push("PrivacyPolicy")}></Button>
 
+          
+          {/* Checkbox for code of conduct */}
+          <View style={styles.checkboxContainer}>
+            <Text style={styles.checkboxPrompt}>I have read the Code of Conduct</Text>
+            <Checkbox.Android
+              status={checkedCoc ? 'checked' : 'unchecked'}
+              onPress={() => setCheckedCoc(!checkedCoc)}
+              uncheckedColor={Colors.darkGray}
+              color={Colors.lightBlue}
+            />
+          </View>
 
+          {/* Checkbox for privacy policy */}
+          <View style={styles.checkboxContainer}>
+            <Text style={styles.checkboxPrompt}>I have read the Privacy Policy</Text>
+            <Checkbox.Android
+              status={checkedPp ? 'checked' : 'unchecked'}
+              onPress={() => setCheckedPp(!checkedPp)}
+              uncheckedColor={Colors.darkGray}
+              color={Colors.lightBlue}
+            />
+          </View>
+
+          
           {/* Continue to Questionnaire (button) */}
           <TouchableOpacity
 					  style={styles.continueButton}
@@ -401,7 +461,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 20,
     margin: 10,
-    marginLeft: 28,
+    marginLeft: 15,
     marginBottom: 0,
     textAlign: 'left',
   },
@@ -417,7 +477,18 @@ const styles = StyleSheet.create({
   },
 
 
-  /* Button styles */
+  /* Button and checkbox styles */
+
+  checkboxContainer: {
+    alignItems: 'flex-end',
+  },
+
+  checkboxPrompt: {
+    alignSelf: 'flex-start',
+    marginLeft: 12,
+    marginTop: 15,
+    fontSize: 16,
+  },
 
   continueButton: {
     backgroundColor: Colors.lightBlue,
