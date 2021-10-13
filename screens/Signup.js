@@ -370,6 +370,12 @@ export default ( {navigation} ) => {
           </SafeAreaView>
 
 
+          {/* View Code of Conduct Button*/}
+          <Button title={"Code of Conduct"} onPress={() => navigation.push("CodeOfConduct")}></Button>
+
+          {/* View Privacy Policy Button */}
+          <Button title={"Privacy Policy"} onPress={() => navigation.push("PrivacyPolicy")}></Button>
+
 
           {/* Continue to Questionnaire (button) */}
           <TouchableOpacity
@@ -442,6 +448,6 @@ const styles = StyleSheet.create({
     width: 75,
     alignSelf: 'center',
   },
-  
+
 
 });
