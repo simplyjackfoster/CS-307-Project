@@ -386,9 +386,16 @@ export default ( {navigation} ) => {
             />
           </SafeAreaView>
 
+
+          {/* View Code of Conduct Button*/}
+          <Button title={"Code of Conduct"} onPress={() => navigation.push("CodeOfConduct")}></Button>
+
+          {/* View Privacy Policy Button */}
+          <Button title={"Privacy Policy"} onPress={() => navigation.push("PrivacyPolicy")}></Button>
+
           
+          {/* Checkbox for code of conduct */}
           <View style={styles.checkboxContainer}>
-            {/* Checkbox for code of conduct */}
             <Text style={styles.checkboxPrompt}>I have read the Code of Conduct</Text>
             <Checkbox.Android
               status={checkedCoc ? 'checked' : 'unchecked'}
@@ -398,9 +405,8 @@ export default ( {navigation} ) => {
             />
           </View>
 
-
+          {/* Checkbox for privacy policy */}
           <View style={styles.checkboxContainer}>
-            {/* Checkbox for privacy policy */}
             <Text style={styles.checkboxPrompt}>I have read the Privacy Policy</Text>
             <Checkbox.Android
               status={checkedPp ? 'checked' : 'unchecked'}
@@ -493,6 +499,6 @@ const styles = StyleSheet.create({
     width: 75,
     alignSelf: 'center',
   },
-  
+
 
 });
