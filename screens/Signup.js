@@ -15,7 +15,7 @@ import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
 import { NavigationContainer } from '@react-navigation/native';
 import { Checkbox } from 'react-native-paper';
-
+import passwordCheck from '../password_Checker';
 
 /*
  * This is the screen where the user creates an account. 
@@ -233,6 +233,10 @@ export default ( {navigation} ) => {
     if (password.length > 28 || password.length < 8) {
       Alert.alert("Error", "Password must be within range 8-28 characters, please try again.", 
 				[{ text: "Ok" }]);
+      return false;
+    }
+    if (passwordCheck(password) == -1)
+    {
       return false;
     }
 
