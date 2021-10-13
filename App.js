@@ -13,7 +13,6 @@ import RootStack from './navigation/RootStack';
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, onValue, exists, val, child, get } from "firebase/database";
-import { getFirestore, collection, getDocs, setDoc, docRef, doc } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -34,8 +33,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 const rtdb = getDatabase(app);
+
+//module.exports = {app, rtdb};
 /*
  * This is the default export for the App.
  */
