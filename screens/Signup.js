@@ -242,7 +242,35 @@ export default ( {navigation} ) => {
 
 
 
-    /*
+  /*
+   * isValidCheckbox()
+   * function to check if the code of conduct and the privacy policy
+   * checkboxes have been read by the user, return true if both are checked
+   */
+  const isValidCheckbox = () => {
+    console.log("Validating the checkboxes...");
+
+    if (!checkedCoc) {
+      // didn't check the code of conduct checkbox
+      Alert.alert("Error", "Please read the Code of Conduct before continuing.", 
+				[{ text: "Ok" }]);
+      return false;
+    }
+
+    if (!checkedPp) {
+      // didn't check the privacy policy checkbox
+      Alert.alert("Error", "Please read the Privacy Policy before continuing.", 
+				[{ text: "Ok" }]);
+      return false;
+    }
+
+    console.log("Checkboxes Validated");
+    return true;
+  }
+
+
+
+  /*
    * validateInputs()
    * function to check all of the input fields and send the appropriate alert
    * if there is an issue with one of the fields. This function will utilize helper
@@ -266,9 +294,12 @@ export default ( {navigation} ) => {
   
       // validate passwords
       if (!isValidPassword()) return;
+
+      // validate checkboxes
+      if (!isValidCheckbox()) return;
   
       // All fields have valid inputs, so create the account by inputting data to the database
-  
+      
 
       // go to the questionnnaire screen
       navigation.push("Questionnaire");
@@ -356,7 +387,7 @@ export default ( {navigation} ) => {
           </SafeAreaView>
 
           
-          <View style={styles.checkbox}>
+          <View style={styles.checkboxContainer}>
             {/* Checkbox for code of conduct */}
             <Text style={styles.checkboxPrompt}>I have read the Code of Conduct</Text>
             <Checkbox.Android
@@ -368,7 +399,7 @@ export default ( {navigation} ) => {
           </View>
 
 
-          <View style={styles.checkbox}>
+          <View style={styles.checkboxContainer}>
             {/* Checkbox for privacy policy */}
             <Text style={styles.checkboxPrompt}>I have read the Privacy Policy</Text>
             <Checkbox.Android
@@ -442,15 +473,15 @@ const styles = StyleSheet.create({
 
   /* Button and checkbox styles */
 
+  checkboxContainer: {
+    alignItems: 'flex-end',
+  },
+
   checkboxPrompt: {
-    alignSelf: 'baseline',
+    alignSelf: 'flex-start',
     marginLeft: 12,
     marginTop: 15,
     fontSize: 16,
-  },
-
-  checkbox: {
-    alignItems: 'flex-end',
   },
 
   continueButton: {
