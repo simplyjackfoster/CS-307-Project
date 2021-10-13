@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
+  ScrollView,
   Image,
   Button,
   TouchableOpacity
@@ -43,8 +44,7 @@ export default ( {navigation} ) => {
 
 
 	return (
-		<View style={styles.container}>
-
+		<ScrollView style={styles.container}>
       {/* Profile Picture Image */}
       <Image source={
           profilePicture ? (
@@ -71,8 +71,20 @@ export default ( {navigation} ) => {
 			  <Text>Edit Questionnaire</Text>
 			</TouchableOpacity>
 
-      <Button title={"Save"} onPress={() => navigation.pop()}></Button>
-		</View>
+
+      {/* Save Button */}
+      <TouchableOpacity
+			  style={styles.buttonSave}
+        // check if questionnaire has been completed and run setUserToken
+        onPress={() => {
+          navigation.pop();
+        }}
+      >
+			  <Text style={styles.textSave}>Save</Text>
+			</TouchableOpacity>
+
+
+		</ScrollView>
 	); // return()
 
 } // export default ()
@@ -92,12 +104,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 
   profilePicture: {
     position: 'absolute',
+    alignSelf: 'center',
     top: 25,
     width: 150,
     height: 150,
@@ -107,6 +118,7 @@ const styles = StyleSheet.create({
 
   buttonChangePicture: {
     position: 'absolute',
+    alignSelf: 'center',
     top: 165,
   }, 
 
@@ -117,6 +129,8 @@ const styles = StyleSheet.create({
   },
 
   questionnaireButton: {
+    position: 'absolute',
+    top: 360,
     backgroundColor: '#66a3dd',
     borderWidth: 2,
     borderRadius: 5,
@@ -125,5 +139,17 @@ const styles = StyleSheet.create({
     width: 135,
     alignSelf: 'center',
   },
+
+  buttonSave: {
+    position: 'absolute',
+    top: 400, 
+    alignSelf: 'center',
+  },
+
+  textSave: {
+    margin: 20,
+    fontSize: 18,
+    color: Colors.lightBlue,
+  }
 
 });
