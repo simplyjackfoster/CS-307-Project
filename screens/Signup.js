@@ -72,7 +72,7 @@ export default ( {navigation} ) => {
       }
     }
 
-    console.log("Name Validated");
+    console.log("Name Validated!");
     return true;
   } // isValidName
 
@@ -139,7 +139,7 @@ export default ( {navigation} ) => {
       }
     }
 
-    console.log("Email Validated");
+    console.log("Email Validated!");
     return true;
   } // isValidEmail
 
@@ -162,23 +162,19 @@ export default ( {navigation} ) => {
     if (phone.length !== 10) {
       Alert.alert("Error", "Phone number is not 10 digits long, please try again.", 
 				[{ text: "Ok" }]);
-
-      // console.log("Phone number not 10 digits long");
       return false;
     }
 
     for (const c in phone) {
-      console.log(c.charCodeAt(0));
+      // console.log(c.charCodeAt(0));
       if (c < '0' || c > '9' || c == '.') {
         Alert.alert("Error", "Phone number contains non-numeric character, please try again.", 
-				[{ text: "Ok" }]);
-
-        // console.log("Non-numeric character found");
+				  [{ text: "Ok" }]);
         return false;
       }
     }
 
-    console.log("Phone Number Validated");
+    console.log("Phone Number Validated!");
     return true;
   } // isValidPhone
   
@@ -188,7 +184,7 @@ export default ( {navigation} ) => {
    * isValidBirthday()
    *  
    */
-/*   const isValidBirthday = () => {
+  const isValidBirthday = () => {
     console.log("Validating the birthday: " + birthday);
 
     if (!birthday) {
@@ -197,16 +193,103 @@ export default ( {navigation} ) => {
       return false;  
     }
 
-    if(birthday.length != 10){
-      console.log("Not a valid length for a date")
+    if (birthday.length != 10) {
+      Alert.alert("Error", "Birthday field has incorrect length, please try again.", 
+				[{ text: "Ok" }]);
       return false;
     }
-    const birthdate = moment(birthday, 'MM-DD-YYYY');
-    if(!birthdate.isValid()){
-      console.log("Not a valid date")
-      return false;
+
+    const slashOneIndex = birthday.indexOf('/');
+    if (slashOneIndex === -1) {
+      // no slash
+      Alert.alert("Error", "Birthday field is missing '/' character, please try again.", 
+				[{ text: "Ok" }]);
     }
-  } */
+
+    const slashTwoIndex = birthday.indexOf('/', slashOneIndex + 1)
+    if (slashTwoIndex === -1) {
+      // no second slash
+      Alert.alert("Error", "Birthday field is missing second '/' character, please try again.", 
+				[{ text: "Ok" }]);
+    }
+
+    const month = birthday.substring(0, slashOneIndex);
+    const day = birthday.substring(slashOneIndex + 1, slashTwoIndex);
+    const year = birthday.substring(slashTwoIndex + 1);
+
+    console.log("Month: " +  month + ", Day: " + day + ", Year: " + year);
+
+    // check if the month day and year are numeric
+    for (const c in month) {
+      if (c < '0' || c > '9') {
+        Alert.alert("Error", "Birthday field contains invalid character, please try again.", 
+				  [{ text: "Ok" }]);
+        return false;
+      }
+    }
+
+    for (const c in day) {
+      if (c < '0' || c > '9') {
+        Alert.alert("Error", "Birthday field contains invalid character, please try again.", 
+				  [{ text: "Ok" }]);
+        return false;
+      }
+    }
+
+    for (const c in year) {
+      if (c < '0' || c > '9') {
+        Alert.alert("Error", "Birthday field contains invalid character, please try again.", 
+				  [{ text: "Ok" }]);
+        return false;
+      }
+    }
+
+    // check if the month day and year are valid dates
+    const monthInt = parseInt(month);
+    const dayInt = parseInt(day);
+    const yearInt = parseInt(year);
+
+    if (monthInt < 1 || monthInt > 12) {
+      Alert.alert("Error", "Birthday field has invalid month, please try again.", 
+				[{ text: "Ok" }]);
+        return false;
+    }
+
+    var dayIsValid = true;
+    switch (monthInt) {
+      case 1, 3, 5, 7, 8, 10, 12: 
+        if (dayInt < 1 || dayInt > 31) dayIsValid = false;
+        break;
+      case 4, 6, 9, 11:
+        if (dayInt < 1 || dayInt > 30) dayIsValid = false;
+        break;
+      case 2:
+        if (dayInt < 1 || dayInt > 28) dayIsValid = false;
+        if (dayInt === 29 && yearInt % 4 === 0) dayIsValid = true;
+        break;
+      default:
+        // month was invalid
+    }
+
+    if (!dayIsValid) {
+      Alert.alert("Error", "Birthday field has invalid day, please try again.", 
+				[{ text: "Ok" }]);
+        return false;
+    }
+
+    const today = new Date();
+    const currentYear = parseInt(today.getFullYear());
+    console.log("Current year: " + currentYear);
+    
+    if (yearInt < currentYear - 100 || yearInt > currentYear - 16) {
+      Alert.alert("Error", "Birthday field has invalid year, please try again.", 
+				[{ text: "Ok" }]);
+        return false;
+    }
+
+    console.log("Birthday Validated!")
+    return true;
+  }
 
 
 
@@ -290,7 +373,7 @@ export default ( {navigation} ) => {
       if (!isValidPhone()) return;
   
       // validate birthday
-      // if (!isValidBirthday()) return;
+      if (!isValidBirthday()) return;
   
       // validate passwords
       if (!isValidPassword()) return;
