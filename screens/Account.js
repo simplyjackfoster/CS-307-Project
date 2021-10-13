@@ -1,5 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet,
+	Text, 
+	View, 
+	Button,
+	TouchableOpacity,
+	ScrollView, 
+} from 'react-native';
 
 import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
@@ -11,14 +17,37 @@ import Colors from "../constants/Colors";
 export default ( {navigation} ) => {
 
 	const { userToken, setUserToken } = React.useContext(AuthContext);
-
+	
 	return (
 		// If user clicks "Sign Out", set userToken to null.
 		<View style={styles.container}>
-			<Text>This is the Account Screen</Text>
-			<Button title="Reset Password" onPress={() => navigation.push("ResetPassword")}></Button>
-			<Button title="Sign Out" onPress={() => setUserToken(null)}></Button>
-			<Button title="Delete Account" onPress={() => navigation.push("DeleteAccount")}></Button>
+
+			{/* Reset Password (button) */}
+			<TouchableOpacity
+				style={styles.resetPassButton}
+				onPress={() => navigation.push("ResetPassword")} 
+			>
+				<Text>Reset Password</Text>
+			</TouchableOpacity>
+
+
+			{/* Sign out (button) */}
+			<TouchableOpacity
+				style={styles.signOutButton}
+				onPress={() => setUserToken(null)} 
+			>
+				<Text>Sign Out</Text>
+			</TouchableOpacity>
+
+
+			{/* Delete Account (button) */}
+			<TouchableOpacity
+				style={styles.deleteButton}
+				onPress={() => navigation.push("DeleteAccount")} 
+			>
+				<Text>Delete Account</Text>
+			</TouchableOpacity>
+
 		</View>
 	);
 }
@@ -31,9 +60,43 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     alignItems: 'center',
     justifyContent: 'center',
   },
+
+  resetPassButton: {
+	backgroundColor: Colors.lightBlue,
+	borderWidth: 2,
+	borderRadius: 5,
+	margin: 10,
+	padding: 5,
+	width: 118,
+	alignSelf: 'center',
+	textAlign: 'center',
+  },
+  
+  signOutButton: {
+	backgroundColor: Colors.lightBlue,
+	borderWidth: 2,
+	borderRadius: 5,
+	margin: 10,
+	padding: 5,
+	width: 70,
+	alignSelf: 'center',
+	textAlign: 'center',
+  },
+  
+  deleteButton: {
+	backgroundColor: Colors.lightBlue,
+	borderWidth: 2,
+	borderRadius: 5,
+	margin: 10,
+	padding: 5,
+	width: 115,
+	alignSelf: 'center',
+	textAlign: 'center',
+  },
+
 
 });
