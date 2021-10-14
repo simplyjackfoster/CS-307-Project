@@ -15,7 +15,6 @@ import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
 import { NavigationContainer } from '@react-navigation/native';
 import { Checkbox } from 'react-native-paper';
-import passwordCheck from '../password_Checker';
 
 /*
  * This is the screen where the user creates an account. 
@@ -318,9 +317,40 @@ export default ( {navigation} ) => {
 				[{ text: "Ok" }]);
       return false;
     }
-    if (passwordCheck(password) == -1)
+    regexNum = /[0-9]/;
+    regexSpecialChar = /[~!@#$%&*?]/;
+    substringLib = ["pass", "password", "word", "purdue", "boiler", "boilermaker", "daniels", "123", "123456789"];
+    // invalid phrase included
+    for (i = 0; i < substringLib.length; i++)
     {
-      return false;
+        if (password.toLowerCase().includes(substringLib[i]))
+        {
+            //console.log("Invalid Password Phrase: %s\n", substringLib[i]);
+            Alert.alert("Error", "Invalid Password Phrase:" + substringLib[i], 
+                [{ text: "Ok" }]);
+            return false;
+        }
+    }
+    // no capital letters
+    if (password.toLowerCase() == password)
+    {
+        Alert.alert("Error", "Invalid Password. Please use at least 1 uppercase letter.",
+            [{ text: "Ok" }]);
+        return false;
+    }
+    // no numbers
+    if (password.match(regexNum) == null)
+    {
+        Alert.alert("Error", "Invalid Password. Please use at least 1 number.", 
+            [{ text: "Ok" }]);
+        return false;
+    }
+    // no special characters
+    if (password.match(regexSpecialChar) == null)
+    {
+        Alert.alert("Error", "Invalid Password. Please use at least 1 special character: ~!@#$%&*?",
+            [{ text: "Ok" }]);
+        return false;
     }
 
     console.log("Password Validated");
