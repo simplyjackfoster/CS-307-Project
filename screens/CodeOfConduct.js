@@ -9,8 +9,8 @@ import Colors from "../constants/Colors";
  */
 export default ({ navigation }) => {
 	return (
-		<View style={styles.container}>
-      <ScrollView style={styles.ScrollView}>
+    <ScrollView style={styles.scrollView}>
+		  <View style={styles.container}>
         <Text>
         <Text>
               {"Welcome to UniRoom, a one of a kind university roommate matching app."}
@@ -97,8 +97,8 @@ export default ({ navigation }) => {
               {"\n\n"}
               {"The UniRoom Team"}
         </Text>
-      </ScrollView>
-		</View>
+		  </View>
+    </ScrollView>
 	);
 }
 
@@ -112,15 +112,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 10,
-    marginRight: 10,
-    marginBottom:30,
-    marginTop: 10,
+    padding: 25,
   },
 
   scrollView: {
-    marginHorizontal: 100,
-    marginLeft: 30,
+    
   },
 
   txtBold: {
