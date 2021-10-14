@@ -312,14 +312,18 @@ export default ( {navigation} ) => {
 				[{ text: "Ok" }]);
       return false;
     }
+
     if (password.length > 28 || password.length < 8) {
       Alert.alert("Error", "Password must be within range 8-28 characters, please try again.", 
 				[{ text: "Ok" }]);
       return false;
     }
+
+    // check for strength of password
     regexNum = /[0-9]/;
     regexSpecialChar = /[~!@#$%&*?]/;
     substringLib = ["pass", "password", "word", "purdue", "boiler", "boilermaker", "daniels", "123", "123456789"];
+    
     // invalid phrase included
     for (i = 0; i < substringLib.length; i++)
     {
@@ -331,6 +335,7 @@ export default ( {navigation} ) => {
             return false;
         }
     }
+
     // no capital letters
     if (password.toLowerCase() == password)
     {
@@ -338,6 +343,7 @@ export default ( {navigation} ) => {
             [{ text: "Ok" }]);
         return false;
     }
+
     // no numbers
     if (password.match(regexNum) == null)
     {
@@ -345,6 +351,7 @@ export default ( {navigation} ) => {
             [{ text: "Ok" }]);
         return false;
     }
+    
     // no special characters
     if (password.match(regexSpecialChar) == null)
     {
@@ -481,7 +488,8 @@ export default ( {navigation} ) => {
 
           
           {/* Password (text), password (field, with black dots) */}
-          <Text style={styles.label}>Password (8-28 characters)</Text>
+          <Text style={styles.label}>Password (8-28 characters, 1 uppercase, 
+            1 number, 1 special character)</Text>
           <SafeAreaView>
             <TextInput
               style={styles.input}
