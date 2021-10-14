@@ -16,6 +16,8 @@ import Colors from "../constants/Colors";
 import { NavigationContainer } from '@react-navigation/native';
 import { Checkbox } from 'react-native-paper';
 
+export var Gemail = '';
+export var Gpassword = '';
 
 /*
  * This is the screen where the user creates an account. 
@@ -45,7 +47,7 @@ export default ( {navigation} ) => {
    * alphabetic characters, apostrophes, and hyphens and false otherwise 
    */
   const isValidName = () => {
-    console.log("Validating the name: " + name);
+    //console.log("Validating the name: " + name);
 
     if (!name) {
       Alert.alert("Error", "Name field is empty, please try again.", 
@@ -60,19 +62,19 @@ export default ( {navigation} ) => {
       if ((c.charCodeAt(0) == 8217) || (c.charCodeAt(0) == 8216) || (c === '-') || 
           (c === ' ') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
         // valid character
-        console.log(c + " is a valid character");
+        //console.log(c + " is a valid character");
       }
       else {
         // invalid character
         Alert.alert("Error", "Name field contains invalid character: '" + c + 
           "', please try again.", [{ text: "Ok" }]);
 
-        console.log(c + " is NOT a valid character");
+        //console.log(c + " is NOT a valid character");
         return false;
       }
     }
 
-    console.log("Name Validated!");
+    //console.log("Name Validated!");
     return true;
   } // isValidName
 
@@ -84,7 +86,7 @@ export default ( {navigation} ) => {
    * returns true if those conditions are met, false if not
    */
   const isValidEmail = () => {
-    console.log("Validating the email: " + email);
+    //console.log("Validating the email: " + email);
 
     if (!email) {
       Alert.alert("Error", "Email field is empty, please try again.", 
@@ -139,7 +141,7 @@ export default ( {navigation} ) => {
       }
     }
 
-    console.log("Email Validated!");
+    //console.log("Email Validated!");
     return true;
   } // isValidEmail
 
@@ -151,7 +153,7 @@ export default ( {navigation} ) => {
    * $$ Issue with interpreting '.' as the same value as numbers $$
    */
   const isValidPhone = () => {
-    console.log("Validating the phone: " + phone);
+    //console.log("Validating the phone: " + phone);
     
     if (!phone) {
       Alert.alert("Error", "Phone field is empty, please try again.", 
@@ -174,7 +176,7 @@ export default ( {navigation} ) => {
       }
     }
 
-    console.log("Phone Number Validated!");
+    //console.log("Phone Number Validated!");
     return true;
   } // isValidPhone
   
@@ -185,7 +187,7 @@ export default ( {navigation} ) => {
    *  
    */
   const isValidBirthday = () => {
-    console.log("Validating the birthday: " + birthday);
+    //console.log("Validating the birthday: " + birthday);
 
     if (!birthday) {
       Alert.alert("Error", "Birthday field is empty, please try again.", 
@@ -217,7 +219,7 @@ export default ( {navigation} ) => {
     const day = birthday.substring(slashOneIndex + 1, slashTwoIndex);
     const year = birthday.substring(slashTwoIndex + 1);
 
-    console.log("Month: " +  month + ", Day: " + day + ", Year: " + year);
+    //console.log("Month: " +  month + ", Day: " + day + ", Year: " + year);
 
     // check if the month day and year are numeric
     for (const c in month) {
@@ -279,7 +281,7 @@ export default ( {navigation} ) => {
 
     const today = new Date();
     const currentYear = parseInt(today.getFullYear());
-    console.log("Current year: " + currentYear);
+    //console.log("Current year: " + currentYear);
     
     if (yearInt < currentYear - 100 || yearInt > currentYear - 16) {
       Alert.alert("Error", "Birthday field has invalid year, please try again.", 
@@ -287,7 +289,7 @@ export default ( {navigation} ) => {
         return false;
     }
 
-    console.log("Birthday Validated!")
+    //console.log("Birthday Validated!")
     return true;
   }
 
@@ -299,8 +301,8 @@ export default ( {navigation} ) => {
    * and also have the length within the specified range of 8 to 28 
    */
   const isValidPassword = () => {
-    console.log("Validating the password: " + password + 
-                ", confirm password: " + confirmPassword);
+    //console.log("Validating the password: " + password + 
+    //            ", confirm password: " + confirmPassword);
 
     if (!password || !confirmPassword) {
       Alert.alert("Error", "Password and/or Confirm Password field is empty, please try again.", 
@@ -319,7 +321,7 @@ export default ( {navigation} ) => {
       return false;
     }
 
-    console.log("Password Validated");
+    //console.log("Password Validated");
     return true;
   } // isValidPassword
 
@@ -331,7 +333,7 @@ export default ( {navigation} ) => {
    * checkboxes have been read by the user, return true if both are checked
    */
   const isValidCheckbox = () => {
-    console.log("Validating the checkboxes...");
+    //console.log("Validating the checkboxes...");
 
     if (!checkedCoc) {
       // didn't check the code of conduct checkbox
@@ -347,7 +349,7 @@ export default ( {navigation} ) => {
       return false;
     }
 
-    console.log("Checkboxes Validated");
+    //console.log("Checkboxes Validated");
     return true;
   }
 
@@ -361,7 +363,7 @@ export default ( {navigation} ) => {
    * If all fields are validated, allow the user to sign up.
    */
     const validateInputs = () => {
-      console.log("\n\n...Authenticating signup...");
+      //console.log("\n\n...Authenticating signup...");
   
       // validate name
       if (!isValidName()) return;
@@ -381,11 +383,15 @@ export default ( {navigation} ) => {
       // validate checkboxes
       if (!isValidCheckbox()) return;
   
-      // All fields have valid inputs, so create the account by inputting data to the database
+      // All fields have valid inputs, so attempt to create the account 
+      
+      //by inputting data to the database
       // storeLoginData()
       // storeCriticalData()
 
       // go to the questionnnaire screen
+      Gemail = email;
+      Gpassword = password;
       navigation.push("Questionnaire");
   
       console.log("Moving to Questionnaire!");

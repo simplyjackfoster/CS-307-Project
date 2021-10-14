@@ -16,7 +16,8 @@ import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
 import { render } from 'react-dom';
 
-import { authNewUser, signInUser } from '../database/Auth';
+import { auth } from '../database/RTDB';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { Title } from 'react-native-paper';
 
 
@@ -64,19 +65,42 @@ export default ({ navigation }) => {
 			// fields were both filled out
 
 			// call a function to check if the email and password combination is valid
-			if (isValidLogin(email, password)) {
-				// on successful login, set userToken to a non-null value
-				setUserToken('Arbitrary text');
-
-				console.log("Successful Login!");
-			}
-			else {
-				// on failed login, alert user to type correct login and return
+			/*var authSuccess;
+			try {
+				signInUser(email, password);
+				authSuccess = true;
+			} catch {
+				authSuccess = false;
+			}*/
+			signInWithEmailAndPassword(auth, email, password)
+        	.then((userCredential, success) => {
+            	const user = userCredential.user;
+            	console.log("signed in ho");
+				//setSignIn(true);
+				if (isValidLogin(email, password) /*&& signInUser(email, password)*/) {
+					// on successful login, set userToken to a non-null value
+					setUserToken('Arbitrary text');
+	
+					console.log("Successful Login!");
+				}
+				else {
+					// on failed login, alert user to type correct login and return
+					Alert.alert("Error", "Incorrect email or password, please try again.", 
+					[{ text: "Ok" }]);
+	
+					console.log("Failed Login!");
+				}
+        	})
+        	.catch((error) => {
+            	console.log("Error Code: " + error.code);
+            	console.log("Error Message: " + error.message);
 				Alert.alert("Error", "Incorrect email or password, please try again.", 
-				[{ text: "Ok" }]);
-
-				console.log("Failed Login!");
-			}
+					[{ text: "Ok" }]);
+	
+					console.log("Failed Login!");
+				//setSignIn(false);
+        	})
+			
 
 		}
 	}
@@ -135,8 +159,8 @@ export default ({ navigation }) => {
 				
 				<TouchableOpacity
 					style={styles.loginButton}
-					//onPress={() => {attemptLogin}} 
-					onPress={() => {signInUser(email, password)}} 
+					onPress={() => {attemptLogin()}} 
+					//onPress={() => {console.log(signInUser(email, password))}} 
 				>
 					<Text>Log In</Text>
 				</TouchableOpacity>

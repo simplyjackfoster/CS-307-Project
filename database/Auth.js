@@ -19,13 +19,15 @@ export function authNewUser(email, password) {
 
 export function signInUser(email, password) {
     signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+        .then((userCredential, success) => {
             const user = userCredential.user;
             console.log("signed in ho");
+            //setSignIn(true);
         })
         .catch((error) => {
             console.log("Error Code: " + error.code);
             console.log("Error Message: " + error.message);
+            //setSignIn(false);
         })
 }
 
