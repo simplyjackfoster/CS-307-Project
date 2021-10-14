@@ -16,6 +16,9 @@ import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
 import { render } from 'react-dom';
 
+import { authNewUser, signInUser } from '../database/Auth';
+import { Title } from 'react-native-paper';
+
 
 
 /*
@@ -129,9 +132,11 @@ export default ({ navigation }) => {
 
 				
 				{/* Log In (button) */}
+				
 				<TouchableOpacity
 					style={styles.loginButton}
-					onPress={attemptLogin} 
+					//onPress={() => {attemptLogin}} 
+					onPress={() => {signInUser(email, password)}} 
 				>
 					<Text>Log In</Text>
 				</TouchableOpacity>
