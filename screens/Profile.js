@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Alert, Switch } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import { AuthContext } from "../context";
 
 /*
  * This is the screen where the user can view their profile.
@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 export default ( {navigation} ) => {
 	const [isEnabled, setIsEnabled] = useState(false);
 	const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+	const { userToken, setUserToken } = React.useContext(AuthContext);
 
 	return (
 		<ScrollView style={styles.container}>
@@ -52,18 +53,12 @@ export default ( {navigation} ) => {
 					Alert.alert("Warning!", 
                 "Clicking yes will delete all information associated with your account. Do you wish to proceed?",
                 [
-                  {
+                  { // TODO: Delete associate user account from database.
                     text: "Yes",
-                    onPress: () => { 
-                      console.log("Yes")
-					  //TODO: Talk to max about redirecting back to login screen
-					}
+                    onPress: () => {setUserToken(null)}
                   },
 				  {
-                    text: "No",
-                    onPress: () => { 
-                      console.log("No")
-					}
+                    text: "No"
                   }
                 ]
                 );
