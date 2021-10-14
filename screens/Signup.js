@@ -382,7 +382,7 @@ export default ( {navigation} ) => {
       if (!isValidCheckbox()) return;
   
       // All fields have valid inputs, so create the account by inputting data to the database
-      // storeLoginData()
+      storeLoginData(email, password);
       // storeCriticalData()
 
       // go to the questionnnaire screen
@@ -391,6 +391,28 @@ export default ( {navigation} ) => {
       console.log("Moving to Questionnaire!");
   
     } // validateInputs
+
+
+    /*
+     * storeLoginData()
+     * function to store the email and password in the authentication database
+     */
+    const storeLoginData = (emailData, passwordData) => {
+
+      // call functions to store the email and password
+
+
+    } // storeLoginData
+
+
+    /*
+     * storeCriticalData()
+     * function to store all the critical user data in the signup screen except
+     * for the password
+     */
+    const storeCriticalData = () => {
+      
+    }
 
 
 
