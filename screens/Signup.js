@@ -16,7 +16,6 @@ import Colors from "../constants/Colors";
 import { NavigationContainer } from '@react-navigation/native';
 import { Checkbox } from 'react-native-paper';
 
-
 /*
  * This is the screen where the user creates an account. 
  */
@@ -317,6 +316,41 @@ export default ( {navigation} ) => {
       Alert.alert("Error", "Password must be within range 8-28 characters, please try again.", 
 				[{ text: "Ok" }]);
       return false;
+    }
+    regexNum = /[0-9]/;
+    regexSpecialChar = /[~!@#$%&*?]/;
+    substringLib = ["pass", "password", "word", "purdue", "boiler", "boilermaker", "daniels", "123", "123456789"];
+    // invalid phrase included
+    for (i = 0; i < substringLib.length; i++)
+    {
+        if (password.toLowerCase().includes(substringLib[i]))
+        {
+            //console.log("Invalid Password Phrase: %s\n", substringLib[i]);
+            Alert.alert("Error", "Invalid Password Phrase:" + substringLib[i], 
+                [{ text: "Ok" }]);
+            return false;
+        }
+    }
+    // no capital letters
+    if (password.toLowerCase() == password)
+    {
+        Alert.alert("Error", "Invalid Password. Please use at least 1 uppercase letter.",
+            [{ text: "Ok" }]);
+        return false;
+    }
+    // no numbers
+    if (password.match(regexNum) == null)
+    {
+        Alert.alert("Error", "Invalid Password. Please use at least 1 number.", 
+            [{ text: "Ok" }]);
+        return false;
+    }
+    // no special characters
+    if (password.match(regexSpecialChar) == null)
+    {
+        Alert.alert("Error", "Invalid Password. Please use at least 1 special character: ~!@#$%&*?",
+            [{ text: "Ok" }]);
+        return false;
     }
 
     console.log("Password Validated");
