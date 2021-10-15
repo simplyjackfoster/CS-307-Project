@@ -23,22 +23,7 @@ import { Gemail, Gpassword } from './Signup';
 // On Press Function for CreateAcc Button
 
 
-const attemptCreate = (navigation, setUserToken) => {
-  createUserWithEmailAndPassword(auth, Gemail, Gpassword)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      // move to Questionnaire screen
-      console.log("Successfully Created Account!");
-      setUserToken('Arbitrary Value');
-    })
-    .catch((error) => {
-      Alert.alert("Error", "Error: Email Already in Use");
-      console.log("Error Code: " + error.code);
-      console.log("Error Message: " + error.message);
-      // move back to create account screen
-      navigation.pop();
-    })
-} // attemptCreate()
+
 
 
 export default ( {navigation} ) => {
@@ -51,7 +36,22 @@ export default ( {navigation} ) => {
   const [selectedFive, setSelectedFive] = React.useState('1');
   const [selectedSix, setSelectedSix] = React.useState('1');
 
-
+  const attemptCreate = () => {
+    createUserWithEmailAndPassword(auth, Gemail, Gpassword)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        // move to Questionnaire screen
+        console.log("Successfully Created Account!");
+        setUserToken('Arbitrary Value');
+      })
+      .catch((error) => {
+        Alert.alert("Error", "Error: Email Already in Use");
+        console.log("Error Code: " + error.code);
+        console.log("Error Message: " + error.message);
+        // move back to create account screen
+        navigation.pop();
+      })
+  } // attemptCreate()
 
 
 	return (
@@ -174,7 +174,7 @@ export default ( {navigation} ) => {
             {userToken ? (
               navigation.pop()
             ) : (
-              setUserToken('asdsf')
+              attemptCreate()
             )}
           }}
         >
