@@ -11,16 +11,24 @@ import Colors from "../constants/Colors";
 export default ({ navigation }) => {
 	return (
 		<View style={styles.container}>
-			<><Text style={{ color: 'blue' }}
-  onPress={() => Linking.openURL('https://www.housing.purdue.edu/')}>
-  Purdue Housing Home Page
-</Text><Text style={{ color: 'blue' }}
-  onPress={() => Linking.openURL('https://www.housing.purdue.edu/my-housing/index.html')}>
-    Purdue Housing Options
-  </Text><Text style={{ color: 'blue' }}
-    onPress={() => Linking.openURL('https://www.housing.purdue.edu/urmovein/dates_and_parking.html')}>
-    Purdue Move-in Help
-  </Text></>
+      <Text 
+        style={styles.link}
+        onPress={() => Linking.openURL('https://www.housing.purdue.edu/')}
+      >
+        Purdue Housing Home Page
+      </Text>
+      <Text 
+        style={styles.link}
+        onPress={() => Linking.openURL('https://www.housing.purdue.edu/my-housing/index.html')}
+      >
+        Purdue Housing Options
+      </Text>
+      <Text 
+        style={styles.link}
+        onPress={() => Linking.openURL('https://www.housing.purdue.edu/urmovein/dates_and_parking.html')}
+      >
+        Purdue Move-in Help
+      </Text>
 		</View>
 	);
 }
@@ -32,9 +40,16 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     alignItems: 'center',
     justifyContent: 'center',
   },
+
+  link: {
+    color: Colors.blue,
+    margin: 10,
+    fontSize: 20,
+    textDecorationLine: 'underline',
+  }
 
 })

@@ -36,7 +36,7 @@ const [email, onChangeEmail] = React.useState("");
                 ]
                 );}}
 				  >
-					<Text>Enter</Text>
+					<Text>Reset Password</Text>
 				</TouchableOpacity>
           </SafeAreaView>
       </View>
@@ -78,12 +78,12 @@ const styles = StyleSheet.create({
   },
 
   enterButton: {
-	backgroundColor: '#66a3dd',
+	backgroundColor: Colors.lightBlue,
 	borderWidth: 2,
 	borderRadius: 5,
 	margin: 10,
 	padding: 5,
-	width: 60,
+	width: 120,
 	alignSelf: 'flex-end',
   },
 

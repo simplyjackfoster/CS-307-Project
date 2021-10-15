@@ -10,15 +10,26 @@ import Colors from "../constants/Colors";
 export default ({ navigation }) => {
 	return (
 		<View style={styles.container}>
-      <View style={styles.header}>
-			  <Text>Privacy Notice</Text>
+      <View>
+			  <Text style={styles.header}>Privacy Notice</Text>
       </View>
-      <Text>Thank you for choosing to be part of our community at UniRoom ("Company," "we," "us," or "our"). We are committed to protecting your personal information and your right to privacy. If you have any questions or concerns about this privacy notice or our practices with regard to your personal information, please contact us at company@email.com.</Text>
-      <View style={styles.header}>
-        <Text>WHAT INFORMATION DO WE COLLECT?</Text>
+        <Text style={styles.body}>
+          Thank you for choosing to be part of our community at UniRoom 
+          ("Company," "we," "us," or "our"). We are committed to protecting your 
+          personal information and your right to privacy. If you have any questions 
+          or concerns about this privacy notice or our practices with regard to your 
+          personal information, please contact us at company@email.com.
+        </Text>
+      <View>
+        <Text style={styles.header}>What Information do we collect?</Text>
 		  </View>
-      <View style={styles.container}>
-			  <Text>We collect personal information that you voluntarily provide to us when you register on the App, express an interest in obtaining information about us or our products and Services, when you participate in activities on the App (such as by posting messages in our online forums or entering competitions, contests or giveaways) or otherwise when you contact us.
+      <View>
+			  <Text style={styles.body}>
+          We collect personal information that you voluntarily provide to us when 
+          you register on the App, express an interest in obtaining information about 
+          us or our products and Services, when you participate in activities on the 
+          App (such as by posting messages in our online forums or entering competitions, 
+          contests or giveaways) or otherwise when you contact us.
         </Text>
       </View>
     </View>
@@ -32,15 +43,22 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: Colors.white,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    padding: 15,
   },
+
   header:{
-    fontSize: 32
+    textAlign: 'center',
+    fontSize: 25,
+    margin: 10,
+    marginTop: 25,
   },
+
   body:{
-    fontSize: 18
+    fontSize: 16
+
   }
 
 });
