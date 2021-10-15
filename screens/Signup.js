@@ -23,9 +23,7 @@ export var Gpassword = '';
  * This is the screen where the user creates an account. 
  */
 export default ( {navigation} ) => {
-
   const { userToken, setUserToken }  = React.useContext(AuthContext);
-
 
   // hooks for input fields
   const [name, onChangeName] = React.useState(null);
@@ -38,8 +36,6 @@ export default ( {navigation} ) => {
   // hooks for code of conduct and privacy policy checkboxes
   const [checkedCoc, setCheckedCoc] = React.useState(false);
   const [checkedPp, setCheckedPp] = React.useState(false);
-
-
 
   /*
    * IsValidName()
@@ -404,11 +400,10 @@ export default ( {navigation} ) => {
      * function to store the email and password in the authentication database
      */
     const storeLoginData = (emailData, passwordData) => {
-
       // call functions to store the email and password
 
-
     } // storeLoginData
+
 
 
     /*

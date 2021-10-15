@@ -13,19 +13,15 @@ import { AuthContext } from "../context";
 import { auth } from '../database/RTDB';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { Gemail, Gpassword } from './Signup';
+
 /*
  * This is the screen where the user fills out the questionnaire
  * about themselves.
  */
-
  //On Press Function for CreateAcc Button
  const attemptCreate = () => {
-  console.log("Auth: " + auth);
-  console.log("EMAIL: " + Gemail);
-  console.log("PASSWORD: " + Gpassword);
   createUserWithEmailAndPassword(auth, Gemail, Gpassword)
       .then((userCredential) => {
-          console.log("ayo we here");
           const user = userCredential.user;
           console.log("USER: " + user);
       })
@@ -34,9 +30,10 @@ import { Gemail, Gpassword } from './Signup';
           console.log("Error Message: " + error.message);
           Alert.alert("Error", "Error: Email Already in Use");
       });
- }
-export default ( {navigation} ) => {
+ } // attemptCreate()
 
+
+export default ( {navigation} ) => {
   const { userToken, setUserToken }  = React.useContext(AuthContext);
 
 	return (
@@ -48,8 +45,6 @@ export default ( {navigation} ) => {
 			  style={styles.createButton}
         // check if questionnaire has been completed and run setUserToken
         onPress={() => {
-          console.log("AYAYAYAYAYA")
-          console.log("USER TOKEN: " + userToken)
           userToken ? (
             navigation.pop()
           ) : (
@@ -67,7 +62,7 @@ export default ( {navigation} ) => {
 			</TouchableOpacity> 
 		</View>
 	);
-}
+} // export default ()
 
 
 
@@ -82,7 +77,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-
   createButton: {
     backgroundColor: '#66a3dd',
     borderWidth: 2,
@@ -92,6 +86,5 @@ const styles = StyleSheet.create({
     width: 120,
     alignSelf: 'center',
   },
-
 
 });

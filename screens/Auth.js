@@ -25,7 +25,6 @@ function signInUser(email, password) {
             console.log("Error Code: " + error.code);
             console.log("Error Message: " + error.message);
         })
-    
 }
 
 function signUserOut() {
