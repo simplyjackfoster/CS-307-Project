@@ -112,8 +112,6 @@ export default ( {navigation} ) => {
 
 
 
-
-
         {/* Continue to Questionnaire (button) */}
         <TouchableOpacity
           style={styles.createButton}

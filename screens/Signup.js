@@ -405,23 +405,23 @@ export default ( {navigation} ) => {
     const validateInputs = () => {
      // console.log("\n\n...Authenticating signup...");
   
-      // // validate name
-      // if (!isValidName()) return;
+      // validate name
+      if (!isValidName()) return;
   
-      // // validate email
-      // if (!isValidEmail()) return;
+      // validate email
+      if (!isValidEmail()) return;
   
-      // // validate phone
-      // if (!isValidPhone()) return;
+      // validate phone
+      if (!isValidPhone()) return;
   
-      // // validate birthday
-      // if (!isValidBirthday()) return;
+      // validate birthday
+      if (!isValidBirthday()) return;
   
-      // // validate passwords
-      // if (!isValidPassword()) return;
+      // validate passwords
+      if (!isValidPassword()) return;
 
-      // // validate checkboxes
-      // if (!isValidCheckbox()) return;
+      // validate checkboxes
+      if (!isValidCheckbox()) return;
   
       // All fields have valid inputs, so create the account by inputting data to the database
       
