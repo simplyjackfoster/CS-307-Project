@@ -9,7 +9,7 @@ import Colors from "../constants/Colors";
  */
 export default ({ navigation }) => {
 	return (
-    <ScrollView style={styles.scrollView}>
+    <ScrollView showsVerticalScrollIndicator={false}>
 		  <View style={styles.container}>
         <Text>
         <Text>
@@ -113,10 +113,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 25,
-  },
-
-  scrollView: {
-    
   },
 
   txtBold: {
