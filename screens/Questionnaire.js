@@ -23,7 +23,6 @@ import { Gemail, Gpassword } from './Signup';
   createUserWithEmailAndPassword(auth, Gemail, Gpassword)
       .then((userCredential) => {
           const user = userCredential.user;
-          console.log("USER: " + user);
       })
       .catch((error) => {
           console.log("Error Code: " + error.code);

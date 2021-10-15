@@ -65,60 +65,23 @@ export default ({ navigation }) => {
 			// fields were both filled out
 
 			// call a function to check if the email and password combination is valid
-			/*var authSuccess;
-			try {
-				signInUser(email, password);
-				authSuccess = true;
-			} catch {
-				authSuccess = false;
-			}*/
 			signInWithEmailAndPassword(auth, email, password)
         	.then((userCredential, success) => {
-            	const user = userCredential.user;
-            	console.log("signed in ho");
-				//setSignIn(true);
-				if (isValidLogin(email, password) /*&& signInUser(email, password)*/) {
-					// on successful login, set userToken to a non-null value
-					setUserToken('Arbitrary text');
-	
-					console.log("Successful Login!");
-				}
-				else {
-					// on failed login, alert user to type correct login and return
-					Alert.alert("Error", "Incorrect email or password, please try again.", 
-					[{ text: "Ok" }]);
-	
-					console.log("Failed Login!");
-				}
+							const user = userCredential.user;
+							setUserToken('Arbitrary text');
+							console.log("Successful Login!");
         	})
         	.catch((error) => {
-            	console.log("Error Code: " + error.code);
-            	console.log("Error Message: " + error.message);
-				Alert.alert("Error", "Incorrect email or password, please try again.", 
-					[{ text: "Ok" }]);
-	
-					console.log("Failed Login!");
-				//setSignIn(false);
+							console.log("Error Code: " + error.code);
+							console.log("Error Message: " + error.message);
+							Alert.alert("Error", "Incorrect email or password, please try again.", 
+								[{ text: "Ok" }]);
+
+							console.log("Failed Login!");
         	})
-			
-
 		}
-	}
+	} // attemptLogin()
 
-
-	/* 	
-	 * isValidLogin(email, password)
-	 * function to check if the email and password combination is valid
-	 * return true if the login is valid, false if not (not implemented) 
-	 */
-	const isValidLogin = (email, password) => {
-		console.log("...Authenticating login...");
-
-		//find user with the specified email in database and check if the password matches
-		
-		// for now, return true for testing purposes
-		return true;
-	}
 
 
 	return (
@@ -278,8 +241,5 @@ const styles = StyleSheet.create({
 	color: Colors.lightBlue,
 	textDecorationLine: 'underline',
   },
-
-
-
 
 });
