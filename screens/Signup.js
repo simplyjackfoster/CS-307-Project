@@ -15,6 +15,7 @@ import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
 import { NavigationContainer } from '@react-navigation/native';
 import { Checkbox } from 'react-native-paper';
+import { Picker } from '@react-native-picker/picker';
 
 
 // variables for exporting email and password information to Questionnaire
@@ -34,10 +35,14 @@ export default ( {navigation} ) => {
   const [birthday, onChangeBirthday] = React.useState(null);
   const [password, onChangePassword] = React.useState(null);
   const [confirmPassword, onChangeConfirmPassword] = React.useState(null);
+  const [securityAnswer, onChangeSecurity] = React.useState(null);
 
   // hooks for code of conduct and privacy policy checkboxes
-  const [checkedCoc, setCheckedCoc] = React.useState(false);
-  const [checkedPp, setCheckedPp] = React.useState(false);
+  const [checkedCoc, setCheckedCoc] = React.useState(null);
+  const [checkedPp, setCheckedPp] = React.useState(null);
+
+  // hooks for security question
+  const [selectedQuestion, setSelectedQuestion] = React.useState(null);
 
   /*
    * IsValidName()
@@ -321,12 +326,12 @@ export default ( {navigation} ) => {
     }
 
     // check for strength of password
-    regexNum = /[0-9]/;
-    regexSpecialChar = /[~!@#$%&*?]/;
-    substringLib = ["pass", "password", "word", "purdue", "boiler", "boilermaker", "daniels", "123", "123456789"];
+    var regexNum = /[0-9]/;
+    var regexSpecialChar = /[~!@#$%&*?]/;
+    var substringLib = ["pass", "password", "word", "purdue", "boiler", "boilermaker", "daniels", "123", "123456789"];
     
     // invalid phrase included
-    for (i = 0; i < substringLib.length; i++)
+    for (var i = 0; i < substringLib.length; i++)
     {
         if (password.toLowerCase().includes(substringLib[i]))
         {
@@ -364,6 +369,24 @@ export default ( {navigation} ) => {
     //console.log("Password Validated");
     return true;
   } // isValidPassword
+
+
+  /*
+   * isValidSecurity()
+   * function to check if the answer to the security question
+   * has been filled out.
+   */
+  const isValidSecurity = () => {
+    if (!securityAnswer) {
+      // didn't answer the security question
+      Alert.alert("Error", "Please answer your selected security question before continuing.", 
+        [{ text: "Ok" }]);
+      return false; 
+    }
+
+    // answered the security question
+    return true;
+  } // isValidSecurity()
 
 
 
@@ -419,6 +442,9 @@ export default ( {navigation} ) => {
   
       // validate passwords
       if (!isValidPassword()) return;
+
+      // validate security
+      if (!isValidSecurity()) return;
 
       // validate checkboxes
       if (!isValidCheckbox()) return;
@@ -513,13 +539,42 @@ export default ( {navigation} ) => {
           </SafeAreaView>
 
 
+          {/* Selector for security question */}
+          <View>
+            <Text style={styles.label}>Choose a Security Question:</Text>
+            <Picker
+              style={styles.picker}
+              selectedValue={selectedQuestion}
+              onValueChange={(itemValue, itemIndex) =>
+                setSelectedQuestion(itemValue)}
+            >
+              <Picker.Item label="In what city were you born?" value="1" />
+              <Picker.Item label="What is the name of your favorite pet?" value="2" />
+              <Picker.Item label="What is your mother's maiden name?" value="3" />
+              <Picker.Item label="What high school did you attend?" value="4" />
+              <Picker.Item label="What the name of your first school?" value="5" />
+              <Picker.Item label="What was your favorite food as a child?" value="6" />
+            </Picker>
+          </View>
+
+          {/* Security Question Text Input */}
+          <Text style={styles.label}>Security Question Answer:</Text>
+          <SafeAreaView>
+            <TextInput
+              style={styles.input}
+              onChangeText={onChangeSecurity}
+              placeholder={"Answer"}
+            />
+          </SafeAreaView>
+
+
           {/* View Code of Conduct Button*/}
           <Button title={"Code of Conduct"} onPress={() => navigation.push("CodeOfConduct")}></Button>
 
           {/* View Privacy Policy Button */}
           <Button title={"Privacy Policy"} onPress={() => navigation.push("PrivacyPolicy")}></Button>
 
-          
+
           {/* Checkbox for code of conduct */}
           <View style={styles.checkboxContainer}>
             <Text style={styles.checkboxPrompt}>I have read the Code of Conduct</Text>
@@ -616,6 +671,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
+  picker: {
+    alignSelf: 'center',
+    width: '120%',
+  },
+
   continueButton: {
     backgroundColor: Colors.lightBlue,
     borderWidth: 2,
@@ -625,6 +685,5 @@ const styles = StyleSheet.create({
     width: 75,
     alignSelf: 'center',
   },
-
 
 });
