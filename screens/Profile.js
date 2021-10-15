@@ -47,7 +47,7 @@ export default ( {navigation} ) => {
 				<View style={styles.icon}>
 					{renderIcon("eye-slash", 25, Colors.darkBlue)}
 				</View>
-				<Text style={styles.disableText}>Disable account?</Text>
+				<Text style={styles.disableText}>Ghost Mode</Text>
 				<Switch
 					trackColor={{ false: Colors.gray, true: Colors.lightBlue }}
 					onValueChange={toggleSwitch}
@@ -56,24 +56,6 @@ export default ( {navigation} ) => {
 				/>
 			</View>
 
-			<View style={styles.deleteWrapper}>
-				<TouchableOpacity style={styles.deleteButton} onPress={() => {
-					Alert.alert("Warning!", 
-                "Clicking yes will delete all information associated with your account. Do you wish to proceed?",
-                [
-                  { // TODO: Delete associate user account from database.
-                    text: "Yes",
-                    onPress: () => {setUserToken(null)}
-                  },
-				  {
-                    text: "No"
-                  }
-                ]
-                );
-				}}>
-					<Text style={styles.deleteButtonText}>Delete account</Text>
-				</TouchableOpacity>
-			</View>
 		</ScrollView>
 	);
 }
@@ -158,13 +140,6 @@ deleteBuff: {
 	alignItems: 'center',
 	backgroundColor: 'blue',
 	
-},
-
-deleteButton: {
-	backgroundColor: Colors.red,
-	padding: 10,
-	alignItems: 'center',
-	borderRadius: 50,
 },
 
 deleteButtonText: {
