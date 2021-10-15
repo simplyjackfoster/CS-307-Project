@@ -5,6 +5,7 @@ import { StyleSheet,
 	Button,
 	TouchableOpacity,
 	ScrollView, 
+	Alert
 } from 'react-native';
 
 import { AuthContext } from "../context";
@@ -34,7 +35,17 @@ export default ( {navigation} ) => {
 			{/* Sign out (button) */}
 			<TouchableOpacity
 				style={styles.signOutButton}
-				onPress={() => setUserToken(null)} 
+				onPress={() => 
+					Alert.alert("Confirm", 
+					"Are you sure you want to sign out?",
+					[{ 
+						text: "No"
+					},
+					{
+						text: "Yes",
+						onPress: () => {setUserToken(null)}
+					}]
+				)}
 			>
 				<Text>Sign Out</Text>
 			</TouchableOpacity>
@@ -43,7 +54,17 @@ export default ( {navigation} ) => {
 			{/* Delete Account (button) */}
 			<TouchableOpacity
 				style={styles.deleteButton}
-				onPress={() => navigation.push("DeleteAccount")} 
+				onPress={() =>
+					Alert.alert("Warning!", 
+						"Clicking yes will delete all information associated with your account. Do you wish to proceed?",
+						[{ // TODO: Delete associate user account from database.
+							text: "No"
+						},
+						{
+							text: "Yes",
+							onPress: () => {setUserToken(null)}
+						}]
+					)}	
 			>
 				<Text>Delete Account</Text>
 			</TouchableOpacity>
@@ -88,7 +109,7 @@ const styles = StyleSheet.create({
   },
   
   deleteButton: {
-	backgroundColor: Colors.lightBlue,
+	backgroundColor: Colors.red,
 	borderWidth: 2,
 	borderRadius: 5,
 	margin: 10,
@@ -97,6 +118,5 @@ const styles = StyleSheet.create({
 	alignSelf: 'center',
 	textAlign: 'center',
   },
-
 
 });
