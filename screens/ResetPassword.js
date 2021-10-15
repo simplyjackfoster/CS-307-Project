@@ -28,7 +28,7 @@ const [email, onChangeEmail] = React.useState("");
                   {
                     text: "Ok",
                     onPress: () => { 
-                      handleEmail
+                      //handleEmail
                       navigation.pop()}
                   }
                 ]
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
   },
 
   form: {

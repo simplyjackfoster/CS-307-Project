@@ -5,6 +5,7 @@ import HomeDrawer from './HomeDrawer';
 import EditProfile from '../screens/EditProfile';
 import ResetPassword from '../screens/ResetPassword';
 import DeleteAccount from '../screens/DeleteAccount';
+import Questionnaire from '../screens/Questionnaire';
 
 const Stack = createStackNavigator();
 
@@ -15,6 +16,8 @@ const HomeStack = () => {
 			options={{ headerShown: false }}/>
 			<Stack.Screen name="EditProfile" component={EditProfile}
 			options={{ headerTitle: "Edit Profile", headerBackTitle: "Back" }}/>
+			<Stack.Screen name="Questionnaire" component={Questionnaire}
+			options={{ headerTitle: "Edit Profile", headerBackTitle: "Back", animationEnabled: false}}/>
 			<Stack.Screen name="ResetPassword" component={ResetPassword}
 			options={{ headerTitle: "Reset Password", headerBackTitle: "Back" }}/>
 			<Stack.Screen name="DeleteAccount" component={DeleteAccount}

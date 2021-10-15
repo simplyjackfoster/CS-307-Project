@@ -3,11 +3,13 @@ import {
 	StyleSheet, 
 	Text, 
 	View, 
+	ScrollView,
 	Button,
 	Image,
 	TextInput,
 	SafeAreaView,
-	TouchableOpacity
+	TouchableOpacity,
+	Alert,
 } from 'react-native';
 
 import { AuthContext } from "../context";
@@ -26,12 +28,74 @@ export default ({ navigation }) => {
 	const { userToken, setUserToken } = React.useContext(AuthContext);
 
 	/* Functions to handle text input changes */
-	const [email, onChangeEmail] = React.useState("email");
-	const [password, onChangePassword] = React.useState("password");
+	const [email, onChangeEmail] = React.useState(null);
+	const [password, onChangePassword] = React.useState(null);
+
+
+	// function to test grabbing the inputs
+	const logInputs = () => {
+		console.log("\nEmail: " + email);
+		console.log("Password: " + password);
+	}
+
+
+	/* 	
+	 * attemptLogin()
+	 * function that attempts to login, it will check if the inputs have been filled out
+	 * and make an alert if they haven't, will also do authenticaton(not implemented) 
+	 */
+	const attemptLogin = () => {
+		// log inputs for testing
+		logInputs();
+
+		if (!email || !password) {
+			// at least one of the fields has not been filled out
+			
+			// alert user to fill out both fields and return
+			Alert.alert("Error", "Please enter your email and password before logging in.", 
+			[{ text: "Ok" }]);
+
+			console.log("Please fill out all fields!");
+		}
+		else {
+			// fields were both filled out
+
+			// call a function to check if the email and password combination is valid
+			if (isValidLogin(email, password)) {
+				// on successful login, set userToken to a non-null value
+				setUserToken('Arbitrary text');
+
+				console.log("Successful Login!");
+			}
+			else {
+				// on failed login, alert user to type correct login and return
+				Alert.alert("Error", "Incorrect email or password, please try again.", 
+				[{ text: "Ok" }]);
+
+				console.log("Failed Login!");
+			}
+
+		}
+	}
+
+
+	/* 	
+	 * isValidLogin(email, password)
+	 * function to check if the email and password combination is valid
+	 * return true if the login is valid, false if not (not implemented) 
+	 */
+	const isValidLogin = (email, password) => {
+		console.log("...Authenticating login...");
+
+		//find user with the specified email in database and check if the password matches
+		
+		// for now, return true for testing purposes
+		return true;
+	}
+
 
 	return (
-		// If the user clicks "Log In", then set userToken to a non-null value.
-		<View style={styles.container}>
+		<ScrollView style={styles.container}>
 
 			{/* UniRoom logo */}
 			<Image
@@ -42,10 +106,10 @@ export default ({ navigation }) => {
 			<View style={styles.form}>
 				
 				{/* Email (text), email (field) */}
-				<Text style={styles.email}>Email</Text>
+				<Text style={styles.label}>Email</Text>
 				<SafeAreaView>
 					<TextInput
-						style={styles.emailInput}
+						style={styles.input}
 						onChangeText={onChangeEmail}
 						placeholder={email}
 					/>
@@ -53,10 +117,10 @@ export default ({ navigation }) => {
 
 				
 				{/* Password (text), password (field, with black dots) */}
-				<Text style={styles.password}>Password</Text>
+				<Text style={styles.label}>Password</Text>
 				<SafeAreaView>
 					<TextInput
-						style={styles.passwordInput}
+						style={styles.input}
 						onChangeText={onChangePassword}
 						placeholder={password}
 						secureTextEntry={true}
@@ -67,7 +131,7 @@ export default ({ navigation }) => {
 				{/* Log In (button) */}
 				<TouchableOpacity
 					style={styles.loginButton}
-					onPress={() => setUserToken('asdf')}
+					onPress={attemptLogin} 
 				>
 					<Text>Log In</Text>
 				</TouchableOpacity>
@@ -84,16 +148,16 @@ export default ({ navigation }) => {
 
 
 				{/* Forgot password button */}
-
 				<TouchableOpacity
 					style={styles.forgotButton}
 					onPress={() => navigation.push("ResetPassword")}				
 				>
 					<Text style={styles.forgotText}>Forgot Password?</Text>
 				</TouchableOpacity>
+
 			</View>
 
-		</View>
+		</ScrollView>
 	);
 
 
@@ -130,34 +194,19 @@ const styles = StyleSheet.create({
 	textAlign: 'left',
   },
 
-  email: {
-	fontSize: 20,
-	margin: 12,
-	marginBottom: 0,
+  label: {
+    fontSize: 20,
+    margin: 12,
+    marginBottom: 0,
   },
 
-  emailInput: {
-	height: 40,
-	width: 250,
-	margin: 10,
-	padding: 10,
-	borderWidth: 1,
-	borderRadius: 10,
-  },
-
-  password: {
-	fontSize: 20,
-	margin: 12,
-	marginBottom: 0,
-  },
-
-  passwordInput: {
-	height: 40,
-	width: 250,
-	margin: 10,
-	padding: 10,
-	borderWidth: 1,
-	borderRadius: 10,
+  input: {
+    height: 40,
+    width: 290,
+    margin: 10,
+    padding: 10,
+    borderWidth: 1,
+    borderRadius: 10,
   },
 
   loginButton: {
@@ -172,7 +221,7 @@ const styles = StyleSheet.create({
   },
 
 
-  /* Bottom section titles */
+  /* Bottom section styles */
 
   signupPrompt: {
 	fontSize: 18,
