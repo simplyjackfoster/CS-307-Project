@@ -10,6 +10,9 @@ import { StyleSheet,
 
 import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
+import { auth, rtdb } from '../database/RTDB';
+import { deleteUser } from 'firebase/auth';
+import { remove } from 'firebase/database';
 
 
 /*
@@ -18,6 +21,29 @@ import Colors from "../constants/Colors";
 export default ( {navigation} ) => {
 
 	const { userToken, setUserToken } = React.useContext(AuthContext);
+	const attemptDelete = () => {
+		/*Alert.alert("Confirm", 
+					"Are you sure you want to sign out?",
+					[{ 
+						text: "No"
+					},
+					{
+						text: "Yes",
+						
+					}]);*/
+		var user = auth.currentUser;
+		console.log("USER: " + user);
+		deleteUser(user).then(() => {
+			console.log("Successful Delete");
+			setUserToken(null);
+			//Implementation for removing from OUR DB after auth deletion
+			//const userRef = rtdb.ref('users/' + userId);
+			//userRef.remove();
+		}).catch((error) => {
+			console.log(error.message);
+			Alert.alert("Error", "There was an error deleting your account");
+		})
+	}
 	
 	return (
 		// If user clicks "Sign Out", set userToken to null.
@@ -43,7 +69,7 @@ export default ( {navigation} ) => {
 					},
 					{
 						text: "Yes",
-						onPress: () => {setUserToken(null)}
+						onPress: () => setUserToken(null)
 					}]
 				)}
 			>
@@ -62,7 +88,7 @@ export default ( {navigation} ) => {
 						},
 						{
 							text: "Yes",
-							onPress: () => {setUserToken(null)}
+							onPress: () => attemptDelete()
 						}]
 					)}	
 			>
