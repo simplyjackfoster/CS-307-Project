@@ -35,13 +35,6 @@ export default ({ navigation }) => {
 	const [password, onChangePassword] = React.useState(null);
 
 
-	// function to test grabbing the inputs
-	const logInputs = () => {
-		console.log("\nEmail: " + email);
-		console.log("Password: " + password);
-	}
-
-
 	/* 	
 	 * attemptLogin()
 	 * function that attempts to login, it will check if the inputs have been filled out
@@ -49,11 +42,11 @@ export default ({ navigation }) => {
 	 */
 	const attemptLogin = () => {
 		// log inputs for testing
-		logInputs();
+		console.log("\nEmail: " + email);
+		console.log("Password: " + password);
 
 		if (!email || !password) {
 			// at least one of the fields has not been filled out
-			
 			// alert user to fill out both fields and return
 			Alert.alert("Error", "Please enter your email and password before logging in.", 
 			[{ text: "Ok" }]);

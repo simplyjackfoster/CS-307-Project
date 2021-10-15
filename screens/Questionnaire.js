@@ -47,6 +47,9 @@ export default ( {navigation} ) => {
   const [selectedOne, setSelectedOne] = React.useState('3');
   const [selectedTwo, setSelectedTwo] = React.useState('3');
   const [selectedThree, setSelectedThree] = React.useState('3');
+  const [selectedFour, setSelectedFour] = React.useState('3');
+  const [selectedFive, setSelectedFive] = React.useState('1');
+  const [selectedSix, setSelectedSix] = React.useState('1');
 
 
 
@@ -94,7 +97,7 @@ export default ( {navigation} ) => {
 
 
         {/* Question 3 */}
-        <Text style={styles.question}>I play videogames frequently.</Text>
+        <Text style={styles.question}>What time do you go to bed during the week?</Text>
         <Picker
           style={styles.picker}
           selectedValue={selectedThree}
@@ -102,11 +105,62 @@ export default ( {navigation} ) => {
             setSelectedThree(itemValue)
           }
         >
-          <Picker.Item label="Strongly Disagree" value="1" />
-          <Picker.Item label="Somewhat Disagree" value="2" />
-          <Picker.Item label="Neither Agree or Disagree" value="3" />
-          <Picker.Item label="Somewhat Agree" value="4" />
-          <Picker.Item label="Strongly Agree" value="5" />
+          <Picker.Item label="Before 10pm" value="1" />
+          <Picker.Item label="10pm-12am" value="2" />
+          <Picker.Item label="12-2am" value="3" />
+          <Picker.Item label="2-4am" value="4" />
+          <Picker.Item label="After 4am" value="5" />
+        </Picker>
+
+
+        {/* Question 4 */}
+        <Text style={styles.question}>What time do you go to bed on the weekends?</Text>
+        <Picker
+          style={styles.picker}
+          selectedValue={selectedFour}
+          onValueChange={(itemValue, itemIndex) =>
+            setSelectedFour(itemValue)
+          }
+        >
+          <Picker.Item label="Before 10pm" value="1" />
+          <Picker.Item label="10pm-12am" value="2" />
+          <Picker.Item label="12-2am" value="3" />
+          <Picker.Item label="2-4am" value="4" />
+          <Picker.Item label="After 4am" value="5" />
+        </Picker>
+        
+        
+        {/* Question 5 */}
+        <Text style={styles.question}>How many days of the week do you drink alcohol?</Text>
+        <Picker
+          style={styles.picker}
+          selectedValue={selectedFive}
+          onValueChange={(itemValue, itemIndex) =>
+            setSelectedFive(itemValue)
+          }
+        >
+          <Picker.Item label="Never" value="1" />
+          <Picker.Item label="1 day" value="2" />
+          <Picker.Item label="2-3 days" value="3" />
+          <Picker.Item label="4-5 days" value="4" />
+          <Picker.Item label="6-7 days" value="5" />
+        </Picker>
+
+
+        {/* Question 6 */}
+        <Text style={styles.question}>How many days of the week do you smoke?</Text>
+        <Picker
+          style={styles.picker}
+          selectedValue={selectedSix}
+          onValueChange={(itemValue, itemIndex) =>
+            setSelectedSix(itemValue)
+          }
+        >
+          <Picker.Item label="Never" value="1" />
+          <Picker.Item label="1 day" value="2" />
+          <Picker.Item label="2-3 days" value="3" />
+          <Picker.Item label="4-5 days" value="4" />
+          <Picker.Item label="6-7 days" value="5" />
         </Picker>
 
 
@@ -170,10 +224,11 @@ const styles = StyleSheet.create({
 
 
   createButton: {
-    backgroundColor: '#66a3dd',
+    backgroundColor: Colors.lightBlue,
     borderWidth: 2,
     borderRadius: 5,
     margin: 10,
+    marginBottom: 30,
     padding: 5,
     width: 120,
     alignSelf: 'center',
