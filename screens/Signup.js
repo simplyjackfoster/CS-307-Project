@@ -399,6 +399,28 @@ export default ( {navigation} ) => {
     } // validateInputs
 
 
+    /*
+     * storeLoginData()
+     * function to store the email and password in the authentication database
+     */
+    const storeLoginData = (emailData, passwordData) => {
+
+      // call functions to store the email and password
+
+
+    } // storeLoginData
+
+
+    /*
+     * storeCriticalData()
+     * function to store all the critical user data in the signup screen except
+     * for the password
+     */
+    const storeCriticalData = () => {
+      
+    }
+
+
 
 	return (
     // If the user clicks "Create Account", set userToken to a non-null value.
