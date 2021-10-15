@@ -1,6 +1,8 @@
 import React from 'react';
 import { TouchableOpacity, TextInput, StyleSheet, Text, View, SafeAreaView, Alert } from 'react-native';
 
+import Colors from "../constants/Colors";
+
 /*
  * This is the screen where the user resets their password.
  */
