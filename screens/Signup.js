@@ -139,7 +139,7 @@ export default ( {navigation} ) => {
       }
     }
 
-    console.log("Email Validated!");
+    //console.log("Email Validated!");
     return true;
   } // isValidEmail()
 
@@ -174,7 +174,7 @@ export default ( {navigation} ) => {
       }
     }
 
-    console.log("Phone Number Validated!");
+    //console.log("Phone Number Validated!");
     return true;
   } // isValidPhone()
   
@@ -287,7 +287,7 @@ export default ( {navigation} ) => {
         return false;
     }
 
-    console.log("Birthday Validated!")
+    //console.log("Birthday Validated!")
     return true;
   } // isValidBirthday()
 
@@ -361,7 +361,7 @@ export default ( {navigation} ) => {
         return false;
     }
 
-    console.log("Password Validated");
+    //console.log("Password Validated");
     return true;
   } // isValidPassword
 
@@ -389,7 +389,7 @@ export default ( {navigation} ) => {
       return false;
     }
 
-    console.log("Checkboxes Validated");
+    //console.log("Checkboxes Validated");
     return true;
   }
 

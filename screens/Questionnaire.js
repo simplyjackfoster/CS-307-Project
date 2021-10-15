@@ -26,6 +26,7 @@ const attemptCreate = (navigation, setUserToken) => {
     .then((userCredential) => {
       const user = userCredential.user;
       // move to Questionnaire screen
+      console.log("Successfully Created Account!");
       setUserToken('Arbitrary Value');
     })
     .catch((error) => {
