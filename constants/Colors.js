@@ -5,7 +5,6 @@
  * file instead of changing the color at every location in the project.
  */
 export default {
-
 	white: "#fff",
 	black: "#000",
 	lightBlue: "#66a3ff",
@@ -19,9 +18,11 @@ export default {
 	purple: "#9b59b6",
 	blueGray: "#34495e",
 	orange: "#e67e22",
-	red: "#e74c3c",
+	red: "#ff0700",
 	pink: "#fd79a8",
 	olive: "#badc58",
+	yellow: "#f9ca24",
+	lightBlue: "#66a3ff",
+	darkBlue: "#2b31d4",
 	yellow: "#f9ca24"
-
 }
