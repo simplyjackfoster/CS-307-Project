@@ -1,9 +1,10 @@
-import React from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Alert, Switch } from 'react-native';
+import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
-import { useState } from 'react';
+//import { useState } from 'react';
 import { NavigationAction } from '@react-navigation/routers';
+import { renderIcon } from "../images/Icons";
 
 
 // START OF DATABASE STUFF
@@ -123,6 +124,10 @@ console.log("Profile");
  * This is the screen where the user can view their profile.
  */
 export default ( {navigation} ) => {
+	const [isEnabled, setIsEnabled] = useState(false);
+	const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+	const { userToken, setUserToken } = React.useContext(AuthContext);
+
 	return (
 		<ScrollView style={styles.container}>
 			<TouchableOpacity
@@ -140,21 +145,37 @@ export default ( {navigation} ) => {
 			<View style={{marginTop: 40}}/>
 
 			<View style={styles.infoWrapper}>
-				<Icon name="envelope" size={25} color={'#2b31d4'} style={styles.icon}/>
+				<View style={styles.icon}>
+					{renderIcon("envelope", 25, Colors.darkBlue)}
+				</View>
 				<Text style={styles.infoHeader}>Email:</Text>
 				<Text style={styles.infoContent}><GetEmail /></Text>
 			</View>
+
 			<View style={styles.infoWrapper}>
-				<Icon name="phone-square" size={25} color={'#2b31d4'} style={styles.icon}/>
+				<View style={styles.icon}>
+					{renderIcon("phone-square", 25, Colors.darkBlue)}
+				</View>
 				<Text style={styles.infoHeader}>Phone:</Text>
 				<Text style={styles.infoContent}>123-456-7890</Text>
 			</View>
+
+			<View style={styles.disableWrapper}>
+				<View style={styles.icon}>
+					{renderIcon("eye-slash", 25, Colors.darkBlue)}
+				</View>
+				<Text style={styles.disableText}>Ghost Mode</Text>
+				<Switch
+					trackColor={{ false: Colors.gray, true: Colors.lightBlue }}
+					onValueChange={toggleSwitch}
+					value={isEnabled}
+					style={{transform: [{ scaleX: .80 }, { scaleY: .80 }] }}
+				/>
+			</View>
+
 		</ScrollView>
 	);
 }
-
-
-
 
 // styles
 const styles = StyleSheet.create({
@@ -197,6 +218,7 @@ infoWrapper: {
 },
 
 icon: {
+	paddingRight: 5,
 },
 
 infoHeader: {
@@ -209,7 +231,38 @@ infoHeader: {
 infoContent: {
 	alignSelf: 'flex-start',
 	fontSize: 20,
-}
+},
 
+disableWrapper: {
+	flexDirection: 'row',
+	marginBottom: 25,
+	marginTop: 15,
+	alignSelf: 'center',
+},
+
+disableText: {
+	paddingLeft: 5,
+	paddingRight: 10,
+	fontSize: 25,
+	textAlign: 'center',
+	fontWeight: 'bold'
+},
+
+deleteWrapper: {
+	paddingLeft: 100,
+	paddingRight: 100,
+},
+
+deleteBuff: {
+	alignItems: 'center',
+	backgroundColor: 'blue',
+	
+},
+
+deleteButtonText: {
+	padding: 10,
+	fontWeight: 'bold',
+	fontSize: 15,
+},
 
 });

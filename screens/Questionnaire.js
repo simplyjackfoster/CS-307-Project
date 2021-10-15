@@ -3,44 +3,136 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 
 import Colors from "../constants/Colors";
 import { AuthContext } from "../context";
+import { Picker } from '@react-native-picker/picker';
+
+
+import { auth } from '../database/RTDB';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { Gemail, Gpassword } from './Signup';
 
 /*
  * This is the screen where the user fills out the questionnaire
  * about themselves.
  */
-export default ( {navigation} ) => {
+// On Press Function for CreateAcc Button
 
+
+const attemptCreate = (navigation, setUserToken) => {
+  createUserWithEmailAndPassword(auth, Gemail, Gpassword)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      // move to Questionnaire screen
+      console.log("Successfully Created Account!");
+      setUserToken('Arbitrary Value');
+    })
+    .catch((error) => {
+      Alert.alert("Error", "Error: Email Already in Use");
+      console.log("Error Code: " + error.code);
+      console.log("Error Message: " + error.message);
+      // move back to create account screen
+      navigation.pop();
+    })
+} // attemptCreate()
+
+
+export default ( {navigation} ) => {
   const { userToken, setUserToken }  = React.useContext(AuthContext);
 
-	return (
-		<View style={styles.container}>
-			<Text>This is the Questionnaire Screen</Text>
-      
-      {/* Continue to Questionnaire (button) */}
-      <TouchableOpacity
-			  style={styles.createButton}
-        // check if questionnaire has been completed and run setUserToken
-        onPress={() => {
-          {userToken ? (
-            navigation.pop()
-          ) : (
-            setUserToken('asdsf')
-          )}
-        }}
-			>
+  const [selectedOne, setSelectedOne] = React.useState('3');
+  const [selectedTwo, setSelectedTwo] = React.useState('3');
+  const [selectedThree, setSelectedThree] = React.useState('3');
 
-      {userToken ? (
-        <Text>Save Changes</Text>
-      ) : (
-        <Text>Create Account</Text>
-      )}
-			</TouchableOpacity> 
-		</View>
+
+
+
+	return (
+    <ScrollView>
+      <View style={styles.container}>
+        <Text style={styles.intro}>
+          Please fill out this questionnaire to get a personalized feed!
+        </Text>
+        
+
+        {/* Question 1 */}
+        <Text style={styles.question}>I have people over frequently.</Text>
+        <Picker
+          style={styles.picker}
+          selectedValue={selectedOne}
+          onValueChange={(itemValue, itemIndex) =>
+            setSelectedOne(itemValue)
+          }
+        >
+          <Picker.Item label="Strongly Disagree" value="1" />
+          <Picker.Item label="Somewhat Disagree" value="2" />
+          <Picker.Item label="Neither Agree or Disagree" value="3" />
+          <Picker.Item label="Somewhat Agree" value="4" />
+          <Picker.Item label="Strongly Agree" value="5" />
+        </Picker>
+
+
+        {/* Question 2 */}
+        <Text style={styles.question}>I am a clean person.</Text>
+        <Picker
+          style={styles.picker}
+          selectedValue={selectedTwo}
+          onValueChange={(itemValue, itemIndex) =>
+            setSelectedTwo(itemValue)
+          }
+        >
+          <Picker.Item label="Strongly Disagree" value="1" />
+          <Picker.Item label="Somewhat Disagree" value="2" />
+          <Picker.Item label="Neither Agree or Disagree" value="3" />
+          <Picker.Item label="Somewhat Agree" value="4" />
+          <Picker.Item label="Strongly Agree" value="5" />
+        </Picker>
+
+
+        {/* Question 3 */}
+        <Text style={styles.question}>I play videogames frequently.</Text>
+        <Picker
+          style={styles.picker}
+          selectedValue={selectedThree}
+          onValueChange={(itemValue, itemIndex) =>
+            setSelectedThree(itemValue)
+          }
+        >
+          <Picker.Item label="Strongly Disagree" value="1" />
+          <Picker.Item label="Somewhat Disagree" value="2" />
+          <Picker.Item label="Neither Agree or Disagree" value="3" />
+          <Picker.Item label="Somewhat Agree" value="4" />
+          <Picker.Item label="Strongly Agree" value="5" />
+        </Picker>
+
+
+
+
+        {/* Continue to Questionnaire (button) */}
+        <TouchableOpacity
+          style={styles.createButton}
+          // check if questionnaire has been completed and run setUserToken
+          onPress={() => {
+            {userToken ? (
+              navigation.pop()
+            ) : (
+              setUserToken('asdsf')
+            )}
+          }}
+        >
+
+        {userToken ? (
+          <Text>Save Changes</Text>
+        ) : (
+          <Text>Create Account</Text>
+        )}
+        </TouchableOpacity> 
+      </View>
+    </ScrollView>
 	);
 }
 
@@ -53,8 +145,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 0,
+  },
+
+  intro: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 20,
+    marginBottom: 40,
+  },
+
+  question: {
+    fontSize: 20,
+    textAlign: 'center',
+    marginBottom: 0,
+    marginTop: 50,
+    fontWeight: 'bold',
+  },
+
+  picker: {
+    alignSelf: 'center',
+    width: '70%',
   },
 
 
