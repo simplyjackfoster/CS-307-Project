@@ -19,7 +19,7 @@ export default ({ navigation }) => {
 		  </View>
       <View style={styles.container}>
 			  <Text>We collect personal information that you voluntarily provide to us when you register on the App, express an interest in obtaining information about us or our products and Services, when you participate in activities on the App (such as by posting messages in our online forums or entering competitions, contests or giveaways) or otherwise when you contact us.
-</Text>
+        </Text>
       </View>
     </View>
 	);

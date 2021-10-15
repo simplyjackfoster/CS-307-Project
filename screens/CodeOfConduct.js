@@ -9,7 +9,7 @@ import Colors from "../constants/Colors";
  */
 export default ({ navigation }) => {
 	return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
 		  <View style={styles.container}>
         <Text>
         <Text>
