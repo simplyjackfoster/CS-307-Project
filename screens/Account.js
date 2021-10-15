@@ -22,15 +22,6 @@ export default ( {navigation} ) => {
 
 	const { userToken, setUserToken } = React.useContext(AuthContext);
 	const attemptDelete = () => {
-		/*Alert.alert("Confirm", 
-					"Are you sure you want to sign out?",
-					[{ 
-						text: "No"
-					},
-					{
-						text: "Yes",
-						
-					}]);*/
 		var user = auth.currentUser;
 		console.log("USER: " + user);
 		deleteUser(user).then(() => {
