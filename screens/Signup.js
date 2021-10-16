@@ -18,9 +18,15 @@ import { Checkbox } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 
 
-// variables for exporting email and password information to Questionnaire
+// variables for exporting information to Questionnaire
 export var Gemail = '';
 export var Gpassword = '';
+export var Gname = '';
+export var Gphone = ''; 
+export var Gbirthday = '';
+export var GsecurityQuestion = '';
+export var GsecurityAnswer = '';
+
 
 /*
  * This is the screen where the user creates an account. 
@@ -41,8 +47,8 @@ export default ( {navigation} ) => {
   const [checkedCoc, setCheckedCoc] = React.useState(null);
   const [checkedPp, setCheckedPp] = React.useState(null);
 
-  // hooks for security question
-  const [selectedQuestion, setSelectedQuestion] = React.useState(null);
+  // hooks for security question (NOTE: start off at question 1 by default)
+  const [selectedQuestion, setSelectedQuestion] = React.useState(1);
 
   /*
    * IsValidName()
@@ -455,6 +461,11 @@ export default ( {navigation} ) => {
       // go to the questionnnaire screen
       Gemail = email;
       Gpassword = password;
+      Gname = name;
+      Gphone = phone;
+      Gbirthday = birthday;
+      GsecurityQuestion = selectedQuestion;
+      GsecurityAnswer = securityAnswer;
       navigation.push("Questionnaire");
   
     } // validateInputs()

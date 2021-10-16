@@ -12,11 +12,23 @@ import Colors from "../constants/Colors";
 import { AuthContext } from "../context";
 import { Picker } from '@react-native-picker/picker';
 
+// authentication imports
 import { auth } from '../database/RTDB';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { Gemail, Gpassword } from './Signup';
 
-import { writeUser } from '../database/writeData';
+// data value imports from Signup screen
+import {
+  Gemail,
+  Gpassword,
+  Gname,
+  Gphone,
+  Gbirthday,
+  GsecurityQuestion,
+  GsecurityAnswer
+ } from './Signup';
+
+// database imports
+import { writeNewUser } from '../database/writeData';
 
 
 
@@ -43,7 +55,9 @@ export default ( {navigation} ) => {
         const user = userCredential.user;
         // move to Questionnaire screen
         console.log("Successfully Created Account!");
-        writeUser(Gemail);
+        console.log("SECURITY_QUESTION: " + GsecurityQuestion);
+        writeNewUser(Gemail, Gname, Gphone,
+          Gbirthday, GsecurityQuestion, GsecurityAnswer);
         setUserToken('Arbitrary Value');
       })
       .catch((error) => {

@@ -27,12 +27,14 @@ export const writeUser = (email) => {
  * Writes a new user to the database based on the information
  * collected from Signup.js
  */
-export const writeNewUser = (name, email, phone_number,
+export const writeNewUser = (email, name, phone,
 														 birthday, securityQuestion, securityAnswer) => {
-	set(ref(rtdb, "users/" + email), {
-		name: name,
+	const id = getID(email);
+
+	set(ref(rtdb, "users/" + id + "/critical_information"), {
 		email: email,
-		phone_number: phone_number,
+		name: name,
+		phone: phone,
 		birthday: birthday,
 		securityQuestion: securityQuestion,
 		securityAnswer: securityAnswer,
