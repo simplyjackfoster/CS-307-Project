@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,7 +11,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { useState } from 'react';
 import Colors from "../constants/Colors";
 
 // firebase imports
@@ -55,6 +54,14 @@ export default ( {navigation} ) => {
   } // openImagePickerAsync()
 
 
+  /*
+   * Validates that none of the inputs are invalid.
+   */
+  const validateInputs = () => {
+
+    // Check if the name field is valid 
+
+  } // validateInputs()
 
 
 
@@ -82,7 +89,7 @@ export default ( {navigation} ) => {
           <TextInput
             style={styles.input}
             onChangeText={onChangeName}
-            placeholder={getProfileName(auth.currentUser.email)}
+            defaultValue={getProfileName(auth.currentUser.email)}
           />
         </SafeAreaView>
 
@@ -115,8 +122,10 @@ export default ( {navigation} ) => {
           onPress={() => {
             // EDIT USER DB ENTRY...
             // To do this write functions in writeData.js and import them here
+
+            // check to make sure fields are not empty
+            //validateInputs()
             writeProfileName(auth.currentUser.email, name);
-            //navigation.navigate('Profile', {name: name, email: email})
             navigation.pop();
           }}
         >
