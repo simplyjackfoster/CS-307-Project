@@ -52,7 +52,6 @@ export default ( {navigation} ) => {
 	// Function that immediately refreshes Profile when we navigate
 	useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", () => {
-			//onRefresh();
 			setRefreshing(true);
 			wait(1).then(() => setRefreshing(false));
 		});
