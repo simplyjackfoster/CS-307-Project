@@ -28,12 +28,12 @@ import { writeProfileName } from '../database/writeData';
  */
 export default ( {navigation} ) => {
 
-  // The variable for profile picture
-  const [profilePicture, setProfilePicture] = React.useState(null);
-
   // hooks for editable fields
   const [name, onChangeName] = React.useState(null);
   const [email, onChangeEmail] = React.useState(null);
+
+  // The variable for profile picture
+  const [profilePicture, setProfilePicture] = React.useState(null);
 
   const openImagePickerAsync = async () => {
     // get permission from user to access camera roll
@@ -44,7 +44,10 @@ export default ( {navigation} ) => {
       return;
     }
     // let user select image from their camera roll
-    let picked = await ImagePicker.launchImageLibraryAsync();
+    let picked = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+    });
     // if they cancelled the selection
     if (picked.cancelled == true) {
       return;
@@ -99,7 +102,7 @@ export default ( {navigation} ) => {
           <TextInput
             style={styles.input}
             onChangeText={onChangeEmail}
-            placeholder={auth.currentUser.email}
+            defualtValue={auth.currentUser.email}
           />
         </SafeAreaView>
 
