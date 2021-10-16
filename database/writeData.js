@@ -1,18 +1,7 @@
 import React from 'react';
 import { app, rtdb, auth } from './RTDB';
 import {ref, set, onValue, exists, val, child, get, remove} from "firebase/database"
-
-
-/* 
- * Gets the user ID, which is used to refer to each
- * user in the database.
- */
-export const getID = (email) => {
-	let atSign = email.indexOf("@");
-	const id = email.substring(0, atSign);
-	return id;
-} // getID() 
-
+import { getID } from './ID';
 
 
 /* 

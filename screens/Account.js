@@ -14,6 +14,9 @@ import { auth, rtdb } from '../database/RTDB';
 import { deleteUser } from 'firebase/auth';
 import { remove } from 'firebase/database';
 
+// database read/write/remove imports
+import { removeUser } from '../database/removeData';
+
 
 /*
  * This is the screen where the user view their account information.
@@ -23,13 +26,15 @@ export default ( {navigation} ) => {
 	const { userToken, setUserToken } = React.useContext(AuthContext);
 	const attemptDelete = () => {
 		var user = auth.currentUser;
-		console.log("USER: " + user);
 		deleteUser(user).then(() => {
 			console.log("Successful Delete");
+
+			// delete from RTDB
+			removeUser(user.email);
+
+			// navigate to log in screen
 			setUserToken(null);
-			//Implementation for removing from OUR DB after auth deletion
-			//const userRef = rtdb.ref('users/' + userId);
-			//userRef.remove();
+
 		}).catch((error) => {
 			console.log(error.message);
 			Alert.alert("Error", "There was an error deleting your account");

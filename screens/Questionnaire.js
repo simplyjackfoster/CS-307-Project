@@ -27,7 +27,7 @@ import {
   GsecurityAnswer
  } from './Signup';
 
-// database imports
+// database read/write/remove imports
 import { writeNewUser } from '../database/writeData';
 
 
@@ -55,7 +55,6 @@ export default ( {navigation} ) => {
         const user = userCredential.user;
         // move to Questionnaire screen
         console.log("Successfully Created Account!");
-        console.log("SECURITY_QUESTION: " + GsecurityQuestion);
         writeNewUser(Gemail, Gname, Gphone,
           Gbirthday, GsecurityQuestion, GsecurityAnswer);
         setUserToken('Arbitrary Value');
