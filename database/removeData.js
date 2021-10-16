@@ -4,7 +4,14 @@ import {ref, set, onValue, exists, val, child, get, remove} from "firebase/datab
 import { getID } from './ID';
 
 
-export const removeUser = (email) => {
+/*
+ * removeUser()
+ *
+ * Removes a specified user from the RTDB
+ * @param email_or_id -> A string that can either be an email
+ * 								 			 or an ID specifying the user to be removed.
+ */
+export const removeUser = (email_or_id) => {
 	const id = getID(email);	
 	remove(ref(rtdb, "users/" + id));
 } // removeUser()

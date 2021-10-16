@@ -13,117 +13,15 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import Colors from "../constants/Colors";
-// START OF DATABASE STUFF
-// WILL NEED TO BE UNIVERSALLY ACCESSABLE FROM App.js
 
+// firebase imports
+import { auth, rtdb } from '../database/RTDB';
+import { deleteUser } from 'firebase/auth';
+import { remove } from 'firebase/database';
 
-// Firebase Integration
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import {getDatabase, ref, set, onValue, exists, val, child, get, remove} from "firebase/database"
-import { StackActions } from '@react-navigation/routers';
-//import {getFirestore, collection, getDocs, setDoc, docRef} from 'firebase/firestore/lite';
-//import {doc} from 'firebase/firestore';
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCVc6_sT83QWcX-TCxDEDtVMHsMRaTy2yY",
-  authDomain: "uniroom-fdcd7.firebaseapp.com",
-  databaseURL: "https://uniroom-fdcd7-default-rtdb.firebaseio.com",
-  projectId: "uniroom-fdcd7",
-  storageBucket: "uniroom-fdcd7.appspot.com",
-  messagingSenderId: "644435940478",
-  appId: "1:644435940478:web:40e3f7aea01972606bb42f",
-  measurementId: "G-KQK1K10WTL"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const rtdb = getDatabase(app);
-
-
-
-// write to rtdb
-function writeUserData(name, email) {
-  set(ref(rtdb, "users/" + "Dummy Name"), {
-    name: name,
-    email: email
-  });
-} // writeUserData()
-
-
-
-// read from rtdb
-function readUserData(user_name) {
-  const dbRef = ref(rtdb);
-  
-  // (react hook)
-  const [name, setName] = useState(null);
-
-  // get the data
-  get(child(dbRef, "users/" + user_name + "/name")).then((snapshot) => {
-    if (snapshot.exists()) {
-      const person = snapshot.val();
-      setName(person);
-    } else {
-      console.log("No data available");
-    }
-  }).catch((error) => {
-    console.error(error);
-  });
-
-  return name;
-} // readUserData()
-
-// read from rtdb
-function readUserEmail(user_name) {
-	const dbRef = ref(rtdb);
-	
-	// (react hook)
-	const [email, setEmail] = useState(null);
-  
-	// get the data
-	get(child(dbRef, "users/" + user_name + "/email")).then((snapshot) => {
-	  if (snapshot.exists()) {
-		const person = snapshot.val();
-		setEmail(person);
-	  } else {
-		console.log("No data available");
-	  }
-	}).catch((error) => {
-	  console.error(error);
-	});
-  
-	return email;
-  } // readUserData()
-
-// remove from rtdb
-function removeUser(user_name) {
-  remove(ref(rtdb, "users/" + user_name));
-} // removeUser()
-
-const GetName = () => {
-  //writeUserData("Max Finder", "mfinder@purdue.edu");
-  const dummy = readUserData("Dummy Name");
-  //removeUser("Max Finder");
-  return (
-    dummy
-  );
-}
-
-const GetEmail = () => {
-	const dummyEmail = readUserEmail("Dummy Name");
-	return (
-	  dummyEmail
-	);
-}
-
-
-// END OF DATABASE STUFF
+// database read/write/remove imports
+import { getProfileName } from '../database/readData';
+import { writeProfileName } from '../database/writeData';
 
 
 /*
@@ -184,7 +82,7 @@ export default ( {navigation} ) => {
           <TextInput
             style={styles.input}
             onChangeText={onChangeName}
-            placeholder={GetName()}
+            placeholder={getProfileName(auth.currentUser.email)}
           />
         </SafeAreaView>
 
@@ -194,7 +92,7 @@ export default ( {navigation} ) => {
           <TextInput
             style={styles.input}
             onChangeText={onChangeEmail}
-            placeholder={GetEmail()}
+            placeholder={auth.currentUser.email}
           />
         </SafeAreaView>
 
@@ -215,9 +113,11 @@ export default ( {navigation} ) => {
           style={styles.buttonSave}
           // check if questionnaire has been completed and run setUserToken
           onPress={() => {
-            //EDIT USER DB ENTRY
-            writeUserData(name, email);
-            navigation.navigate('Profile', {name: name, email: email})
+            // EDIT USER DB ENTRY...
+            // To do this write functions in writeData.js and import them here
+            writeProfileName(auth.currentUser.email, name);
+            //navigation.navigate('Profile', {name: name, email: email})
+            navigation.pop();
           }}
         >
           <Text style={styles.textSave}>Save</Text>

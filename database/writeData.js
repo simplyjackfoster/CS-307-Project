@@ -1,12 +1,20 @@
 import React from 'react';
 import { app, rtdb, auth } from './RTDB';
-import {ref, set, onValue, exists, val, child, get, remove} from "firebase/database"
+import {ref, set, update, onValue, exists, val, child, get, remove} from "firebase/database"
 import { getID } from './ID';
 
 
 /* 
+ * writeNewUser()
+ *
  * Writes a new user to the database based on the information
  * collected from Signup.js
+ * @param email -> the email the user entered in signup.
+ * @param name -> the name the user entered in signup.
+ * @param phone -> the phone number the user entered in signup.
+ * @param birthday -> the birthday the user entered in signup.
+ * @param securityQuestion -> the security question the user chose in signup.
+ * @param securityAnswer -> the answer the user entered in signup.
  */
 export const writeNewUser = (email, name, phone,
 														 birthday, securityQuestion, securityAnswer) => {
@@ -74,3 +82,18 @@ export const writeNewUser = (email, name, phone,
 } // writeNewUser()
 
 
+
+/*
+ * writeName()
+ *
+ * Writes a profile_name to the specified user in the RTDB
+ * @param email_or_id -> the email or id specifying the user.
+ * @param name -> the name that we will write to the database.
+ */
+export const writeProfileName = (email_or_id, name) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		profile_name: name
+	});
+} // writeName()

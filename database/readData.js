@@ -5,13 +5,18 @@ import { getID } from './ID';
 
 
 /*
- * Get name of user
+ * getProfileName()
+ *
+ * Get the profile_name of the specified user.
+ * @param email -> A string that can either be an email
+ * 								 or an ID. 
+ * @return -> The profile_name of the user specified by the email or ID
  */
-export const getName = (email) => {
+export const getProfileName = (email_or_id) => {
 	const dbRef = ref(rtdb);
 
 	// get the id
-	const id = getID(email);
+	const id = getID(email_or_id);
 
 	// (react hook)
 	const [name, setName] = useState(null);

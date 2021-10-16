@@ -11,7 +11,7 @@ import { deleteUser } from 'firebase/auth';
 import { remove } from 'firebase/database';
 
 // database read/write/remove imports
-import { getName } from '../database/readData';
+import { getProfileName } from '../database/readData';
 
 
 /*
@@ -33,7 +33,7 @@ export default ( {navigation} ) => {
 			<View style={styles.imageWrapper}>
 				<Image source={ require("../images/default-profile-picture.jpeg") } style={styles.profilePic} />
 				<Text style={styles.imageName}>
-					{getName(auth.currentUser.email)}
+					{getProfileName(auth.currentUser.email)}
 				</Text>
 			</View>
 
