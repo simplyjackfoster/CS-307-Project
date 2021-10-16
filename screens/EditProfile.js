@@ -16,11 +16,13 @@ import Colors from "../constants/Colors";
 // firebase imports
 import { auth, rtdb } from '../database/RTDB';
 import { deleteUser } from 'firebase/auth';
-import { remove } from 'firebase/database';
+import { ref, remove } from 'firebase/database';
+import { uploadBytes } from 'firebase/storage';
 
 // database read/write/remove imports
 import { getProfileName } from '../database/readData';
 import { writeProfileName } from '../database/writeData';
+import { uploadProfilePicture } from '../database/uploadImage';
 
 
 /*
@@ -35,6 +37,7 @@ export default ( {navigation} ) => {
   // The variable for profile picture
   const [profilePicture, setProfilePicture] = React.useState(null);
 
+  /*
   const openImagePickerAsync = async () => {
     // get permission from user to access camera roll
     let libraryPermissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -55,6 +58,33 @@ export default ( {navigation} ) => {
     // set the selected image
     setProfilePicture({ localUri: picked.uri });
   } // openImagePickerAsync()
+*/
+
+  const openImagePickerAsync = async () => {
+    // get permission from user to access camera roll
+    let libraryPermissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    // if they decline permission
+    if (libraryPermissionResult.granted == false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+    // let user select image from their camera roll
+    let picked = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+    });
+    // if they cancelled the selection
+    if (picked.cancelled == true) {
+      return;
+    }
+    // set the selected image
+    //setProfilePicture({ localUri: picked.uri });
+    setProfilePicture(picked.uri);
+    uploadProfilePicture(auth.currentUser.email, picked.uri);
+  } // openImagePickerAsync()
+
+
+
 
 
   /*
@@ -75,7 +105,8 @@ export default ( {navigation} ) => {
         <SafeAreaView>
           <Image source={
             profilePicture ? (
-              { uri: profilePicture.localUri }
+              //{ uri: profilePicture.localUri }
+              {uri: profilePicture}
             ) : (
               require("../images/default-profile-picture.jpeg")
             )}
