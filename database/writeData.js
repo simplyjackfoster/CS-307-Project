@@ -3,23 +3,15 @@ import { app, rtdb, auth } from './RTDB';
 import {ref, set, onValue, exists, val, child, get, remove} from "firebase/database"
 
 
-// gets the user ID
+/* 
+ * Gets the user ID, which is used to refer to each
+ * user in the database.
+ */
 export const getID = (email) => {
 	let atSign = email.indexOf("@");
 	const id = email.substring(0, atSign);
 	return id;
 } // getID() 
-
-
-
-//FOR TESTING ONLY
-export const writeUser = (email) => {
-	const id = getID(email);
-
-	set(ref(rtdb, "users/" + id), {
-		email: email
-	});
-} // writeUser()
 
 
 
@@ -78,7 +70,6 @@ export const writeNewUser = (email, name, phone,
 		has_significant_other: "value"
 	});
 
-
 	// write the "Match List" 
 	set(ref(rtdb, "users/" + id + "/Match List"), {
 		user_count: 0
@@ -91,7 +82,6 @@ export const writeNewUser = (email, name, phone,
 	set(ref(rtdb, "users/" + id + "/Feed/Swipe Right List"), {
 		user_count: 0
 	});
-
 } // writeNewUser()
 
 
