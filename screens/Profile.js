@@ -1,145 +1,81 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Alert, Switch } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet,
+				 Text,
+				 View,
+				 ScrollView,
+				 RefreshControl,
+				 Image,
+				 TouchableOpacity,
+				 Alert,
+				 Switch
+				} from 'react-native';
 import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
-//import { useState } from 'react';
 import { NavigationAction } from '@react-navigation/routers';
 import { renderIcon } from "../images/Icons";
 
+// firebase imports
+import { auth, rtdb } from '../database/RTDB';
+import { deleteUser } from 'firebase/auth';
+import { remove } from 'firebase/database';
 
-// START OF DATABASE STUFF
-// WILL NEED TO BE UNIVERSALLY ACCESSABLE FROM App.js
-
-
-// Firebase Integration
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import {getDatabase, ref, set, onValue, exists, val, child, get, remove} from "firebase/database"
-//import { navigate } from '@react-navigation/routers/lib/typescript/src/CommonActions';
-//import {getFirestore, collection, getDocs, setDoc, docRef} from 'firebase/firestore/lite';
-//import {doc} from 'firebase/firestore';
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCVc6_sT83QWcX-TCxDEDtVMHsMRaTy2yY",
-  authDomain: "uniroom-fdcd7.firebaseapp.com",
-  databaseURL: "https://uniroom-fdcd7-default-rtdb.firebaseio.com",
-  projectId: "uniroom-fdcd7",
-  storageBucket: "uniroom-fdcd7.appspot.com",
-  messagingSenderId: "644435940478",
-  appId: "1:644435940478:web:40e3f7aea01972606bb42f",
-  measurementId: "G-KQK1K10WTL"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const rtdb = getDatabase(app);
-
-// write to rtdb
-function writeUserData(name, email) {
-  set(ref(rtdb, "users/" + name), {
-    name: name,
-    email: email
-  });
-} // writeUserData()
+// database read/write/remove imports
+import { getProfileName } from '../database/readData';
 
 
-
-// read from rtdb
-function readUserData(user_name) {
-  const dbRef = ref(rtdb);
-  
-  // (react hook)
-  const [name, setName] = useState(null);
-
-  // get the data
-  get(child(dbRef, "users/" + user_name + "/name")).then((snapshot) => {
-    if (snapshot.exists()) {
-      const person = snapshot.val();
-      setName(person);
-    } else {
-      console.log("No data available");
-    }
-  }).catch((error) => {
-    console.error(error);
-  });
-
-  return name;
-} // readUserData()
-
-// read from rtdb
-function readUserEmail(user_name) {
-	const dbRef = ref(rtdb);
-	
-	// (react hook)
-	const [email, setEmail] = useState(null);
-  
-	// get the data
-	get(child(dbRef, "users/" + user_name + "/email")).then((snapshot) => {
-	  if (snapshot.exists()) {
-		const person = snapshot.val();
-		setEmail(person);
-	  } else {
-		console.log("No data available");
-	  }
-	}).catch((error) => {
-	  console.error(error);
-	});
-  
-	return email;
-  } // readUserData()
+/*
+ * Function used to wait a certain amount of time
+ * @param timeout -> the amount of milliseconds to wait
+ */
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+} // wait()
 
 
-// remove from rtdb
-function removeUser(user_name) {
-  remove(ref(rtdb, "users/" + user_name));
-} // removeUser()
-
-const GetName = () => {
-  //writeUserData("Max Finder", "mfinder@purdue.edu");
-  const dummy = readUserData("Dummy Name");
-  //removeUser("Max Finder");
-  return (
-    dummy
-  );
-}
-const GetEmail = () => {
-	const dummyEmail = readUserEmail("Dummy Name");
-	return (
-	  dummyEmail
-	);
-}
-
-
-// END OF DATABASE STUFF
-
-
-console.log("Profile");
 
 /*
  * This is the screen where the user can view their profile.
  */
 export default ( {navigation} ) => {
+
 	const [isEnabled, setIsEnabled] = useState(false);
 	const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+	const [refreshing, setRefreshing] = React.useState(false);
 	const { userToken, setUserToken } = React.useContext(AuthContext);
 
+	// Function that refreshes
+	const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(250).then(() => setRefreshing(false));
+  }, []);
+
+	// Function that immediately refreshes Profile when we navigate
+	useEffect(() => {
+		const unsubscribe = navigation.addListener("focus", () => {
+			setRefreshing(true);
+			wait(1).then(() => setRefreshing(false));
+		});
+		return unsubscribe;
+	}, [navigation]);
+
+
 	return (
-		<ScrollView style={styles.container}>
+		<ScrollView style={styles.container}
+			refreshControl={
+				<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
+			}	
+		>
 			<TouchableOpacity
 					style={styles.editProfile}
 					onPress={() => navigation.push("EditProfile")}	
-					//onPress={() => navigation.navigate("EditProfile")}			
 			>
 				<Text style={styles.textEditProfile}>Edit Profile...</Text>
 			</TouchableOpacity>
 			<View style={styles.imageWrapper}>
 				<Image source={ require("../images/default-profile-picture.jpeg") } style={styles.profilePic} />
-				<Text style={styles.imageName}><GetName /></Text>
+				<Text style={styles.imageName}>
+					{getProfileName(auth.currentUser.email)}
+				</Text>
 			</View>
 
 			<View style={{marginTop: 40}}/>
@@ -149,7 +85,7 @@ export default ( {navigation} ) => {
 					{renderIcon("envelope", 25, Colors.darkBlue)}
 				</View>
 				<Text style={styles.infoHeader}>Email:</Text>
-				<Text style={styles.infoContent}><GetEmail /></Text>
+				<Text style={styles.infoContent}>{auth.currentUser.email}</Text>
 			</View>
 
 			<View style={styles.infoWrapper}>

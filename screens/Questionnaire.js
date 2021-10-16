@@ -5,25 +5,38 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  Alert
 } from 'react-native';
 
 import Colors from "../constants/Colors";
 import { AuthContext } from "../context";
 import { Picker } from '@react-native-picker/picker';
 
-
+// authentication imports
 import { auth } from '../database/RTDB';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { Gemail, Gpassword } from './Signup';
+
+// data value imports from Signup screen
+import {
+  Gemail,
+  Gpassword,
+  Gname,
+  Gphone,
+  Gbirthday,
+  GsecurityQuestion,
+  GsecurityAnswer
+ } from './Signup';
+
+// database read/write/remove imports
+import { writeNewUser } from '../database/writeData';
+
+
 
 /*
  * This is the screen where the user fills out the questionnaire
  * about themselves.
  */
 // On Press Function for CreateAcc Button
-
-
-
 
 
 export default ( {navigation} ) => {
@@ -42,6 +55,8 @@ export default ( {navigation} ) => {
         const user = userCredential.user;
         // move to Questionnaire screen
         console.log("Successfully Created Account!");
+        writeNewUser(Gemail, Gname, Gphone,
+          Gbirthday, GsecurityQuestion, GsecurityAnswer);
         setUserToken('Arbitrary Value');
       })
       .catch((error) => {
