@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Alert, Switch } from 'react-native';
+import { StyleSheet,
+				 Text,
+				 View,
+				 ScrollView,
+				 RefreshControl,
+				 Image,
+				 TouchableOpacity,
+				 Alert,
+				 Switch
+				} from 'react-native';
 import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
 import { NavigationAction } from '@react-navigation/routers';
@@ -15,15 +24,37 @@ import { getProfileName } from '../database/readData';
 
 
 /*
+ * Function used to wait a certain amount of time
+ * @param timeout -> the amount of milliseconds to wait
+ */
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+} // wait()
+
+
+
+/*
  * This is the screen where the user can view their profile.
  */
 export default ( {navigation} ) => {
+
 	const [isEnabled, setIsEnabled] = useState(false);
 	const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+	const [refreshing, setRefreshing] = React.useState(false);
 	const { userToken, setUserToken } = React.useContext(AuthContext);
 
+	// Function that refreshes
+	const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(500).then(() => setRefreshing(false));
+  }, []);
+
 	return (
-		<ScrollView style={styles.container}>
+		<ScrollView style={styles.container}
+			refreshControl={
+				<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
+			}	
+		>
 			<TouchableOpacity
 					style={styles.editProfile}
 					onPress={() => navigation.push("EditProfile")}	
