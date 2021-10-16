@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet,
 				 Text,
 				 View,
@@ -46,8 +46,19 @@ export default ( {navigation} ) => {
 	// Function that refreshes
 	const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    wait(500).then(() => setRefreshing(false));
+    wait(250).then(() => setRefreshing(false));
   }, []);
+
+	// Function that immediately refreshes Profile when we navigate
+	useEffect(() => {
+		const unsubscribe = navigation.addListener("focus", () => {
+			//onRefresh();
+			setRefreshing(true);
+			wait(1).then(() => setRefreshing(false));
+		});
+		return unsubscribe;
+	}, [navigation]);
+
 
 	return (
 		<ScrollView style={styles.container}
