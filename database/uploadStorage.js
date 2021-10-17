@@ -1,34 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { app, rtdb, auth, storage } from './RTDB';
-import { ref, uploadBytes, child } from 'firebase/storage';
+import { ref, uploadBytes } from 'firebase/storage';
 import { getID } from './ID'
 
 import uuid4 from 'uuid4';
 
 
-
-
 /*
- * Uploads the profile picture.
- * @param email_or_id -> the email or id of the user whose 
- * 											 profile picture we want to update.
- * @param uri -> the uri of the profile picture.
- */
-export const uploadProfilePicture = (email_or_id, uri) => {
-	// get the id
-	const id = getID(email_or_id);
-
-	// create storage path
-	const path = "users/" + id + "/Profile Picture";
-
-	// upload the image to the storage path
-	uploadImageAsync(path, uri);
-} // uploadProfilePicture()
-
-
-
-/*
- *
+ * Uploades an image to the firebase storage asynchronously.
+ * @param storage_path -> the path in the storage that we want
+ * 												to store the image to.
+ * @param uri -> the uri to the image.
  */
 async function uploadImageAsync(storage_path, uri) {
 	// get blob from uri so we can upload it to storage
@@ -56,6 +38,46 @@ async function uploadImageAsync(storage_path, uri) {
   // We're done with the blob, close and release it
   blob.close();
 } // uploadImageAsync()
+
+
+
+/*
+ * Uploads the profile picture.
+ * @param email_or_id -> the email or id of the user whose 
+ * 											 profile picture we want to update.
+ * @param uri -> the uri of the profile picture.
+ */
+export const uploadProfilePicture = (email_or_id, uri) => {
+	// get the id
+	const id = getID(email_or_id);
+
+	// create storage path
+	const path = "users/" + id + "/Profile Picture";
+
+	// upload the image to the storage path
+	uploadImageAsync(path, uri);
+} // uploadProfilePicture()
+
+
+
+
+/*
+ * Uploads the profile picture on the Edit Profile screen.
+ * @param email_or_id -> the email or id of the user whose 
+ * 											 profile picture we want to update.
+ * @param uri -> the uri of the profile picture.
+ */
+export const uploadEditProfilePicture = (email_or_id, uri) => {
+	// get the id
+	const id = getID(email_or_id);
+
+	// create storage path
+	const path = "users/" + id + "/Edit Profile Picture";
+
+	// upload the image to the storage path
+	uploadImageAsync(path, uri);
+} // uploadProfilePicture()
+
 
 
 
