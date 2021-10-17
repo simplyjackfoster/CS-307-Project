@@ -151,6 +151,10 @@ export default ( {navigation} ) => {
         <SafeAreaView>
           <TextInput
             style={styles.input}
+            autoCapitalize='none'
+						autoComplete='off'
+						autoCorrect='false'
+						spellCheck={false}
             onChangeText={nameInputHandler}
             defaultValue={getProfileName(auth.currentUser.email)}
             placeholder={"Name"}

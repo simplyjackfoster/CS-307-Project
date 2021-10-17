@@ -91,6 +91,10 @@ export default ({ navigation }) => {
 				<SafeAreaView>
 					<TextInput
 						style={styles.input}
+						autoCapitalize='none'
+						autoComplete='off'
+						autoCorrect='false'
+						spellCheck={false}
 						onChangeText={onChangeEmail}
 						placeholder={email}
 					/>
@@ -103,6 +107,10 @@ export default ({ navigation }) => {
 					<TextInput
 						style={styles.input}
 						onChangeText={onChangePassword}
+						autoCapitalize='none'
+						autoComplete='off'
+						autoCorrect='false'
+						spellCheck={false}
 						placeholder={password}
 						secureTextEntry={true}
 					/>
