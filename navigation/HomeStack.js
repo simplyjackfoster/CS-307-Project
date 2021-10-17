@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { BackHandler } from 'react-native';
 
 import HomeDrawer from './HomeDrawer';
 import EditProfile from '../screens/EditProfile';
@@ -15,7 +16,7 @@ const HomeStack = () => {
 			<Stack.Screen name="HomeDrawer" component={HomeDrawer}
 			options={{ headerShown: false }}/>
 			<Stack.Screen name="EditProfile" component={EditProfile}
-			options={{ headerTitle: "Edit Profile", headerBackTitle: "Back" }}/>
+				options={{ headerTitle: "Edit Profile", headerBackTitle: "Back"}}/>
 			<Stack.Screen name="Questionnaire" component={Questionnaire}
 			options={{ headerTitle: "Edit Profile", headerBackTitle: "Back", animationEnabled: false}}/>
 			<Stack.Screen name="ResetPassword" component={ResetPassword}

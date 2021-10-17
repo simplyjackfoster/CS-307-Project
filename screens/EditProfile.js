@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,32 +11,45 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { useState } from 'react';
 import Colors from "../constants/Colors";
 
 // firebase imports
-import { auth, rtdb } from '../database/RTDB';
-import { deleteUser } from 'firebase/auth';
-import { remove } from 'firebase/database';
+import { auth } from '../database/RTDB';
 
 // database read/write/remove imports
 import { getProfileName } from '../database/readData';
 import { writeProfileName } from '../database/writeData';
+import { uploadProfilePicture, uploadEditProfilePicture } from '../database/uploadStorage';
+import { downloadProfilePicture, downloadEditProfilePicture } from '../database/downloadStorage';
+
+import {
+  isValidName,
+  isValidEmail,
+  isValidPhone,
+  isValidBirthday,
+  isValidPassword,
+  isValidSecurity,
+  isValidCheckbox
+} from '../checkInputs';
+
 
 
 /*
- * This is the screen where the user can edit their profile.
+ * This is the default export for the EditProfile screen.
  */
 export default ( {navigation} ) => {
 
-  // The variable for profile picture
-  const [profilePicture, setProfilePicture] = React.useState(null);
-
   // hooks for editable fields
   const [name, onChangeName] = React.useState(null);
-  const [email, onChangeEmail] = React.useState(null);
+  const [nameChanged, setNameChanged] = React.useState(false); 
+  const [editProfilePicture, setEditProfilePicture] = React.useState(null);
 
-  const openImagePickerAsync = async () => {
+
+  /*
+   * This function is used to choose an image from the camera roll
+   * for the profile picture.
+   */
+  const openProfilePicImagePickerAsync = async () => {
     // get permission from user to access camera roll
     let libraryPermissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     // if they decline permission
@@ -45,56 +58,105 @@ export default ( {navigation} ) => {
       return;
     }
     // let user select image from their camera roll
-    let picked = await ImagePicker.launchImageLibraryAsync();
+    let picked = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+    });
     // if they cancelled the selection
     if (picked.cancelled == true) {
       return;
     }
+
     // set the selected image
-    setProfilePicture({ localUri: picked.uri });
-  } // openImagePickerAsync()
+    setEditProfilePicture(picked.uri);
+    uploadEditProfilePicture(auth.currentUser.email, picked.uri);
+  } // openProfilePicImagePickerAsync()
 
 
 
 
+  /*
+   * This function is called when the text in the name 
+   * input is changed. It changes the value of the name hook
+   * and also changed the boolean that tells us if the user has
+   * changed the value.
+   */
+  const nameInputHandler = (input) => {
+    onChangeName(input);
+    setNameChanged(true);
+  } // setNameChanged
+
+
+
+  /*
+   * This function is called when the user clicks "Save".
+   * It updates all of the profile data in the database.
+   */
+  const updateProfileData = () => {
+    // if we changed the profile picture, then upload it
+    if (editProfilePicture) {
+      uploadProfilePicture(auth.currentUser.email, editProfilePicture);
+    }
+
+    // if the name is not null, then update it
+    if (name) {
+      // update the name
+      writeProfileName(auth.currentUser.email, name);
+    }
+  } // updateProfileData()
+
+
+
+
+  /*
+   * Validates that none of the inputs are invalid.
+   */
+  const validateInputs = () => {
+    // Check if the name field is valid
+    if (nameChanged != false) {
+      if (!isValidName(name)) {return}
+    } // if it hasn't been changed then we save it as is
+   
+    // update the information and navigate to Profile
+    updateProfileData();
+    navigation.pop();
+  } // validateInputs()
+
+
+
+
+  
 
 	return (
 		<ScrollView style={styles.container}>
       <View style={styles.form}>
+
         {/* Profile Picture Image */}
         <SafeAreaView>
-          <Image source={
-            profilePicture ? (
-              { uri: profilePicture.localUri }
-            ) : (
-              require("../images/default-profile-picture.jpeg")
-            )}
-            style={styles.profilePicture}>
-          </Image>
-
-          <TouchableOpacity onPress={openImagePickerAsync} style={styles.buttonChangePicture}>
+            <Image source={{uri: downloadEditProfilePicture(auth.currentUser.email)}}
+              style={styles.profilePicture}
+            />
+          <TouchableOpacity
+            onPress={
+              openProfilePicImagePickerAsync
+            }
+            style={styles.buttonChangePicture}>
             <Text style={styles.textChangePicture}>Change Picture</Text>
           </TouchableOpacity>
         </SafeAreaView>
+
+
         {/* Name (text), name (field) */}
         <Text style={styles.label}>Name</Text>
         <SafeAreaView>
           <TextInput
             style={styles.input}
-            onChangeText={onChangeName}
-            placeholder={getProfileName(auth.currentUser.email)}
+            onChangeText={nameInputHandler}
+            defaultValue={getProfileName(auth.currentUser.email)}
+            placeholder={"Name"}
           />
         </SafeAreaView>
 
-        {/* Email (text), email (field) */}
-        <Text style={styles.label}>Purdue Email</Text>
-        <SafeAreaView>
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeEmail}
-            placeholder={auth.currentUser.email}
-          />
-        </SafeAreaView>
 
         {/* Continue to Questionnaire (button) */}
         <TouchableOpacity
@@ -112,13 +174,7 @@ export default ( {navigation} ) => {
         <TouchableOpacity
           style={styles.buttonSave}
           // check if questionnaire has been completed and run setUserToken
-          onPress={() => {
-            // EDIT USER DB ENTRY...
-            // To do this write functions in writeData.js and import them here
-            writeProfileName(auth.currentUser.email, name);
-            //navigation.navigate('Profile', {name: name, email: email})
-            navigation.pop();
-          }}
+          onPress={ validateInputs }
         >
           <Text style={styles.textSave}>Save</Text>
         </TouchableOpacity>
@@ -128,6 +184,8 @@ export default ( {navigation} ) => {
 	); // return()
 
 } // export default ()
+
+
 
 
 
