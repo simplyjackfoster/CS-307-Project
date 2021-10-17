@@ -1,50 +1,36 @@
 import React from 'react';
-import { Image } from 'react-native';
 import { app, rtdb, auth, storage } from './RTDB';
 import { ref, uploadBytes, child } from 'firebase/storage';
 import { getID } from './ID'
 
 import uuid4 from 'uuid4';
 
+
+
+
 /*
- *
+ * Uploads the profile picture.
+ * @param email_or_id -> the email or id of the user whose 
+ * 											 profile picture we want to update.
+ * @param uri -> the uri of the profile picture.
  */
 export const uploadProfilePicture = (email_or_id, uri) => {
-
 	// get the id
 	const id = getID(email_or_id);
-	
-	// get the file extension
-	const fileExtension = uri.split('.').pop();
-	console.log("File extension: " + fileExtension);
 
-	// create unique filename
-	var uuid = uuid4();
-	const fileName = `${uuid}.${fileExtension}`;
-	console.log("File Name: " + fileName);
+	// create storage path
+	const path = "users/" + id + "/Profile Picture";
 
-
-	uploadImageAsync(uri);
-/*	// put the file in the storage
-	uploadBytes(ref(storage, "users/" + id + "/Profile Picture/"
-									+ fileName), uri).then((snapshot) => {
-		console.log("Uploaded file");
-	}).catch((error) => {
-		console.error(error);
-	});*/
-
-
+	// upload the image to the storage path
+	uploadImageAsync(path, uri);
 } // uploadProfilePicture()
 
 
 
-
-
 /*
  *
  */
-async function uploadImageAsync(uri) {
-
+async function uploadImageAsync(storage_path, uri) {
 	// get blob from uri so we can upload it to storage
   const blob = await new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -61,8 +47,7 @@ async function uploadImageAsync(uri) {
   });
 
 	// upload bytes from the blob to storage
-	uploadBytes(ref(storage, "users/" + "mfinder" + "/Profile Picture"
-									), blob).then((snapshot) => {
+	uploadBytes(ref(storage, storage_path), blob).then((snapshot) => {
 		console.log("Successfully Uploaded File!");
 	}).catch((error) => {
 		console.error(error);
@@ -75,3 +60,21 @@ async function uploadImageAsync(uri) {
 
 
 
+/*
+ * Takes the uri to an image and creates a unique name with
+ * the proper extension.
+ * @param uri -> the uri to the image.
+ * @return -> a unique name for the file with the proper extension.
+ */
+export const createUniqueImageName = (uri) => {
+	// get the file extension
+	const fileExtension = uri.split('.').pop();
+	console.log("File extension: " + fileExtension);
+
+	// create unique filename
+	var uuid = uuid4();
+	const fileName = `${uuid}.${fileExtension}`;
+	console.log("File Name: " + fileName);
+
+	return fileName;
+} // createUniqueImageName()
