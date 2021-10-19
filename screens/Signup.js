@@ -119,6 +119,10 @@ export default ( {navigation} ) => {
             <TextInput
               style={styles.input}
               onChangeText={onChangeName}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
               placeholder={name}
             />
           </SafeAreaView>
@@ -130,6 +134,10 @@ export default ( {navigation} ) => {
             <TextInput
               style={styles.input}
               onChangeText={onChangeEmail}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
               placeholder={email}
             />
           </SafeAreaView>
@@ -141,6 +149,10 @@ export default ( {navigation} ) => {
             <TextInput
               style={styles.input}
               onChangeText={onChangePhone}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
               placeholder={phone}
               keyboardType='numeric'
             />
@@ -153,6 +165,10 @@ export default ( {navigation} ) => {
             <TextInput
               style={styles.input}
               onChangeText={onChangeBirthday}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
               placeholder={birthday}
             />
           </SafeAreaView>
@@ -165,6 +181,10 @@ export default ( {navigation} ) => {
             <TextInput
               style={styles.input}
               onChangeText={onChangePassword}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
               placeholder={password}
               secureTextEntry={true}
             />
@@ -177,6 +197,10 @@ export default ( {navigation} ) => {
             <TextInput
               style={styles.input}
               onChangeText={onChangeConfirmPassword}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
               placeholder={confirmPassword}
               secureTextEntry={true}
             />
@@ -207,6 +231,10 @@ export default ( {navigation} ) => {
             <TextInput
               style={styles.input}
               onChangeText={onChangeSecurity}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
               placeholder={"Answer"}
             />
           </SafeAreaView>
@@ -241,7 +269,6 @@ export default ( {navigation} ) => {
             />
           </View>
 
-          
           {/* Continue to Questionnaire (button) */}
           <TouchableOpacity
 					  style={styles.continueButton}

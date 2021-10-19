@@ -93,7 +93,7 @@ export default ({ navigation }) => {
 						style={styles.input}
 						autoCapitalize='none'
 						autoComplete='off'
-						autoCorrect='false'
+						autoCorrect={false}
 						spellCheck={false}
 						onChangeText={onChangeEmail}
 						placeholder={email}
@@ -109,7 +109,7 @@ export default ({ navigation }) => {
 						onChangeText={onChangePassword}
 						autoCapitalize='none'
 						autoComplete='off'
-						autoCorrect='false'
+						autoCorrect={false}
 						spellCheck={false}
 						placeholder={password}
 						secureTextEntry={true}
@@ -149,8 +149,7 @@ export default ({ navigation }) => {
 		</ScrollView>
 	);
 
-
-}
+} // export default ()
 
 
 
