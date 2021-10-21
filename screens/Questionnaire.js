@@ -29,7 +29,7 @@ import {
  } from './Signup';
 
 // database read/write/remove imports
-import { writeNewUser } from '../database/writeData';
+import { writeNewUser, writeQuestionnaire } from '../database/writeData';
 import { getDataFromPath } from '../database/readData';
 import { getID } from '../database/ID';
 
@@ -405,7 +405,12 @@ export default ( {navigation} ) => {
           style={styles.createButton}
           onPress={() => {
             {userToken ? (
-              // check inputs, and save changes to database if they are valid
+              // save changes to database 
+              writeQuestionnaire(auth.currentUser.email, selectedOne, selectedTwo,
+                selectedThree, selectedFour, selectedFive, selectedSix, selectedSeven,
+                selectedEight, selectedNine, selectedTen, selectedEleven,
+                selectedTwelve, selectedThirteen),
+
 
               // navigate back to EditProfile
               updatedTheSelected = false,

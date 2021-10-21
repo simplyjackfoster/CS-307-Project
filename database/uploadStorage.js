@@ -16,7 +16,6 @@ import uuid4 from 'uuid4';
  * @param uri -> the uri of the profile picture.
  */
 export const uploadProfilePicture = (email_or_id, uri) => {
-	console.log("HERE -20");
 	// get the id
 	const id = getID(email_or_id);
 
@@ -45,8 +44,6 @@ export const uploadProfilePicture = (email_or_id, uri) => {
  * 										 the image to. 
  */
 async function uploadImageAsync(storage_path, uri, rtdb_path) {
-	console.log("HERE -10");
-
 	// get blob from uri so we can upload it to storage
   const blob = await new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -62,7 +59,6 @@ async function uploadImageAsync(storage_path, uri, rtdb_path) {
     xhr.send(null);
   });
 
-	console.log("HERE -5");
 
 	// upload bytes from the blob to storage
 	uploadBytes(ref(storage, storage_path), blob).then((snapshot) => {
@@ -71,7 +67,6 @@ async function uploadImageAsync(storage_path, uri, rtdb_path) {
 		// get the url from the database and add it to the realtime database
 		var imgRef = ref(storage, storage_path);
 		getDownloadURL(imgRef).then((url) => {
-			console.log("HERE -1");
 
 			// get which picture we are uploading
 			const whichImage = getWhichImage(rtdb_path);
@@ -81,7 +76,6 @@ async function uploadImageAsync(storage_path, uri, rtdb_path) {
 				writeProfilePicture(auth.currentUser.email, url);
 			}
 
-			console.log("HERE 0");
 		}).catch((error) => {
 			console.log(error);
 		});

@@ -119,7 +119,6 @@ export const writeProfileName = (email_or_id, name) => {
  * 							 the profile picture to.
  */
 export const writeProfilePicture = (email_or_id, uri) => {
-	console.log("HERE1");
 	// get the id
 	const id = getID(email_or_id);
 
@@ -127,14 +126,35 @@ export const writeProfilePicture = (email_or_id, uri) => {
 	update(ref(rtdb, "users/" + id + "/Profile/Images"), {
 		profile_picture: uri
 	});
-	console.log("HERE2");
 } // writeProfilePicture()
 
 
 
 /*
- *
+ * This function updates the questionnaire data in the RTDB.
+ * @param email_or_id -> the email or id of the user
+ * @param a<i> -> the answer for the i-th question.
  */
-export const writeQuestionnaire = (email_or_id) => {
+export const writeQuestionnaire = (email_or_id, a1, a2, a3, a4, a5, a6, a7, a8,
+																   a9, a10, a11, a12, a13) => {
+	// get the id
+	const id = getID(email_or_id);
 
-}
+	// write each answer to the database
+	update(ref(rtdb, "users/" + id + "/Roommate Compatibility/"), {
+		has_people_over: a1,
+		is_clean: a2,
+		week_bedtime: a3,
+		weekend_bedtime: a4,
+		drinks_alcohol: a5,
+		smokes: a6,
+		handle_chores: a7,
+		has_car: a8,
+		wants_pets: a9,
+		introverted_or_extraverted: a10,
+		check_before_having_people_over: a11,
+		joint_grocery_shopping: a12,
+		has_significant_other: a13
+	});
+} // writeQuestionnaire
+
