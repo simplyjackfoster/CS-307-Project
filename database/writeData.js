@@ -1,6 +1,6 @@
 import React from 'react';
-import { app, rtdb, auth } from './RTDB';
-import {ref, set, update, onValue, exists, val, child, get, remove} from "firebase/database"
+import { rtdb, auth } from './RTDB';
+import { ref, set, update, exists, val, child, get, remove} from "firebase/database"
 import { getID } from './ID';
 
 
@@ -20,6 +20,9 @@ export const writeNewUser = (email, name, phone,
 														 birthday, securityQuestion, securityAnswer) => {
 	const id = getID(email);
 
+	const default_profile_picture = "https://firebasestorage.googleapis.com/v0/b/uniroom-fdcd7.appspot.com/o/default-profile-picture.jpeg?alt=media&token=5c5c586a-e822-4096-b6cd-52c34f41dc9b"
+
+
 	// write the "Critical Information" data
 	set(ref(rtdb, "users/" + id + "/Critical Information"), {
 		email: email,
@@ -34,13 +37,15 @@ export const writeNewUser = (email, name, phone,
 	// write the "Profile" data
 	set(ref(rtdb, "users/" + id + "/Profile"), {
 		profile_name: name,
-		profile_picture: "../images/default-profile-picture.jpeg",
 		year_in_school: "year", // change
 		gender: "gender", // change
 		bio: "bio", // change
 		hometown: "hometown", // change
 		major: "major", // change
 		covid_vaccination_status: "vaccine" // change
+	});
+	set(ref(rtdb, "users/" + id + "/Profile/Images"), {
+		profile_picture: default_profile_picture, 
 	});
 	set(ref(rtdb, "users/" + id + "/Profile/Social Media"), {
 		instagram: "insta", // change
@@ -83,6 +88,7 @@ export const writeNewUser = (email, name, phone,
 
 
 
+
 /*
  * writeName()
  *
@@ -97,3 +103,25 @@ export const writeProfileName = (email_or_id, name) => {
 		profile_name: name
 	});
 } // writeName()
+
+
+
+
+/*
+ * writeProfilePicture()
+ *
+ * This function updates the uri for the profile picture in the RTDB.
+ * @param email_or_id -> the email or id of the user who we are updating.
+ * @param uri -> the uri of the image that we are going to update
+ * 							 the profile picture to.
+ */
+export const writeProfilePicture = (email_or_id, uri) => {
+	// get the id
+	const id = getID(email_or_id);
+
+	// write the url to the database
+	update(ref(rtdb, "users/" + id + "/Profile/Images"), {
+		profile_picture: uri
+	});
+} // writeProfilePicture()
+
