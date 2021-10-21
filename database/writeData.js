@@ -66,7 +66,7 @@ export const writeNewUser = (email, name, phone,
 		handle_chores: "value",
 		has_car: "value",
 		wants_pets: "value",
-		introverted_or_extroverted: "value",
+		introverted_or_extraverted: "value",
 		check_before_having_people_over: "value",
 		joint_grocery_shop: "value",
 		has_significant_other: "value"

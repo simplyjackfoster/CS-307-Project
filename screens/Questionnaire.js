@@ -42,12 +42,20 @@ import { writeNewUser } from '../database/writeData';
 export default ( {navigation} ) => {
   const { userToken, setUserToken }  = React.useContext(AuthContext);
 
-  const [selectedOne, setSelectedOne] = React.useState('3');
-  const [selectedTwo, setSelectedTwo] = React.useState('3');
-  const [selectedThree, setSelectedThree] = React.useState('3');
-  const [selectedFour, setSelectedFour] = React.useState('3');
-  const [selectedFive, setSelectedFive] = React.useState('1');
-  const [selectedSix, setSelectedSix] = React.useState('1');
+  const [selectedOne, setSelectedOne] = React.useState('3'); // has_people_over
+  const [selectedTwo, setSelectedTwo] = React.useState('3'); // is_clean
+  const [selectedThree, setSelectedThree] = React.useState('3'); // week_bedtime
+  const [selectedFour, setSelectedFour] = React.useState('3'); // weekend_bedtime
+  const [selectedFive, setSelectedFive] = React.useState('1'); // drinks_alcohol
+  const [selectedSix, setSelectedSix] = React.useState('1'); // smokes
+  const [selectedSeven, setSelectedSeven] = React.useState('1'); // handle_chores
+  const [selectedEight, setSelectedEight] = React.useState('1'); // has_car
+  const [selectedNine, setSelectedNine] = React.useState('1'); // wants_pets
+  const [selectedTen, setSelectedTen] = React.useState('1'); // introverted_or_extraverted
+  const [selectedEleven, setSelectedEleven] = React.useState('1'); // check_before_having_people_over
+  const [selectedTwelve, setSelectedTwelve] = React.useState('1'); // joint_grocery_shopping
+  const [selectedThirteen, setSelectedThirteen] = React.useState('1'); // has_significant_other
+
 
   const attemptCreate = () => {
     createUserWithEmailAndPassword(auth, Gemail, Gpassword)
@@ -179,6 +187,120 @@ export default ( {navigation} ) => {
         </Picker>
 
 
+        {/* Question 7 */}
+        <Text style={styles.question}>How would you like to handle chores?</Text>
+        <Picker
+          style={styles.picker}
+          selectedValue={selectedSeven}
+          onValueChange={(itemValue, itemIndex) =>
+            setSelectedSeven(itemValue)
+          }
+        >
+          <Picker.Item label="Assign tasks to each person" value="1" />
+          <Picker.Item label="Do them when needed" value="2" />
+          <Picker.Item label="I don't want to do any chores" value="3" />
+        </Picker>
+
+
+        {/* Question 8 */}
+        <Text style={styles.question}>Do you have a car?</Text>
+        <Picker
+          style={styles.picker}
+          selectedValue={selectedEight}
+          onValueChange={(itemValue, itemIndex) =>
+            setSelectedEight(itemValue)
+          }
+        >
+          <Picker.Item label="No" value="1" />
+          <Picker.Item label="Yes" value="2" />
+        </Picker>
+
+
+        {/* Question 9 */}
+        <Text style={styles.question}>Do you want pets in the room?</Text>
+        <Picker
+          style={styles.picker}
+          selectedValue={selectedNine}
+          onValueChange={(itemValue, itemIndex) =>
+            setSelectedNine(itemValue)
+          }
+        >
+          <Picker.Item label="No" value="1" />
+          <Picker.Item label="Yes, dog(s)" value="2" />
+          <Picker.Item label="Yes, cat(s)" value="3" />
+          <Picker.Item label="Yes, (other)" value="4" />
+        </Picker>
+
+
+        {/* Question 10 */}
+        <Text style={styles.question}>Are you introverted or extraverted?</Text>
+        <Picker
+          style={styles.picker}
+          selectedValue={selectedTen}
+          onValueChange={(itemValue, itemIndex) =>
+            setSelectedTen(itemValue)
+          }
+        >
+          <Picker.Item label="Definitely introverted" value="1" />
+          <Picker.Item label="Somewhat introverted" value="2" />
+          <Picker.Item label="Neither" value="3" />
+          <Picker.Item label="Somewhat extraverted" value="4" />
+          <Picker.Item label="Definitely extraverted" value="5" />
+        </Picker>
+
+
+        {/* Question 11 */}
+        <Text style={styles.question}>Do we need to check before having someone over?</Text>
+        <Picker
+          style={styles.picker}
+          selectedValue={selectedEleven}
+          onValueChange={(itemValue, itemIndex) =>
+            setSelectedEleven(itemValue)
+          }
+        >
+          <Picker.Item label="Never, no" value="1" />
+          <Picker.Item label="Sometimes, yes" value="2" />
+          <Picker.Item label="Most of the time, yes" value="3" />
+          <Picker.Item label="Always, yes" value="4" />
+        </Picker>
+
+
+        {/* Question 12 */}
+        <Text style={styles.question}>Do you want to do joint grocery shopping?</Text>
+        <Picker
+          style={styles.picker}
+          selectedValue={selectedTwelve}
+          onValueChange={(itemValue, itemIndex) =>
+            setSelectedTwelve(itemValue)
+          }
+        >
+          <Picker.Item label="No" value="1" />
+          <Picker.Item label="Yes" value="2" />
+        </Picker>
+
+
+        {/* Question 13 */}
+        <Text style={styles.question}>Do you have a significant other?</Text>
+        <Picker
+          style={styles.picker}
+          selectedValue={selectedThirteen}
+          onValueChange={(itemValue, itemIndex) =>
+            setSelectedThirteen(itemValue)
+          }
+        >
+          <Picker.Item label="No" value="1" />
+          <Picker.Item label="Yes, on campus" value="2" />
+          <Picker.Item label="Yes, not on campus" value="3" />
+        </Picker>
+
+
+
+
+
+
+
+
+
 
 
         {/* Continue to Questionnaire (button) */}
@@ -229,12 +351,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 0,
     marginTop: 50,
+    marginHorizontal: '10%',
     fontWeight: 'bold',
   },
 
   picker: {
+    flex: 1,
     alignSelf: 'center',
-    width: '70%',
+    width: '80%',
   },
 
 
