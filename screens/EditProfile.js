@@ -18,9 +18,9 @@ import { auth } from '../database/RTDB';
 
 // database read/write/remove imports
 import { getID } from '../database/ID';
-import { getProfileName, getDataFromPath } from '../database/readData';
+import { getDataFromPath } from '../database/readData';
 import { writeProfileName } from '../database/writeData';
-import { uploadProfilePicture, uploadEditProfilePicture } from '../database/uploadStorage';
+import { uploadProfilePicture } from '../database/uploadStorage';
 
 import {
   isValidName,
@@ -70,9 +70,7 @@ export default ( {navigation} ) => {
 
     // set the selected image
     setEditProfilePicture(picked.uri);
-    uploadEditProfilePicture(auth.currentUser.email, picked.uri);
   } // openProfilePicImagePickerAsync()
-
 
 
 
@@ -170,7 +168,7 @@ export default ( {navigation} ) => {
 						autoCorrect={false}
 						spellCheck={false}
             onChangeText={nameInputHandler}
-            defaultValue={getProfileName(auth.currentUser.email)}
+            defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/profile_name")}
             placeholder={"Name"}
           />
         </SafeAreaView>

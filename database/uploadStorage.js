@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { app, rtdb, auth, storage } from './RTDB';
+import { rtdb, auth, storage } from './RTDB';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { getID } from './ID'
 import { writeDataToPath, writeEditProfilePicture, writeProfilePicture } from './writeData';
@@ -8,6 +8,8 @@ import uuid4 from 'uuid4';
 
 
 /*
+ * uploadProfilePicture()
+ *
  * Uploads the profile picture.
  * @param email_or_id -> the email or id of the user whose 
  * 											 profile picture we want to update.
@@ -31,34 +33,15 @@ export const uploadProfilePicture = (email_or_id, uri) => {
 
 
 /*
- * Uploads the profile picture on the Edit Profile screen.
- * @param email_or_id -> the email or id of the user whose 
- * 											 profile picture we want to update.
- * @param uri -> the uri of the profile picture.
- */
-export const uploadEditProfilePicture = (email_or_id, uri) => {
-	// get the id
-	const id = getID(email_or_id);
-
-	// create storage path
-	const storage_path = "users/" + id + "/edit_profile_picture";
-
-	// create rtdb path and field
-	const rtdb_path = "users/" + id + "/Profile/edit_profile_picture";
-
-	// upload the image to the storage path
-	uploadImageAsync(storage_path, uri, rtdb_path);
-} // uploadProfilePicture()
-
-
-
-
-
-/*
- * Uploades an image to the firebase storage asynchronously.
+ * uploadImageAsync()
+ *
+ * Uploades an image to the firebase storage asynchronously, and
+ * writes the uri of the image to the database to the specified path.
  * @param storage_path -> the path in the storage that we want
  * 												to store the image to.
  * @param uri -> the uri to the image.
+ * @param rtdb_path -> the path in the RTDB that we will write the uri of
+ * 										 the image to. 
  */
 async function uploadImageAsync(storage_path, uri, rtdb_path) {
 	// get blob from uri so we can upload it to storage
@@ -91,9 +74,6 @@ async function uploadImageAsync(storage_path, uri, rtdb_path) {
 				// write the url to the database path
 				writeProfilePicture(auth.currentUser.email, url);
 			}
-			else if (whichImage == "edit_profile_picture") {
-				writeEditProfilePicture(auth.currentUser.email, url);
-			}
 
 		}).catch((error) => {
 			console.log(error);
@@ -111,7 +91,13 @@ async function uploadImageAsync(storage_path, uri, rtdb_path) {
 
 
 /*
+ * getWhichImage()
  *
+ * This function finds which image we are uploading, and returns the name
+ * of the image.
+ * @param rtdb_path -> a path in the RTDB.
+ * @return -> the name of the image.
+ * 						ex. "/users/id/Profile/Images/profile_picture" will return "profile_picture"
  */
 export const getWhichImage = (rtdb_path) => {
 	const whichImage = rtdb_path.split('/').pop();	
@@ -122,6 +108,8 @@ export const getWhichImage = (rtdb_path) => {
 
 
 /*
+ * createUniqueImageName()
+ *
  * Takes the uri to an image and creates a unique name with
  * the proper extension.
  * @param uri -> the uri to the image.

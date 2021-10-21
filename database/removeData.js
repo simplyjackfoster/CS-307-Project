@@ -1,6 +1,6 @@
 import React from 'react';
-import { app, rtdb, auth } from './RTDB';
-import {ref, set, onValue, exists, val, child, get, remove} from "firebase/database";
+import { rtdb, auth } from './RTDB';
+import {ref, set, exists, val, child, get, remove} from "firebase/database";
 import { getID } from './ID';
 
 

@@ -26,7 +26,7 @@ export default ( {navigation} ) => {
 
 	const { userToken, setUserToken } = React.useContext(AuthContext);
 
-
+	// attempts to delete a user from the database and take them to the login screen
 	const attemptDelete = () => {
 		var user = auth.currentUser;
 		var user_email = auth.currentUser.email;

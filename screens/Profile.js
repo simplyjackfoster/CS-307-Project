@@ -19,9 +19,7 @@ import { renderIcon } from "../images/Icons";
 import { auth } from '../database/RTDB';
 
 // database read/write/remove imports
-import { getProfileName, getDataFromPath } from '../database/readData';
-//import { downloadProfilePicture } from '../database/downloadStorage';
-import { uploadEditProfilePicture } from '../database/uploadStorage';
+import { getDataFromPath } from '../database/readData';
 import { getID } from '../database/ID';
 
 
@@ -50,7 +48,7 @@ export default ( {navigation} ) => {
 	// Function that refreshes
 	const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    wait(250).then(() => setRefreshing(false));
+    wait(500).then(() => setRefreshing(false));
   }, []);
 
 	// Function that immediately refreshes Profile when we navigate
@@ -83,15 +81,15 @@ export default ( {navigation} ) => {
 			{/* Profile Picture */}
 			<View style={styles.imageWrapper}>
 				<Image style={styles.profilePic}
-					/*source={{uri: downloadProfilePicture(auth.currentUser.email)}}*/
 					source={{uri: getDataFromPath("users/" + getID(auth.currentUser.email) 
 									 + "/Profile/Images/profile_picture")}}
 				/>
+
+				{/* Profile Name */}
 				<Text style={styles.imageName}>
-					{getProfileName(auth.currentUser.email)}
+					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/profile_name")}
 				</Text>
 			</View>
-
 			<View style={{marginTop: 40}}/>
 
 			{/* Email: <email> */}

@@ -1,6 +1,6 @@
 import React from 'react';
-import { app, rtdb, auth } from './RTDB';
-import {ref, set, update, onValue, exists, val, child, get, remove} from "firebase/database"
+import { rtdb, auth } from './RTDB';
+import { ref, set, update, exists, val, child, get, remove} from "firebase/database"
 import { getID } from './ID';
 
 
@@ -46,7 +46,6 @@ export const writeNewUser = (email, name, phone,
 	});
 	set(ref(rtdb, "users/" + id + "/Profile/Images"), {
 		profile_picture: default_profile_picture, 
-		edit_profile_picture: default_profile_picture,
 	});
 	set(ref(rtdb, "users/" + id + "/Profile/Social Media"), {
 		instagram: "insta", // change
@@ -109,7 +108,12 @@ export const writeProfileName = (email_or_id, name) => {
 
 
 /*
- * 
+ * writeProfilePicture()
+ *
+ * This function updates the uri for the profile picture in the RTDB.
+ * @param email_or_id -> the email or id of the user who we are updating.
+ * @param uri -> the uri of the image that we are going to update
+ * 							 the profile picture to.
  */
 export const writeProfilePicture = (email_or_id, uri) => {
 	// get the id
@@ -120,21 +124,4 @@ export const writeProfilePicture = (email_or_id, uri) => {
 		profile_picture: uri
 	});
 } // writeProfilePicture()
-
-
-
-/*
- * 
- */
-export const writeEditProfilePicture = (email_or_id, uri) => {
-	// get the id
-	const id = getID(email_or_id);
-
-	// write the url to the database
-	update(ref(rtdb, "users/" + id + "/Profile/Images"), {
-		edit_profile_picture: uri
-	});
-} // writeProfilePicture()
-
-
 
