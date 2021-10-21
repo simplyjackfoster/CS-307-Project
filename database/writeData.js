@@ -17,7 +17,10 @@ import { getID } from './ID';
  * @param securityAnswer -> the answer the user entered in signup.
  */
 export const writeNewUser = (email, name, phone,
-														 birthday, securityQuestion, securityAnswer) => {
+														 birthday, securityQuestion, securityAnswer, selectedOne, selectedTwo,
+														 selectedThree, selectedFour, selectedFive, selectedSix, selectedSeven,
+														 selectedEight, selectedNine, selectedTen, selectedEleven, selectedTwelve,
+														 selectedThirteen) => {
 	const id = getID(email);
 
 	const default_profile_picture = "https://firebasestorage.googleapis.com/v0/b/uniroom-fdcd7.appspot.com/o/default-profile-picture.jpeg?alt=media&token=5c5c586a-e822-4096-b6cd-52c34f41dc9b"
@@ -56,20 +59,20 @@ export const writeNewUser = (email, name, phone,
 	});
 
 	// write the "Roomate Compatibility" data
-	set(ref(rtdb, "users/" + id + "/Roomate Compatibility"), {
-		has_people_over: "value",
-		is_clean: "value",
-		week_bedtime: "value",
-		weekend_bedtime: "value",
-		drinks_alcohol: "value",
-		smokes: "value",
-		handle_chores: "value",
-		has_car: "value",
-		wants_pets: "value",
-		introverted_or_extraverted: "value",
-		check_before_having_people_over: "value",
-		joint_grocery_shop: "value",
-		has_significant_other: "value"
+	set(ref(rtdb, "users/" + id + "/Roommate Compatibility"), {
+		has_people_over: selectedOne,
+		is_clean: selectedTwo,
+		week_bedtime: selectedThree,
+		weekend_bedtime: selectedFour,
+		drinks_alcohol: selectedFive,
+		smokes: selectedSix,
+		handle_chores: selectedSeven,
+		has_car: selectedEight,
+		wants_pets: selectedNine,
+		introverted_or_extraverted: selectedTen,
+		check_before_having_people_over: selectedEleven,
+		joint_grocery_shopping: selectedTwelve,
+		has_significant_other: selectedThirteen 
 	});
 
 	// write the "Match List" 
@@ -116,6 +119,7 @@ export const writeProfileName = (email_or_id, name) => {
  * 							 the profile picture to.
  */
 export const writeProfilePicture = (email_or_id, uri) => {
+	console.log("HERE1");
 	// get the id
 	const id = getID(email_or_id);
 
@@ -123,5 +127,14 @@ export const writeProfilePicture = (email_or_id, uri) => {
 	update(ref(rtdb, "users/" + id + "/Profile/Images"), {
 		profile_picture: uri
 	});
+	console.log("HERE2");
 } // writeProfilePicture()
 
+
+
+/*
+ *
+ */
+export const writeQuestionnaire = (email_or_id) => {
+
+}

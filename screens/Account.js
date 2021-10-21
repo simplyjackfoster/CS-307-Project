@@ -36,7 +36,7 @@ export default ( {navigation} ) => {
 			// delete from RTDB
 			removeUser(user_email);
 
-			// delete images from storage
+			// delete images from storage if there is one
 			deleteUserImages(user_email);
 
 			// navigate to log in screen

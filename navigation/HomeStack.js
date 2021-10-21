@@ -18,7 +18,7 @@ const HomeStack = () => {
 			<Stack.Screen name="EditProfile" component={EditProfile}
 				options={{ headerTitle: "Edit Profile", headerBackTitle: "Back"}}/>
 			<Stack.Screen name="Questionnaire" component={Questionnaire}
-			options={{ headerTitle: "Edit Profile", headerBackTitle: "Back", animationEnabled: false}}/>
+			options={{ headerTitle: "Edit Profile", headerBackTitle: "Back", animationEnabled: false }}/>
 			<Stack.Screen name="ResetPassword" component={ResetPassword}
 			options={{ headerTitle: "Reset Password", headerBackTitle: "Back" }}/>
 			<Stack.Screen name="DeleteAccount" component={DeleteAccount}
