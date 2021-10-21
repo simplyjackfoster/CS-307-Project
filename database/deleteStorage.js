@@ -22,8 +22,6 @@ export const deleteUserImages = (email_or_id) => {
 	// delete the profile_picture from user storage
 	deleteObject(storageRef).then(() => {
 		console.log("Profile Picture Deleted Successfully!");
-	}).catch((error) => {
-		console.log(error);
-	});
+	}).catch((error) => {});
 } // deleteUserImages()
 

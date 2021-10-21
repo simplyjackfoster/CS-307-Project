@@ -23,7 +23,7 @@ export const uploadProfilePicture = (email_or_id, uri) => {
 	const path = "users/" + id + "/profile_picture";
 
 	// create rtdb path and field
-	const rtdb_path = "users/" + id + "/Profile/profile_picture";
+	const rtdb_path = "users/" + id + "/Profile/Images/profile_picture";
 
 	// upload the image to the storage path
 	uploadImageAsync(path, uri, rtdb_path);
@@ -58,6 +58,7 @@ async function uploadImageAsync(storage_path, uri, rtdb_path) {
     xhr.open('GET', uri, true);
     xhr.send(null);
   });
+
 
 	// upload bytes from the blob to storage
 	uploadBytes(ref(storage, storage_path), blob).then((snapshot) => {

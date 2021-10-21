@@ -29,7 +29,50 @@ export const getDataFromPath = (path) => {
 	}).catch((error) => {
 		console.error(error);
 	});
-
 	return data;	
 } // getDataFromPath()
 
+
+
+
+/*
+ * Gets the answers from a user's questionnaire and
+ * returns them in the form of an array.
+ * @param email_or_id -> the email or id of the user
+ * @return -> an array containing the answers to the questionnaire
+ * 						questions.
+ */
+export const getQuestionnaireData = (email_or_id) => {
+	// create the variable that we will store the answers in
+	const answers = [];	
+
+	// Answer 1
+	var a1 = getDataFromPath("users/" + getID(email_or_id) +
+															 "/Roommate Compatibility/is_clean");
+	if (!a1) {
+		a1 = 3;
+	}
+
+	// Answer 2
+	var a2 = getDataFromPath("users/" + getID(email_or_id) +
+															 "/Roommate Compatibility/week_bedtime");
+	if (!a2) {
+		a2 = 3;
+	}
+
+	answers[0] = a1;
+	answers[1] = a2;
+
+	return answers;
+} // getQuestionnaireData
+
+
+
+export const getAnswerOne = (email_or_id) => {
+	const id = getID(auth.currentUser.email);
+	var answer = getDataFromPath("users/" + id + "/Roommate Compatibility/has_people_over");
+	if (!answer) {
+		return 3;
+	}
+	return answer;
+}

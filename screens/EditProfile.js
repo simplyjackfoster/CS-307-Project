@@ -94,7 +94,12 @@ export default ( {navigation} ) => {
   const updateProfileData = () => {
     // if we changed the profile picture, then upload it
     if (editProfilePicture) {
+      console.log("SAVING: " + editProfilePicture);
+      console.log("SAVING: " + editProfilePicture);
       uploadProfilePicture(auth.currentUser.email, editProfilePicture);
+    }
+    else {
+      console.log("Profile picture was not changed");
     }
 
     // if the name is not null, then update it
