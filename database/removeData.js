@@ -12,6 +12,6 @@ import { getID } from './ID';
  * 								 			 or an ID specifying the user to be removed.
  */
 export const removeUser = (email_or_id) => {
-	const id = getID(email);	
+	const id = getID(email_or_id);	
 	remove(ref(rtdb, "users/" + id));
 } // removeUser()

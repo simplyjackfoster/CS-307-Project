@@ -19,9 +19,10 @@ import { renderIcon } from "../images/Icons";
 import { auth } from '../database/RTDB';
 
 // database read/write/remove imports
-import { getProfileName } from '../database/readData';
-import { downloadProfilePicture } from '../database/downloadStorage';
+import { getProfileName, getDataFromPath } from '../database/readData';
+//import { downloadProfilePicture } from '../database/downloadStorage';
 import { uploadEditProfilePicture } from '../database/uploadStorage';
+import { getID } from '../database/ID';
 
 
 /*
@@ -82,7 +83,10 @@ export default ( {navigation} ) => {
 			{/* Profile Picture */}
 			<View style={styles.imageWrapper}>
 				<Image style={styles.profilePic}
-				 source={{uri: downloadProfilePicture(auth.currentUser.email)}} />
+					/*source={{uri: downloadProfilePicture(auth.currentUser.email)}}*/
+					source={{uri: getDataFromPath("users/" + getID(auth.currentUser.email) 
+									 + "/Profile/Images/profile_picture")}}
+				/>
 				<Text style={styles.imageName}>
 					{getProfileName(auth.currentUser.email)}
 				</Text>

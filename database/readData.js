@@ -4,6 +4,35 @@ import {ref, set, onValue, exists, val, child, get, remove} from "firebase/datab
 import { getID } from './ID';
 
 
+
+/*
+ *
+ */
+export const getDataFromPath = (path) => {
+	const dbRef = ref(rtdb);
+
+	// (react hook)
+	const [data, setData] = useState(null);
+
+	// get the data
+	get(child(dbRef, path)).then((snapshot) => {
+		if (snapshot.exists()) {
+			const data_val = snapshot.val();
+			setData(data_val);
+		}
+		else {
+			console.log("This data is unavailable");
+		}
+	}).catch((error) => {
+		console.error(error);
+	});
+
+	return data;	
+} // getDataFromPath()
+
+
+
+
 /*
  * getProfileName()
  *
@@ -36,3 +65,7 @@ export const getProfileName = (email_or_id) => {
 
 	return name;
 } // getName()
+
+
+
+

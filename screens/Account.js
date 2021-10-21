@@ -16,6 +16,7 @@ import { remove } from 'firebase/database';
 
 // database read/write/remove imports
 import { removeUser } from '../database/removeData';
+import { deleteUserImages } from '../database/deleteStorage';
 
 
 /*
@@ -24,13 +25,19 @@ import { removeUser } from '../database/removeData';
 export default ( {navigation} ) => {
 
 	const { userToken, setUserToken } = React.useContext(AuthContext);
+
+
 	const attemptDelete = () => {
 		var user = auth.currentUser;
+		var user_email = auth.currentUser.email;
 		deleteUser(user).then(() => {
-			console.log("Successful Delete");
+			console.log("Successful Delete!");
 
 			// delete from RTDB
-			removeUser(user.email);
+			removeUser(user_email);
+
+			// delete images from storage
+			deleteUserImages(user_email);
 
 			// navigate to log in screen
 			setUserToken(null);
@@ -40,7 +47,8 @@ export default ( {navigation} ) => {
 			Alert.alert("Error", "There was an error deleting your account");
 		})
 	}
-	
+
+
 	return (
 		// If user clicks "Sign Out", set userToken to null.
 		<View style={styles.container}>
