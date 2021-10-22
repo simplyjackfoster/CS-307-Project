@@ -122,7 +122,7 @@ export default ({ navigation }) => {
 					style={styles.loginButton}
 					onPress={() => attemptLogin()} 
 				>
-					<Text>Log In</Text>
+					<Text style={styles.loginText}>Log In</Text>
 				</TouchableOpacity>
 
 
@@ -132,7 +132,7 @@ export default ({ navigation }) => {
 					style={styles.signupButton}
 					onPress={() => navigation.push("Signup")}			
 				>
-					<Text>Sign Up</Text>
+					<Text style={styles.signupText}>Sign Up</Text>
 				</TouchableOpacity>
 
 
@@ -177,11 +177,6 @@ const styles = StyleSheet.create({
 	alignSelf: 'center',
   },
 
-  login: {
-	fontSize: 35,
-	textAlign: 'left',
-  },
-
   label: {
     fontSize: 20,
     margin: 12,
@@ -197,48 +192,61 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 
+	/* Login Button */
+
+  loginText: {
+		fontSize: 18,
+		textAlign: 'center',
+  },
+
   loginButton: {
-	backgroundColor: Colors.lightBlue,
-	borderWidth: 2,
-	borderRadius: 5,
-	margin: 10,
-	padding: 5,
-	width: 55,
-	alignSelf: 'flex-end',
-	textAlign: 'center',
+		backgroundColor: Colors.lightBlue,
+		borderWidth: 1,
+		borderRadius: 25,
+		margin: 10,
+		padding: 7,
+		width: 105,
+		alignSelf: 'flex-end',
+		textAlign: 'center',
   },
 
+	/* Signup Button */
 
-  /* Bottom section styles */
-
-  signupPrompt: {
-	fontSize: 18,
-	marginLeft: 12,
-  },
+	signupText: {
+		fontSize: 18,
+		textAlign: 'center',
+	},
 
   signupButton: {
-	backgroundColor: Colors.lightBlue,
-	borderWidth: 2,
-	borderRadius: 5,
-	margin: 10,
-	padding: 5,
-	width: 65,
-	alignSelf: 'flex-end',
-	textAlign: 'center',
+		backgroundColor: Colors.offWhite,
+		borderWidth: 1,
+		borderRadius: 25,
+		margin: 10,
+		padding: 7,
+		width: 105,
+		alignSelf: 'flex-end',
+		textAlign: 'center',
+  },
+
+	/* "New to UniRoom?" Prompt */
+
+  signupPrompt: {
+		fontSize: 18,
+		marginLeft: 12,
+  },
+
+	/* Forgot Password Button */
+
+  forgotText: {
+		fontSize: 18, 
+		color: Colors.lightBlue,
+		textDecorationLine: 'underline',
   },
 
   forgotButton: {
-	margin: 12,
-	alignSelf: 'flex-start',
+		margin: 12,
+		alignSelf: 'flex-start',
   },
-
-  forgotText: {
-	fontSize: 18, 
-	color: Colors.lightBlue,
-	textDecorationLine: 'underline',
-  },
-
-
 
 
 });

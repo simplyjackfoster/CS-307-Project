@@ -58,7 +58,7 @@ export default ( {navigation} ) => {
 				style={styles.resetPassButton}
 				onPress={() => navigation.push("ResetPassword")} 
 			>
-				<Text>Reset Password</Text>
+				<Text style={styles.resetPassText}>Reset Password</Text>
 			</TouchableOpacity>
 
 
@@ -77,7 +77,7 @@ export default ( {navigation} ) => {
 					}]
 				)}
 			>
-				<Text>Sign Out</Text>
+				<Text style={styles.signOutText}>Sign Out</Text>
 			</TouchableOpacity>
 
 
@@ -96,7 +96,7 @@ export default ( {navigation} ) => {
 						}]
 					)}	
 			>
-				<Text>Delete Account</Text>
+				<Text style={styles.deleteText}>Delete Account</Text>
 			</TouchableOpacity>
 
 		</View>
@@ -116,37 +116,57 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  resetPassButton: {
-	backgroundColor: Colors.lightBlue,
-	borderWidth: 2,
-	borderRadius: 5,
-	margin: 10,
-	padding: 5,
-	width: 118,
-	alignSelf: 'center',
-	textAlign: 'center',
-  },
-  
+	/* Sign Out Button */
+	signOutText: {
+		fontSize: 18,
+		alignSelf: 'center',
+	},
+
   signOutButton: {
-	backgroundColor: Colors.lightBlue,
-	borderWidth: 2,
-	borderRadius: 5,
-	margin: 10,
-	padding: 5,
-	width: 70,
-	alignSelf: 'center',
-	textAlign: 'center',
+		backgroundColor: Colors.offWhite,
+		borderWidth: 1,
+		borderRadius: 25,
+		margin: 10,
+		padding: 8,
+		width: 170,
+		alignSelf: 'center',
+		textAlign: 'center',
+  },
+
+	/* Reset Password Button */
+	resetPassText: {
+		fontSize: 18,
+		alignSelf: 'center',
+	},
+
+  resetPassButton: {
+		backgroundColor: Colors.offWhite,
+		borderWidth: 1,
+		borderRadius: 25,
+		margin: 10,
+		padding: 8,
+		width: 170,
+		alignSelf: 'center',
+		textAlign: 'center',
   },
   
+
+	/* Delete Account Button */	
+	deleteText: {
+			fontSize: 18,
+			alignSelf: 'center',
+	},
+
   deleteButton: {
-	backgroundColor: Colors.red,
-	borderWidth: 2,
-	borderRadius: 5,
-	margin: 10,
-	padding: 5,
-	width: 115,
-	alignSelf: 'center',
-	textAlign: 'center',
+		backgroundColor: Colors.lightRed,
+		borderWidth: 1,
+		borderRadius: 25,
+		margin: 10,
+		padding: 8,
+		width: 170,
+		alignSelf: 'center',
+		textAlign: 'center',
   },
+
 
 });

@@ -11,11 +11,13 @@ import {
 import Colors from "../constants/Colors";
 import { AuthContext } from "../context";
 import { Picker } from '@react-native-picker/picker';
+import { Divider } from 'react-native-elements';
 
 // authentication imports
 import { auth, rtdb } from '../database/RTDB';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { ref, child, get, set } from 'firebase/database';
+        
 
 // data value imports from Signup screen
 import {
@@ -398,11 +400,15 @@ export default ( {navigation} ) => {
 
 
 
-
-
         {/* Create account (button) */}
         <TouchableOpacity
-          style={styles.createButton}
+          style={
+            userToken ? (
+              styles.saveButton
+            ) : (
+              styles.createButton
+            )
+          }
           onPress={() => {
             {userToken ? (
               // save changes to database 
@@ -423,11 +429,12 @@ export default ( {navigation} ) => {
         >
 
         {userToken ? (
-          <Text>Save Changes</Text>
+          <Text style={styles.saveText}>Save Changes</Text>
         ) : (
-          <Text>Create Account</Text>
+          <Text style={styles.createText}>Create Account</Text>
         )}
         </TouchableOpacity> 
+
       </View>
     </ScrollView>
 	);
@@ -442,7 +449,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    padding: 0,
+    paddingTop: 40,
+    paddingBottom: 130,
   },
 
   intro: {
@@ -467,17 +475,40 @@ const styles = StyleSheet.create({
     width: '80%',
   },
 
-
-  createButton: {
-    backgroundColor: Colors.lightBlue,
-    borderWidth: 2,
-    borderRadius: 5,
-    margin: 10,
-    marginBottom: 30,
-    padding: 5,
-    width: 110,
+  /* Create Account Button */
+  createText: {
+    fontSize: 18,
     alignSelf: 'center',
   },
 
+  createButton: {
+    backgroundColor: Colors.lightBlue,
+    borderWidth: 1,
+    borderRadius: 25,
+    margin: 10,
+    padding: 7,
+    width: 125,
+    alignSelf: 'flex-end',
+    textAlign: 'center',
+  },
+
+  /* Save Changes Button */
+  saveText: {
+    fontSize: 16,
+    alignSelf: 'center',
+  },
+
+  saveButton: {
+  flex: 1,
+  backgroundColor: Colors.offWhite,
+  borderWidth: 1,
+  borderRadius: 25,
+  margin: 10,
+  padding: 10,
+  width: 175,
+  alignSelf: 'center',
+  textAlign: 'center',
+  top: 60,
+  },
 
 });

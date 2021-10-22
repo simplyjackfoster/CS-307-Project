@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Colors from "../constants/Colors";
+import { Divider } from 'react-native-elements';
 
 // firebase imports
 import { auth } from '../database/RTDB';
@@ -163,6 +164,10 @@ export default ( {navigation} ) => {
         </SafeAreaView>
 
 
+        {/* Divider used between profile picture and text fields */}
+        <Divider orientation="horizontal" height={20}/>
+
+
         {/* Name (text), name (field) */}
         <Text style={styles.label}>Name</Text>
         <SafeAreaView>
@@ -179,6 +184,7 @@ export default ( {navigation} ) => {
         </SafeAreaView>
 
 
+
         {/* Continue to Questionnaire (button) */}
         <TouchableOpacity
           style={styles.questionnaireButton}
@@ -187,7 +193,7 @@ export default ( {navigation} ) => {
             navigation.push("Questionnaire");
           }}
         >
-          <Text>Edit Questionnaire</Text>
+          <Text style={styles.questionnaireText}>Edit Questionnaire</Text>
         </TouchableOpacity>
 
 
@@ -197,7 +203,7 @@ export default ( {navigation} ) => {
           // check if questionnaire has been completed and run setUserToken
           onPress={ validateInputs }
         >
-          <Text style={styles.textSave}>Save</Text>
+          <Text style={styles.textSave}>Save Changes</Text>
         </TouchableOpacity>
 
       </View>
@@ -217,6 +223,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
+    paddingBottom: 150,
   },
 
   profilePicture: {
@@ -274,28 +281,42 @@ const styles = StyleSheet.create({
     top: 225,
   },
 
+  /* Questionnaire Button */
+  questionnaireText: {
+    fontSize: 16,
+    alignSelf: 'center',
+  },
+
   questionnaireButton: {
-    position: 'absolute',
-    top: 550,
-    backgroundColor: '#66a3dd',
-    borderWidth: 2,
-    borderRadius: 5,
+    flex: 1,
+    top: 450,
+    backgroundColor: Colors.lightBlue,
+    borderWidth: 1,
+    borderRadius: 25,
     margin: 10,
-    padding: 5,
-    width: 135,
+    padding: 10,
+    width: 175,
+    alignSelf: 'center',
+  },
+
+  /* Save Button */
+   textSave: {
+    fontSize: 16,
     alignSelf: 'center',
   },
 
   buttonSave: {
-    position: 'absolute',
-    top: 600, 
+    flex: 1,
+    top: 450,
+    backgroundColor: Colors.offWhite,
+    borderWidth: 1,
+    borderRadius: 25,
+    margin: 10,
+    padding: 10,
+    width: 175,
     alignSelf: 'center',
   },
 
-  textSave: {
-    margin: 20,
-    fontSize: 18,
-    color: Colors.lightBlue,
-  }
+ 
 
 });
