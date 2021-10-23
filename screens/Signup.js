@@ -274,7 +274,7 @@ export default ( {navigation} ) => {
 					  style={styles.continueButton}
             onPress={validateInputs}
 				  >
-            <Text>Continue</Text>
+            <Text style={styles.continueText}>Continue</Text>
 				  </TouchableOpacity>
 
         </View>
@@ -307,6 +307,7 @@ const styles = StyleSheet.create({
     margin: 20,
     textAlign: 'left',
     alignSelf: 'center',
+    paddingBottom: 50,
   },
 
   label: {
@@ -346,14 +347,23 @@ const styles = StyleSheet.create({
     width: '120%',
   },
 
+  /* Continue Button */
+
+  continueText: {
+    fontSize: 18,
+    alignSelf: 'center'
+  },
+  
   continueButton: {
-    backgroundColor: Colors.lightBlue,
-    borderWidth: 2,
-    borderRadius: 5,
+    backgroundColor: Colors.offWhite,
+    borderWidth: 1,
+    borderRadius: 25,
     margin: 10,
-    padding: 5,
-    width: 75,
+    padding: 7,
+    width: 175,
     alignSelf: 'center',
+    textAlign: 'center',
+    top: 25,
   },
 
 });

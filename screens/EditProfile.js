@@ -130,13 +130,14 @@ export default ( {navigation} ) => {
 
 
 
-	return (
-		<ScrollView style={styles.container}>
-      <View style={styles.form}>
 
+	return (
+    <View style={styles.container}>
+
+
+      <ScrollView style={styles.scroll}>
         {/* Profile Picture Image */}
         <SafeAreaView>
-
             {/* Image displayed when we haven't changed the profile picture */}
             <Image 
               source={{uri: getDataFromPath("users/" + getID(auth.currentUser.email) +
@@ -147,13 +148,15 @@ export default ( {navigation} ) => {
                 styles.profilePicture
               )}
             />
-
             {/* Image displayed when we changed the profile picture */}
-            <Image 
+            <Image
               source={{uri: editProfilePicture}}
-              style={styles.profilePicture}
+              style={editProfilePicture ? (
+                styles.profilePicture
+              ) : (
+                {display: 'none'}
+              )}
             />
-
           <TouchableOpacity
             onPress={
               openProfilePicImagePickerAsync
@@ -163,28 +166,25 @@ export default ( {navigation} ) => {
           </TouchableOpacity>
         </SafeAreaView>
 
-
-        {/* Divider used between profile picture and text fields */}
-        <Divider orientation="horizontal" height={20}/>
-
-
         {/* Name (text), name (field) */}
-        <Text style={styles.label}>Name</Text>
+        <Text style={styles.prompt}>Name</Text>
         <SafeAreaView>
           <TextInput
             style={styles.input}
             autoCapitalize='none'
-						autoComplete='off'
-						autoCorrect={false}
-						spellCheck={false}
+            autoComplete='off'
+            autoCorrect={false}
+            spellCheck={false}
             onChangeText={nameInputHandler}
             defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/profile_name")}
             placeholder={"Name"}
           />
         </SafeAreaView>
+      </ScrollView>
 
 
 
+      <View style={styles.footer}>
         {/* Continue to Questionnaire (button) */}
         <TouchableOpacity
           style={styles.questionnaireButton}
@@ -196,7 +196,6 @@ export default ( {navigation} ) => {
           <Text style={styles.questionnaireText}>Edit Questionnaire</Text>
         </TouchableOpacity>
 
-
         {/* Save Button */}
         <TouchableOpacity
           style={styles.buttonSave}
@@ -205,9 +204,10 @@ export default ( {navigation} ) => {
         >
           <Text style={styles.textSave}>Save Changes</Text>
         </TouchableOpacity>
-
       </View>
-		</ScrollView>
+
+
+    </View>
 	); // return()
 
 } // export default ()
@@ -220,28 +220,41 @@ export default ( {navigation} ) => {
 // styles
 const styles = StyleSheet.create({
 
+  /* Container Styles */
   container: {
     flex: 1,
+    flexDirection: 'column',
     backgroundColor: Colors.white,
-    paddingBottom: 150,
   },
 
-  profilePicture: {
-    position: 'absolute',
+  scroll: {
+    flex: 1,
+    padding: 30,
+  },
+
+  footer: {
+    flex: 0.15,
+    flexDirection: 'row-reverse',
     alignSelf: 'center',
-    top: 25,
+    paddingTop: 5,
+    paddingHorizontal: 150,
+    paddingBottom: 25,
+    backgroundColor: Colors.lightGray,
+  },
+
+  /* Profile Picture */
+  profilePicture: {
+    alignSelf: 'center',
     width: 150,
     height: 150,
-    resizeMode: "cover",
-    borderRadius: 200, // makes image circular
+    borderRadius: 200,
+    resizeMode: 'cover',
   },
 
   buttonChangePicture: {
-    position: 'absolute',
     alignSelf: 'center',
-    top: 165,
     padding: 5,
-  }, 
+  },
 
   textChangePicture: {
     margin: 20,
@@ -249,37 +262,28 @@ const styles = StyleSheet.create({
     color: Colors.lightBlue,
   },
 
-  /* Form styles */
-
-  form: {
-    margin: 20,
+  /* Input Prompt */
+  prompt: {
+    flexDirection: 'row',
     textAlign: 'left',
-    alignSelf: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-
-  label: {
     fontSize: 20,
     margin: 10,
     marginLeft: 15,
     marginBottom: 0,
     marginTop: 10,
-    textAlign: 'left',
-    flexDirection: 'row',
-    top: 225,
   },
 
+  /* Text Input */
   input: {
+    textAlign: 'left',
     height: 40,
     width: 290,
     margin: 10,
     padding: 10,
     borderWidth: 1,
     borderRadius: 10,
-    alignSelf: 'center',
-    top: 225,
   },
+
 
   /* Questionnaire Button */
   questionnaireText: {
@@ -288,15 +292,13 @@ const styles = StyleSheet.create({
   },
 
   questionnaireButton: {
-    flex: 1,
-    top: 450,
-    backgroundColor: Colors.lightBlue,
+    alignSelf: 'center',
     borderWidth: 1,
     borderRadius: 25,
-    margin: 10,
+    margin: 5,
     padding: 10,
     width: 175,
-    alignSelf: 'center',
+    backgroundColor: Colors.offWhite,
   },
 
   /* Save Button */
@@ -306,17 +308,14 @@ const styles = StyleSheet.create({
   },
 
   buttonSave: {
-    flex: 1,
-    top: 450,
-    backgroundColor: Colors.offWhite,
+    alignSelf: 'center',
     borderWidth: 1,
     borderRadius: 25,
-    margin: 10,
+    margin: 5,
     padding: 10,
     width: 175,
-    alignSelf: 'center',
+    backgroundColor: Colors.offWhite,
   },
 
- 
 
 });
