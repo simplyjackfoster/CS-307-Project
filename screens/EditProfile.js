@@ -149,9 +149,13 @@ export default ( {navigation} ) => {
               )}
             />
             {/* Image displayed when we changed the profile picture */}
-            <Image 
+            <Image
               source={{uri: editProfilePicture}}
-              style={styles.profilePicture}
+              style={editProfilePicture ? (
+                styles.profilePicture
+              ) : (
+                {display: 'none'}
+              )}
             />
           <TouchableOpacity
             onPress={
@@ -217,7 +221,6 @@ export default ( {navigation} ) => {
 const styles = StyleSheet.create({
 
   /* Container Styles */
-
   container: {
     flex: 1,
     flexDirection: 'column',
@@ -231,22 +234,21 @@ const styles = StyleSheet.create({
 
   footer: {
     flex: 0.15,
+    flexDirection: 'row-reverse',
     alignSelf: 'center',
-    paddingTop: 20,
+    paddingTop: 5,
     paddingHorizontal: 150,
-    paddingBottom: 50,
-    backgroundColor: Colors.blueGray,
+    paddingBottom: 25,
+    backgroundColor: Colors.lightGray,
   },
 
   /* Profile Picture */
-
   profilePicture: {
     alignSelf: 'center',
     width: 150,
     height: 150,
     borderRadius: 200,
     resizeMode: 'cover',
-    marginBottom: -80,
   },
 
   buttonChangePicture: {
@@ -296,7 +298,7 @@ const styles = StyleSheet.create({
     margin: 5,
     padding: 10,
     width: 175,
-    backgroundColor: Colors.lightBlue,
+    backgroundColor: Colors.offWhite,
   },
 
   /* Save Button */

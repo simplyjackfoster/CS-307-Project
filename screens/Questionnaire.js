@@ -446,8 +446,11 @@ export default ( {navigation} ) => {
 // styles
 const styles = StyleSheet.create({
 
+  /* Container Styles */
+
   container: {
     flex: 1,
+    flexDirection: 'column',
     backgroundColor: Colors.white,
     paddingTop: 40,
     paddingBottom: 130,
