@@ -22,9 +22,11 @@ import { getID } from '../database/ID';
 import { getDataFromPath } from '../database/readData';
 import { writeProfileName } from '../database/writeData';
 import { uploadProfilePicture } from '../database/uploadStorage';
+import { writeProfileInstagramLink } from '../database/writeData';
 
 import {
   isValidName,
+  isValidInstagram,
   isValidEmail,
   isValidPhone,
   isValidBirthday,
@@ -45,6 +47,8 @@ export default ( {navigation} ) => {
   const [name, onChangeName] = React.useState(null);
   const [nameChanged, setNameChanged] = React.useState(false); 
   const [editProfilePicture, setEditProfilePicture] = React.useState(null);
+  const [instagramLink, onChangeInstagramLink] = React.useState(null);
+  const [instagramLinkChange, setInstagramLinkChange] = React.useState(false);
 
 
   /*
@@ -73,8 +77,6 @@ export default ( {navigation} ) => {
     setEditProfilePicture(picked.uri);
   } // openProfilePicImagePickerAsync()
 
-
-
   /*
    * This function is called when the text in the name 
    * input is changed. It changes the value of the name hook
@@ -85,6 +87,11 @@ export default ( {navigation} ) => {
     onChangeName(input);
     setNameChanged(true);
   } // setNameChanged
+
+  const instagramLinkInputHandler = (input) => {
+    onChangeInstagramLink(input);
+    setInstagramLinkChange(true);
+  }
 
 
 
@@ -108,9 +115,11 @@ export default ( {navigation} ) => {
       // update the name
       writeProfileName(auth.currentUser.email, name);
     }
+
+    if(instagramLink) {
+      writeProfileInstagramLink(auth.currentUser.email, instagramLink);
+    }
   } // updateProfileData()
-
-
 
 
   /*
@@ -121,14 +130,15 @@ export default ( {navigation} ) => {
     if (nameChanged != false) {
       if (!isValidName(name)) {return}
     } // if it hasn't been changed then we save it as is
+
+    if(instagramLinkChange != false) {
+      if(!isValidInstagram(instagramLink)) {return}
+    }
    
     // update the information and navigate to Profile
     updateProfileData();
     navigation.pop();
   } // validateInputs()
-
-
-
 
 	return (
 		<ScrollView style={styles.container}>
@@ -180,6 +190,20 @@ export default ( {navigation} ) => {
             onChangeText={nameInputHandler}
             defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/profile_name")}
             placeholder={"Name"}
+          />
+        </SafeAreaView>
+
+        <Text style={styles.label}>Instagram Link</Text>
+        <SafeAreaView>
+          <TextInput
+            style={styles.input}
+            autoCapitalize='none'
+						autoComplete='off'
+						autoCorrect={false}
+						spellCheck={false}
+            onChangeText={instagramLinkInputHandler}
+            defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram_link")}
+            placeholder={"Profile Name"}
           />
         </SafeAreaView>
 
@@ -289,7 +313,7 @@ const styles = StyleSheet.create({
 
   questionnaireButton: {
     flex: 1,
-    top: 450,
+    top: 275,
     backgroundColor: Colors.lightBlue,
     borderWidth: 1,
     borderRadius: 25,
@@ -307,7 +331,7 @@ const styles = StyleSheet.create({
 
   buttonSave: {
     flex: 1,
-    top: 450,
+    top: 275,
     backgroundColor: Colors.offWhite,
     borderWidth: 1,
     borderRadius: 25,

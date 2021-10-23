@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
-
+import { StyleSheet, Text, View, Image } from 'react-native';
+'/.'
 import Colors from "../constants/Colors";
 
 
@@ -11,7 +11,22 @@ import Colors from "../constants/Colors";
 export default () => {
 	return (
 		<View style={styles.container}>
-			<Text>This is the Feed Screen</Text>
+
+			<View style={styles.imageWrapper}>
+				<Image
+					source={{
+            width: 200, height: 300,
+            uri: "https://picsum.photos/200/300"}}
+				/>
+        </View>
+
+        <View style={styles.nameWrapper}>
+          <Text style={styles.nameText}>
+					  John Doe
+				  </Text>
+			  </View>
+
+
 		</View>
 	);
 }
@@ -25,8 +40,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+  },
+
+  imageWrapper: {
+    paddingTop: 30,
+  },
+
+  nameWrapper: {
+    paddingTop: 15,
+  },
+
+  nameText: {
+    fontSize: 25,
   },
 
 });
