@@ -487,9 +487,10 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     margin: 10,
     padding: 7,
-    width: 125,
-    alignSelf: 'flex-end',
+    width: 175,
+    alignSelf: 'center',
     textAlign: 'center',
+    top: 60,
   },
 
   /* Save Changes Button */
@@ -499,16 +500,16 @@ const styles = StyleSheet.create({
   },
 
   saveButton: {
-  flex: 1,
-  backgroundColor: Colors.offWhite,
-  borderWidth: 1,
-  borderRadius: 25,
-  margin: 10,
-  padding: 10,
-  width: 175,
-  alignSelf: 'center',
-  textAlign: 'center',
-  top: 60,
+    flex: 1,
+    backgroundColor: Colors.offWhite,
+    borderWidth: 1,
+    borderRadius: 25,
+    margin: 10,
+    padding: 10,
+    width: 175,
+    alignSelf: 'center',
+    textAlign: 'center',
+    top: 60,
   },
 
 });
