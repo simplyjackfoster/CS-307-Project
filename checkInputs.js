@@ -359,4 +359,3 @@ export const isValidCheckbox = (checkedCoc, checkedPp) => {
 	return true;
 } // isValidCheckbox()
 
-

@@ -20,8 +20,11 @@ import { auth } from '../database/RTDB';
 // database read/write/remove imports
 import { getID } from '../database/ID';
 import { getDataFromPath } from '../database/readData';
-import { writeProfileName } from '../database/writeData';
 import { uploadProfilePicture } from '../database/uploadStorage';
+import {
+  writeProfileName,
+  writeBio
+} from '../database/writeData';
 
 import {
   isValidName,
@@ -42,9 +45,11 @@ import { set } from 'react-native-reanimated';
 export default ( {navigation} ) => {
 
   // hooks for editable fields
-  const [name, onChangeName] = React.useState(null);
-  const [nameChanged, setNameChanged] = React.useState(false); 
   const [editProfilePicture, setEditProfilePicture] = React.useState(null);
+  const [name, setName] = React.useState(null);
+  const [nameChanged, setNameChanged] = React.useState(false);
+  const [bio, setBio] = React.useState(null);
+  const [bioChanged, setBioChanged] = React.useState(false);
 
 
   /*
@@ -78,12 +83,24 @@ export default ( {navigation} ) => {
   /*
    * This function is called when the text in the name 
    * input is changed. It changes the value of the name hook
-   * and also changed the boolean that tells us if the user has
+   * and also changes the boolean that tells us if the user has
    * changed the value.
    */
   const nameInputHandler = (input) => {
-    onChangeName(input);
+    setName(input);
     setNameChanged(true);
+  } // setNameChanged
+
+
+  /*
+   * This function is called when the text in the bio 
+   * input is changed. It changes the value of the bio hook
+   * and also changes the boolean that tells us if the user has
+   * changed the value.
+   */
+  const bioInputHandler = (input) => {
+    setBio(input);
+    setBioChanged(true);
   } // setNameChanged
 
 
@@ -95,8 +112,7 @@ export default ( {navigation} ) => {
   const updateProfileData = () => {
     // if we changed the profile picture, then upload it
     if (editProfilePicture) {
-      console.log("SAVING: " + editProfilePicture);
-      console.log("SAVING: " + editProfilePicture);
+      console.log("Saving Image: " + editProfilePicture);
       uploadProfilePicture(auth.currentUser.email, editProfilePicture);
     }
     else {
@@ -105,9 +121,14 @@ export default ( {navigation} ) => {
 
     // if the name is not null, then update it
     if (name) {
-      // update the name
       writeProfileName(auth.currentUser.email, name);
     }
+
+    // if the bio has been changed, then update it
+    if (bioChanged) {
+      writeBio(auth.currentUser.email, bio);
+    }
+
   } // updateProfileData()
 
 
@@ -115,13 +136,21 @@ export default ( {navigation} ) => {
 
   /*
    * Validates that none of the inputs are invalid.
+   * If the fields have been changed, then we do a check
+   * to see if they are valid. If they havn't been changed then
+   * we don't do a check.
    */
   const validateInputs = () => {
     // Check if the name field is valid
     if (nameChanged != false) {
       if (!isValidName(name)) {return}
-    } // if it hasn't been changed then we save it as is
-   
+    } 
+
+    // Bio field is always valid because it isn't required
+
+
+
+
     // update the information and navigate to Profile
     updateProfileData();
     navigation.pop();
@@ -180,6 +209,25 @@ export default ( {navigation} ) => {
             placeholder={"Name"}
           />
         </SafeAreaView>
+
+
+        {/* Bio (text), bio (field) */}
+        <SafeAreaView>
+          <Text style={styles.prompt}>Bio</Text>
+          <TextInput
+            style={styles.largeInput}
+            autoCapitalize='none'
+            autoComplete='off'
+            autoCorrect={false}
+            spellCheck={false}
+            maxLength={250}
+            multiline={true}
+            onChangeText={bioInputHandler}
+            defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/bio")}
+            placeholder={"Enter a description of yourself"}
+          />
+        </SafeAreaView>
+
       </ScrollView>
 
 
@@ -234,7 +282,7 @@ const styles = StyleSheet.create({
 
   footer: {
     flex: 0.15,
-    flexDirection: 'row-reverse',
+    flexDirection: 'row',
     alignSelf: 'center',
     paddingTop: 5,
     paddingHorizontal: 150,
@@ -282,6 +330,18 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 1,
     borderRadius: 10,
+  },
+
+  /* Large Text Input */
+  largeInput: {
+    textAlign: 'left',
+    textAlign: 'auto',
+    height: 140,
+    width: 290,
+    margin: 10,
+    padding: 10,
+    borderWidth: 1,
+    borderRadius: 10, 
   },
 
 

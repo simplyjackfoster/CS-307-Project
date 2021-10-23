@@ -92,22 +92,6 @@ export const writeNewUser = (email, name, phone,
 
 
 
-/*
- * writeName()
- *
- * Writes a profile_name to the specified user in the RTDB
- * @param email_or_id -> the email or id specifying the user.
- * @param name -> the name that we will write to the database.
- */
-export const writeProfileName = (email_or_id, name) => {
-	const id = getID(email_or_id);
-
-	update(ref(rtdb, "users/" + id + "/Profile"), {
-		profile_name: name
-	});
-} // writeName()
-
-
 
 
 /*
@@ -127,6 +111,42 @@ export const writeProfilePicture = (email_or_id, uri) => {
 		profile_picture: uri
 	});
 } // writeProfilePicture()
+
+
+
+
+/*
+ * writeName()
+ *
+ * Writes a profile_name to the specified user in the RTDB
+ * @param email_or_id -> the email or id specifying the user.
+ * @param name -> the name that we will write to the database.
+ */
+export const writeProfileName = (email_or_id, name) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		profile_name: name
+	});
+} // writeName()
+
+
+
+/*
+ * writeBio()
+ *
+ * Writes a bio to the specified user in the RTDB
+ * @param email_or_id -> the email or id specifying the user.
+ * @param name -> the bio that we will write to the database.
+ */
+export const writeBio = (email_or_id, bio) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		bio: bio
+	});
+} // writeBio()
+
 
 
 
