@@ -23,7 +23,8 @@ import { getDataFromPath } from '../database/readData';
 import { uploadProfilePicture } from '../database/uploadStorage';
 import {
   writeProfileName,
-  writeBio
+  writeBio,
+  writeYearInSchool
 } from '../database/writeData';
 
 import {
@@ -33,7 +34,8 @@ import {
   isValidBirthday,
   isValidPassword,
   isValidSecurity,
-  isValidCheckbox
+  isValidCheckbox,
+  isValidYearInSchool
 } from '../checkInputs';
 import { set } from 'react-native-reanimated';
 
@@ -50,6 +52,8 @@ export default ( {navigation} ) => {
   const [nameChanged, setNameChanged] = React.useState(false);
   const [bio, setBio] = React.useState(null);
   const [bioChanged, setBioChanged] = React.useState(false);
+  const [year, setYear] = React.useState(null);
+  const [yearChanged, setYearChanged] = React.useState(false);
 
 
   /*
@@ -101,7 +105,21 @@ export default ( {navigation} ) => {
   const bioInputHandler = (input) => {
     setBio(input);
     setBioChanged(true);
+  } // setBioChanged
+
+
+
+  /*
+   * This function is called when the text in the year 
+   * input is changed. It changes the value of the bio hook
+   * and also changes the boolean that tells us if the user has
+   * changed the value.
+   */
+  const yearInputHandler = (input) => {
+    setYear(input);
+    setYearChanged(true);
   } // setNameChanged
+
 
 
 
@@ -129,6 +147,12 @@ export default ( {navigation} ) => {
       writeBio(auth.currentUser.email, bio);
     }
 
+    // if the year has changed, then update it
+    if (yearChanged) {
+      writeYearInSchool(auth.currentUser.email, year);
+    }
+
+
   } // updateProfileData()
 
 
@@ -146,9 +170,16 @@ export default ( {navigation} ) => {
       if (!isValidName(name)) {return}
     } 
 
-    // Bio field is always valid because it isn't required
+
+    // Check if the year in school is valid
+    if (yearChanged != false) {
+      if (!isValidYearInSchool(year)) {return}
+    }
+
+    // Check if hometown is valid
 
 
+    // Check if major is valid
 
 
     // update the information and navigate to Profile
@@ -227,6 +258,25 @@ export default ( {navigation} ) => {
             placeholder={"Enter a description of yourself"}
           />
         </SafeAreaView>
+
+
+        {/* Graduation Year (text), Graduation Year (field) */}
+        <SafeAreaView>
+          <Text style={styles.prompt}>Graduation Year</Text>
+          <TextInput
+            style={styles.input}
+            autoCapitalize='none'
+            autoComplete='off'
+            autoCorrect={false}
+            spellCheck={false}
+            onChangeText={yearInputHandler}
+            defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/year_in_school")}
+            placeholder={"yyyy"}
+          />
+        </SafeAreaView>
+
+
+
 
       </ScrollView>
 

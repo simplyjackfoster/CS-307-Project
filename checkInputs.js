@@ -359,3 +359,50 @@ export const isValidCheckbox = (checkedCoc, checkedPp) => {
 	return true;
 } // isValidCheckbox()
 
+
+
+
+
+
+/*
+ * isValidYearInSchool()
+ *
+ * function to check if the year in school is valid.
+ * returns true if its either null, or between the current year and
+ * the current year + 10
+ */
+export const isValidYearInSchool = (year) => {
+	// if its null, then its valid
+	if (!year) {
+		return true;
+	}	
+
+	// check if the year is a 4 digit number
+	if (year.length != 4) {
+		Alert.alert("Error", "Graduation year field must be a 4 digit number, please try again.", 
+		[{ text: "Ok" }]);
+		return false;
+	}
+
+	for (const c in year) {
+		if (c < '0' || c > '9') {
+			Alert.alert("Error", "Graduation year field must be a 4 digit number, please try again.", 
+			[{ text: "Ok" }]);	
+			return false;
+		}
+	}
+
+	// get the year passed in and the current year
+	const yearInt = parseInt(year);
+	const today = new Date();
+	const currentYear = parseInt(today.getFullYear());
+
+	// make sure the year is in the valid range
+	if (yearInt < currentYear || yearInt > currentYear + 10) {
+		Alert.alert("Error", "Graduation year field has invalid year, please try again.", 
+			[{ text: "Ok" }]);
+			return false;
+	}
+	return true;
+} // isValidYearInSchool()
+

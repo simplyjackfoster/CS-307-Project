@@ -40,11 +40,11 @@ export const writeNewUser = (email, name, phone,
 	// write the "Profile" data
 	set(ref(rtdb, "users/" + id + "/Profile"), {
 		profile_name: name,
-		year_in_school: "year", // change
+		bio: "",
+		year_in_school: "", 
 		gender: "gender", // change
-		bio: "bio", // change
-		hometown: "hometown", // change
-		major: "major", // change
+		hometown: "", 
+		major: "", 
 		covid_vaccination_status: "vaccine" // change
 	});
 	set(ref(rtdb, "users/" + id + "/Profile/Images"), {
@@ -135,7 +135,7 @@ export const writeProfileName = (email_or_id, name) => {
 /*
  * writeBio()
  *
- * Writes a bio to the specified user in the RTDB
+ * Writes a bio to the specified user in the RTDB.
  * @param email_or_id -> the email or id specifying the user.
  * @param name -> the bio that we will write to the database.
  */
@@ -146,6 +146,24 @@ export const writeBio = (email_or_id, bio) => {
 		bio: bio
 	});
 } // writeBio()
+
+
+
+
+/*
+ * writeYearInSchool()
+ *
+ * Writes a year in school to the specified user in the RTDB.
+ * @param email_or_id -> the email or id specifying the user.
+ * @param year -> the year in school that we will write to the database.
+ */
+export const writeYearInSchool = (email_or_id, year) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		year_in_school: year
+	});
+} // writeYearInSchool()
 
 
 
