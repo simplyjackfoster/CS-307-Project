@@ -12,11 +12,13 @@ import {
   KeyboardAvoidingView
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { Picker } from '@react-native-picker/picker';
 import Colors from "../constants/Colors";
 import { Divider } from 'react-native-elements';
 
 // firebase imports
-import { auth } from '../database/RTDB';
+import { auth, rtdb } from '../database/RTDB';
+import { ref, child, get } from 'firebase/database';
 
 // database read/write/remove imports
 import { getID } from '../database/ID';
@@ -25,7 +27,9 @@ import { uploadProfilePicture } from '../database/uploadStorage';
 import {
   writeProfileName,
   writeBio,
-  writeGraduationYear
+  writeGraduationYear,
+  writeGender,
+  writeVaccinated
 } from '../database/writeData';
 
 import {
@@ -39,6 +43,10 @@ import {
   isValidGraduationYear
 } from '../checkInputs';
 import { set } from 'react-native-reanimated';
+
+
+// used so that the hooks don't get set rapidly in edit questionnaire
+var updatedTheSelected = false;
 
 
 
@@ -55,6 +63,74 @@ export default ( {navigation} ) => {
   const [bioChanged, setBioChanged] = React.useState(false);
   const [year, setYear] = React.useState(null);
   const [yearChanged, setYearChanged] = React.useState(false);
+
+  const [gender, setGender] = React.useState(1);
+  const [vaccinated, setVaccinated] = React.useState(1);
+
+
+  // function for setting the selection boxes to the correct value
+  const setSelection = () => {
+    const dbRef = ref(rtdb);
+
+    // set the gender to the correct value
+    get(child(dbRef, "users/" + getID(auth.currentUser.email) +
+              "/Profile/gender")).then((snapshot) => {
+      if (snapshot.exists()) {
+        const data_val = snapshot.val();
+        if (data_val == "Male") {
+          setGender(1);
+        }
+        else if (data_val == "Female") {
+          setGender(2);
+        }
+        else if (data_val == "Other") {
+          setGender(3);
+        }
+        else {
+          setGender(4);
+        }
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+
+    // set vaccination status to the correct value
+    get(child(dbRef, "users/" + getID(auth.currentUser.email) +
+              "/Profile/covid_vaccination_status")).then((snapshot) => {
+      if (snapshot.exists()) {
+        const data_val = snapshot.val();
+        if (data_val == "Not Vaccinated") {
+          setVaccinated(1);
+        }
+        else {
+          setVaccinated(2);
+        }
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+
+  } // setSelection()
+
+
+  // update the initial values of the selection boxes
+  if (updatedTheSelected == false) {
+    setSelection();
+    updatedTheSelected = true;
+  }
+
+
+  /*
+   * Effect that resets the value of updatedTheSelected to false, so that when
+   * we open the edit profile screen again, the selections will update.
+   */
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("beforeRemove", () => {
+      updatedTheSelected = false;
+    });
+    return unsubscribe;
+  }, [navigation]);
+
 
 
   /*
@@ -124,6 +200,7 @@ export default ( {navigation} ) => {
 
 
 
+
   /*
    * This function is called when the user clicks "Save".
    * It updates all of the profile data in the database.
@@ -152,6 +229,10 @@ export default ( {navigation} ) => {
     if (yearChanged) {
       writeGraduationYear(auth.currentUser.email, year);
     }
+
+    // write the gender and vaccination status data
+    writeGender(auth.currentUser.email, gender);
+    writeVaccinated(auth.currentUser.email, vaccinated);
 
 
   } // updateProfileData()
@@ -272,10 +353,47 @@ export default ( {navigation} ) => {
               autoCorrect={false}
               spellCheck={false}
               onChangeText={yearInputHandler}
-              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/year_in_school")}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/graduation_year")}
               placeholder={"yyyy"}
             />
           </SafeAreaView>
+
+
+          {/* Gender (text), Gender (field) */}
+          <Text style={styles.prompt}>Gender</Text>
+          <Picker
+            style={styles.picker}
+            selectedValue={
+              gender
+            }
+            onValueChange={(itemValue, itemIndex) =>
+              setGender(itemValue)
+            }
+          >
+            <Picker.Item label="Male" value={1} />
+            <Picker.Item label="Female" value={2} />
+            <Picker.Item label="Other" value={3} />
+            <Picker.Item label="Prefer not to say" value={4} />
+          </Picker>
+
+          
+          {/* Vaccination status (text), vaccination status (field) */}
+          <Text style={styles.prompt}>Vaccination Status</Text>
+          <Picker
+            style={styles.picker}
+            selectedValue={
+              vaccinated
+            }
+            onValueChange={(itemValue, itemIndex) =>
+              setVaccinated(itemValue)
+            }
+          >
+            <Picker.Item label="Not Vaccinated" value={1} />
+            <Picker.Item label="Vaccinated" value={2} />
+          </Picker>
+
+
+
 
 
           {/* Divider used for spacing between the last item in scroll and the footer */}
