@@ -175,7 +175,7 @@ export default ( {navigation} ) => {
           selectedThree, selectedFour, selectedFive, selectedSix, selectedSeven,
           selectedEight, selectedNine, selectedTen, selectedEleven, selectedTwelve,
           selectedThirteen);
-        sendSignInLinkToEmail(auth, Gemail, sendEmail)
+        sendEmailVerification(user, sendEmail)
         .then(() => {
           window.localStorage.setItem('email', Gemail);
         })
