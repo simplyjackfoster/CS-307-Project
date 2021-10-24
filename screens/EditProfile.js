@@ -9,19 +9,30 @@ import {
   Image,
   Button,
   TouchableOpacity,
+  KeyboardAvoidingView
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { Picker } from '@react-native-picker/picker';
 import Colors from "../constants/Colors";
 import { Divider } from 'react-native-elements';
 
 // firebase imports
-import { auth } from '../database/RTDB';
+import { auth, rtdb } from '../database/RTDB';
+import { ref, child, get } from 'firebase/database';
 
 // database read/write/remove imports
 import { getID } from '../database/ID';
 import { getDataFromPath } from '../database/readData';
-import { writeProfileName } from '../database/writeData';
 import { uploadProfilePicture } from '../database/uploadStorage';
+import {
+  writeProfileName,
+  writeBio,
+  writeGraduationYear,
+  writeMajor,
+  writeLocation,
+  writeGender,
+  writeVaccinated
+} from '../database/writeData';
 
 import {
   isValidName,
@@ -30,10 +41,14 @@ import {
   isValidBirthday,
   isValidPassword,
   isValidSecurity,
-  isValidCheckbox
+  isValidCheckbox,
+  isValidGraduationYear
 } from '../checkInputs';
 import { set } from 'react-native-reanimated';
 
+
+// used so that the hooks don't get set rapidly in edit questionnaire
+var updatedTheSelected = false;
 
 
 /*
@@ -42,9 +57,85 @@ import { set } from 'react-native-reanimated';
 export default ( {navigation} ) => {
 
   // hooks for editable fields
-  const [name, onChangeName] = React.useState(null);
-  const [nameChanged, setNameChanged] = React.useState(false); 
   const [editProfilePicture, setEditProfilePicture] = React.useState(null);
+  const [name, setName] = React.useState(null);
+  const [nameChanged, setNameChanged] = React.useState(false);
+  const [bio, setBio] = React.useState(null);
+  const [bioChanged, setBioChanged] = React.useState(false);
+  const [year, setYear] = React.useState(null);
+  const [yearChanged, setYearChanged] = React.useState(false);
+  const [major, setMajor] = React.useState(null);
+  const [majorChanged, setMajorChanged] = React.useState(false);
+  const [location, setLocation] = React.useState(null);
+  const [locationChanged, setLocationChanged] = React.useState(false);
+
+  const [gender, setGender] = React.useState(1);
+  const [vaccinated, setVaccinated] = React.useState(1);
+
+
+  // function for setting the selection boxes to the correct value
+  const setSelection = () => {
+    const dbRef = ref(rtdb);
+
+    // set the gender to the correct value
+    get(child(dbRef, "users/" + getID(auth.currentUser.email) +
+              "/Profile/gender")).then((snapshot) => {
+      if (snapshot.exists()) {
+        const data_val = snapshot.val();
+        if (data_val == "Male") {
+          setGender(1);
+        }
+        else if (data_val == "Female") {
+          setGender(2);
+        }
+        else if (data_val == "Other") {
+          setGender(3);
+        }
+        else {
+          setGender(4);
+        }
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+
+    // set vaccination status to the correct value
+    get(child(dbRef, "users/" + getID(auth.currentUser.email) +
+              "/Profile/covid_vaccination_status")).then((snapshot) => {
+      if (snapshot.exists()) {
+        const data_val = snapshot.val();
+        if (data_val == "Not Vaccinated") {
+          setVaccinated(1);
+        }
+        else {
+          setVaccinated(2);
+        }
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+
+  } // setSelection()
+
+
+  // update the initial values of the selection boxes
+  if (updatedTheSelected == false) {
+    setSelection();
+    updatedTheSelected = true;
+  }
+
+
+  /*
+   * Effect that resets the value of updatedTheSelected to false, so that when
+   * we open the edit profile screen again, the selections will update.
+   */
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("beforeRemove", () => {
+      updatedTheSelected = false;
+    });
+    return unsubscribe;
+  }, [navigation]);
+
 
 
   /*
@@ -78,14 +169,62 @@ export default ( {navigation} ) => {
   /*
    * This function is called when the text in the name 
    * input is changed. It changes the value of the name hook
-   * and also changed the boolean that tells us if the user has
+   * and also changes the boolean that tells us if the user has
    * changed the value.
    */
   const nameInputHandler = (input) => {
-    onChangeName(input);
+    setName(input);
     setNameChanged(true);
-  } // setNameChanged
+  } // nameInputHandler()
 
+
+  /*
+   * This function is called when the text in the bio 
+   * input is changed. It changes the value of the bio hook
+   * and also changes the boolean that tells us if the user has
+   * changed the value.
+   */
+  const bioInputHandler = (input) => {
+    setBio(input);
+    setBioChanged(true);
+  } // bioInputHandler()
+
+
+
+  /*
+   * This function is called when the text in the year 
+   * input is changed. It changes the value of the bio hook
+   * and also changes the boolean that tells us if the user has
+   * changed the value.
+   */
+  const yearInputHandler = (input) => {
+    setYear(input);
+    setYearChanged(true);
+  } // yearInputHandler()
+
+
+
+  /*
+   * This function is called when the major input is changed. It changes
+   * the value of the major hook and also changes the boolean that tells
+   * us if the user has changed the value.
+   */
+  const majorInputHandler = (input) => {
+    setMajor(input);
+    setMajorChanged(true);
+  } // majorInputHandler()
+
+
+
+  /*
+    * This function is called when the location input is changed. It changes
+    * the value of the location hook and also changes the boolean that tells
+    * us if the user has changed the value.
+    */
+  const locationInputHandler = (input) => {
+    setLocation(input);
+    setLocationChanged(true);
+  } // locationInputHandler()
 
 
   /*
@@ -95,8 +234,7 @@ export default ( {navigation} ) => {
   const updateProfileData = () => {
     // if we changed the profile picture, then upload it
     if (editProfilePicture) {
-      console.log("SAVING: " + editProfilePicture);
-      console.log("SAVING: " + editProfilePicture);
+      console.log("Saving Image: " + editProfilePicture);
       uploadProfilePicture(auth.currentUser.email, editProfilePicture);
     }
     else {
@@ -105,9 +243,34 @@ export default ( {navigation} ) => {
 
     // if the name is not null, then update it
     if (name) {
-      // update the name
       writeProfileName(auth.currentUser.email, name);
     }
+
+    // if the bio has been changed, then update it
+    if (bioChanged) {
+      writeBio(auth.currentUser.email, bio);
+    }
+
+    // if the year has changed, then update it
+    if (yearChanged) {
+      writeGraduationYear(auth.currentUser.email, year);
+    }
+
+    // if the major has changed, then update it
+    if (majorChanged) {
+      writeMajor(auth.currentUser.email, major);
+    }
+
+    // if the location has changed, then update it
+    if (locationChanged) {
+      writeLocation(auth.currentUser.email, location);
+    }
+
+    // write the gender and vaccination status data
+    writeGender(auth.currentUser.email, gender);
+    writeVaccinated(auth.currentUser.email, vaccinated);
+
+
   } // updateProfileData()
 
 
@@ -115,13 +278,29 @@ export default ( {navigation} ) => {
 
   /*
    * Validates that none of the inputs are invalid.
+   * If the fields have been changed, then we do a check
+   * to see if they are valid. If they havn't been changed then
+   * we don't do a check.
    */
   const validateInputs = () => {
     // Check if the name field is valid
     if (nameChanged != false) {
       if (!isValidName(name)) {return}
-    } // if it hasn't been changed then we save it as is
-   
+    } 
+
+
+    // Check if the year in school is valid
+    if (yearChanged != false) {
+      if (!isValidGraduationYear(year)) {return}
+    }
+
+
+    // Check if major is valid (same as checking name)
+    if (majorChanged != false) {
+      if (!isValidName(major)) {return}
+    }
+
+
     // update the information and navigate to Profile
     updateProfileData();
     navigation.pop();
@@ -132,82 +311,195 @@ export default ( {navigation} ) => {
 
 
 	return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
+      <View style={styles.container}>
 
 
-      <ScrollView style={styles.scroll}>
-        {/* Profile Picture Image */}
-        <SafeAreaView>
-            {/* Image displayed when we haven't changed the profile picture */}
-            <Image 
-              source={{uri: getDataFromPath("users/" + getID(auth.currentUser.email) +
-                            "/Profile/Images/profile_picture")}}
-              style={editProfilePicture ? (
-                {display: 'none'} 
-              ) : (
-                styles.profilePicture
-              )}
+        <ScrollView style={styles.scroll}>
+          {/* Profile Picture Image */}
+          <SafeAreaView>
+              {/* Image displayed when we haven't changed the profile picture */}
+              <Image 
+                source={{uri: getDataFromPath("users/" + getID(auth.currentUser.email) +
+                              "/Profile/Images/profile_picture")}}
+                style={editProfilePicture ? (
+                  {display: 'none'} 
+                ) : (
+                  styles.profilePicture
+                )}
+              />
+              {/* Image displayed when we changed the profile picture */}
+              <Image
+                source={{uri: editProfilePicture}}
+                style={editProfilePicture ? (
+                  styles.profilePicture
+                ) : (
+                  {display: 'none'}
+                )}
+              />
+            <TouchableOpacity
+              onPress={
+                openProfilePicImagePickerAsync
+              }
+              style={styles.buttonChangePicture}>
+              <Text style={styles.textChangePicture}>Change Picture</Text>
+            </TouchableOpacity>
+          </SafeAreaView>
+
+          {/* Name (text), name (field) */}
+          <Text style={styles.prompt}>Name*</Text>
+          <SafeAreaView>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              onChangeText={nameInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/profile_name")}
+              placeholder={"Name"}
             />
-            {/* Image displayed when we changed the profile picture */}
-            <Image
-              source={{uri: editProfilePicture}}
-              style={editProfilePicture ? (
-                styles.profilePicture
-              ) : (
-                {display: 'none'}
-              )}
+          </SafeAreaView>
+
+
+          {/* Bio (text), bio (field) */}
+          <SafeAreaView>
+            <Text style={styles.prompt}>Bio</Text>
+            <TextInput
+              style={styles.largeInput}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              maxLength={250}
+              multiline={true}
+              onChangeText={bioInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/bio")}
+              placeholder={"Enter a description of yourself"}
             />
-          <TouchableOpacity
-            onPress={
-              openProfilePicImagePickerAsync
+          </SafeAreaView>
+
+
+          {/* Graduation Year (text), Graduation Year (field) */}
+          <SafeAreaView>
+            <Text style={styles.prompt}>Graduation Year</Text>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              onChangeText={yearInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/graduation_year")}
+              placeholder={"yyyy"}
+            />
+          </SafeAreaView>
+
+
+         {/* Major (text), major (field) */}
+         <SafeAreaView>
+            <Text style={styles.prompt}>Major</Text>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              onChangeText={majorInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/major")}
+              placeholder={"Enter your major"}
+            />
+          </SafeAreaView> 
+
+
+          {/* Location (text), location (field) */}
+          <SafeAreaView>
+            <Text style={styles.prompt}>Location</Text>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              onChangeText={locationInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/location")}
+              placeholder={"Where you are from"}
+            />
+          </SafeAreaView> 
+
+
+
+          {/* Gender (text), Gender (field) */}
+          <Text style={styles.prompt}>Gender*</Text>
+          <Picker
+            style={styles.picker}
+            selectedValue={
+              gender
             }
-            style={styles.buttonChangePicture}>
-            <Text style={styles.textChangePicture}>Change Picture</Text>
+            onValueChange={(itemValue, itemIndex) =>
+              setGender(itemValue)
+            }
+          >
+            <Picker.Item label="Male" value={1} />
+            <Picker.Item label="Female" value={2} />
+            <Picker.Item label="Other" value={3} />
+            <Picker.Item label="Prefer not to say" value={4} />
+          </Picker>
+
+
+
+          
+          {/* Vaccination status (text), vaccination status (field) */}
+          <Text style={styles.prompt}>Vaccination Status*</Text>
+          <Picker
+            style={styles.picker}
+            selectedValue={
+              vaccinated
+            }
+            onValueChange={(itemValue, itemIndex) =>
+              setVaccinated(itemValue)
+            }
+          >
+            <Picker.Item label="Not Vaccinated" value={1} />
+            <Picker.Item label="Vaccinated" value={2} />
+          </Picker>
+
+
+
+
+
+          {/* Divider used for spacing between the last item in scroll and the footer */}
+          <Divider color={Colors.white} height={15}></Divider>
+
+        </ScrollView>
+
+
+
+        <View style={styles.footer}>
+          {/* Continue to Questionnaire (button) */}
+          <TouchableOpacity
+            style={styles.questionnaireButton}
+            // check if questionnaire has been completed and run setUserToken
+            onPress={() => {
+              navigation.push("Questionnaire");
+            }}
+          >
+            <Text style={styles.questionnaireText}>Edit Questionnaire</Text>
           </TouchableOpacity>
-        </SafeAreaView>
 
-        {/* Name (text), name (field) */}
-        <Text style={styles.prompt}>Name</Text>
-        <SafeAreaView>
-          <TextInput
-            style={styles.input}
-            autoCapitalize='none'
-            autoComplete='off'
-            autoCorrect={false}
-            spellCheck={false}
-            onChangeText={nameInputHandler}
-            defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/profile_name")}
-            placeholder={"Name"}
-          />
-        </SafeAreaView>
-      </ScrollView>
+          {/* Save Button */}
+          <TouchableOpacity
+            style={styles.buttonSave}
+            // check if questionnaire has been completed and run setUserToken
+            onPress={ validateInputs }
+          >
+            <Text style={styles.textSave}>Save Changes</Text>
+          </TouchableOpacity>
+        </View>
 
 
-
-      <View style={styles.footer}>
-        {/* Continue to Questionnaire (button) */}
-        <TouchableOpacity
-          style={styles.questionnaireButton}
-          // check if questionnaire has been completed and run setUserToken
-          onPress={() => {
-            navigation.push("Questionnaire");
-          }}
-        >
-          <Text style={styles.questionnaireText}>Edit Questionnaire</Text>
-        </TouchableOpacity>
-
-        {/* Save Button */}
-        <TouchableOpacity
-          style={styles.buttonSave}
-          // check if questionnaire has been completed and run setUserToken
-          onPress={ validateInputs }
-        >
-          <Text style={styles.textSave}>Save Changes</Text>
-        </TouchableOpacity>
       </View>
-
-
-    </View>
+    </KeyboardAvoidingView>
 	); // return()
 
 } // export default ()
@@ -229,12 +521,13 @@ const styles = StyleSheet.create({
 
   scroll: {
     flex: 1,
-    padding: 30,
+    paddingHorizontal: 30,
+    paddingTop: 30,
   },
 
   footer: {
     flex: 0.15,
-    flexDirection: 'row-reverse',
+    flexDirection: 'row',
     alignSelf: 'center',
     paddingTop: 5,
     paddingHorizontal: 150,
@@ -277,11 +570,33 @@ const styles = StyleSheet.create({
   input: {
     textAlign: 'left',
     height: 40,
-    width: 290,
+    width: "90%",
     margin: 10,
+    marginBottom: 20,
     padding: 10,
     borderWidth: 1,
     borderRadius: 10,
+  },
+
+  /* Large Text Input */
+  largeInput: {
+    textAlign: 'left',
+    textAlign: 'auto',
+    height: 140,
+    width: "90%",
+    margin: 10,
+    marginBottom: 20,
+    padding: 10,
+    borderWidth: 1,
+    borderRadius: 10, 
+  },
+
+  /* Picker */
+  picker: {
+    flex: 1,
+    textAlign: 'left',
+    width: '95%',
+    marginBottom: 20,
   },
 
 
