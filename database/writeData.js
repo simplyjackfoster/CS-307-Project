@@ -17,7 +17,7 @@ import { getID } from './ID';
  * @param securityAnswer -> the answer the user entered in signup.
  */
 export const writeNewUser = (email, name, phone,
-														 birthday, gender, securityQuestion, securityAnswer, selectedOne, selectedTwo,
+														 birthday, gender, vaccinated, securityQuestion, securityAnswer, selectedOne, selectedTwo,
 														 selectedThree, selectedFour, selectedFive, selectedSix, selectedSeven,
 														 selectedEight, selectedNine, selectedTen, selectedEleven, selectedTwelve,
 														 selectedThirteen) => {
@@ -42,12 +42,13 @@ export const writeNewUser = (email, name, phone,
 	set(ref(rtdb, "users/" + id + "/Profile"), {
 		profile_name: name,
 		bio: "",
-		year_in_school: "", 
+		graduation_year: "", 
 		hometown: "", 
 		major: "", 
 		covid_vaccination_status: "vaccine" // change
 	});
 	writeGender(auth.currentUser.email, gender);
+	writeVaccinated(auth.currentUser.email, vaccinated);
 	set(ref(rtdb, "users/" + id + "/Profile/Images"), {
 		profile_picture: default_profile_picture, 
 	});
@@ -152,19 +153,19 @@ export const writeBio = (email_or_id, bio) => {
 
 
 /*
- * writeYearInSchool()
+ * writeGraduationYear()
  *
- * Writes a year in school to the specified user in the RTDB.
+ * Writes the graduation year to the specified user in the RTDB.
  * @param email_or_id -> the email or id specifying the user.
- * @param year -> the year in school that we will write to the database.
+ * @param year -> the graduation year that we will write to the database.
  */
-export const writeYearInSchool = (email_or_id, year) => {
+export const writeGraduationYear = (email_or_id, year) => {
 	const id = getID(email_or_id);
 
 	update(ref(rtdb, "users/" + id + "/Profile"), {
-		year_in_school: year
+		graduation_year: year
 	});
-} // writeYearInSchool()
+} // writeGraduationYear()
 
 
 
@@ -199,6 +200,35 @@ export const writeGender = (email_or_id, gender) => {
 
 	update(ref(rtdb, "users/" + id + "/Profile"), {
 		gender: genderStr
+	});
+} // writeGender()
+
+
+
+
+/*
+ * writeVaccinated()
+ *
+ * Writes the vaccination status to the specified user in the RTDB.
+ * @param email_or_id -> the email or id specifying the user.
+ * @param vaccinated -> the selected number from the vaccination status selection menu
+ * 									1: No, I'm not vaccinated
+ * 									2: Yes, I'm vaccinated 
+ */
+export const writeVaccinated = (email_or_id, vaccinated) => {
+	const id = getID(email_or_id);
+
+	// get the vaccination status as a string
+	var vaccinatedStr;
+	if (vaccinated == 1) {
+		vaccinatedStr = "Not Vaccinated";
+	}
+	else {
+		vaccinatedStr = "Vaccinated";
+	}
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		covid_vaccination_status: vaccinatedStr
 	});
 } // writeGender()
 

@@ -365,13 +365,13 @@ export const isValidCheckbox = (checkedCoc, checkedPp) => {
 
 
 /*
- * isValidYearInSchool()
+ * isValidGraduationYear()
  *
- * function to check if the year in school is valid.
+ * function to check if the graduation year is valid.
  * returns true if its either null, or between the current year and
  * the current year + 10
  */
-export const isValidYearInSchool = (year) => {
+export const isValidGraduationYear = (year) => {
 	// if its null, then its valid
 	if (!year) {
 		return true;
@@ -404,5 +404,5 @@ export const isValidYearInSchool = (year) => {
 			return false;
 	}
 	return true;
-} // isValidYearInSchool()
+} // isValidGraduationYear()
 

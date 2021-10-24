@@ -25,7 +25,7 @@ import { uploadProfilePicture } from '../database/uploadStorage';
 import {
   writeProfileName,
   writeBio,
-  writeYearInSchool
+  writeGraduationYear
 } from '../database/writeData';
 
 import {
@@ -36,7 +36,7 @@ import {
   isValidPassword,
   isValidSecurity,
   isValidCheckbox,
-  isValidYearInSchool
+  isValidGraduationYear
 } from '../checkInputs';
 import { set } from 'react-native-reanimated';
 
@@ -150,7 +150,7 @@ export default ( {navigation} ) => {
 
     // if the year has changed, then update it
     if (yearChanged) {
-      writeYearInSchool(auth.currentUser.email, year);
+      writeGraduationYear(auth.currentUser.email, year);
     }
 
 
@@ -174,7 +174,7 @@ export default ( {navigation} ) => {
 
     // Check if the year in school is valid
     if (yearChanged != false) {
-      if (!isValidYearInSchool(year)) {return}
+      if (!isValidGraduationYear(year)) {return}
     }
 
     // Check if hometown is valid

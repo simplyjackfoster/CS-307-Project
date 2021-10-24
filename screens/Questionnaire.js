@@ -28,7 +28,8 @@ import {
   Gbirthday,
   Ggender,
   GsecurityQuestion,
-  GsecurityAnswer
+  GsecurityAnswer,
+  Gvaccinated
  } from './Signup';
 
 // database read/write/remove imports
@@ -160,7 +161,7 @@ export default ( {navigation} ) => {
         const user = userCredential.user;
         // move to Questionnaire screen
         console.log("Successfully Created Account!");
-        writeNewUser(Gemail, Gname, Gphone, Gbirthday, Ggender,
+        writeNewUser(Gemail, Gname, Gphone, Gbirthday, Ggender, Gvaccinated,
           GsecurityQuestion, GsecurityAnswer, selectedOne, selectedTwo,
           selectedThree, selectedFour, selectedFive, selectedSix, selectedSeven,
           selectedEight, selectedNine, selectedTen, selectedEleven, selectedTwelve,

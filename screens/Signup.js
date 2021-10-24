@@ -36,6 +36,7 @@ export var Gname = '';
 export var Gphone = ''; 
 export var Gbirthday = '';
 export var Ggender = '';
+export var Gvaccinated = '';
 export var GsecurityQuestion = '';
 export var GsecurityAnswer = '';
 
@@ -61,6 +62,7 @@ export default ( {navigation} ) => {
 
   // hooks for security question (NOTE: start off at question 1 by default)
   const [gender, setGender] = React.useState(1);
+  const [vaccinated, setVaccinated] = React.useState(1);
   const [selectedQuestion, setSelectedQuestion] = React.useState(1);
 
 
@@ -102,6 +104,7 @@ export default ( {navigation} ) => {
     Gphone = phone;
     Gbirthday = birthday;
     Ggender = gender;
+    Gvaccinated = vaccinated;
     GsecurityQuestion = selectedQuestion;
     GsecurityAnswer = securityAnswer;
     navigation.push("Questionnaire");
@@ -193,6 +196,22 @@ export default ( {navigation} ) => {
                 <Picker.Item label="Prefer not to say" value={4} />
               </Picker>
             </View>
+
+
+            {/* Vaccination status */}
+            <View>
+              <Text style={styles.label}>Are You Vaccinated for Covid-19?</Text>
+              <Picker
+                style={styles.picker}
+                selectedValue={vaccinated}
+                onValueChange={(itemValue, itemIndex) =>
+                  setVaccinated(itemValue)}
+              >
+                <Picker.Item label="No, I'm not vaccinated" value={1} />
+                <Picker.Item label="Yes, I'm vaccinated" value={2} />
+              </Picker>
+            </View>
+
 
             
             {/* Password (text), password (field, with black dots) */}
