@@ -15,7 +15,7 @@ import { Divider } from 'react-native-elements';
 
 // authentication imports
 import { auth, rtdb } from '../database/RTDB';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, sendSignInLinkToEmail } from 'firebase/auth';
 import { ref, child, get, set } from 'firebase/database';
         
 
@@ -62,6 +62,14 @@ export default ( {navigation} ) => {
   const [selectedEleven, setSelectedEleven] = React.useState(1); // check_before_having_people_over
   const [selectedTwelve, setSelectedTwelve] = React.useState(1); // joint_grocery_shopping
   const [selectedThirteen, setSelectedThirteen] = React.useState(1); // has_significant_other
+
+  const sendEmail = {
+    //set up url in firebase host 
+    url: 'none',
+    handleCodeInApp: true,
+    // create domain?
+    dynamicLinkDomain : 'none'
+  };
 
   
 
@@ -167,6 +175,10 @@ export default ( {navigation} ) => {
           selectedEight, selectedNine, selectedTen, selectedEleven, selectedTwelve,
           selectedThirteen);
         setUserToken('Arbitrary Value');
+        sendSignInLinkToEmail(auth, Gemail, sendEmail)
+          .then(() => {
+            window.localStorage.setItem('email', Gemail);
+          })
       })
       .catch((error) => {
         Alert.alert("Error", "Error: Email Already in Use");
