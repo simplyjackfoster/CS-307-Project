@@ -17,13 +17,14 @@ import { getID } from './ID';
  * @param securityAnswer -> the answer the user entered in signup.
  */
 export const writeNewUser = (email, name, phone,
-														 birthday, securityQuestion, securityAnswer, selectedOne, selectedTwo,
+														 birthday, gender, securityQuestion, securityAnswer, selectedOne, selectedTwo,
 														 selectedThree, selectedFour, selectedFive, selectedSix, selectedSeven,
 														 selectedEight, selectedNine, selectedTen, selectedEleven, selectedTwelve,
 														 selectedThirteen) => {
 	const id = getID(email);
 
 	const default_profile_picture = "https://firebasestorage.googleapis.com/v0/b/uniroom-fdcd7.appspot.com/o/default-profile-picture.jpeg?alt=media&token=5c5c586a-e822-4096-b6cd-52c34f41dc9b"
+
 
 
 	// write the "Critical Information" data
@@ -42,11 +43,11 @@ export const writeNewUser = (email, name, phone,
 		profile_name: name,
 		bio: "",
 		year_in_school: "", 
-		gender: "gender", // change
 		hometown: "", 
 		major: "", 
 		covid_vaccination_status: "vaccine" // change
 	});
+	writeGender(auth.currentUser.email, gender);
 	set(ref(rtdb, "users/" + id + "/Profile/Images"), {
 		profile_picture: default_profile_picture, 
 	});
@@ -165,6 +166,41 @@ export const writeYearInSchool = (email_or_id, year) => {
 	});
 } // writeYearInSchool()
 
+
+
+/*
+ * writeGender()
+ *
+ * Writes the gender to the specified user in the RTDB.
+ * @param email_or_id -> the email or id specifying the user.
+ * @param gender -> the selected number from the gender selection menu
+ * 									1: Male
+ * 									2: Female
+ * 								  3: Other
+ * 									4: Prefere not to say
+ */
+export const writeGender = (email_or_id, gender) => {
+	const id = getID(email_or_id);
+
+	// get the gender as a string
+	var genderStr;
+	if (gender == 1) {
+		genderStr = "Male";
+	}
+	else if (gender == 2) {
+		genderStr = "Female";
+	}
+	else if (gender == 3) {
+		genderStr = "Other";
+	}
+	else {
+		genderStr = "Prefer not to say";
+	}
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		gender: genderStr
+	});
+} // writeGender()
 
 
 

@@ -35,6 +35,7 @@ export var Gpassword = '';
 export var Gname = '';
 export var Gphone = ''; 
 export var Gbirthday = '';
+export var Ggender = '';
 export var GsecurityQuestion = '';
 export var GsecurityAnswer = '';
 
@@ -59,6 +60,7 @@ export default ( {navigation} ) => {
   const [checkedPp, setCheckedPp] = React.useState(null);
 
   // hooks for security question (NOTE: start off at question 1 by default)
+  const [gender, setGender] = React.useState(1);
   const [selectedQuestion, setSelectedQuestion] = React.useState(1);
 
 
@@ -99,6 +101,7 @@ export default ( {navigation} ) => {
     Gname = name;
     Gphone = phone;
     Gbirthday = birthday;
+    Ggender = gender;
     GsecurityQuestion = selectedQuestion;
     GsecurityAnswer = securityAnswer;
     navigation.push("Questionnaire");
@@ -174,6 +177,23 @@ export default ( {navigation} ) => {
               />
             </SafeAreaView>
 
+
+            {/* Gender */}
+            <View>
+              <Text style={styles.label}>Gender</Text>
+              <Picker
+                style={styles.picker}
+                selectedValue={gender}
+                onValueChange={(itemValue, itemIndex) =>
+                  setGender(itemValue)}
+              >
+                <Picker.Item label="Male" value={1} />
+                <Picker.Item label="Female" value={2} />
+                <Picker.Item label="Other" value={3} />
+                <Picker.Item label="Prefer not to say" value={4} />
+              </Picker>
+            </View>
+
             
             {/* Password (text), password (field, with black dots) */}
             <Text style={styles.label}>Password (8-28 characters, 1 uppercase, 
@@ -217,12 +237,12 @@ export default ( {navigation} ) => {
                 onValueChange={(itemValue, itemIndex) =>
                   setSelectedQuestion(itemValue)}
               >
-                <Picker.Item label="In what city were you born?" value="1" />
-                <Picker.Item label="What is the name of your favorite pet?" value="2" />
-                <Picker.Item label="What is your mother's maiden name?" value="3" />
-                <Picker.Item label="What high school did you attend?" value="4" />
-                <Picker.Item label="What the name of your first school?" value="5" />
-                <Picker.Item label="What was your favorite food as a child?" value="6" />
+                <Picker.Item label="In what city were you born?" value={1} />
+                <Picker.Item label="What is the name of your favorite pet?" value={2} />
+                <Picker.Item label="What is your mother's maiden name?" value={3} />
+                <Picker.Item label="What high school did you attend?" value={4} />
+                <Picker.Item label="What the name of your first school?" value={5} />
+                <Picker.Item label="What was your favorite food as a child?" value={6} />
               </Picker>
             </View>
 
@@ -290,6 +310,7 @@ export default ( {navigation} ) => {
 // styles
 const styles = StyleSheet.create({
 
+  /* Continer styles */
   container: {
     flex: 1,
     backgroundColor: Colors.white,
@@ -304,7 +325,6 @@ const styles = StyleSheet.create({
   },
 
   /* Form styles */
-
   form: {
     margin: 20,
     textAlign: 'left',
@@ -331,8 +351,7 @@ const styles = StyleSheet.create({
   },
 
 
-  /* Button and checkbox styles */
-
+  /* Checkbox styles */
   checkboxContainer: {
     alignItems: 'flex-end',
   },
@@ -350,7 +369,6 @@ const styles = StyleSheet.create({
   },
 
   /* Continue Button */
-
   continueText: {
     fontSize: 18,
     alignSelf: 'center'

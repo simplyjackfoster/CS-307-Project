@@ -26,6 +26,7 @@ import {
   Gname,
   Gphone,
   Gbirthday,
+  Ggender,
   GsecurityQuestion,
   GsecurityAnswer
  } from './Signup';
@@ -159,8 +160,8 @@ export default ( {navigation} ) => {
         const user = userCredential.user;
         // move to Questionnaire screen
         console.log("Successfully Created Account!");
-        writeNewUser(Gemail, Gname, Gphone,
-          Gbirthday, GsecurityQuestion, GsecurityAnswer, selectedOne, selectedTwo,
+        writeNewUser(Gemail, Gname, Gphone, Gbirthday, Ggender,
+          GsecurityQuestion, GsecurityAnswer, selectedOne, selectedTwo,
           selectedThree, selectedFour, selectedFive, selectedSix, selectedSeven,
           selectedEight, selectedNine, selectedTen, selectedEleven, selectedTwelve,
           selectedThirteen);
