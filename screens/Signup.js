@@ -8,7 +8,8 @@ import {
   SafeAreaView,
   TextInput,
   TouchableOpacity,
-  Alert
+  Alert,
+  KeyboardAvoidingView
 } from 'react-native';
 
 import { AuthContext } from "../context";
@@ -106,180 +107,181 @@ export default ( {navigation} ) => {
 
 
 	return (
-    // If the user clicks "Create Account", set userToken to a non-null value.
-		<ScrollView style={styles.container}>
+    <KeyboardAvoidingView style={{flex: 1}} behavior="padding" keyboardVerticalOffset={90}>
+      <ScrollView style={styles.container}>
 
-        <Text style={styles.intro}>Please fill out the information below to create an account!</Text>
+          <Text style={styles.intro}>Please fill out the information below to create an account!</Text>
 
-        <View style={styles.form}>
+          <View style={styles.form}>
 
-          {/* Name (text), name (field) */}
-          <Text style={styles.label}>Name</Text>
-          <SafeAreaView>
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeName}
-              autoCapitalize='none'
-              autoComplete='off'
-              autoCorrect={false}
-              spellCheck={false}
-              placeholder={name}
-            />
-          </SafeAreaView>
-
-
-          {/* Email (text), email (field) */}
-          <Text style={styles.label}>Purdue Email</Text>
-          <SafeAreaView>
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeEmail}
-              autoCapitalize='none'
-              autoComplete='off'
-              autoCorrect={false}
-              spellCheck={false}
-              placeholder={email}
-            />
-          </SafeAreaView>
+            {/* Name (text), name (field) */}
+            <Text style={styles.label}>Name</Text>
+            <SafeAreaView>
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangeName}
+                autoCapitalize='none'
+                autoComplete='off'
+                autoCorrect={false}
+                spellCheck={false}
+                placeholder={name}
+              />
+            </SafeAreaView>
 
 
-          {/* Phone number (text), phone number (field, only takes numbers) */}
-          <Text style={styles.label}>Phone Number (10 #'s only)</Text>
-          <SafeAreaView>
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangePhone}
-              autoCapitalize='none'
-              autoComplete='off'
-              autoCorrect={false}
-              spellCheck={false}
-              placeholder={phone}
-              keyboardType='numeric'
-            />
-          </SafeAreaView>
+            {/* Email (text), email (field) */}
+            <Text style={styles.label}>Purdue Email</Text>
+            <SafeAreaView>
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangeEmail}
+                autoCapitalize='none'
+                autoComplete='off'
+                autoCorrect={false}
+                spellCheck={false}
+                placeholder={email}
+              />
+            </SafeAreaView>
 
 
-          {/* Date of birthday (text), date of birth (field) */}
-          <Text style={styles.label}>Date of Birth (MM/DD/YYYY)</Text>
-          <SafeAreaView>
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeBirthday}
-              autoCapitalize='none'
-              autoComplete='off'
-              autoCorrect={false}
-              spellCheck={false}
-              placeholder={birthday}
-            />
-          </SafeAreaView>
-
-          
-          {/* Password (text), password (field, with black dots) */}
-          <Text style={styles.label}>Password (8-28 characters, 1 uppercase, 
-            1 number, 1 special character)</Text>
-          <SafeAreaView>
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangePassword}
-              autoCapitalize='none'
-              autoComplete='off'
-              autoCorrect={false}
-              spellCheck={false}
-              placeholder={password}
-              secureTextEntry={true}
-            />
-          </SafeAreaView>
+            {/* Phone number (text), phone number (field, only takes numbers) */}
+            <Text style={styles.label}>Phone Number (10 #'s only)</Text>
+            <SafeAreaView>
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangePhone}
+                autoCapitalize='none'
+                autoComplete='off'
+                autoCorrect={false}
+                spellCheck={false}
+                placeholder={phone}
+                keyboardType='numeric'
+              />
+            </SafeAreaView>
 
 
-          {/* Confirm password (text), password (field, with black dots) */}
-          <Text style={styles.label}>Confirm Password</Text>
-          <SafeAreaView>
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeConfirmPassword}
-              autoCapitalize='none'
-              autoComplete='off'
-              autoCorrect={false}
-              spellCheck={false}
-              placeholder={confirmPassword}
-              secureTextEntry={true}
-            />
-          </SafeAreaView>
+            {/* Date of birthday (text), date of birth (field) */}
+            <Text style={styles.label}>Date of Birth (MM/DD/YYYY)</Text>
+            <SafeAreaView>
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangeBirthday}
+                autoCapitalize='none'
+                autoComplete='off'
+                autoCorrect={false}
+                spellCheck={false}
+                placeholder={birthday}
+              />
+            </SafeAreaView>
+
+            
+            {/* Password (text), password (field, with black dots) */}
+            <Text style={styles.label}>Password (8-28 characters, 1 uppercase, 
+              1 number, 1 special character)</Text>
+            <SafeAreaView>
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangePassword}
+                autoCapitalize='none'
+                autoComplete='off'
+                autoCorrect={false}
+                spellCheck={false}
+                placeholder={password}
+                secureTextEntry={true}
+              />
+            </SafeAreaView>
 
 
-          {/* Selector for security question */}
-          <View>
-            <Text style={styles.label}>Choose a Security Question:</Text>
-            <Picker
-              style={styles.picker}
-              selectedValue={selectedQuestion}
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectedQuestion(itemValue)}
+            {/* Confirm password (text), password (field, with black dots) */}
+            <Text style={styles.label}>Confirm Password</Text>
+            <SafeAreaView>
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangeConfirmPassword}
+                autoCapitalize='none'
+                autoComplete='off'
+                autoCorrect={false}
+                spellCheck={false}
+                placeholder={confirmPassword}
+                secureTextEntry={true}
+              />
+            </SafeAreaView>
+
+
+            {/* Selector for security question */}
+            <View>
+              <Text style={styles.label}>Choose a Security Question:</Text>
+              <Picker
+                style={styles.picker}
+                selectedValue={selectedQuestion}
+                onValueChange={(itemValue, itemIndex) =>
+                  setSelectedQuestion(itemValue)}
+              >
+                <Picker.Item label="In what city were you born?" value="1" />
+                <Picker.Item label="What is the name of your favorite pet?" value="2" />
+                <Picker.Item label="What is your mother's maiden name?" value="3" />
+                <Picker.Item label="What high school did you attend?" value="4" />
+                <Picker.Item label="What the name of your first school?" value="5" />
+                <Picker.Item label="What was your favorite food as a child?" value="6" />
+              </Picker>
+            </View>
+
+            {/* Security Question Text Input */}
+            <Text style={styles.label}>Security Question Answer:</Text>
+            <SafeAreaView>
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangeSecurity}
+                autoCapitalize='none'
+                autoComplete='off'
+                autoCorrect={false}
+                spellCheck={false}
+                placeholder={"Answer"}
+              />
+            </SafeAreaView>
+
+
+            {/* View Code of Conduct Button*/}
+            <Button title={"Code of Conduct"} onPress={() => navigation.push("CodeOfConduct")}></Button>
+
+            {/* View Privacy Policy Button */}
+            <Button title={"Privacy Policy"} onPress={() => navigation.push("PrivacyPolicy")}></Button>
+
+
+            {/* Checkbox for code of conduct */}
+            <View style={styles.checkboxContainer}>
+              <Text style={styles.checkboxPrompt}>I have read the Code of Conduct</Text>
+              <Checkbox.Android
+                status={checkedCoc ? 'checked' : 'unchecked'}
+                onPress={() => setCheckedCoc(!checkedCoc)}
+                uncheckedColor={Colors.darkGray}
+                color={Colors.lightBlue}
+              />
+            </View>
+
+            {/* Checkbox for privacy policy */}
+            <View style={styles.checkboxContainer}>
+              <Text style={styles.checkboxPrompt}>I have read the Privacy Policy</Text>
+              <Checkbox.Android
+                status={checkedPp ? 'checked' : 'unchecked'}
+                onPress={() => setCheckedPp(!checkedPp)}
+                uncheckedColor={Colors.darkGray}
+                color={Colors.lightBlue}
+              />
+            </View>
+
+            {/* Continue to Questionnaire (button) */}
+            <TouchableOpacity
+              style={styles.continueButton}
+              onPress={validateInputs}
             >
-              <Picker.Item label="In what city were you born?" value="1" />
-              <Picker.Item label="What is the name of your favorite pet?" value="2" />
-              <Picker.Item label="What is your mother's maiden name?" value="3" />
-              <Picker.Item label="What high school did you attend?" value="4" />
-              <Picker.Item label="What the name of your first school?" value="5" />
-              <Picker.Item label="What was your favorite food as a child?" value="6" />
-            </Picker>
+              <Text style={styles.continueText}>Continue</Text>
+            </TouchableOpacity>
+
           </View>
 
-          {/* Security Question Text Input */}
-          <Text style={styles.label}>Security Question Answer:</Text>
-          <SafeAreaView>
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeSecurity}
-              autoCapitalize='none'
-              autoComplete='off'
-              autoCorrect={false}
-              spellCheck={false}
-              placeholder={"Answer"}
-            />
-          </SafeAreaView>
-
-
-          {/* View Code of Conduct Button*/}
-          <Button title={"Code of Conduct"} onPress={() => navigation.push("CodeOfConduct")}></Button>
-
-          {/* View Privacy Policy Button */}
-          <Button title={"Privacy Policy"} onPress={() => navigation.push("PrivacyPolicy")}></Button>
-
-
-          {/* Checkbox for code of conduct */}
-          <View style={styles.checkboxContainer}>
-            <Text style={styles.checkboxPrompt}>I have read the Code of Conduct</Text>
-            <Checkbox.Android
-              status={checkedCoc ? 'checked' : 'unchecked'}
-              onPress={() => setCheckedCoc(!checkedCoc)}
-              uncheckedColor={Colors.darkGray}
-              color={Colors.lightBlue}
-            />
-          </View>
-
-          {/* Checkbox for privacy policy */}
-          <View style={styles.checkboxContainer}>
-            <Text style={styles.checkboxPrompt}>I have read the Privacy Policy</Text>
-            <Checkbox.Android
-              status={checkedPp ? 'checked' : 'unchecked'}
-              onPress={() => setCheckedPp(!checkedPp)}
-              uncheckedColor={Colors.darkGray}
-              color={Colors.lightBlue}
-            />
-          </View>
-
-          {/* Continue to Questionnaire (button) */}
-          <TouchableOpacity
-					  style={styles.continueButton}
-            onPress={validateInputs}
-				  >
-            <Text style={styles.continueText}>Continue</Text>
-				  </TouchableOpacity>
-
-        </View>
-
-		</ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
 	); // return()
 } // default export ()
 

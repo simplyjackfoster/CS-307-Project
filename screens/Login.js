@@ -10,6 +10,7 @@ import {
 	SafeAreaView,
 	TouchableOpacity,
 	Alert,
+	KeyboardAvoidingView
 } from 'react-native';
 
 import { AuthContext } from "../context";
@@ -76,77 +77,79 @@ export default ({ navigation }) => {
 
 
 	return (
-		<ScrollView style={styles.container}>
+		<KeyboardAvoidingView style={{flex: 1}} behavior={"padding"} keyboardVerticalOffset={90}>
+			<ScrollView style={styles.container}>
 
-			{/* UniRoom logo */}
-			<Image
-				style={styles.logo}
-				source={require('../images/logo.png')}
-			/>
+				{/* UniRoom logo */}
+				<Image
+					style={styles.logo}
+					source={require('../images/logo.png')}
+				/>
 
-			<View style={styles.form}>
-				
-				{/* Email (text), email (field) */}
-				<Text style={styles.label}>Email</Text>
-				<SafeAreaView>
-					<TextInput
-						style={styles.input}
-						autoCapitalize='none'
-						autoComplete='off'
-						autoCorrect={false}
-						spellCheck={false}
-						onChangeText={onChangeEmail}
-						placeholder={email}
-					/>
-				</SafeAreaView>
+				<View style={styles.form}>
+					
+					{/* Email (text), email (field) */}
+					<Text style={styles.label}>Email</Text>
+					<SafeAreaView>
+						<TextInput
+							style={styles.input}
+							autoCapitalize='none'
+							autoComplete='off'
+							autoCorrect={false}
+							spellCheck={false}
+							onChangeText={onChangeEmail}
+							placeholder={email}
+						/>
+					</SafeAreaView>
 
-				
-				{/* Password (text), password (field, with black dots) */}
-				<Text style={styles.label}>Password</Text>
-				<SafeAreaView>
-					<TextInput
-						style={styles.input}
-						onChangeText={onChangePassword}
-						autoCapitalize='none'
-						autoComplete='off'
-						autoCorrect={false}
-						spellCheck={false}
-						placeholder={password}
-						secureTextEntry={true}
-					/>
-				</SafeAreaView>
+					
+					{/* Password (text), password (field, with black dots) */}
+					<Text style={styles.label}>Password</Text>
+					<SafeAreaView>
+						<TextInput
+							style={styles.input}
+							onChangeText={onChangePassword}
+							autoCapitalize='none'
+							autoComplete='off'
+							autoCorrect={false}
+							spellCheck={false}
+							placeholder={password}
+							secureTextEntry={true}
+						/>
+					</SafeAreaView>
 
-				
-				{/* Log In (button) */}
-				<TouchableOpacity
-					style={styles.loginButton}
-					onPress={() => attemptLogin()} 
-				>
-					<Text style={styles.loginText}>Log In</Text>
-				</TouchableOpacity>
-
-
-				{/* New to UniRoom? (text), Sign Up (button) */}
-				<Text style={styles.signupPrompt}>New to UniRoom?</Text>
-				<TouchableOpacity
-					style={styles.signupButton}
-					onPress={() => navigation.push("Signup")}			
-				>
-					<Text style={styles.signupText}>Sign Up</Text>
-				</TouchableOpacity>
+					
+					{/* Log In (button) */}
+					<TouchableOpacity
+						style={styles.loginButton}
+						onPress={() => attemptLogin()} 
+					>
+						<Text style={styles.loginText}>Log In</Text>
+					</TouchableOpacity>
 
 
-				{/* Forgot password button */}
-				<TouchableOpacity
-					style={styles.forgotButton}
-					onPress={() => navigation.push("ResetPassword")}				
-				>
-					<Text style={styles.forgotText}>Forgot Password?</Text>
-				</TouchableOpacity>
+					{/* New to UniRoom? (text), Sign Up (button) */}
+					<Text style={styles.signupPrompt}>New to UniRoom?</Text>
+					<TouchableOpacity
+						style={styles.signupButton}
+						onPress={() => navigation.push("Signup")}			
+					>
+						<Text style={styles.signupText}>Sign Up</Text>
+					</TouchableOpacity>
 
-			</View>
 
-		</ScrollView>
+					{/* Forgot password button */}
+					<TouchableOpacity
+						style={styles.forgotButton}
+						onPress={() => navigation.push("ResetPassword")}				
+					>
+						<Text style={styles.forgotText}>Forgot Password?</Text>
+					</TouchableOpacity>
+
+				</View>
+
+			</ScrollView>
+		</KeyboardAvoidingView>
 	);
 
 } // export default ()

@@ -1,5 +1,14 @@
 import React from 'react';
-import { TouchableOpacity, TextInput, StyleSheet, Text, View, SafeAreaView, Alert } from 'react-native';
+import {
+  TouchableOpacity,
+  TextInput,
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  Alert,
+  KeyboardAvoidingView
+} from 'react-native';
 
 import Colors from "../constants/Colors";
 
@@ -11,42 +20,45 @@ export default ( {navigation} ) => {
 const [email, onChangeEmail] = React.useState("");
 
   return (
-    <View style={styles.container}>
-      <View style={styles.form}>
-        <Text style={styles.email}>Enter your email address</Text>
-        <SafeAreaView>
-					<TextInput
-				  	style={styles.emailInput}
-				  	onChangeText={onChangeEmail}
-				  	placeholder={email}
-					/>
-          <TouchableOpacity
-					    style={styles.enterButton}
-              onPress={() => {
-                console.log("reseting with " + email)
-                Alert.alert("Notice", 
-                "An email has been sent to your email address. Please follow the contained instructions to reset your password.",
-                [
-                  {
-                    text: "Ok",
-                    onPress: () => { 
-                      //handleEmail
-                      navigation.pop()}
-                  }
-                ]
-                );}}
-				  >
-					<Text>Reset Password</Text>
-				</TouchableOpacity>
-          </SafeAreaView>
+    <KeyboardAvoidingView style={{flex: 1}} behavior={"padding"}>
+      <View style={styles.container}>
+        <View style={styles.form}>
+          <Text style={styles.email}>Enter your email address</Text>
+          <SafeAreaView>
+            <TextInput
+              style={styles.emailInput}
+              onChangeText={onChangeEmail}
+              placeholder={email}
+            />
+            <TouchableOpacity
+                style={styles.resetButton}
+                onPress={() => {
+                  console.log("reseting with " + email)
+                  Alert.alert("Notice", 
+                  "An email has been sent to your email address. Please follow the contained instructions to reset your password.",
+                  [
+                    {
+                      text: "Ok",
+                      onPress: () => { 
+                        //handleEmail
+                        navigation.pop()}
+                    }
+                  ]
+                  );}}
+            >
+            <Text style={styles.resetText}>Reset Password</Text>
+          </TouchableOpacity>
+            </SafeAreaView>
+        </View>
       </View>
-		</View>
+    </KeyboardAvoidingView>
 	);
 }
 
 // styles
 const styles = StyleSheet.create({
 
+  /* Container styles */
   container: {
     justifyContent: "center",
     alignItems: "center",
@@ -61,6 +73,7 @@ const styles = StyleSheet.create({
 
   },
 
+  /* Email Input */
   email: {
 	fontSize: 20,
 	margin: 12,
@@ -77,14 +90,21 @@ const styles = StyleSheet.create({
 	borderRadius: 10,
   },
 
-  enterButton: {
-	backgroundColor: Colors.lightBlue,
-	borderWidth: 2,
-	borderRadius: 5,
-	margin: 10,
-	padding: 5,
-	width: 120,
-	alignSelf: 'flex-end',
+  /* Reset Password Button */
+  resetText: {
+    fontSize: 16,
+    alignSelf: 'center',
   },
+
+  resetButton: {
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderRadius: 25,
+    margin: 5,
+    padding: 10,
+    width: 175,
+    backgroundColor: Colors.lightBlue,
+  },
+
 
 });

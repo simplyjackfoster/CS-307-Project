@@ -9,6 +9,7 @@ import {
   Image,
   Button,
   TouchableOpacity,
+  KeyboardAvoidingView
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Colors from "../constants/Colors";
@@ -192,120 +193,123 @@ export default ( {navigation} ) => {
 
 
 	return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
+      <View style={styles.container}>
 
 
-      <ScrollView style={styles.scroll}>
-        {/* Profile Picture Image */}
-        <SafeAreaView>
-            {/* Image displayed when we haven't changed the profile picture */}
-            <Image 
-              source={{uri: getDataFromPath("users/" + getID(auth.currentUser.email) +
-                            "/Profile/Images/profile_picture")}}
-              style={editProfilePicture ? (
-                {display: 'none'} 
-              ) : (
-                styles.profilePicture
-              )}
+        <ScrollView style={styles.scroll}>
+          {/* Profile Picture Image */}
+          <SafeAreaView>
+              {/* Image displayed when we haven't changed the profile picture */}
+              <Image 
+                source={{uri: getDataFromPath("users/" + getID(auth.currentUser.email) +
+                              "/Profile/Images/profile_picture")}}
+                style={editProfilePicture ? (
+                  {display: 'none'} 
+                ) : (
+                  styles.profilePicture
+                )}
+              />
+              {/* Image displayed when we changed the profile picture */}
+              <Image
+                source={{uri: editProfilePicture}}
+                style={editProfilePicture ? (
+                  styles.profilePicture
+                ) : (
+                  {display: 'none'}
+                )}
+              />
+            <TouchableOpacity
+              onPress={
+                openProfilePicImagePickerAsync
+              }
+              style={styles.buttonChangePicture}>
+              <Text style={styles.textChangePicture}>Change Picture</Text>
+            </TouchableOpacity>
+          </SafeAreaView>
+
+          {/* Name (text), name (field) */}
+          <Text style={styles.prompt}>Name</Text>
+          <SafeAreaView>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              onChangeText={nameInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/profile_name")}
+              placeholder={"Name"}
             />
-            {/* Image displayed when we changed the profile picture */}
-            <Image
-              source={{uri: editProfilePicture}}
-              style={editProfilePicture ? (
-                styles.profilePicture
-              ) : (
-                {display: 'none'}
-              )}
+          </SafeAreaView>
+
+
+          {/* Bio (text), bio (field) */}
+          <SafeAreaView>
+            <Text style={styles.prompt}>Bio</Text>
+            <TextInput
+              style={styles.largeInput}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              maxLength={250}
+              multiline={true}
+              onChangeText={bioInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/bio")}
+              placeholder={"Enter a description of yourself"}
             />
+          </SafeAreaView>
+
+
+          {/* Graduation Year (text), Graduation Year (field) */}
+          <SafeAreaView>
+            <Text style={styles.prompt}>Graduation Year</Text>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              onChangeText={yearInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/year_in_school")}
+              placeholder={"yyyy"}
+            />
+          </SafeAreaView>
+
+
+          {/* Divider used for spacing between the last item in scroll and the footer */}
+          <Divider color={Colors.white} height={80}></Divider>
+
+        </ScrollView>
+
+
+
+        <View style={styles.footer}>
+          {/* Continue to Questionnaire (button) */}
           <TouchableOpacity
-            onPress={
-              openProfilePicImagePickerAsync
-            }
-            style={styles.buttonChangePicture}>
-            <Text style={styles.textChangePicture}>Change Picture</Text>
+            style={styles.questionnaireButton}
+            // check if questionnaire has been completed and run setUserToken
+            onPress={() => {
+              navigation.push("Questionnaire");
+            }}
+          >
+            <Text style={styles.questionnaireText}>Edit Questionnaire</Text>
           </TouchableOpacity>
-        </SafeAreaView>
 
-        {/* Name (text), name (field) */}
-        <Text style={styles.prompt}>Name</Text>
-        <SafeAreaView>
-          <TextInput
-            style={styles.input}
-            autoCapitalize='none'
-            autoComplete='off'
-            autoCorrect={false}
-            spellCheck={false}
-            onChangeText={nameInputHandler}
-            defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/profile_name")}
-            placeholder={"Name"}
-          />
-        </SafeAreaView>
+          {/* Save Button */}
+          <TouchableOpacity
+            style={styles.buttonSave}
+            // check if questionnaire has been completed and run setUserToken
+            onPress={ validateInputs }
+          >
+            <Text style={styles.textSave}>Save Changes</Text>
+          </TouchableOpacity>
+        </View>
 
 
-        {/* Bio (text), bio (field) */}
-        <SafeAreaView>
-          <Text style={styles.prompt}>Bio</Text>
-          <TextInput
-            style={styles.largeInput}
-            autoCapitalize='none'
-            autoComplete='off'
-            autoCorrect={false}
-            spellCheck={false}
-            maxLength={250}
-            multiline={true}
-            onChangeText={bioInputHandler}
-            defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/bio")}
-            placeholder={"Enter a description of yourself"}
-          />
-        </SafeAreaView>
-
-
-        {/* Graduation Year (text), Graduation Year (field) */}
-        <SafeAreaView>
-          <Text style={styles.prompt}>Graduation Year</Text>
-          <TextInput
-            style={styles.input}
-            autoCapitalize='none'
-            autoComplete='off'
-            autoCorrect={false}
-            spellCheck={false}
-            onChangeText={yearInputHandler}
-            defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/year_in_school")}
-            placeholder={"yyyy"}
-          />
-        </SafeAreaView>
-
-
-
-
-      </ScrollView>
-
-
-
-      <View style={styles.footer}>
-        {/* Continue to Questionnaire (button) */}
-        <TouchableOpacity
-          style={styles.questionnaireButton}
-          // check if questionnaire has been completed and run setUserToken
-          onPress={() => {
-            navigation.push("Questionnaire");
-          }}
-        >
-          <Text style={styles.questionnaireText}>Edit Questionnaire</Text>
-        </TouchableOpacity>
-
-        {/* Save Button */}
-        <TouchableOpacity
-          style={styles.buttonSave}
-          // check if questionnaire has been completed and run setUserToken
-          onPress={ validateInputs }
-        >
-          <Text style={styles.textSave}>Save Changes</Text>
-        </TouchableOpacity>
       </View>
-
-
-    </View>
+    </KeyboardAvoidingView>
 	); // return()
 
 } // export default ()
@@ -377,6 +381,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: 290,
     margin: 10,
+    marginBottom: 20,
     padding: 10,
     borderWidth: 1,
     borderRadius: 10,
@@ -389,6 +394,7 @@ const styles = StyleSheet.create({
     height: 140,
     width: 290,
     margin: 10,
+    marginBottom: 30,
     padding: 10,
     borderWidth: 1,
     borderRadius: 10, 
