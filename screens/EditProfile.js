@@ -28,6 +28,8 @@ import {
   writeProfileName,
   writeBio,
   writeGraduationYear,
+  writeMajor,
+  writeLocation,
   writeGender,
   writeVaccinated
 } from '../database/writeData';
@@ -49,7 +51,6 @@ import { set } from 'react-native-reanimated';
 var updatedTheSelected = false;
 
 
-
 /*
  * This is the default export for the EditProfile screen.
  */
@@ -63,6 +64,10 @@ export default ( {navigation} ) => {
   const [bioChanged, setBioChanged] = React.useState(false);
   const [year, setYear] = React.useState(null);
   const [yearChanged, setYearChanged] = React.useState(false);
+  const [major, setMajor] = React.useState(null);
+  const [majorChanged, setMajorChanged] = React.useState(false);
+  const [location, setLocation] = React.useState(null);
+  const [locationChanged, setLocationChanged] = React.useState(false);
 
   const [gender, setGender] = React.useState(1);
   const [vaccinated, setVaccinated] = React.useState(1);
@@ -170,7 +175,7 @@ export default ( {navigation} ) => {
   const nameInputHandler = (input) => {
     setName(input);
     setNameChanged(true);
-  } // setNameChanged
+  } // nameInputHandler()
 
 
   /*
@@ -182,7 +187,7 @@ export default ( {navigation} ) => {
   const bioInputHandler = (input) => {
     setBio(input);
     setBioChanged(true);
-  } // setBioChanged
+  } // bioInputHandler()
 
 
 
@@ -195,10 +200,31 @@ export default ( {navigation} ) => {
   const yearInputHandler = (input) => {
     setYear(input);
     setYearChanged(true);
-  } // setNameChanged
+  } // yearInputHandler()
 
 
 
+  /*
+   * This function is called when the major input is changed. It changes
+   * the value of the major hook and also changes the boolean that tells
+   * us if the user has changed the value.
+   */
+  const majorInputHandler = (input) => {
+    setMajor(input);
+    setMajorChanged(true);
+  } // majorInputHandler()
+
+
+
+  /*
+    * This function is called when the location input is changed. It changes
+    * the value of the location hook and also changes the boolean that tells
+    * us if the user has changed the value.
+    */
+  const locationInputHandler = (input) => {
+    setLocation(input);
+    setLocationChanged(true);
+  } // locationInputHandler()
 
 
   /*
@@ -230,6 +256,16 @@ export default ( {navigation} ) => {
       writeGraduationYear(auth.currentUser.email, year);
     }
 
+    // if the major has changed, then update it
+    if (majorChanged) {
+      writeMajor(auth.currentUser.email, major);
+    }
+
+    // if the location has changed, then update it
+    if (locationChanged) {
+      writeLocation(auth.currentUser.email, location);
+    }
+
     // write the gender and vaccination status data
     writeGender(auth.currentUser.email, gender);
     writeVaccinated(auth.currentUser.email, vaccinated);
@@ -258,10 +294,11 @@ export default ( {navigation} ) => {
       if (!isValidGraduationYear(year)) {return}
     }
 
-    // Check if hometown is valid
 
-
-    // Check if major is valid
+    // Check if major is valid (same as checking name)
+    if (majorChanged != false) {
+      if (!isValidName(major)) {return}
+    }
 
 
     // update the information and navigate to Profile
@@ -310,7 +347,7 @@ export default ( {navigation} ) => {
           </SafeAreaView>
 
           {/* Name (text), name (field) */}
-          <Text style={styles.prompt}>Name</Text>
+          <Text style={styles.prompt}>Name*</Text>
           <SafeAreaView>
             <TextInput
               style={styles.input}
@@ -359,8 +396,41 @@ export default ( {navigation} ) => {
           </SafeAreaView>
 
 
+         {/* Major (text), major (field) */}
+         <SafeAreaView>
+            <Text style={styles.prompt}>Major</Text>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              onChangeText={majorInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/major")}
+              placeholder={"Enter your major"}
+            />
+          </SafeAreaView> 
+
+
+          {/* Location (text), location (field) */}
+          <SafeAreaView>
+            <Text style={styles.prompt}>Location</Text>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              onChangeText={locationInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/location")}
+              placeholder={"Where you are from"}
+            />
+          </SafeAreaView> 
+
+
+
           {/* Gender (text), Gender (field) */}
-          <Text style={styles.prompt}>Gender</Text>
+          <Text style={styles.prompt}>Gender*</Text>
           <Picker
             style={styles.picker}
             selectedValue={
@@ -376,9 +446,11 @@ export default ( {navigation} ) => {
             <Picker.Item label="Prefer not to say" value={4} />
           </Picker>
 
+
+
           
           {/* Vaccination status (text), vaccination status (field) */}
-          <Text style={styles.prompt}>Vaccination Status</Text>
+          <Text style={styles.prompt}>Vaccination Status*</Text>
           <Picker
             style={styles.picker}
             selectedValue={
@@ -397,7 +469,7 @@ export default ( {navigation} ) => {
 
 
           {/* Divider used for spacing between the last item in scroll and the footer */}
-          <Divider color={Colors.white} height={80}></Divider>
+          <Divider color={Colors.white} height={15}></Divider>
 
         </ScrollView>
 
@@ -449,7 +521,8 @@ const styles = StyleSheet.create({
 
   scroll: {
     flex: 1,
-    padding: 30,
+    paddingHorizontal: 30,
+    paddingTop: 30,
   },
 
   footer: {
@@ -497,7 +570,7 @@ const styles = StyleSheet.create({
   input: {
     textAlign: 'left',
     height: 40,
-    width: 290,
+    width: "90%",
     margin: 10,
     marginBottom: 20,
     padding: 10,
@@ -510,12 +583,20 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     textAlign: 'auto',
     height: 140,
-    width: 290,
+    width: "90%",
     margin: 10,
-    marginBottom: 30,
+    marginBottom: 20,
     padding: 10,
     borderWidth: 1,
     borderRadius: 10, 
+  },
+
+  /* Picker */
+  picker: {
+    flex: 1,
+    textAlign: 'left',
+    width: '95%',
+    marginBottom: 20,
   },
 
 

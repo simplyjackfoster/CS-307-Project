@@ -43,7 +43,7 @@ export const writeNewUser = (email, name, phone,
 		profile_name: name,
 		bio: "",
 		graduation_year: "", 
-		hometown: "", 
+		location: "", 
 		major: "", 
 		covid_vaccination_status: "vaccine" // change
 	});
@@ -166,6 +166,42 @@ export const writeGraduationYear = (email_or_id, year) => {
 		graduation_year: year
 	});
 } // writeGraduationYear()
+
+
+
+/*
+ * writeMajor()
+ *
+ * Writes the major to the specified user in the RTDB.
+ * @param email_or_id -> the email or id specifying the user.
+ * @param major -> the major that we will write to the database.
+ */
+export const writeMajor = (email_or_id, major) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		major: major
+	});
+} // writeMajor
+
+
+
+
+/*
+ * writeLocation()
+ *
+ * Writes the location to the specified user in the RTDB.
+ * @param email_or_id -> the email or id specifying the user.
+ * @param location -> the location of the user that we are writing to the database.
+ */
+export const writeLocation = (email_or_id, location) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		location: location
+	});
+} // writeLocation()
+
 
 
 

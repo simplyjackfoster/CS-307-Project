@@ -400,7 +400,7 @@ export default ( {navigation} ) => {
             <Picker.Item label="Yes, not on campus" value={3} />
           </Picker>
 
-
+          <Divider color={Colors.white} height={50}></Divider>
 
           {/* Create Account Button - when we are in the AuthStack */}
           <TouchableOpacity
@@ -445,6 +445,7 @@ export default ( {navigation} ) => {
         >
           <Text style={styles.saveText}>Save Changes</Text>
         </TouchableOpacity>
+
       </View>
 
     </View>
@@ -514,10 +515,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 25,
     margin: 10,
-    marginTop: 50,
-    marginBottom: 150,
+    marginBottom: 100,
     padding: 10,
-    top: 15,
     width: 175,
     alignSelf: 'center',
     textAlign: 'center',
