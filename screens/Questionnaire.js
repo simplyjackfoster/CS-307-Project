@@ -16,7 +16,7 @@ import { Divider } from 'react-native-elements';
 
 // authentication imports
 import { auth, rtdb } from '../database/RTDB';
-import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, sendSignInLinkToEmail } from 'firebase/auth';
+import { AuthCredential, createUserWithEmailAndPassword, getAuth, sendEmailVerification, updateProfile } from 'firebase/auth';
 import { ref, child, get, set } from 'firebase/database';
         
 
@@ -37,6 +37,7 @@ import {
 import { writeNewUser, writeQuestionnaire } from '../database/writeData';
 import { getDataFromPath } from '../database/readData';
 import { getID } from '../database/ID';
+import { FirebaseError } from '@firebase/util';
 
 // used so that the hooks don't get set rapidly in edit questionnaire
 var updatedTheSelected = false;
@@ -63,16 +64,6 @@ export default ( {navigation} ) => {
   const [selectedEleven, setSelectedEleven] = React.useState(1); // check_before_having_people_over
   const [selectedTwelve, setSelectedTwelve] = React.useState(1); // joint_grocery_shopping
   const [selectedThirteen, setSelectedThirteen] = React.useState(1); // has_significant_other
-
-  const sendEmail = {
-    //set up url in firebase host 
-    url: 'https://uniroom-fdcd7.firebaseapp.com/__/auth/action?mode=action&oobCode=code',
-    handleCodeInApp: true,
-    // create domain?
-    //dynamicLinkDomain : 'none'
- 
-  };
-  
 
   // function for setting the selection boxes to the correct value
   const setSelection = (question_num, field) => {
@@ -175,9 +166,22 @@ export default ( {navigation} ) => {
           selectedThree, selectedFour, selectedFive, selectedSix, selectedSeven,
           selectedEight, selectedNine, selectedTen, selectedEleven, selectedTwelve,
           selectedThirteen);
-        sendEmailVerification(user, sendEmail)
+        updateProfile(user, {displayName: Gname})
         .then(() => {
-          window.localStorage.setItem('email', Gemail);
+          //displayName has been updated
+          console.log(user.displayName)
+        })
+        .catch((error) => {
+          Alert.alert("Error", "Error: There was an issue updating your name");
+          console.log("Error Code: " + error.code);
+          console.log("Error Message: " + error.message);
+          // move back to create account screen
+          navigation.pop();
+        });
+        //find way to update app and display name in email
+        sendEmailVerification(auth.currentUser)
+        .then(() => {
+          //window.localStorage.setItem('email', Gemail);
         })
         .catch((error) => {
           Alert.alert("Error", "Error: There was an issue sending your account verification link");
