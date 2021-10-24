@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   ScrollView,
-  Alert
+  Alert,
+  Linking
 } from 'react-native';
 
 import Colors from "../constants/Colors";
@@ -65,12 +66,12 @@ export default ( {navigation} ) => {
 
   const sendEmail = {
     //set up url in firebase host 
-    url: 'none',
+    url: 'https://uniroom-fdcd7.firebaseapp.com/__/auth/action?mode=action&oobCode=code',
     handleCodeInApp: true,
     // create domain?
-    dynamicLinkDomain : 'none'
+    //dynamicLinkDomain : 'none'
+ 
   };
-
   
 
   // function for setting the selection boxes to the correct value
@@ -174,11 +175,18 @@ export default ( {navigation} ) => {
           selectedThree, selectedFour, selectedFive, selectedSix, selectedSeven,
           selectedEight, selectedNine, selectedTen, selectedEleven, selectedTwelve,
           selectedThirteen);
-        setUserToken('Arbitrary Value');
         sendSignInLinkToEmail(auth, Gemail, sendEmail)
-          .then(() => {
-            window.localStorage.setItem('email', Gemail);
-          })
+        .then(() => {
+          window.localStorage.setItem('email', Gemail);
+        })
+        .catch((error) => {
+          Alert.alert("Error", "Error: There was an issue sending your account verification link");
+          console.log("Error Code: " + error.code);
+          console.log("Error Message: " + error.message);
+          // move back to create account screen
+          navigation.pop();
+        });
+        setUserToken('Arbitrary Value');
       })
       .catch((error) => {
         Alert.alert("Error", "Error: Email Already in Use");
