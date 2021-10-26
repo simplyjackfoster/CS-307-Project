@@ -43,9 +43,9 @@ export const writeNewUser = (email, name, phone,
 		profile_name: name,
 		bio: "",
 		graduation_year: "", 
-		location: "", 
 		major: "", 
-		covid_vaccination_status: "vaccine" // change
+		location: "", 
+		preferred_number_of_roommates: "",
 	});
 	writeGender(auth.currentUser.email, gender);
 	writeVaccinated(auth.currentUser.email, vaccinated);
@@ -201,6 +201,27 @@ export const writeLocation = (email_or_id, location) => {
 		location: location
 	});
 } // writeLocation()
+
+
+
+
+
+/*
+ * writePreferredNumRoommates()
+ *
+ * Writes the preferred number of roommates to the specified user in the RTDB.
+ * @param email_or_id -> the email or id specifying the user.
+ * @param numRoommates -> the preferred number of roommates of the user
+ * 												that we are writing to the database.
+ */
+export const writePreferredNumRoommates = (email_or_id, numRoommates) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		preferred_number_of_roommates: numRoommates
+	});
+} // writePreferredNumRoommates()
+
 
 
 

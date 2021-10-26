@@ -31,7 +31,8 @@ import {
   writeMajor,
   writeLocation,
   writeGender,
-  writeVaccinated
+  writeVaccinated,
+  writePreferredNumRoommates
 } from '../database/writeData';
 
 import {
@@ -42,7 +43,8 @@ import {
   isValidPassword,
   isValidSecurity,
   isValidCheckbox,
-  isValidGraduationYear
+  isValidGraduationYear,
+  isValidNumberOfRoommates
 } from '../checkInputs';
 import { set } from 'react-native-reanimated';
 
@@ -68,6 +70,8 @@ export default ( {navigation} ) => {
   const [majorChanged, setMajorChanged] = React.useState(false);
   const [location, setLocation] = React.useState(null);
   const [locationChanged, setLocationChanged] = React.useState(false);
+  const [numRoommates, setNumRoommates] = React.useState(null);
+  const [numRoommatesChanged, setNumRoommatesChanged] = React.useState(false);
 
   const [gender, setGender] = React.useState(1);
   const [vaccinated, setVaccinated] = React.useState(1);
@@ -228,6 +232,23 @@ export default ( {navigation} ) => {
 
 
   /*
+    * This function is called when the preferred number of roommates input is changed. It 
+    * changes the value of the numRoommates hook and also changes the boolean that tells
+    * us if the user has changed the value.
+    */
+  const numRoommatesInputHandler = (input) => {
+    setNumRoommates(input);
+    setNumRoommatesChanged(true);
+  } // numRoommatesInputHandler()
+
+
+
+
+
+
+
+
+  /*
    * This function is called when the user clicks "Save".
    * It updates all of the profile data in the database.
    */
@@ -266,6 +287,11 @@ export default ( {navigation} ) => {
       writeLocation(auth.currentUser.email, location);
     }
 
+    // if the preferred # of roommates changed, then update it
+    if (numRoommatesChanged) {
+      writePreferredNumRoommates(auth.currentUser.email, numRoommates);
+    }
+
     // write the gender and vaccination status data
     writeGender(auth.currentUser.email, gender);
     writeVaccinated(auth.currentUser.email, vaccinated);
@@ -299,6 +325,12 @@ export default ( {navigation} ) => {
     if (majorChanged != false) {
       if (!isValidName(major)) {return}
     }
+
+    // Check if the preferred # of roommates is valid
+    if (numRoommatesChanged != false) {
+      if (!isValidNumberOfRoommates(numRoommates)) {return}
+    }
+
 
 
     // update the information and navigate to Profile
@@ -426,6 +458,24 @@ export default ( {navigation} ) => {
               placeholder={"Where you are from"}
             />
           </SafeAreaView> 
+
+
+
+          {/* Preferred Number of Roommates */}
+          <SafeAreaView>
+            <Text style={styles.prompt}>Preferred # of Roommates</Text>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              onChangeText={numRoommatesInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/preferred_number_of_roommates")}
+              placeholder={"Number of people you want to live with"}
+            />
+          </SafeAreaView> 
+
 
 
 

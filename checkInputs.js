@@ -385,7 +385,7 @@ export const isValidGraduationYear = (year) => {
 	}
 
 	for (const c in year) {
-		if (c < '0' || c > '9') {
+		if (year[c] < '0' || year[c] > '9') {
 			Alert.alert("Error", "Graduation year field must be a 4 digit number, please try again.", 
 			[{ text: "Ok" }]);	
 			return false;
@@ -405,4 +405,33 @@ export const isValidGraduationYear = (year) => {
 	}
 	return true;
 } // isValidGraduationYear()
+
+
+
+
+/*
+ * isValidNumberOfRoommates()
+ *
+ * function to check if a string is a valid number of roommates
+ * returns true if its either null, or a positive number.
+ * Otherwise, returns false.
+ */
+export const isValidNumberOfRoommates = (numRoommates) => {
+	if (!numRoommates) {
+		return true;
+	}
+	if (numRoommates[0] == '0') {
+		Alert.alert("Error", "Preferred # of Roommates field cannot have leading zeros, please try again.", 
+			[{ text: "Ok" }]);
+			return false;
+	}
+	for (const c in numRoommates) {
+		if (numRoommates[c] < '0' || numRoommates[c] > '9') {
+			Alert.alert("Error", "Preferred # of Roommates field has invalid number, please try again.", 
+				[{ text: "Ok" }]);
+				return false;
+		}
+	}
+	return true;
+} // isValidNumberOfRoommates()
 
