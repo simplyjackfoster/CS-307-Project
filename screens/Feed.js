@@ -47,11 +47,15 @@ export default () => {
 			</View>
 
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.dislikeWrapper}>
+        <TouchableOpacity style={styles.dislikeWrapper} onPress={() => {
+          console.log("Dislike pressed")
+        }}>
           {renderIcon("times", 60, Colors.red)}
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.likeWrapper}>
+        <TouchableOpacity style={styles.likeWrapper} onPress={() => {
+          console.log("Like pressed")
+        }}>
           {renderIcon("gratipay", 60, Colors.green)}
         </TouchableOpacity>
       </View>
