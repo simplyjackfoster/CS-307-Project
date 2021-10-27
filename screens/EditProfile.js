@@ -681,6 +681,4 @@ const styles = StyleSheet.create({
     width: 175,
     backgroundColor: Colors.offWhite,
   },
-
-
 });
