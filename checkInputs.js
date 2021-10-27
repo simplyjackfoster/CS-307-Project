@@ -382,3 +382,78 @@ export const isValidCheckbox = (checkedCoc, checkedPp) => {
 } // isValidCheckbox()
 
 
+
+
+
+
+/*
+ * isValidGraduationYear()
+ *
+ * function to check if the graduation year is valid.
+ * returns true if its either null, or between the current year and
+ * the current year + 10
+ */
+export const isValidGraduationYear = (year) => {
+	// if its null, then its valid
+	if (!year) {
+		return true;
+	}	
+
+	// check if the year is a 4 digit number
+	if (year.length != 4) {
+		Alert.alert("Error", "Graduation year field must be a 4 digit number, please try again.", 
+		[{ text: "Ok" }]);
+		return false;
+	}
+
+	for (const c in year) {
+		if (year[c] < '0' || year[c] > '9') {
+			Alert.alert("Error", "Graduation year field must be a 4 digit number, please try again.", 
+			[{ text: "Ok" }]);	
+			return false;
+		}
+	}
+
+	// get the year passed in and the current year
+	const yearInt = parseInt(year);
+	const today = new Date();
+	const currentYear = parseInt(today.getFullYear());
+
+	// make sure the year is in the valid range
+	if (yearInt < currentYear || yearInt > currentYear + 10) {
+		Alert.alert("Error", "Graduation year field has invalid year, please try again.", 
+			[{ text: "Ok" }]);
+			return false;
+	}
+	return true;
+} // isValidGraduationYear()
+
+
+
+
+/*
+ * isValidNumberOfRoommates()
+ *
+ * function to check if a string is a valid number of roommates
+ * returns true if its either null, or a positive number.
+ * Otherwise, returns false.
+ */
+export const isValidNumberOfRoommates = (numRoommates) => {
+	if (!numRoommates) {
+		return true;
+	}
+	if (numRoommates[0] == '0') {
+		Alert.alert("Error", "Preferred # of Roommates field cannot have leading zeros, please try again.", 
+			[{ text: "Ok" }]);
+			return false;
+	}
+	for (const c in numRoommates) {
+		if (numRoommates[c] < '0' || numRoommates[c] > '9') {
+			Alert.alert("Error", "Preferred # of Roommates field has invalid number, please try again.", 
+				[{ text: "Ok" }]);
+				return false;
+		}
+	}
+	return true;
+} // isValidNumberOfRoommates()
+

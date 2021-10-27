@@ -17,13 +17,14 @@ import { getID } from './ID';
  * @param securityAnswer -> the answer the user entered in signup.
  */
 export const writeNewUser = (email, name, phone,
-														 birthday, securityQuestion, securityAnswer, selectedOne, selectedTwo,
+														 birthday, gender, vaccinated, securityQuestion, securityAnswer, selectedOne, selectedTwo,
 														 selectedThree, selectedFour, selectedFive, selectedSix, selectedSeven,
 														 selectedEight, selectedNine, selectedTen, selectedEleven, selectedTwelve,
 														 selectedThirteen) => {
 	const id = getID(email);
 
 	const default_profile_picture = "https://firebasestorage.googleapis.com/v0/b/uniroom-fdcd7.appspot.com/o/default-profile-picture.jpeg?alt=media&token=5c5c586a-e822-4096-b6cd-52c34f41dc9b"
+
 
 
 	// write the "Critical Information" data
@@ -40,13 +41,14 @@ export const writeNewUser = (email, name, phone,
 	// write the "Profile" data
 	set(ref(rtdb, "users/" + id + "/Profile"), {
 		profile_name: name,
-		year_in_school: "year", // change
-		gender: "gender", // change
-		bio: "bio", // change
-		hometown: "hometown", // change
-		major: "major", // change
-		covid_vaccination_status: "vaccine" // change
+		bio: "",
+		graduation_year: "", 
+		major: "", 
+		location: "", 
+		preferred_number_of_roommates: "",
 	});
+	writeGender(auth.currentUser.email, gender);
+	writeVaccinated(auth.currentUser.email, vaccinated);
 	set(ref(rtdb, "users/" + id + "/Profile/Images"), {
 		profile_picture: default_profile_picture, 
 	});
@@ -92,6 +94,29 @@ export const writeNewUser = (email, name, phone,
 
 
 
+
+
+/*
+ * writeProfilePicture()
+ *
+ * This function updates the uri for the profile picture in the RTDB.
+ * @param email_or_id -> the email or id of the user who we are updating.
+ * @param uri -> the uri of the image that we are going to update
+ * 							 the profile picture to.
+ */
+export const writeProfilePicture = (email_or_id, uri) => {
+	// get the id
+	const id = getID(email_or_id);
+
+	// write the url to the database
+	update(ref(rtdb, "users/" + id + "/Profile/Images"), {
+		profile_picture: uri
+	});
+} // writeProfilePicture()
+
+
+
+
 /*
  * writeName()
  *
@@ -117,24 +142,160 @@ export const writeProfileInstagramLink = (email_or_id, instagramLink) => {
 
 
 
-
 /*
- * writeProfilePicture()
+ * writeBio()
  *
- * This function updates the uri for the profile picture in the RTDB.
- * @param email_or_id -> the email or id of the user who we are updating.
- * @param uri -> the uri of the image that we are going to update
- * 							 the profile picture to.
+ * Writes a bio to the specified user in the RTDB.
+ * @param email_or_id -> the email or id specifying the user.
+ * @param name -> the bio that we will write to the database.
  */
-export const writeProfilePicture = (email_or_id, uri) => {
-	// get the id
+export const writeBio = (email_or_id, bio) => {
 	const id = getID(email_or_id);
 
-	// write the url to the database
-	update(ref(rtdb, "users/" + id + "/Profile/Images"), {
-		profile_picture: uri
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		bio: bio
 	});
-} // writeProfilePicture()
+} // writeBio()
+
+
+
+
+/*
+ * writeGraduationYear()
+ *
+ * Writes the graduation year to the specified user in the RTDB.
+ * @param email_or_id -> the email or id specifying the user.
+ * @param year -> the graduation year that we will write to the database.
+ */
+export const writeGraduationYear = (email_or_id, year) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		graduation_year: year
+	});
+} // writeGraduationYear()
+
+
+
+/*
+ * writeMajor()
+ *
+ * Writes the major to the specified user in the RTDB.
+ * @param email_or_id -> the email or id specifying the user.
+ * @param major -> the major that we will write to the database.
+ */
+export const writeMajor = (email_or_id, major) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		major: major
+	});
+} // writeMajor
+
+
+
+
+/*
+ * writeLocation()
+ *
+ * Writes the location to the specified user in the RTDB.
+ * @param email_or_id -> the email or id specifying the user.
+ * @param location -> the location of the user that we are writing to the database.
+ */
+export const writeLocation = (email_or_id, location) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		location: location
+	});
+} // writeLocation()
+
+
+
+
+
+/*
+ * writePreferredNumRoommates()
+ *
+ * Writes the preferred number of roommates to the specified user in the RTDB.
+ * @param email_or_id -> the email or id specifying the user.
+ * @param numRoommates -> the preferred number of roommates of the user
+ * 												that we are writing to the database.
+ */
+export const writePreferredNumRoommates = (email_or_id, numRoommates) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		preferred_number_of_roommates: numRoommates
+	});
+} // writePreferredNumRoommates()
+
+
+
+
+
+/*
+ * writeGender()
+ *
+ * Writes the gender to the specified user in the RTDB.
+ * @param email_or_id -> the email or id specifying the user.
+ * @param gender -> the selected number from the gender selection menu
+ * 									1: Male
+ * 									2: Female
+ * 								  3: Other
+ * 									4: Prefere not to say
+ */
+export const writeGender = (email_or_id, gender) => {
+	const id = getID(email_or_id);
+
+	// get the gender as a string
+	var genderStr;
+	if (gender == 1) {
+		genderStr = "Male";
+	}
+	else if (gender == 2) {
+		genderStr = "Female";
+	}
+	else if (gender == 3) {
+		genderStr = "Other";
+	}
+	else {
+		genderStr = "Prefer not to say";
+	}
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		gender: genderStr
+	});
+} // writeGender()
+
+
+
+
+/*
+ * writeVaccinated()
+ *
+ * Writes the vaccination status to the specified user in the RTDB.
+ * @param email_or_id -> the email or id specifying the user.
+ * @param vaccinated -> the selected number from the vaccination status selection menu
+ * 									1: No, I'm not vaccinated
+ * 									2: Yes, I'm vaccinated 
+ */
+export const writeVaccinated = (email_or_id, vaccinated) => {
+	const id = getID(email_or_id);
+
+	// get the vaccination status as a string
+	var vaccinatedStr;
+	if (vaccinated == 1) {
+		vaccinatedStr = "Not Vaccinated";
+	}
+	else {
+		vaccinatedStr = "Vaccinated";
+	}
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		covid_vaccination_status: vaccinatedStr
+	});
+} // writeGender()
 
 
 

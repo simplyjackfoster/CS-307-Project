@@ -22,7 +22,7 @@ export default {
 	// grey
 	darkGray: '#555',
 	gray: '#888',
-	lightGray: '#aaa',
+	lightGray: '#d3d3d3',
 	blueGray: '#34495e',
 
 	// green
