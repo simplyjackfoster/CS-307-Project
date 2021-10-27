@@ -9,7 +9,7 @@ import {
   Image,
   Button,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
@@ -47,7 +47,9 @@ import {
   isValidNumberOfRoommates
 } from '../checkInputs';
 import { set } from 'react-native-reanimated';
+import Interests from './Interests';
 
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 // used so that the hooks don't get set rapidly in edit questionnaire
 var updatedTheSelected = false;
@@ -477,6 +479,21 @@ export default ( {navigation} ) => {
           </SafeAreaView> 
 
 
+          {/* Navigate to Edit Interests */}
+          <SafeAreaView>
+            <TouchableOpacity style={styles.interestsButton}
+              onPress={() => navigation.push("Interests")}
+            >
+              <Text style={styles.interestsText}>Add Interests</Text>
+              <Icon
+                style={styles.interestsIcon}
+                name={'caret-right'}
+                size={20}
+                color={Colors.black}
+              />
+            </TouchableOpacity>
+          </SafeAreaView>
+
 
 
           {/* Gender (text), Gender (field) */}
@@ -648,6 +665,35 @@ const styles = StyleSheet.create({
     width: '95%',
     marginBottom: 20,
   },
+
+
+  /* Interests Button */
+  interestsText: {
+    flex: 1,
+    fontSize: 20,
+    alignSelf: 'auto',
+  },
+
+  interestsIcon: {
+    flex: 1,
+    textAlign: 'right',
+    fontSize: 25,
+    marginRight: '5%',
+  },
+
+  interestsButton: {
+    flexDirection: 'row',
+    textAlign: 'left',
+    borderWidth: 1,
+    borderRadius: 11,
+    margin: 10,
+    marginTop: 25,
+    marginBottom: 40,
+    padding: 10,
+    width: '90%',
+    backgroundColor: Colors.offWhite,
+  },
+
 
 
   /* Questionnaire Button */
