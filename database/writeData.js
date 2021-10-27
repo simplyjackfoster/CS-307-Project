@@ -133,6 +133,15 @@ export const writeProfileName = (email_or_id, name) => {
 } // writeName()
 
 
+export const writeProfileInstagramLink = (email_or_id, instagramLink) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		instagram_link: instagramLink
+	})
+}
+
+
 
 /*
  * writeBio()
