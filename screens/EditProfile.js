@@ -24,7 +24,6 @@ import { ref, child, get } from 'firebase/database';
 import { getID } from '../database/ID';
 import { getDataFromPath } from '../database/readData';
 import { uploadProfilePicture } from '../database/uploadStorage';
-import { writeProfileInstagramLink } from '../database/writeData';
 import {
   writeProfileName,
   writeBio,
@@ -38,7 +37,6 @@ import {
 
 import {
   isValidName,
-  isValidInstagram,
   isValidEmail,
   isValidPhone,
   isValidBirthday,
@@ -62,8 +60,6 @@ export default ( {navigation} ) => {
 
   // hooks for editable fields
   const [editProfilePicture, setEditProfilePicture] = React.useState(null);
-  const [instagramLink, onChangeInstagramLink] = React.useState(null);
-  const [instagramLinkChange, setInstagramLinkChange] = React.useState(false);
   const [name, setName] = React.useState(null);
   const [nameChanged, setNameChanged] = React.useState(false);
   const [bio, setBio] = React.useState(null);
@@ -144,6 +140,8 @@ export default ( {navigation} ) => {
     return unsubscribe;
   }, [navigation]);
 
+
+
   /*
    * This function is used to choose an image from the camera roll
    * for the profile picture.
@@ -169,6 +167,8 @@ export default ( {navigation} ) => {
     // set the selected image
     setEditProfilePicture(picked.uri);
   } // openProfilePicImagePickerAsync()
+
+
 
   /*
    * This function is called when the text in the name 
@@ -246,11 +246,6 @@ export default ( {navigation} ) => {
 
 
 
-  const instagramLinkInputHandler = (input) => {
-    onChangeInstagramLink(input);
-    setInstagramLinkChange(true);
-  }
-
 
 
   /*
@@ -304,10 +299,7 @@ export default ( {navigation} ) => {
 
   } // updateProfileData()
 
-    if(instagramLink) {
-      writeProfileInstagramLink(auth.currentUser.email, instagramLink);
-    }
-  } // updateProfileData()
+
 
 
   /*
@@ -320,11 +312,6 @@ export default ( {navigation} ) => {
     // Check if the name field is valid
     if (nameChanged != false) {
       if (!isValidName(name)) {return}
-    } // if it hasn't been changed then we save it as is
-
-    if(instagramLinkChange != false) {
-      if(!isValidInstagram(instagramLink)) {return}
-    }
     } 
 
 
@@ -344,10 +331,16 @@ export default ( {navigation} ) => {
       if (!isValidNumberOfRoommates(numRoommates)) {return}
     }
 
+
+
     // update the information and navigate to Profile
     updateProfileData();
     navigation.pop();
   } // validateInputs()
+
+
+
+
 
 	return (
     <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
@@ -543,64 +536,6 @@ export default ( {navigation} ) => {
           >
             <Text style={styles.questionnaireText}>Edit Questionnaire</Text>
           </TouchableOpacity>
-        </SafeAreaView>
-
-
-        {/* Divider used between profile picture and text fields */}
-        <Divider orientation="horizontal" height={20}/>
-
-
-        {/* Name (text), name (field) */}
-        <Text style={styles.label}>Name</Text>
-        <SafeAreaView>
-          <TextInput
-            style={styles.input}
-            autoCapitalize='none'
-						autoComplete='off'
-						autoCorrect={false}
-						spellCheck={false}
-            onChangeText={nameInputHandler}
-            defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/profile_name")}
-            placeholder={"Name"}
-          />
-        </SafeAreaView>
-
-        <Text style={styles.label}>Instagram Link</Text>
-        <SafeAreaView>
-          <TextInput
-            style={styles.input}
-            autoCapitalize='none'
-						autoComplete='off'
-						autoCorrect={false}
-						spellCheck={false}
-            onChangeText={instagramLinkInputHandler}
-            defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram_link")}
-            placeholder={"Profile Name"}
-          />
-        </SafeAreaView>
-
-
-
-        {/* Continue to Questionnaire (button) */}
-        <TouchableOpacity
-          style={styles.questionnaireButton}
-          // check if questionnaire has been completed and run setUserToken
-          onPress={() => {
-            navigation.push("Questionnaire");
-          }}
-        >
-          <Text style={styles.questionnaireText}>Edit Questionnaire</Text>
-        </TouchableOpacity>
-
-
-        {/* Save Button */}
-        <TouchableOpacity
-          style={styles.buttonSave}
-          // check if questionnaire has been completed and run setUserToken
-          onPress={ validateInputs }
-        >
-          <Text style={styles.textSave}>Save Changes</Text>
-        </TouchableOpacity>
 
           {/* Save Button */}
           <TouchableOpacity
@@ -611,6 +546,8 @@ export default ( {navigation} ) => {
             <Text style={styles.textSave}>Save Changes</Text>
           </TouchableOpacity>
         </View>
+
+
       </View>
     </KeyboardAvoidingView>
 	); // return()
@@ -720,9 +657,6 @@ const styles = StyleSheet.create({
   },
 
   questionnaireButton: {
-    flex: 1,
-    top: 275,
-    backgroundColor: Colors.lightBlue,
     alignSelf: 'center',
     borderWidth: 1,
     borderRadius: 25,
@@ -739,9 +673,6 @@ const styles = StyleSheet.create({
   },
 
   buttonSave: {
-    flex: 1,
-    top: 275,
-    backgroundColor: Colors.offWhite,
     alignSelf: 'center',
     borderWidth: 1,
     borderRadius: 25,

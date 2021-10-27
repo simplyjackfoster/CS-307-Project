@@ -110,17 +110,6 @@ export default ( {navigation} ) => {
 				<Text style={styles.infoContent}>123-456-7890</Text>
 			</View>
 
-			{/* Phone: <phone number> */}
-			<View style={styles.infoWrapper}>
-				<View style={styles.icon}>
-					{renderIcon("instagram", 25, Colors.darkBlue)}
-				</View>
-				<Text style={styles.infoHeader}>Instagram:</Text>
-				<Text style={styles.infoContent}>
-					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram_link")}
-				</Text>
-			</View>
-
 			{/* Ghost Mode */}
 			<View style={styles.disableWrapper}>
 				<View style={styles.icon}>
@@ -169,7 +158,7 @@ const styles = StyleSheet.create({
 		fontSize: 25,
 		fontWeight: 'bold',
 	},
-	
+
 	profilePic: {
 		width: 300,
 		height: 300,
