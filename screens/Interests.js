@@ -1,6 +1,6 @@
 import React, {use} from 'react';
 import { SafeAreaView } from 'react-native';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import Colors from '../constants/Colors';
 
 
@@ -9,19 +9,12 @@ import Colors from '../constants/Colors';
 
 export default ( {navigation } ) => {
 
-	const data = "music";
-	const [music, setMusic] = React.useState(data == "music" ? (true) : (false));
-	console.log("music = " + music);
-
-	const [workingOut, setWorkingOut] = React.useState(false);
-	const [yoga, setYoga] = React.useState(false);
 
 
-	
 
 
 	return (
-		<View style={styles.container}>
+		<ScrollView style={styles.container}>
 			<Text style={styles.instructionsText}>Select Up to 5 Interests!</Text>
 
 
@@ -473,7 +466,7 @@ export default ( {navigation } ) => {
 
 
 			</View>
-		</View>
+		</ScrollView>
 	);
 } // export default () 
 

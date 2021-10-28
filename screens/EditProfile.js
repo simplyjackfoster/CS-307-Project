@@ -515,6 +515,21 @@ export default ( {navigation} ) => {
             />
           </SafeAreaView> 
 
+          {/* Instagram Link (field) */}
+          <Text style={styles.prompt}>Instagram</Text>
+          <SafeAreaView>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              onChangeText={instagramInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram")}
+              placeholder={"Instagram username"}
+            />
+          </SafeAreaView>
+
 
           {/* Navigate to Edit Interests */}
           <SafeAreaView>
@@ -532,22 +547,7 @@ export default ( {navigation} ) => {
           </SafeAreaView>
 
 
-          {/* Instagram Link (field) */}
-          <Text style={styles.prompt}>Instagram</Text>
-          <SafeAreaView>
-            <TextInput
-              style={styles.input}
-              autoCapitalize='none'
-              autoComplete='off'
-              autoCorrect={false}
-              spellCheck={false}
-              onChangeText={instagramInputHandler}
-              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram")}
-              placeholder={"Instagram username"}
-            />
-          </SafeAreaView>
-
-
+        
 
           {/* Gender (text), Gender (field) */}
           <Text style={styles.prompt}>Gender*</Text>
