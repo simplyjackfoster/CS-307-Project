@@ -24,11 +24,11 @@ const CardItem = (props) => {
         <ScrollView style={styles.container}>
             <Text>{name}</Text>
             <Text>{location}</Text>
-            <Text>{graduationYear}</Text>
-            <Text>{major}</Text>
+            <Text>Class of {graduationYear}</Text>
+            <Text>Studying {major}</Text>
             <Text>{bio}</Text>
-            <Text>I am {vaccination}</Text>
-            <Text>I prefer to have {preferredRoommates} roomates</Text>
+            <Text>I am {vaccination} for Covid-19</Text>
+            <Text>I prefer to have {preferredRoommates} roommates</Text>
 
             
 
