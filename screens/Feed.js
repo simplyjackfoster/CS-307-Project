@@ -12,7 +12,7 @@ import { renderIcon } from "../images/Icons";
 export default () => {
 	return (
 		<View style={styles.container}>
-      <CardItem id={"thylan"}/>
+      <CardItem id={"test"}/>
       {/* <View style={styles.contentContainer}>
         <View style={styles.imageWrapper}>
           <Image
