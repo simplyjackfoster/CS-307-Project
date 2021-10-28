@@ -32,7 +32,8 @@ import {
   writeLocation,
   writeGender,
   writeVaccinated,
-  writePreferredNumRoommates
+  writePreferredNumRoommates,
+  writeInstagram
 } from '../database/writeData';
 
 import {
@@ -43,6 +44,7 @@ import {
   isValidPassword,
   isValidSecurity,
   isValidCheckbox,
+  isValidInstagram,
   isValidGraduationYear,
   isValidNumberOfRoommates
 } from '../checkInputs';
@@ -74,6 +76,8 @@ export default ( {navigation} ) => {
   const [locationChanged, setLocationChanged] = React.useState(false);
   const [numRoommates, setNumRoommates] = React.useState(null);
   const [numRoommatesChanged, setNumRoommatesChanged] = React.useState(false);
+  const [instagram, onChangeInstagram] = React.useState(null);
+  const [instagramChanged, setInstagramChanged] = React.useState(false);
 
   const [gender, setGender] = React.useState(1);
   const [vaccinated, setVaccinated] = React.useState(1);
@@ -130,7 +134,6 @@ export default ( {navigation} ) => {
     updatedTheSelected = true;
   }
 
-
   /*
    * Effect that resets the value of updatedTheSelected to false, so that when
    * we open the edit profile screen again, the selections will update.
@@ -184,6 +187,8 @@ export default ( {navigation} ) => {
   } // nameInputHandler()
 
 
+
+  
   /*
    * This function is called when the text in the bio 
    * input is changed. It changes the value of the bio hook
@@ -245,8 +250,16 @@ export default ( {navigation} ) => {
 
 
 
-
-
+  /*
+   * This function is called when the text in the instagram 
+   * input is changed. It changes the value of the name hook
+   * and also changes the boolean that tells us if the user has
+   * changed the value.
+   */
+  const instagramInputHandler = (input) => {
+    onChangeInstagram(input);
+    setInstagramChanged(true);
+  } // instagramInputHandler()
 
 
 
@@ -294,6 +307,10 @@ export default ( {navigation} ) => {
       writePreferredNumRoommates(auth.currentUser.email, numRoommates);
     }
 
+    if (instagramChanged) {
+      writeInstagram(auth.currentUser.email, instagram);
+    }
+
     // write the gender and vaccination status data
     writeGender(auth.currentUser.email, gender);
     writeVaccinated(auth.currentUser.email, vaccinated);
@@ -326,6 +343,11 @@ export default ( {navigation} ) => {
     // Check if major is valid (same as checking name)
     if (majorChanged != false) {
       if (!isValidName(major)) {return}
+    }
+
+    // Check if instagram is valid 
+    if (instagramChanged != false) {
+      if(!isValidInstagram(instagram)) {return}
     }
 
     // Check if the preferred # of roommates is valid
@@ -459,6 +481,21 @@ export default ( {navigation} ) => {
               defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/location")}
               placeholder={"Where you are from"}
             />
+          </SafeAreaView>
+
+          {/* Location (text), location (field) */}
+          <SafeAreaView>
+            <Text style={styles.prompt}>Location</Text>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              onChangeText={locationInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/location")}
+              placeholder={"Where you are from"}
+            />
           </SafeAreaView> 
 
 
@@ -492,6 +529,22 @@ export default ( {navigation} ) => {
                 color={Colors.black}
               />
             </TouchableOpacity>
+          </SafeAreaView>
+
+
+          {/* Instagram Link (field) */}
+          <Text style={styles.prompt}>Instagram</Text>
+          <SafeAreaView>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              onChangeText={instagramInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram")}
+              placeholder={"Instagram username"}
+            />
           </SafeAreaView>
 
 
@@ -727,6 +780,4 @@ const styles = StyleSheet.create({
     width: 175,
     backgroundColor: Colors.offWhite,
   },
-
-
 });
