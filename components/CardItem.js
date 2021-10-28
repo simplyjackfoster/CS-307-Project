@@ -22,6 +22,7 @@ const CardItem = (props) => {
     // var image = getDataFromPath("users/" + uid + "/Profile/Images/profile_picture");
     // console.log("OK!")
     console.log("INSIDE OF CARDITEM")
+    console.log("UID WAS: " + uid)
 
     // console.log("BEFORE PRINTING IMAGE")
     // const image = getDataFromPath("users/" + uid + "/Profile/Images/profile_picture");
@@ -68,6 +69,7 @@ const CardItem = (props) => {
         <ScrollView style={styles.container}>
             <View style={styles.contentContainer}>
                 <View style={styles.imageWrapper}>
+                    
                     {/* <Image style={styles.profilePic}
 					source={{uri: image}}
 				    /> */}
@@ -79,6 +81,16 @@ const CardItem = (props) => {
                 <View style={styles.nameWrapper}>
                     <Text style={styles.nameText}>
                         {name}
+                    </Text>
+                </View>
+                <View style={styles.nameWrapper}>
+                    <Text style={styles.nameText}>
+                        {age}
+                    </Text>
+                </View>
+                <View style={styles.nameWrapper}>
+                    <Text style={styles.nameText}>
+                        {bio}
                     </Text>
                 </View>
             </View>
