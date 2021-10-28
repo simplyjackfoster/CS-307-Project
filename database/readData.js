@@ -4,7 +4,6 @@ import {ref, set, exists, val, child, get, remove} from "firebase/database";
 import { getID } from './ID';
 
 
-
 /*
  * getDataFromPath()
  *
@@ -17,6 +16,9 @@ export const getDataFromPath = (path) => {
 	const dbRef = ref(rtdb);
 	const [data, setData] = useState(null);
 
+	// end of path
+	const endPath = path.split('/').pop();
+
 	// get the data
 	get(child(dbRef, path)).then((snapshot) => {
 		if (snapshot.exists()) {
@@ -24,7 +26,7 @@ export const getDataFromPath = (path) => {
 			setData(data_val);
 		}
 		else {
-			console.log("This data is unavailable");
+			console.log("This data is unavailable: " + path);
 		}
 	}).catch((error) => {
 		console.error(error);
