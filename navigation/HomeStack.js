@@ -7,6 +7,7 @@ import EditProfile from '../screens/EditProfile';
 import ResetPassword from '../screens/ResetPassword';
 import DeleteAccount from '../screens/DeleteAccount';
 import Questionnaire from '../screens/Questionnaire';
+import Interests from '../screens/Interests';
 
 import Colors from '../constants/Colors';
 
@@ -25,6 +26,14 @@ const HomeStack = () => {
 				options={{
 					headerTitle: "Edit Profile",
 					headerBackTitle: "Back",
+				}}
+			/>
+
+			<Stack.Screen name="Interests" component={Interests}
+				options={{
+					headerTitle: "Edit Profile",
+					headerBackTitle: "Back",
+					animationEnabled: false
 				}}
 			/>
 
