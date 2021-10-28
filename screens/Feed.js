@@ -1,5 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  Image,
+  TouchableOpacity
+} from 'react-native';
 import CardItem from '../components/CardItem';
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
@@ -12,7 +19,13 @@ import { renderIcon } from "../images/Icons";
 export default () => {
 	return (
 		<View style={styles.container}>
-      <CardItem id={"test"}/>
+
+      <View style={styles.contentContainer}>
+        <CardItem id={"test"}/>
+      </View>
+
+
+
       {/* <View style={styles.contentContainer}>
         <View style={styles.imageWrapper}>
           <Image
@@ -71,66 +84,35 @@ export default () => {
 // styles
 const styles = StyleSheet.create({
 
+  /* Container styles */
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.lightGray,
   },
 
   contentContainer: {
     flex: 1,
+    marginHorizontal: '5%',
+    marginVertical: '7%',
   },
 
   footer: {
+    flex: 1,
     justifyContent: 'space-evenly',
 		flexDirection: 'row',
     alignItems: 'center',
     paddingBottom: 15,
   },
 
+  /* Dislike Button */
   dislikeWrapper: {
     paddingRight: 10,
   },
 
+  /* Like Button */
   likeWrapper: {
     paddingLeft: 10,
   },
 
-  imageWrapper: {
-    paddingTop: 30,
-    alignItems: "center",
-  },
-
-  nameWrapper: {
-    paddingTop: 15,
-    alignItems: "center",
-    paddingBottom: 15,
-  },
-
-  nameText: {
-    fontSize: 40,
-  },
-
-  infoWrapper: {
-		textAlign: 'left',
-		flexDirection: 'row',
-		marginLeft: 25,
-		marginBottom: 25,
-	},
-
-	icon: {
-		paddingRight: 5,
-	},
-
-	infoHeader: {
-		fontSize: 20,
-		marginLeft: 8,
-		marginRight: 8,
-		fontWeight: 'bold',
-	},
-
-	infoContent: {
-		alignSelf: 'flex-start',
-		fontSize: 20,
-	},
 
 });
