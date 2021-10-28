@@ -1,17 +1,51 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { 
+    StyleSheet,
+    Text, 
+    View, 
+    ScrollView 
+} from "react-native";
 import { getDataFromPath } from "../database/readData";
 
 const CardItem = (props) => {
     const uid = props.id;
-    const name = getDataFromPath("users/" + uid + "/Profile/profile_name")
+    const name = getDataFromPath("users/" + uid + "/Profile/profile_name");
+    // const age;
+    const location = getDataFromPath("users/" + uid + "/Profile/location");
+    const graduationYear = getDataFromPath("users/" + uid + "/Profile/graduation_year");
+    const major = getDataFromPath("users/" + uid + "/Profile/major");
+    const bio = getDataFromPath("users/" + uid + "/Profile/bio");
+    const vaccination = getDataFromPath("users/" + uid + "/Profile/covid_vaccination_status");
+    const preferredRoommates = getDataFromPath("users/" + uid + "/Profile/preferred_number_of_roommates")
+    
 
 
     return (
-        <View>
-            <Text>{uid}</Text>
-        </View>
+        <ScrollView style={styles.container}>
+            <Text>{name}</Text>
+            <Text>{location}</Text>
+            <Text>{graduationYear}</Text>
+            <Text>{major}</Text>
+            <Text>{bio}</Text>
+            <Text>I am {vaccination}</Text>
+            <Text>I prefer to have {preferredRoommates} roomates</Text>
+
+            
+
+
+        </ScrollView>
     )
 }
 
 export default CardItem
+
+
+const styles = StyleSheet.create({
+
+    container: {
+        margin: 20,
+        alignSelf: 'center',
+    },
+
+
+});
