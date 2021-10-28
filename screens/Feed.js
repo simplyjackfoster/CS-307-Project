@@ -20,45 +20,12 @@ export default () => {
 	return (
 		<View style={styles.container}>
 
+      {/* Card */}
       <View style={styles.contentContainer}>
         <CardItem id={"test"}/>
       </View>
 
-
-
-      {/* <View style={styles.contentContainer}>
-        <View style={styles.imageWrapper}>
-          <Image
-            source={{
-              width: 250, height: 300,
-              uri: "https://picsum.photos/200/300"}}
-          />
-        </View>
-
-          <View style={styles.nameWrapper}>
-            <Text style={styles.nameText}>
-              John Doe
-            </Text>
-			    </View>
-      </View>
-
-        {/* Phone: <phone number> */}
-			{/* <View style={styles.infoWrapper}>
-				<View style={styles.icon}>
-					{renderIcon("phone-square", 25, Colors.darkBlue)}
-				</View>
-				<Text style={styles.infoHeader}>Some:</Text>
-				<Text style={styles.infoContent}>text_here1</Text>
-			</View> */}
-
-      {/* <View style={styles.infoWrapper}>
-				<View style={styles.icon}>
-					{renderIcon("phone-square", 25, Colors.darkBlue)}
-				</View>
-				<Text style={styles.infoHeader}>Some:</Text>
-				<Text style={styles.infoContent}>text_here2</Text>
-			</View>
-
+      {/* Like and Dislike Buttons */}
       <View style={styles.footer}>
         <TouchableOpacity style={styles.dislikeWrapper} onPress={() => {
           console.log("Dislike pressed")
@@ -71,8 +38,7 @@ export default () => {
         }}>
           {renderIcon("gratipay", 60, Colors.green)}
         </TouchableOpacity>
-      </View> */}
-
+      </View>
 
 		</View>
 	);
@@ -92,26 +58,28 @@ const styles = StyleSheet.create({
 
   contentContainer: {
     flex: 1,
-    marginHorizontal: '5%',
-    marginVertical: '7%',
+    marginHorizontal: '7%',
+    marginTop: '8%',
+    marginBottom: '5%',
   },
 
   footer: {
-    flex: 1,
+    flex: .10,
     justifyContent: 'space-evenly',
 		flexDirection: 'row',
     alignItems: 'center',
-    paddingBottom: 15,
+    marginBottom: 30,
   },
+
 
   /* Dislike Button */
   dislikeWrapper: {
-    paddingRight: 10,
+    marginRight: 45,
   },
 
   /* Like Button */
   likeWrapper: {
-    paddingLeft: 10,
+    marginLeft: 45,
   },
 
 

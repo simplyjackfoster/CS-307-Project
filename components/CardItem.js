@@ -111,22 +111,20 @@ const styles = StyleSheet.create({
     profilePic: {
         width: 300,
         height: 300,
-        borderRadius: 20,
+        borderRadius: 25,
         marginTop: 35,
-        marginBottom: 15,
+        marginBottom: 10,
         alignSelf: 'center',
 
     },
 
     /* Name */
     nameWrapper: {
-        paddingTop: 15,
-        alignItems: "center",
-        paddingBottom: 15,
+        marginHorizontal: 35,
     },
 
     nameText: {
-        fontSize: 40,
+        fontSize: 35,
     },
 
 
