@@ -32,3 +32,21 @@ export const getDataFromPath = (path) => {
 	return data;	
 } // getDataFromPath()
 
+
+
+
+
+/*
+ * getInstagramLink()
+ *
+ * This function can be used to get the url link to a users instagram.
+ * @param email_or_id -> the email or id to the specified user.
+ * @return -> the url link to the specified user's instagram.
+ */
+export const getInstagramLink = (email_or_id) => {
+	const id = getID(email_or_id);
+	var instagram_username = getDataFromPath("users/" + id + "/Profile/instagram");
+	var url = "https://www.instagram.com/" + instagram_username + "/";
+	return url;
+} // getInstagramLink()
+

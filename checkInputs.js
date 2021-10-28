@@ -34,34 +34,6 @@ export const isValidName = (name) => {
 } // isValidName()
 
 
-export const isValidInstagram = (name) => {
-	if (!name) {
-		Alert.alert("Error", "Name field is empty, please try again.", 
-			[{ text: "Ok" }]);
-		return false;
-	}
-
-	// iterate through the characters in the name
-	for (const c of name) {
-
-		// 8216 and 8217 are the acsii values for apostrophes in iOS
-		if ((c === '.') || (c === '_') || (c.charCodeAt(0) == 8217) || (c.charCodeAt(0) == 8216) || (c === '-') || 
-				(c === ' ') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
-				(c >= '0' && c <= '9')) {
-			// valid character
-		}
-		else {
-			// invalid character
-			Alert.alert("Error", "Name field contains invalid character: '" + c + 
-				"', please try again.", [{ text: "Ok" }]);
-
-			return false;
-		}
-	}
-
-	return true;
-}
-
 
 
 
@@ -461,4 +433,41 @@ export const isValidNumberOfRoommates = (numRoommates) => {
 	}
 	return true;
 } // isValidNumberOfRoommates()
+
+
+
+
+
+/*
+ * isValidInstagram()
+ *
+ * function to check if the instagram name entered is valid.
+ * @param username -> the username of the user.
+ * @return -> true if the username is valid, false if it is invalid.
+ */
+export const isValidInstagram = (username) => {
+	if (!username) {
+		return true;
+	}
+
+	// iterate through the characters in the name
+	for (const c of username) {
+
+		// 8216 and 8217 are the acsii values for apostrophes in iOS
+		if ((c === '.') || (c === '_') || (c.charCodeAt(0) == 8217) || (c.charCodeAt(0) == 8216) || (c === '-') || 
+				(c === ' ') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
+				(c >= '0' && c <= '9')) {
+			// valid character
+		}
+		else {
+			// invalid character
+			Alert.alert("Error", "Instagram field contains invalid character: '" + c + 
+				"', please try again.", [{ text: "Ok" }]);
+
+			return false;
+		}
+	}
+
+	return true;
+} // isValidInstagram()
 

@@ -19,7 +19,6 @@ import { Divider } from 'react-native-elements';
 // firebase imports
 import { auth, rtdb } from '../database/RTDB';
 import { ref, child, get } from 'firebase/database';
-import { writeProfileInstagramLink } from '../database/writeData';
 
 // database read/write/remove imports
 import { getID } from '../database/ID';
@@ -33,7 +32,8 @@ import {
   writeLocation,
   writeGender,
   writeVaccinated,
-  writePreferredNumRoommates
+  writePreferredNumRoommates,
+  writeInstagram
 } from '../database/writeData';
 
 import {
@@ -74,8 +74,8 @@ export default ( {navigation} ) => {
   const [locationChanged, setLocationChanged] = React.useState(false);
   const [numRoommates, setNumRoommates] = React.useState(null);
   const [numRoommatesChanged, setNumRoommatesChanged] = React.useState(false);
-  const [instagramLink, onChangeInstagramLink] = React.useState(null);
-  const [instagramLinkChange, setInstagramLinkChange] = React.useState(false);
+  const [instagram, onChangeInstagram] = React.useState(null);
+  const [instagramChanged, setInstagramChanged] = React.useState(false);
 
   const [gender, setGender] = React.useState(1);
   const [vaccinated, setVaccinated] = React.useState(1);
@@ -185,12 +185,8 @@ export default ( {navigation} ) => {
   } // nameInputHandler()
 
 
-  const instagramLinkInputHandler = (input) => {
-    onChangeInstagramLink(input);
-    setInstagramLinkChange(true);
-  }
 
-
+  
   /*
    * This function is called when the text in the bio 
    * input is changed. It changes the value of the bio hook
@@ -252,8 +248,16 @@ export default ( {navigation} ) => {
 
 
 
-
-
+  /*
+   * This function is called when the text in the instagram 
+   * input is changed. It changes the value of the name hook
+   * and also changes the boolean that tells us if the user has
+   * changed the value.
+   */
+  const instagramInputHandler = (input) => {
+    onChangeInstagram(input);
+    setInstagramChanged(true);
+  } // instagramInputHandler()
 
 
 
@@ -301,8 +305,8 @@ export default ( {navigation} ) => {
       writePreferredNumRoommates(auth.currentUser.email, numRoommates);
     }
 
-    if(instagramLink) {
-      writeProfileInstagramLink(auth.currentUser.email, instagramLink);
+    if (instagramChanged) {
+      writeInstagram(auth.currentUser.email, instagram);
     }
 
     // write the gender and vaccination status data
@@ -339,8 +343,9 @@ export default ( {navigation} ) => {
       if (!isValidName(major)) {return}
     }
 
-    if(instagramLinkChange != false) {
-      if(!isValidInstagram(instagramLink)) {return}
+    // Check if instagram is valid 
+    if (instagramChanged != false) {
+      if(!isValidInstagram(instagram)) {return}
     }
 
     // Check if the preferred # of roommates is valid
@@ -409,21 +414,6 @@ export default ( {navigation} ) => {
               placeholder={"Name"}
             />
           </SafeAreaView>
-
-          {/* Instagram Link (field) */}
-          <Text style={styles.prompt}>Instagram Link</Text>
-        <SafeAreaView>
-          <TextInput
-            style={styles.input}
-            autoCapitalize='none'
-						autoComplete='off'
-						autoCorrect={false}
-						spellCheck={false}
-            onChangeText={instagramLinkInputHandler}
-            defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram_link")}
-            placeholder={"Profile Name"}
-          />
-        </SafeAreaView>
 
 
           {/* Bio (text), bio (field) */}
@@ -523,6 +513,22 @@ export default ( {navigation} ) => {
             />
           </SafeAreaView> 
 
+
+
+          {/* Instagram Link (field) */}
+          <Text style={styles.prompt}>Instagram</Text>
+          <SafeAreaView>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              onChangeText={instagramInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram")}
+              placeholder={"Instagram username"}
+            />
+          </SafeAreaView>
 
 
 

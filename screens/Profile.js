@@ -8,7 +8,8 @@ import {
   Image,
   TouchableOpacity,
   Alert,
-  Switch
+  Switch,
+	Linking
 } from 'react-native';
 import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
@@ -19,7 +20,7 @@ import { renderIcon } from "../images/Icons";
 import { auth } from '../database/RTDB';
 
 // database read/write/remove imports
-import { getDataFromPath } from '../database/readData';
+import { getDataFromPath, getInstagramLink } from '../database/readData';
 import { getID } from '../database/ID';
 
 
@@ -43,6 +44,9 @@ export default ( {navigation} ) => {
 	const [isEnabled, setIsEnabled] = useState(false);
 	const [refreshing, setRefreshing] = React.useState(false);
 	const [profilePicture, setProfilePicture] = React.useState(null);
+	
+	const instagramLink = getInstagramLink(auth.currentUser.email);
+
 
 
 	// Function that refreshes
@@ -110,16 +114,28 @@ export default ( {navigation} ) => {
 				<Text style={styles.infoContent}>123-456-7890</Text>
 			</View>
 
-			{/* Phone: <phone number> */}
+
+			{/* Instagram Link */}
 			<View style={styles.infoWrapper}>
 				<View style={styles.icon}>
 					{renderIcon("instagram", 25, Colors.darkBlue)}
 				</View>
 				<Text style={styles.infoHeader}>Instagram:</Text>
-				<Text style={styles.infoContent}>
-					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram_link")}
+				<Text style={styles.instagramLink}
+					onPress={async () => {
+						const supported = await Linking.canOpenURL(instagramLink);
+						if (supported) {
+							Linking.openURL(instagramLink);
+						}
+						else {
+							console.log("Instagram Link doesn't exist");
+						}
+					}}
+				>
+					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram")}
 				</Text>
 			</View>
+
 
 			{/* Ghost Mode */}
 			<View style={styles.disableWrapper}>
@@ -230,6 +246,14 @@ const styles = StyleSheet.create({
 		padding: 10,
 		fontWeight: 'bold',
 		fontSize: 15,
+	},
+
+
+	/* Instagram Link Text */
+	instagramLink: {
+		fontSize: 20,
+		color: Colors.blue,
+		textDecorationLine: 'underline',
 	},
 
 });

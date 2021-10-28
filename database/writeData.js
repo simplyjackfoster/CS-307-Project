@@ -133,13 +133,6 @@ export const writeProfileName = (email_or_id, name) => {
 } // writeName()
 
 
-export const writeProfileInstagramLink = (email_or_id, instagramLink) => {
-	const id = getID(email_or_id);
-
-	update(ref(rtdb, "users/" + id + "/Profile"), {
-		instagram_link: instagramLink
-	})
-}
 
 
 
@@ -231,6 +224,22 @@ export const writePreferredNumRoommates = (email_or_id, numRoommates) => {
 	});
 } // writePreferredNumRoommates()
 
+
+
+/*
+ * writeIstagram()
+ *
+ * Writes the instagram of the specified user in the RTDB.
+ * @param email_or_id -> the email or id of the user.
+ * @param instagram -> the instagram username of the user.
+ */
+export const writeInstagram = (email_or_id, instagram) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		instagram: instagram
+	})
+} // writeInstagram()
 
 
 
