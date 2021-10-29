@@ -53,7 +53,7 @@ const CardItem = (props) => {
         age = curr_year - bday_year;
 
         /* Giga brain math to calculate true age */
-     /*   if(bday_month >= curr_month) {
+        /*   if(bday_month >= curr_month) {
             if(bday_day > curr_day) {
                 age -= 1
             }
@@ -64,7 +64,6 @@ const CardItem = (props) => {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.contentContainer}>
-
                 {/* Profile Picture */}
                 <SafeAreaView style={styles.imageWrapper}>
                     <Image style={styles.profilePic}
@@ -78,9 +77,6 @@ const CardItem = (props) => {
                         "/Profile/profile_name")}
                     </Text>
                 </SafeAreaView>
-
-
-
             </View>
         </ScrollView>
     );
