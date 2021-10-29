@@ -18,18 +18,19 @@ import { renderIcon } from "../images/Icons";
 const CardItem = (props) => {
     
     const uid = props.id;
+    const profile_picture = getDataFromPath("users/" + uid + "/Profile/Images/profile_picture");
     const name = getDataFromPath("users/" + uid + "/Profile/profile_name");
     const location = getDataFromPath("users/" + uid + "/Profile/location");
     const graduationYear = getDataFromPath("users/" + uid + "/Profile/graduation_year");
     const major = getDataFromPath("users/" + uid + "/Profile/major");
     const bio = getDataFromPath("users/" + uid + "/Profile/bio");
     const vaccination = getDataFromPath("users/" + uid + "/Profile/covid_vaccination_status");
-    const preferredRoommates = getDataFromPath("users/" + uid + "/Profile/preferred_number_of_roommates");    
+    const preferredNumRoommates = getDataFromPath("users/" + uid + "/Profile/preferred_number_of_roommates");    
     const instagram = getDataFromPath("users/" + uid + "/Profile/instagram");
     const instagramLink = getInstagramLink(uid);
     const bday = getDataFromPath("users/" + uid + "/Critical Information/birthday");
 
-    var age
+    var age;
     /* Used for age calculation */
     if(bday != null) { // Seems redundant, but during loading page, bday is briefly null
         const bday_day = bday.substring(0, 2)
@@ -54,59 +55,102 @@ const CardItem = (props) => {
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             <View style={styles.contentContainer}>
+
+
                 {/* Profile Picture */}
                 <View style={styles.imageWrapper}>
                     <Image style={styles.profilePic}
-                        source={{uri: getDataFromPath("users/" + uid + "/Profile/Images/profile_picture")}}
+                        source={{uri: profile_picture}}
                     />
                 </View>
+
 
                 {/* Name and Age */}
                 <View style={styles.nameWrapper}>
                     <Text style={styles.nameText}>{name}, {age}</Text>
                 </View>
 
-                {/* Bio */}
-                <View style={styles.bioWrapper}>
+
+                {/* Bio (optional) */}
+                <View style=
+                    {bio ? (
+                        styles.bioWrapper
+                    ) : (
+                        {display: 'none'}
+                    )}
+                >
                     <Text style={styles.bioContent}>{bio}</Text>
                 </View>
 
 
-                {/* Graduation year */}
-                <View style={styles.graduationYearWrapper}>
+                {/* Graduation year (optional) */}
+                <View style={
+                    graduationYear ? (
+                        styles.graduationYearWrapper
+                    ) : (
+                        {display: 'none'}
+                    )}
+                >
                     <View>
                         {renderIcon("graduation-cap", 25, Colors.darkBlue)}
                     </View>
                     <Text style={styles.graduationYearContent}>Class of {graduationYear}</Text>
                 </View>
 
-                {/* Major */}
-                <View style={styles.majorWrapper}>
+
+                {/* Major (optional) */}
+                <View style=
+                    {major ? (
+                        styles.majorWrapper
+                    ) : (
+                        {display: 'none'}
+                    )}
+                >
                     <View>
                         {renderIcon("book", 25, Colors.darkBlue)}
                     </View>
                     <Text style={styles.majorContent}>Major: {major}</Text>
                 </View>
 
-                {/* Location */}
-                <View style={styles.locationWrapper}>
+
+                {/* Location (optional) */}
+                <View style=
+                    {location ? (
+                        styles.locationWrapper
+                    ) : (
+                        {display: 'none'}
+                    )}
+                >
                     <View>
                         {renderIcon("map-pin", 25, Colors.darkBlue)}
                     </View>
                     <Text style={styles.locationContent}>Location: {location}</Text>
                 </View>
 
-                {/* Preferred # of Roommates */}
-                <View style={styles.preferredNumRoommatesWrapper}>
+
+                {/* Preferred # of Roommates (optional) */}
+                <View style=
+                    {preferredNumRoommates ? (
+                        styles.preferredNumRoommatesWrapper
+                    ) : (
+                        {display: 'none'}
+                    )}
+                >
                     <View>
                         {renderIcon("users", 25, Colors.darkBlue)}
                     </View>
-                    <Text style={styles.preferredNumRoommatesContent}>Preferred # of Roommates: {preferredRoommates}</Text>
+                    <Text style={styles.preferredNumRoommatesContent}>Preferred # of Roommates: {preferredNumRoommates}</Text>
                 </View>
 
 
-                {/* Instagram */}
-                <View style={styles.instagramWrapper}>
+                {/* Instagram (optional) */}
+                <View style=
+                    {instagram ? (
+                        styles.instagramWrapper
+                    ) : (
+                        {display: 'none'}
+                    )}
+                >
                     <TouchableOpacity style={styles.instagramButton}
                         onPress={async () => {
                             const supported = await Linking.canOpenURL(instagramLink);

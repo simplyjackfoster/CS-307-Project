@@ -46,6 +46,7 @@ import {
   isValidCheckbox,
   isValidInstagram,
   isValidGraduationYear,
+  isValidMajor,
   isValidNumberOfRoommates
 } from '../checkInputs';
 import { set } from 'react-native-reanimated';
@@ -342,7 +343,7 @@ export default ( {navigation} ) => {
 
     // Check if major is valid (same as checking name)
     if (majorChanged != false) {
-      if (!isValidName(major)) {return}
+      if (!isValidMajor(major)) {return}
     }
 
     // Check if instagram is valid 
