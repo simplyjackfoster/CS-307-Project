@@ -3,11 +3,12 @@ import {
     StyleSheet,
     Text, 
     View, 
-    SafeAreaView,
     ScrollView,
     Image,
+    Linking,
+    TouchableOpacity
 } from 'react-native';
-import { getDataFromPath } from "../database/readData";
+import { getDataFromPath, getInstagramLink } from "../database/readData";
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
 
@@ -23,6 +24,8 @@ const CardItem = (props) => {
     const bio = getDataFromPath("users/" + uid + "/Profile/bio");
     const vaccination = getDataFromPath("users/" + uid + "/Profile/covid_vaccination_status");
     const preferredRoommates = getDataFromPath("users/" + uid + "/Profile/preferred_number_of_roommates");    
+    const instagram = getDataFromPath("users/" + uid + "/Profile/instagram");
+    const instagramLink = getInstagramLink(uid);
     const bday = getDataFromPath("users/" + uid + "/Critical Information/birthday");
 
     var age
@@ -48,54 +51,82 @@ const CardItem = (props) => {
 
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             <View style={styles.contentContainer}>
                 {/* Profile Picture */}
-                <SafeAreaView style={styles.imageWrapper}>
+                <View style={styles.imageWrapper}>
                     <Image style={styles.profilePic}
                         source={{uri: getDataFromPath("users/" + uid + "/Profile/Images/profile_picture")}}
                     />
-                </SafeAreaView>
+                </View>
 
                 {/* Name and Age */}
-                <SafeAreaView style={styles.nameWrapper}>
+                <View style={styles.nameWrapper}>
                     <Text style={styles.nameText}>{name}, {age}</Text>
-                </SafeAreaView>
-
-
-                {/* Location */}
-                <View style={styles.locationWrapper}>
-                    <View style={styles.icon}>
-                        {renderIcon("map-pin", 25, Colors.darkBlue)}
-                    </View>
-                    <Text style={styles.locationContent}>Location: {location}</Text>
                 </View>
+
+                {/* Bio */}
+                <View style={styles.bioWrapper}>
+                    <Text style={styles.bioContent}>{bio}</Text>
+                </View>
+
 
                 {/* Graduation year */}
                 <View style={styles.graduationYearWrapper}>
-                    <View style={styles.icon}>
+                    <View>
                         {renderIcon("graduation-cap", 25, Colors.darkBlue)}
                     </View>
-                    <Text style={styles.graduationYearContent}>Graduation Year: {graduationYear}</Text>
+                    <Text style={styles.graduationYearContent}>Class of {graduationYear}</Text>
                 </View>
 
                 {/* Major */}
                 <View style={styles.majorWrapper}>
-                    <View style={styles.icon}>
+                    <View>
                         {renderIcon("book", 25, Colors.darkBlue)}
                     </View>
                     <Text style={styles.majorContent}>Major: {major}</Text>
                 </View>
 
-                {/* Preferred # of Roommates */}
-                <View style={styles.preferredNumRoommatesWrapper}>
-                    <View style={styles.icon}>
-                        {renderIcon("users", 25, Colors.darkBlue)}
+                {/* Location */}
+                <View style={styles.locationWrapper}>
+                    <View>
+                        {renderIcon("map-pin", 25, Colors.darkBlue)}
                     </View>
-                    <Text style={styles.preferredNumRoommatesContent}>Preferred roommate #: {preferredRoommates}</Text>
+                    <Text style={styles.locationContent}>Location: {location}</Text>
                 </View>
 
-                
+                {/* Preferred # of Roommates */}
+                <View style={styles.preferredNumRoommatesWrapper}>
+                    <View>
+                        {renderIcon("users", 25, Colors.darkBlue)}
+                    </View>
+                    <Text style={styles.preferredNumRoommatesContent}>Preferred # of Roommates: {preferredRoommates}</Text>
+                </View>
+
+
+                {/* Instagram */}
+                <View style={styles.instagramWrapper}>
+
+                <TouchableOpacity style={styles.instagramButton}
+                    onPress={async () => {
+                        const supported = await Linking.canOpenURL(instagramLink);
+                        if (supported) {
+                            Linking.openURL(instagramLink);
+                        }
+                        else {
+                            console.log("Instagram Link doesn't exist");
+                        }
+                    }}
+                >
+                    <View style={styles.viewInstagramWrapper}>
+                        {renderIcon("instagram", 25, "#ff00ff")}
+                        <Text style={styles.viewInstagramText}>View Instagram</Text>
+                    </View>
+                    <Text style={styles.instagramUsernameText}>{instagram}</Text>
+                </TouchableOpacity>
+
+                </View>
+
             </View>
         </ScrollView>
     );
@@ -143,18 +174,14 @@ const styles = StyleSheet.create({
     },
 
 
-    /* Location */
-    locationWrapper: {
+    /* Bio */
+    bioWrapper: {
         paddingTop: 20,
-        paddingLeft: 10,
-        flexDirection: 'row',
     },
 
-    locationContent: {
-        paddingLeft: 15,
-        fontSize: 20,
+    bioContent: {
+       fontSize: 15, 
     },
-
 
     /* Graduation Year */
     graduationYearWrapper: {
@@ -180,6 +207,19 @@ const styles = StyleSheet.create({
     },
 
 
+    /* Location */
+    locationWrapper: {
+        paddingTop: 20,
+        paddingLeft: 5,
+        flexDirection: 'row',
+    },
+
+    locationContent: {
+        paddingLeft: 20,
+        fontSize: 20,
+    },
+
+   
     /* Preferred Roommates */
     preferredNumRoommatesWrapper: {
         paddingTop: 20,
@@ -189,6 +229,43 @@ const styles = StyleSheet.create({
     preferredNumRoommatesContent: {
         paddingLeft: 15,
         fontSize: 20,
+    },
+
+
+    /* Instagram */
+    instagramWrapper: {
+        flexDirection: 'row',
+        alignSelf: 'center',
+        paddingTop: 20,
+    },
+
+    instagramButton: {
+        marginTop: 40,
+        marginBottom: 40,
+        paddingHorizontal: 25,
+        paddingTop: 5,
+        paddingBottom: 10,
+        borderRadius: 20,
+        borderWidth: 1.15,
+        borderColor: Colors.fuchsia,
+    },
+
+    viewInstagramWrapper: {
+        flexDirection: 'row',
+        alignSelf: 'center',
+    },
+
+    viewInstagramText: {
+        fontSize: 15,
+        paddingTop: 5,
+        paddingLeft: 12,
+    },
+
+    instagramUsernameText: {
+        color: Colors.darkGray,
+        fontSize: 12,
+        paddingTop: 3,
+        alignSelf: 'center',
     },
 
 

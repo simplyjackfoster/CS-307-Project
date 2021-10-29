@@ -483,21 +483,6 @@ export default ( {navigation} ) => {
             />
           </SafeAreaView>
 
-          {/* Location (text), location (field) */}
-          <SafeAreaView>
-            <Text style={styles.prompt}>Location</Text>
-            <TextInput
-              style={styles.input}
-              autoCapitalize='none'
-              autoComplete='off'
-              autoCorrect={false}
-              spellCheck={false}
-              onChangeText={locationInputHandler}
-              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/location")}
-              placeholder={"Where you are from"}
-            />
-          </SafeAreaView> 
-
 
 
           {/* Preferred Number of Roommates */}

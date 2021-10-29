@@ -32,6 +32,7 @@ export default {
 
 	// purple
 	purple: '#9b59b6',
+	fuchsia: '#ff00ff',
 
 	// orange
 	orange: '#e67e22',
