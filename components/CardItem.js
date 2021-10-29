@@ -113,18 +113,24 @@ const styles = StyleSheet.create({
         height: 300,
         borderRadius: 25,
         marginTop: 35,
-        marginBottom: 10,
         alignSelf: 'center',
 
     },
 
     /* Name */
     nameWrapper: {
-        marginHorizontal: 35,
+        marginHorizontal: 40,
+        marginTop: -55,
     },
 
     nameText: {
         fontSize: 35,
+        fontWeight: '600',
+        color: Colors.white,
+        textShadowColor: Colors.black,
+        shadowOpacity: 100,
+        shadowRadius: 3,
+        shadowOffset: {width: 0, height: 0},
     },
 
 
