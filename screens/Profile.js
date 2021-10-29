@@ -193,17 +193,17 @@ const styles = StyleSheet.create({
 		alignSelf: 'center',
 	},
 
+	icon: {
+		paddingRight: 5,
+	},
+
 	infoWrapper: {
 		textAlign: 'left',
 		flexDirection: 'row',
 		marginLeft: 25,
 		marginBottom: 25,
 	},
-
-	icon: {
-		paddingRight: 5,
-	},
-
+	
 	infoHeader: {
 		fontSize: 20,
 		marginLeft: 8,

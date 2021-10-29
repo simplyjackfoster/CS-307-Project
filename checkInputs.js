@@ -409,6 +409,43 @@ export const isValidGraduationYear = (year) => {
 
 
 /*
+ * isValidMajor()
+ *
+ * function to check if a major is valid. returns true if it is either
+ * null or contains only letters. Otherwise returns false.
+ */
+export const isValidMajor = (major) => {
+	if (!major) {
+		return true;
+	}
+
+	// iterate through the characters in the name
+	for (const c of major) {
+
+		// 8216 and 8217 are the acsii values for apostrophes in iOS
+		if ((c.charCodeAt(0) == 8217) || (c.charCodeAt(0) == 8216) || (c === '-') || 
+				(c === ' ') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
+			// valid character
+		}
+		else {
+			// invalid character
+			Alert.alert("Error", "Major field contains invalid character: '" + c + 
+				"', please try again.", [{ text: "Ok" }]);
+
+			return false;
+		}
+	}
+
+	return true;
+} // isValidMajor()
+
+
+
+
+
+
+
+/*
  * isValidNumberOfRoommates()
  *
  * function to check if a string is a valid number of roommates

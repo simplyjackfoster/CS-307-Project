@@ -46,6 +46,7 @@ import {
   isValidCheckbox,
   isValidInstagram,
   isValidGraduationYear,
+  isValidMajor,
   isValidNumberOfRoommates
 } from '../checkInputs';
 import { set } from 'react-native-reanimated';
@@ -342,7 +343,7 @@ export default ( {navigation} ) => {
 
     // Check if major is valid (same as checking name)
     if (majorChanged != false) {
-      if (!isValidName(major)) {return}
+      if (!isValidMajor(major)) {return}
     }
 
     // Check if instagram is valid 
@@ -482,21 +483,6 @@ export default ( {navigation} ) => {
               placeholder={"Where you are from"}
             />
           </SafeAreaView>
-
-          {/* Location (text), location (field) */}
-          <SafeAreaView>
-            <Text style={styles.prompt}>Location</Text>
-            <TextInput
-              style={styles.input}
-              autoCapitalize='none'
-              autoComplete='off'
-              autoCorrect={false}
-              spellCheck={false}
-              onChangeText={locationInputHandler}
-              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/location")}
-              placeholder={"Where you are from"}
-            />
-          </SafeAreaView> 
 
 
 

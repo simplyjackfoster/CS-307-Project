@@ -46,15 +46,12 @@ export const writeNewUser = (email, name, phone,
 		major: "", 
 		location: "", 
 		preferred_number_of_roommates: "",
+		instagram: "",
 	});
 	writeGender(auth.currentUser.email, gender);
 	writeVaccinated(auth.currentUser.email, vaccinated);
 	set(ref(rtdb, "users/" + id + "/Profile/Images"), {
 		profile_picture: default_profile_picture, 
-	});
-	set(ref(rtdb, "users/" + id + "/Profile/Social Media"), {
-		instagram: "insta", // change
-		facebook: "fb" // change
 	});
 	set(ref(rtdb, "users/" + id + "/Profile/Activities"), {
 		activity_count: 0

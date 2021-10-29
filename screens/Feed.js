@@ -1,5 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  Image,
+  TouchableOpacity
+} from 'react-native';
 import CardItem from '../components/CardItem';
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
@@ -12,54 +19,26 @@ import { renderIcon } from "../images/Icons";
 export default () => {
 	return (
 		<View style={styles.container}>
-      <CardItem id={"thylan"}/>
-      {/* <View style={styles.contentContainer}>
-        <View style={styles.imageWrapper}>
-          <Image
-            source={{
-              width: 250, height: 300,
-              uri: "https://picsum.photos/200/300"}}
-          />
-        </View>
 
-          <View style={styles.nameWrapper}>
-            <Text style={styles.nameText}>
-              John Doe
-            </Text>
-			    </View>
+      {/* Card */}
+      <View style={styles.contentContainer}>
+        <CardItem id={"mfinder"}/>
       </View>
 
-        {/* Phone: <phone number> */}
-			{/* <View style={styles.infoWrapper}>
-				<View style={styles.icon}>
-					{renderIcon("phone-square", 25, Colors.darkBlue)}
-				</View>
-				<Text style={styles.infoHeader}>Some:</Text>
-				<Text style={styles.infoContent}>text_here1</Text>
-			</View> */}
-
-      {/* <View style={styles.infoWrapper}>
-				<View style={styles.icon}>
-					{renderIcon("phone-square", 25, Colors.darkBlue)}
-				</View>
-				<Text style={styles.infoHeader}>Some:</Text>
-				<Text style={styles.infoContent}>text_here2</Text>
-			</View>
-
+      {/* Like and Dislike Buttons */}
       <View style={styles.footer}>
         <TouchableOpacity style={styles.dislikeWrapper} onPress={() => {
           console.log("Dislike pressed")
         }}>
-          {renderIcon("times", 60, Colors.red)}
+          {renderIcon("times", 50, Colors.red)}
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.likeWrapper} onPress={() => {
           console.log("Like pressed")
         }}>
-          {renderIcon("gratipay", 60, Colors.green)}
+          {renderIcon("check", 50, Colors.green)}
         </TouchableOpacity>
-      </View> */}
-
+      </View>
 
 		</View>
 	);
@@ -71,66 +50,37 @@ export default () => {
 // styles
 const styles = StyleSheet.create({
 
+  /* Container styles */
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.lightGray,
   },
 
   contentContainer: {
     flex: 1,
+    marginHorizontal: '3%',
+    marginTop: '3%',
+    marginBottom: '3%',
   },
 
   footer: {
+    flex: .10,
     justifyContent: 'space-evenly',
 		flexDirection: 'row',
     alignItems: 'center',
-    paddingBottom: 15,
+    marginBottom: 30,
   },
 
+
+  /* Dislike Button */
   dislikeWrapper: {
-    paddingRight: 10,
+    marginRight: 45,
   },
 
+  /* Like Button */
   likeWrapper: {
-    paddingLeft: 10,
+    marginLeft: 45,
   },
 
-  imageWrapper: {
-    paddingTop: 30,
-    alignItems: "center",
-  },
-
-  nameWrapper: {
-    paddingTop: 15,
-    alignItems: "center",
-    paddingBottom: 15,
-  },
-
-  nameText: {
-    fontSize: 40,
-  },
-
-  infoWrapper: {
-		textAlign: 'left',
-		flexDirection: 'row',
-		marginLeft: 25,
-		marginBottom: 25,
-	},
-
-	icon: {
-		paddingRight: 5,
-	},
-
-	infoHeader: {
-		fontSize: 20,
-		marginLeft: 8,
-		marginRight: 8,
-		fontWeight: 'bold',
-	},
-
-	infoContent: {
-		alignSelf: 'flex-start',
-		fontSize: 20,
-	},
 
 });
