@@ -30,13 +30,13 @@ export default () => {
         <TouchableOpacity style={styles.dislikeWrapper} onPress={() => {
           console.log("Dislike pressed")
         }}>
-          {renderIcon("times", 65, Colors.red)}
+          {renderIcon("times", 50, Colors.red)}
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.likeWrapper} onPress={() => {
           console.log("Like pressed")
         }}>
-          {renderIcon("gratipay", 65, Colors.green)}
+          {renderIcon("check", 50, Colors.green)}
         </TouchableOpacity>
       </View>
 
