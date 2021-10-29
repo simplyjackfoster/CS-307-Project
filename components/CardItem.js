@@ -6,7 +6,8 @@ import {
     ScrollView,
     Image,
     Linking,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from 'react-native';
 import { getDataFromPath, getInstagramLink } from "../database/readData";
 import Colors from "../constants/Colors";
@@ -106,26 +107,38 @@ const CardItem = (props) => {
 
                 {/* Instagram */}
                 <View style={styles.instagramWrapper}>
-
-                <TouchableOpacity style={styles.instagramButton}
-                    onPress={async () => {
-                        const supported = await Linking.canOpenURL(instagramLink);
-                        if (supported) {
-                            Linking.openURL(instagramLink);
-                        }
-                        else {
-                            console.log("Instagram Link doesn't exist");
-                        }
-                    }}
-                >
-                    <View style={styles.viewInstagramWrapper}>
-                        {renderIcon("instagram", 25, "#ff00ff")}
-                        <Text style={styles.viewInstagramText}>View Instagram</Text>
-                    </View>
-                    <Text style={styles.instagramUsernameText}>{instagram}</Text>
-                </TouchableOpacity>
-
+                    <TouchableOpacity style={styles.instagramButton}
+                        onPress={async () => {
+                            const supported = await Linking.canOpenURL(instagramLink);
+                            if (supported) {
+                                Linking.openURL(instagramLink);
+                            }
+                            else {
+                                console.log("Instagram Link doesn't exist");
+                            }
+                        }}
+                    >
+                        <View style={styles.viewInstagramWrapper}>
+                            {renderIcon("instagram", 25, "#ff00ff")}
+                            <Text style={styles.viewInstagramText}>View Instagram</Text>
+                        </View>
+                        <Text style={styles.instagramUsernameText}>{instagram}</Text>
+                    </TouchableOpacity>
                 </View>
+
+
+                {/* Report User */}
+                <View style={styles.reportUserWrapper}>
+                        <Text style={styles.reportUserText}
+                            onPress={() => {
+                                Alert.alert("Report User", "Are you sure you want to report " + name + "?",
+                                [{ text: "No" }, {text: "Yes"}]); 
+                            }}
+                        >
+                            Report User
+                        </Text>
+                </View>
+
 
             </View>
         </ScrollView>
@@ -240,8 +253,7 @@ const styles = StyleSheet.create({
     },
 
     instagramButton: {
-        marginTop: 40,
-        marginBottom: 40,
+        marginTop: 20,
         paddingHorizontal: 25,
         paddingTop: 5,
         paddingBottom: 10,
@@ -267,6 +279,21 @@ const styles = StyleSheet.create({
         paddingTop: 3,
         alignSelf: 'center',
     },
+
+
+    /* Report User */
+    reportUserWrapper: {
+        alignSelf: 'center',
+        marginTop: 50,
+        marginBottom: 30,
+    },
+
+    reportUserText: {
+        alignSelf: 'center',
+        fontWeight: '600',
+        color: Colors.lightRed,
+        fontSize: 14,
+    }
 
 
 });
