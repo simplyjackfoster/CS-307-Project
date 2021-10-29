@@ -57,41 +57,42 @@ const CardItem = (props) => {
                     />
                 </SafeAreaView>
 
-                {/* Name and age */}
+                {/* Name and Age */}
                 <SafeAreaView style={styles.nameWrapper}>
-                    <Text style={styles.nameText}>{name}</Text>
-                    <Text style={styles.ageText}>Age: {age}</Text>
+                    <Text style={styles.nameText}>{name}, {age}</Text>
                 </SafeAreaView>
 
+
                 {/* Location */}
-                <View style={styles.infoWrapper1}>
+                <View style={styles.locationWrapper}>
                     <View style={styles.icon}>
                         {renderIcon("map-pin", 25, Colors.darkBlue)}
                     </View>
-                    <Text style={styles.infoContent1}>Location: {location}</Text>
+                    <Text style={styles.locationContent}>Location: {location}</Text>
                 </View>
 
                 {/* Graduation year */}
-                <View style={styles.infoWrapper2}>
+                <View style={styles.graduationYearWrapper}>
                     <View style={styles.icon}>
                         {renderIcon("graduation-cap", 25, Colors.darkBlue)}
                     </View>
-                    <Text style={styles.infoContent2}>Graduation Year: {graduationYear}</Text>
+                    <Text style={styles.graduationYearContent}>Graduation Year: {graduationYear}</Text>
                 </View>
 
                 {/* Major */}
-                <View style={styles.infoWrapper3}>
+                <View style={styles.majorWrapper}>
                     <View style={styles.icon}>
                         {renderIcon("book", 25, Colors.darkBlue)}
                     </View>
-                    <Text style={styles.infoContent3}>Major: {major}</Text>
+                    <Text style={styles.majorContent}>Major: {major}</Text>
                 </View>
 
-                <View style={styles.infoWrapper3}>
+                {/* Preferred # of Roommates */}
+                <View style={styles.preferredNumRoommatesWrapper}>
                     <View style={styles.icon}>
                         {renderIcon("users", 25, Colors.darkBlue)}
                     </View>
-                    <Text style={styles.infoContent3}>Preferred roommate #: {preferredRoommates}</Text>
+                    <Text style={styles.preferredNumRoommatesContent}>Preferred roommate #: {preferredRoommates}</Text>
                 </View>
 
                 
@@ -114,88 +115,81 @@ const styles = StyleSheet.create({
 
     contentContainer: {
         flex: 1,
-        
+        alignSelf: 'center',
+        width: 325,
     },
+
 
     /* Profile Picture */
     profilePic: {
-        width: 300,
-        height: 300,
+        width: 325,
+        height: 325, 
         borderRadius: 25,
         marginTop: 35,
         marginBottom: 10,
         alignSelf: 'center',
     },
 
+
     /* Name */
     nameWrapper: {
-        marginHorizontal: 40,
-        flexDirection: 'row',
+        flex: 1,
         justifyContent: 'space-between',
     },
 
     nameText: {
-        fontSize: 35,
+        fontSize: 30,
         alignSelf: 'flex-start',
     },
 
-    ageText: {
-        fontSize: 25,
-        alignSelf: 'flex-end',
-        paddingTop: 8,
-        marginLeft: 60,
-    },
 
-    infoWrapper1: {
+    /* Location */
+    locationWrapper: {
         paddingTop: 20,
-        paddingLeft: 55,
+        paddingLeft: 10,
         flexDirection: 'row',
     },
 
-    infoContent1: {
+    locationContent: {
         paddingLeft: 15,
         fontSize: 20,
     },
 
-    infoWrapper2: {
+
+    /* Graduation Year */
+    graduationYearWrapper: {
         paddingTop: 20,
-        paddingLeft: 45,
         flexDirection: 'row',
     },
 
-    infoContent2: {
+    graduationYearContent: {
         paddingLeft: 5,
         fontSize: 20,
     },
 
-    infoWrapper3: {
+
+    /* Major */
+    majorWrapper: {
         paddingTop: 20,
-        paddingLeft: 45,
         flexDirection: 'row',
     },
 
-    infoContent3: {
+    majorContent: {
         paddingLeft: 15,
         fontSize: 20,
     },
-    // infoWrapper: {
-	// 	textAlign: 'left',
-	// 	flexDirection: 'row',
-	// 	marginLeft: 25,
-	// 	marginBottom: 25,
-	// },
-	
-	// infoHeader: {
-	// 	fontSize: 20,
-	// 	marginLeft: 8,
-	// 	marginRight: 8,
-	// 	fontWeight: 'bold',
-	// },
 
-	// infoContent: {
-	// 	alignSelf: 'flex-start',
-	// 	fontSize: 20,
-	// },
+
+    /* Preferred Roommates */
+    preferredNumRoommatesWrapper: {
+        paddingTop: 20,
+        flexDirection: 'row',
+    },
+
+    preferredNumRoommatesContent: {
+        paddingLeft: 15,
+        fontSize: 20,
+    },
 
 
 });
