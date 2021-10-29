@@ -22,7 +22,7 @@ export default () => {
 
       {/* Card */}
       <View style={styles.contentContainer}>
-        <CardItem id={"test"}/>
+        <CardItem id={"thylan"}/>
       </View>
 
       {/* Like and Dislike Buttons */}
@@ -30,13 +30,13 @@ export default () => {
         <TouchableOpacity style={styles.dislikeWrapper} onPress={() => {
           console.log("Dislike pressed")
         }}>
-          {renderIcon("times", 60, Colors.red)}
+          {renderIcon("times", 65, Colors.red)}
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.likeWrapper} onPress={() => {
           console.log("Like pressed")
         }}>
-          {renderIcon("gratipay", 60, Colors.green)}
+          {renderIcon("gratipay", 65, Colors.green)}
         </TouchableOpacity>
       </View>
 
@@ -58,9 +58,9 @@ const styles = StyleSheet.create({
 
   contentContainer: {
     flex: 1,
-    marginHorizontal: '7%',
-    marginTop: '8%',
-    marginBottom: '5%',
+    marginHorizontal: '3%',
+    marginTop: '3%',
+    marginBottom: '3%',
   },
 
   footer: {
