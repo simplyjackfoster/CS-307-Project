@@ -12,6 +12,7 @@ import {
 import { getDataFromPath, getInstagramLink } from "../database/readData";
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
+import { reportUser } from '../database/writeData';
 
 
 
@@ -29,6 +30,7 @@ const CardItem = (props) => {
     const instagram = getDataFromPath("users/" + uid + "/Profile/instagram");
     const instagramLink = getInstagramLink(uid);
     const bday = getDataFromPath("users/" + uid + "/Critical Information/birthday");
+    const reports = getDataFromPath("reported/" + uid + "/num_reports");
 
     var age;
     /* Used for age calculation */
@@ -176,7 +178,12 @@ const CardItem = (props) => {
                         <Text style={styles.reportUserText}
                             onPress={() => {
                                 Alert.alert("Report User", "Are you sure you want to report " + name + "?",
-                                [{ text: "No" }, {text: "Yes"}]); 
+                                [{ 
+                                    text: "No" 
+                                }, {
+                                    text: "Yes",
+                                    onPress: () => reportUser(uid, reports)
+                                }]); 
                             }}
                         >
                             Report User
