@@ -3,23 +3,34 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { BackHandler } from 'react-native';
 
 import HomeDrawer from './HomeDrawer';
+import VerifyEmail from '../screens/VerifyEmail';
 import EditProfile from '../screens/EditProfile';
 import ResetPassword from '../screens/ResetPassword';
 import DeleteAccount from '../screens/DeleteAccount';
 import Questionnaire from '../screens/Questionnaire';
 
 import Colors from '../constants/Colors';
+import { auth } from '../database/RTDB';
+import { sendVerification } from '../database/sendEmail';
 
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
 	return (
 		<Stack.Navigator>
-			<Stack.Screen name="HomeDrawer" component={HomeDrawer}
-				options={{
-					headerShown: false,
-				}}
-			/>
+			{auth.currentUser.emailVerified ? (
+				<Stack.Screen name="HomeDrawer" component={HomeDrawer}
+					options={{
+						headerShown: false,
+					}}
+				/>) : (
+				<Stack.Screen name="VerifyEmail" component={VerifyEmail}
+					options={{
+						title: "Verify Email",
+						headerBackTitle: "Back",
+					}}
+				/>)
+			}
 
 			<Stack.Screen name="EditProfile" component={EditProfile}
 				options={{
@@ -27,8 +38,7 @@ const HomeStack = () => {
 					headerBackTitle: "Back",
 				}}
 			/>
-
-			<Stack.Screen name="Questionnaire" component={Questionnaire} 
+			<Stack.Screen name="Questionnaire" component={Questionnaire}
 				options={{
 					headerTitle: "Edit Profile",
 					headerBackTitle: "Back",
@@ -49,7 +59,7 @@ const HomeStack = () => {
 					headerBackTitle: "Back"
 				}}
 			/>
-		</Stack.Navigator>	
+		</Stack.Navigator>
 	);
 }
 

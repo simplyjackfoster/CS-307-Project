@@ -166,6 +166,7 @@ export default ( {navigation} ) => {
           selectedThree, selectedFour, selectedFive, selectedSix, selectedSeven,
           selectedEight, selectedNine, selectedTen, selectedEleven, selectedTwelve,
           selectedThirteen);
+        setUserToken('Arbitrary Value');
       })
       .catch((error) => {
         Alert.alert("Error", "Error: Email Already in Use");
@@ -173,37 +174,8 @@ export default ( {navigation} ) => {
         console.log("Error Message: " + error.message);
         // move back to create account screen
         navigation.pop();
-      })
+      });
   } // attemptCreate()
-
- 
-  // attempt to send a verification email to the user, and update their display name
-  const attemptSendVerificationEmail = () => {
-    updateProfile(auth.currentUser, { displayName: Gname })
-      .then(() => {
-        //displayName has been updated
-        console.log(auth.currentUser.displayName)
-      })
-      .catch((error) => {
-        Alert.alert("Error", "Error: There was an issue updating your name");
-        console.log("Error Code: " + error.code);
-        console.log("Error Message: " + error.message);
-        // move back to create account screen
-        navigation.pop();
-      });
-    //find way to update app and display name in email
-    sendEmailVerification(auth.currentUser)
-      .then(() => {
-        setUserToken('Arbitrary Value');
-      })
-      .catch((error) => {
-        Alert.alert("Error", "Error: There was an issue sending your account verification link");
-        console.log("Error Code: " + error.code);
-        console.log("Error Message: " + error.message);
-        // move back to create account screen
-        navigation.pop();
-      });
-  } // attempSendVerificationEmail()
 
 
 	return (
@@ -435,10 +407,7 @@ export default ( {navigation} ) => {
                 styles.createButton
               )
             }
-            onPress={() => {
-              attemptCreate()
-              attemptSendVerificationEmail()
-            }}
+            onPress={attemptCreate}
           >
             <Text style={styles.createText}>Create Account</Text>
           </TouchableOpacity> 
