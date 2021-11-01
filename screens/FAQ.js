@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-<<<<<<< HEAD
-//import * as Animatable from 'react-native-animatable';
 import Collapsible from 'react-native-collapsible';
-//import Accordion from 'react-native-collapsible/Accordion';
-=======
-import Collapsible from 'react-native-collapsible';
->>>>>>> main
 import Colors from "../constants/Colors";
 
 
@@ -85,11 +79,7 @@ const styles = StyleSheet.create({
   },
 
   header: {
-<<<<<<< HEAD
-    backgroundColor: Colors.veryLightBlue,
-=======
     backgroundColor: Colors.lightBlue,
->>>>>>> main
     marginTop: 20,
     textAlign: 'center',
     fontSize: 16,
@@ -99,11 +89,7 @@ const styles = StyleSheet.create({
   },
 
   content: {
-<<<<<<< HEAD
-    backgroundColor: Colors.veryLightBlue,
-=======
     backgroundColor: Colors.lightBlue,
->>>>>>> main
     alignSelf: 'center',
     textAlign: 'center',
     padding: 20,
