@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    backgroundColor: Colors.veryLightBlue,
+    backgroundColor: Colors.lightBlue,
     marginTop: 20,
     textAlign: 'center',
     fontSize: 16,
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   },
 
   content: {
-    backgroundColor: Colors.veryLightBlue,
+    backgroundColor: Colors.lightBlue,
     alignSelf: 'center',
     textAlign: 'center',
     padding: 20,
