@@ -1,4 +1,4 @@
-# CS-307-Project
+# UniRoom
 
 <p align="center">
   <a href="#key-feature">Key Features</a> •
