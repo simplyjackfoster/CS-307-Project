@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,136 +9,150 @@ import {
   Image,
   Button,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { useState } from 'react';
+import { Picker } from '@react-native-picker/picker';
 import Colors from "../constants/Colors";
-// START OF DATABASE STUFF
-// WILL NEED TO BE UNIVERSALLY ACCESSABLE FROM App.js
+import { Divider } from 'react-native-elements';
 
+// firebase imports
+import { auth, rtdb } from '../database/RTDB';
+import { ref, child, get } from 'firebase/database';
 
-// Firebase Integration
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import {getDatabase, ref, set, onValue, exists, val, child, get, remove} from "firebase/database"
-import { StackActions } from '@react-navigation/routers';
-//import {getFirestore, collection, getDocs, setDoc, docRef} from 'firebase/firestore/lite';
-//import {doc} from 'firebase/firestore';
+// database read/write/remove imports
+import { getID } from '../database/ID';
+import { getDataFromPath } from '../database/readData';
+import { uploadProfilePicture } from '../database/uploadStorage';
+import {
+  writeProfileName,
+  writeBio,
+  writeGraduationYear,
+  writeMajor,
+  writeLocation,
+  writeGender,
+  writeVaccinated,
+  writePreferredNumRoommates,
+  writeInstagram
+} from '../database/writeData';
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import {
+  isValidName,
+  isValidEmail,
+  isValidPhone,
+  isValidBirthday,
+  isValidPassword,
+  isValidSecurity,
+  isValidCheckbox,
+  isValidInstagram,
+  isValidGraduationYear,
+  isValidMajor,
+  isValidNumberOfRoommates
+} from '../checkInputs';
+import { set } from 'react-native-reanimated';
+import Interests from './Interests';
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCVc6_sT83QWcX-TCxDEDtVMHsMRaTy2yY",
-  authDomain: "uniroom-fdcd7.firebaseapp.com",
-  databaseURL: "https://uniroom-fdcd7-default-rtdb.firebaseio.com",
-  projectId: "uniroom-fdcd7",
-  storageBucket: "uniroom-fdcd7.appspot.com",
-  messagingSenderId: "644435940478",
-  appId: "1:644435940478:web:40e3f7aea01972606bb42f",
-  measurementId: "G-KQK1K10WTL"
-};
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const rtdb = getDatabase(app);
-
-
-
-// write to rtdb
-function writeUserData(name, email) {
-  set(ref(rtdb, "users/" + "Dummy Name"), {
-    name: name,
-    email: email
-  });
-} // writeUserData()
-
-
-
-// read from rtdb
-function readUserData(user_name) {
-  const dbRef = ref(rtdb);
-  
-  // (react hook)
-  const [name, setName] = useState(null);
-
-  // get the data
-  get(child(dbRef, "users/" + user_name + "/name")).then((snapshot) => {
-    if (snapshot.exists()) {
-      const person = snapshot.val();
-      setName(person);
-    } else {
-      console.log("No data available");
-    }
-  }).catch((error) => {
-    console.error(error);
-  });
-
-  return name;
-} // readUserData()
-
-// read from rtdb
-function readUserEmail(user_name) {
-	const dbRef = ref(rtdb);
-	
-	// (react hook)
-	const [email, setEmail] = useState(null);
-  
-	// get the data
-	get(child(dbRef, "users/" + user_name + "/email")).then((snapshot) => {
-	  if (snapshot.exists()) {
-		const person = snapshot.val();
-		setEmail(person);
-	  } else {
-		console.log("No data available");
-	  }
-	}).catch((error) => {
-	  console.error(error);
-	});
-  
-	return email;
-  } // readUserData()
-
-// remove from rtdb
-function removeUser(user_name) {
-  remove(ref(rtdb, "users/" + user_name));
-} // removeUser()
-
-const GetName = () => {
-  //writeUserData("Max Finder", "mfinder@purdue.edu");
-  const dummy = readUserData("Dummy Name");
-  //removeUser("Max Finder");
-  return (
-    dummy
-  );
-}
-
-const GetEmail = () => {
-	const dummyEmail = readUserEmail("Dummy Name");
-	return (
-	  dummyEmail
-	);
-}
-
-
-// END OF DATABASE STUFF
+// used so that the hooks don't get set rapidly in edit questionnaire
+var updatedTheSelected = false;
 
 
 /*
- * This is the screen where the user can edit their profile.
+ * This is the default export for the EditProfile screen.
  */
 export default ( {navigation} ) => {
 
-  // The variable for profile picture
-  const [profilePicture, setProfilePicture] = React.useState(null);
-
   // hooks for editable fields
-  const [name, onChangeName] = React.useState(null);
-  const [email, onChangeEmail] = React.useState(null);
+  const [editProfilePicture, setEditProfilePicture] = React.useState(null);
+  const [name, setName] = React.useState(null);
+  const [nameChanged, setNameChanged] = React.useState(false);
+  const [bio, setBio] = React.useState(null);
+  const [bioChanged, setBioChanged] = React.useState(false);
+  const [year, setYear] = React.useState(null);
+  const [yearChanged, setYearChanged] = React.useState(false);
+  const [major, setMajor] = React.useState(null);
+  const [majorChanged, setMajorChanged] = React.useState(false);
+  const [location, setLocation] = React.useState(null);
+  const [locationChanged, setLocationChanged] = React.useState(false);
+  const [numRoommates, setNumRoommates] = React.useState(null);
+  const [numRoommatesChanged, setNumRoommatesChanged] = React.useState(false);
+  const [instagram, onChangeInstagram] = React.useState(null);
+  const [instagramChanged, setInstagramChanged] = React.useState(false);
 
-  const openImagePickerAsync = async () => {
+  const [gender, setGender] = React.useState(1);
+  const [vaccinated, setVaccinated] = React.useState(1);
+
+
+  // function for setting the selection boxes to the correct value
+  const setSelection = () => {
+    const dbRef = ref(rtdb);
+
+    // set the gender to the correct value
+    get(child(dbRef, "users/" + getID(auth.currentUser.email) +
+              "/Profile/gender")).then((snapshot) => {
+      if (snapshot.exists()) {
+        const data_val = snapshot.val();
+        if (data_val == "Male") {
+          setGender(1);
+        }
+        else if (data_val == "Female") {
+          setGender(2);
+        }
+        else if (data_val == "Other") {
+          setGender(3);
+        }
+        else {
+          setGender(4);
+        }
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+
+    // set vaccination status to the correct value
+    get(child(dbRef, "users/" + getID(auth.currentUser.email) +
+              "/Profile/covid_vaccination_status")).then((snapshot) => {
+      if (snapshot.exists()) {
+        const data_val = snapshot.val();
+        if (data_val == "Not Vaccinated") {
+          setVaccinated(1);
+        }
+        else {
+          setVaccinated(2);
+        }
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+
+  } // setSelection()
+
+
+  // update the initial values of the selection boxes
+  if (updatedTheSelected == false) {
+    setSelection();
+    updatedTheSelected = true;
+  }
+
+  /*
+   * Effect that resets the value of updatedTheSelected to false, so that when
+   * we open the edit profile screen again, the selections will update.
+   */
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("beforeRemove", () => {
+      updatedTheSelected = false;
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+
+
+  /*
+   * This function is used to choose an image from the camera roll
+   * for the profile picture.
+   */
+  const openProfilePicImagePickerAsync = async () => {
     // get permission from user to access camera roll
     let libraryPermissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     // if they decline permission
@@ -147,84 +161,451 @@ export default ( {navigation} ) => {
       return;
     }
     // let user select image from their camera roll
-    let picked = await ImagePicker.launchImageLibraryAsync();
+    let picked = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+    });
     // if they cancelled the selection
     if (picked.cancelled == true) {
       return;
     }
+
     // set the selected image
-    setProfilePicture({ localUri: picked.uri });
-  } // openImagePickerAsync()
+    setEditProfilePicture(picked.uri);
+  } // openProfilePicImagePickerAsync()
+
+
+
+  /*
+   * This function is called when the text in the name 
+   * input is changed. It changes the value of the name hook
+   * and also changes the boolean that tells us if the user has
+   * changed the value.
+   */
+  const nameInputHandler = (input) => {
+    setName(input);
+    setNameChanged(true);
+  } // nameInputHandler()
+
+
+
+  
+  /*
+   * This function is called when the text in the bio 
+   * input is changed. It changes the value of the bio hook
+   * and also changes the boolean that tells us if the user has
+   * changed the value.
+   */
+  const bioInputHandler = (input) => {
+    setBio(input);
+    setBioChanged(true);
+  } // bioInputHandler()
+
+
+
+  /*
+   * This function is called when the text in the year 
+   * input is changed. It changes the value of the bio hook
+   * and also changes the boolean that tells us if the user has
+   * changed the value.
+   */
+  const yearInputHandler = (input) => {
+    setYear(input);
+    setYearChanged(true);
+  } // yearInputHandler()
+
+
+
+  /*
+   * This function is called when the major input is changed. It changes
+   * the value of the major hook and also changes the boolean that tells
+   * us if the user has changed the value.
+   */
+  const majorInputHandler = (input) => {
+    setMajor(input);
+    setMajorChanged(true);
+  } // majorInputHandler()
+
+
+
+  /*
+    * This function is called when the location input is changed. It changes
+    * the value of the location hook and also changes the boolean that tells
+    * us if the user has changed the value.
+    */
+  const locationInputHandler = (input) => {
+    setLocation(input);
+    setLocationChanged(true);
+  } // locationInputHandler()
+
+
+  /*
+    * This function is called when the preferred number of roommates input is changed. It 
+    * changes the value of the numRoommates hook and also changes the boolean that tells
+    * us if the user has changed the value.
+    */
+  const numRoommatesInputHandler = (input) => {
+    setNumRoommates(input);
+    setNumRoommatesChanged(true);
+  } // numRoommatesInputHandler()
+
+
+
+  /*
+   * This function is called when the text in the instagram 
+   * input is changed. It changes the value of the name hook
+   * and also changes the boolean that tells us if the user has
+   * changed the value.
+   */
+  const instagramInputHandler = (input) => {
+    onChangeInstagram(input);
+    setInstagramChanged(true);
+  } // instagramInputHandler()
+
+
+
+  /*
+   * This function is called when the user clicks "Save".
+   * It updates all of the profile data in the database.
+   */
+  const updateProfileData = () => {
+    // if we changed the profile picture, then upload it
+    if (editProfilePicture) {
+      console.log("Saving Image: " + editProfilePicture);
+      uploadProfilePicture(auth.currentUser.email, editProfilePicture);
+    }
+    else {
+      console.log("Profile picture was not changed");
+    }
+
+    // if the name is not null, then update it
+    if (name) {
+      writeProfileName(auth.currentUser.email, name);
+    }
+
+    // if the bio has been changed, then update it
+    if (bioChanged) {
+      writeBio(auth.currentUser.email, bio);
+    }
+
+    // if the year has changed, then update it
+    if (yearChanged) {
+      writeGraduationYear(auth.currentUser.email, year);
+    }
+
+    // if the major has changed, then update it
+    if (majorChanged) {
+      writeMajor(auth.currentUser.email, major);
+    }
+
+    // if the location has changed, then update it
+    if (locationChanged) {
+      writeLocation(auth.currentUser.email, location);
+    }
+
+    // if the preferred # of roommates changed, then update it
+    if (numRoommatesChanged) {
+      writePreferredNumRoommates(auth.currentUser.email, numRoommates);
+    }
+
+    if (instagramChanged) {
+      writeInstagram(auth.currentUser.email, instagram);
+    }
+
+    // write the gender and vaccination status data
+    writeGender(auth.currentUser.email, gender);
+    writeVaccinated(auth.currentUser.email, vaccinated);
+
+
+  } // updateProfileData()
+
+
+
+
+  /*
+   * Validates that none of the inputs are invalid.
+   * If the fields have been changed, then we do a check
+   * to see if they are valid. If they havn't been changed then
+   * we don't do a check.
+   */
+  const validateInputs = () => {
+    // Check if the name field is valid
+    if (nameChanged != false) {
+      if (!isValidName(name)) {return}
+    } 
+
+
+    // Check if the year in school is valid
+    if (yearChanged != false) {
+      if (!isValidGraduationYear(year)) {return}
+    }
+
+
+    // Check if major is valid (same as checking name)
+    if (majorChanged != false) {
+      if (!isValidMajor(major)) {return}
+    }
+
+    // Check if instagram is valid 
+    if (instagramChanged != false) {
+      if(!isValidInstagram(instagram)) {return}
+    }
+
+    // Check if the preferred # of roommates is valid
+    if (numRoommatesChanged != false) {
+      if (!isValidNumberOfRoommates(numRoommates)) {return}
+    }
+
+
+
+    // update the information and navigate to Profile
+    updateProfileData();
+    navigation.pop();
+  } // validateInputs()
 
 
 
 
 
 	return (
-		<ScrollView style={styles.container}>
-      <View style={styles.form}>
-        {/* Profile Picture Image */}
-        <SafeAreaView>
-          <Image source={
-            profilePicture ? (
-              { uri: profilePicture.localUri }
-            ) : (
-              require("../images/default-profile-picture.jpeg")
-            )}
-            style={styles.profilePicture}>
-          </Image>
+    <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
+      <View style={styles.container}>
 
-          <TouchableOpacity onPress={openImagePickerAsync} style={styles.buttonChangePicture}>
-            <Text style={styles.textChangePicture}>Change Picture</Text>
+
+        <ScrollView style={styles.scroll}>
+          {/* Profile Picture Image */}
+          <SafeAreaView>
+              {/* Image displayed when we haven't changed the profile picture */}
+              <Image 
+                source={{uri: getDataFromPath("users/" + getID(auth.currentUser.email) +
+                              "/Profile/Images/profile_picture")}}
+                style={editProfilePicture ? (
+                  {display: 'none'} 
+                ) : (
+                  styles.profilePicture
+                )}
+              />
+              {/* Image displayed when we changed the profile picture */}
+              <Image
+                source={{uri: editProfilePicture}}
+                style={editProfilePicture ? (
+                  styles.profilePicture
+                ) : (
+                  {display: 'none'}
+                )}
+              />
+            <TouchableOpacity
+              onPress={
+                openProfilePicImagePickerAsync
+              }
+              style={styles.buttonChangePicture}>
+              <Text style={styles.textChangePicture}>Change Picture</Text>
+            </TouchableOpacity>
+          </SafeAreaView>
+
+          {/* Name (text), name (field) */}
+          <Text style={styles.prompt}>Name*</Text>
+          <SafeAreaView>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              onChangeText={nameInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/profile_name")}
+              placeholder={"Name"}
+            />
+          </SafeAreaView>
+
+
+          {/* Bio (text), bio (field) */}
+          <SafeAreaView>
+            <Text style={styles.prompt}>Bio</Text>
+            <TextInput
+              style={styles.largeInput}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              maxLength={250}
+              multiline={true}
+              onChangeText={bioInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/bio")}
+              placeholder={"Enter a description of yourself"}
+            />
+          </SafeAreaView>
+
+
+          {/* Graduation Year (text), Graduation Year (field) */}
+          <SafeAreaView>
+            <Text style={styles.prompt}>Graduation Year</Text>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              onChangeText={yearInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/graduation_year")}
+              placeholder={"yyyy"}
+            />
+          </SafeAreaView>
+
+
+         {/* Major (text), major (field) */}
+         <SafeAreaView>
+            <Text style={styles.prompt}>Major</Text>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              onChangeText={majorInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/major")}
+              placeholder={"Enter your major"}
+            />
+          </SafeAreaView> 
+
+
+          {/* Location (text), location (field) */}
+          <SafeAreaView>
+            <Text style={styles.prompt}>Location</Text>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              onChangeText={locationInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/location")}
+              placeholder={"Where you are from"}
+            />
+          </SafeAreaView>
+
+
+
+          {/* Preferred Number of Roommates */}
+          <SafeAreaView>
+            <Text style={styles.prompt}>Preferred # of Roommates</Text>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              onChangeText={numRoommatesInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/preferred_number_of_roommates")}
+              placeholder={"Number of people you want to live with"}
+            />
+          </SafeAreaView> 
+
+          {/* Instagram Link (field) */}
+          <Text style={styles.prompt}>Instagram</Text>
+          <SafeAreaView>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              onChangeText={instagramInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram")}
+              placeholder={"Instagram username"}
+            />
+          </SafeAreaView>
+
+
+          {/* Navigate to Edit Interests */}
+          <SafeAreaView>
+            <TouchableOpacity style={styles.interestsButton}
+              onPress={() => navigation.push("Interests")}
+            >
+              <Text style={styles.interestsText}>Add Interests</Text>
+              <Icon
+                style={styles.interestsIcon}
+                name={'caret-right'}
+                size={20}
+                color={Colors.black}
+              />
+            </TouchableOpacity>
+          </SafeAreaView>
+
+
+        
+
+          {/* Gender (text), Gender (field) */}
+          <Text style={styles.prompt}>Gender*</Text>
+          <Picker
+            style={styles.picker}
+            selectedValue={
+              gender
+            }
+            onValueChange={(itemValue, itemIndex) =>
+              setGender(itemValue)
+            }
+          >
+            <Picker.Item label="Male" value={1} />
+            <Picker.Item label="Female" value={2} />
+            <Picker.Item label="Other" value={3} />
+            <Picker.Item label="Prefer not to say" value={4} />
+          </Picker>
+
+
+
+          
+          {/* Vaccination status (text), vaccination status (field) */}
+          <Text style={styles.prompt}>Vaccination Status*</Text>
+          <Picker
+            style={styles.picker}
+            selectedValue={
+              vaccinated
+            }
+            onValueChange={(itemValue, itemIndex) =>
+              setVaccinated(itemValue)
+            }
+          >
+            <Picker.Item label="Not Vaccinated" value={1} />
+            <Picker.Item label="Vaccinated" value={2} />
+          </Picker>
+
+
+
+
+
+          {/* Divider used for spacing between the last item in scroll and the footer */}
+          <Divider color={Colors.white} height={15}></Divider>
+
+        </ScrollView>
+
+
+
+        <View style={styles.footer}>
+          {/* Continue to Questionnaire (button) */}
+          <TouchableOpacity
+            style={styles.questionnaireButton}
+            // check if questionnaire has been completed and run setUserToken
+            onPress={() => {
+              navigation.push("Questionnaire");
+            }}
+          >
+            <Text style={styles.questionnaireText}>Edit Questionnaire</Text>
           </TouchableOpacity>
-        </SafeAreaView>
-        {/* Name (text), name (field) */}
-        <Text style={styles.label}>Name</Text>
-        <SafeAreaView>
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeName}
-            placeholder={GetName()}
-          />
-        </SafeAreaView>
 
-        {/* Email (text), email (field) */}
-        <Text style={styles.label}>Purdue Email</Text>
-        <SafeAreaView>
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeEmail}
-            placeholder={GetEmail()}
-          />
-        </SafeAreaView>
+          {/* Save Button */}
+          <TouchableOpacity
+            style={styles.buttonSave}
+            // check if questionnaire has been completed and run setUserToken
+            onPress={ validateInputs }
+          >
+            <Text style={styles.textSave}>Save Changes</Text>
+          </TouchableOpacity>
+        </View>
 
-        {/* Continue to Questionnaire (button) */}
-        <TouchableOpacity
-          style={styles.questionnaireButton}
-          // check if questionnaire has been completed and run setUserToken
-          onPress={() => {
-            navigation.push("Questionnaire");
-          }}
-        >
-          <Text>Edit Questionnaire</Text>
-        </TouchableOpacity>
-
-
-        {/* Save Button */}
-        <TouchableOpacity
-          style={styles.buttonSave}
-          // check if questionnaire has been completed and run setUserToken
-          onPress={() => {
-            //EDIT USER DB ENTRY
-            writeUserData(name, email);
-            navigation.navigate('Profile', {name: name, email: email})
-          }}
-        >
-          <Text style={styles.textSave}>Save</Text>
-        </TouchableOpacity>
 
       </View>
-		</ScrollView>
+    </KeyboardAvoidingView>
 	); // return()
 
 } // export default ()
@@ -232,30 +613,47 @@ export default ( {navigation} ) => {
 
 
 
+
+
 // styles
 const styles = StyleSheet.create({
 
+  /* Container Styles */
   container: {
     flex: 1,
+    flexDirection: 'column',
     backgroundColor: Colors.white,
   },
 
-  profilePicture: {
-    position: 'absolute',
+  scroll: {
+    flex: 1,
+    paddingHorizontal: 30,
+    paddingTop: 30,
+  },
+
+  footer: {
+    flex: 0.15,
+    flexDirection: 'row',
     alignSelf: 'center',
-    top: 25,
+    paddingTop: 5,
+    paddingHorizontal: 150,
+    paddingBottom: 25,
+    backgroundColor: Colors.lightGray,
+  },
+
+  /* Profile Picture */
+  profilePicture: {
+    alignSelf: 'center',
     width: 150,
     height: 150,
-    resizeMode: "cover",
-    borderRadius: 200, // makes image circular
+    borderRadius: 200,
+    resizeMode: 'cover',
   },
 
   buttonChangePicture: {
-    position: 'absolute',
     alignSelf: 'center',
-    top: 165,
     padding: 5,
-  }, 
+  },
 
   textChangePicture: {
     margin: 20,
@@ -263,60 +661,109 @@ const styles = StyleSheet.create({
     color: Colors.lightBlue,
   },
 
-  /* Form styles */
-
-  form: {
-    margin: 20,
+  /* Input Prompt */
+  prompt: {
+    flexDirection: 'row',
     textAlign: 'left',
-    alignSelf: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-
-  label: {
     fontSize: 20,
     margin: 10,
     marginLeft: 15,
     marginBottom: 0,
     marginTop: 10,
-    textAlign: 'left',
-    flexDirection: 'row',
-    top: 225,
   },
 
+  /* Text Input */
   input: {
+    textAlign: 'left',
     height: 40,
-    width: 290,
+    width: "90%",
     margin: 10,
+    marginBottom: 20,
     padding: 10,
     borderWidth: 1,
     borderRadius: 10,
+  },
+
+  /* Large Text Input */
+  largeInput: {
+    textAlign: 'left',
+    textAlign: 'auto',
+    height: 140,
+    width: "90%",
+    margin: 10,
+    marginBottom: 20,
+    padding: 10,
+    borderWidth: 1,
+    borderRadius: 10, 
+  },
+
+  /* Picker */
+  picker: {
+    flex: 1,
+    textAlign: 'left',
+    width: '95%',
+    marginBottom: 20,
+  },
+
+
+  /* Interests Button */
+  interestsText: {
+    flex: 1,
+    fontSize: 20,
+    alignSelf: 'auto',
+  },
+
+  interestsIcon: {
+    flex: 1,
+    textAlign: 'right',
+    fontSize: 25,
+    marginRight: '5%',
+  },
+
+  interestsButton: {
+    flexDirection: 'row',
+    textAlign: 'left',
+    borderWidth: 1,
+    borderRadius: 11,
+    margin: 10,
+    marginTop: 25,
+    marginBottom: 40,
+    padding: 10,
+    width: '90%',
+    backgroundColor: Colors.offWhite,
+  },
+
+
+
+  /* Questionnaire Button */
+  questionnaireText: {
+    fontSize: 16,
     alignSelf: 'center',
-    top: 225,
   },
 
   questionnaireButton: {
-    position: 'absolute',
-    top: 550,
-    backgroundColor: '#66a3dd',
-    borderWidth: 2,
-    borderRadius: 5,
-    margin: 10,
-    padding: 5,
-    width: 135,
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderRadius: 25,
+    margin: 5,
+    padding: 10,
+    width: 175,
+    backgroundColor: Colors.offWhite,
+  },
+
+  /* Save Button */
+   textSave: {
+    fontSize: 16,
     alignSelf: 'center',
   },
 
   buttonSave: {
-    position: 'absolute',
-    top: 600, 
     alignSelf: 'center',
+    borderWidth: 1,
+    borderRadius: 25,
+    margin: 5,
+    padding: 10,
+    width: 175,
+    backgroundColor: Colors.offWhite,
   },
-
-  textSave: {
-    margin: 20,
-    fontSize: 18,
-    color: Colors.lightBlue,
-  }
-
 });

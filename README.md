@@ -1,29 +1,23 @@
-# CS-307-Project
+# UniRoom
 
 <p align="center">
-  <a href="#key-features">Key Features</a> •
+  <a href="#key-feature">Key Features</a> •
   <a href="#how-to-use">How To Use</a> •
-  <a href="#download">Download</a> •
-  <a href="#license">License</a>
+
 </p>
 
 
 
-## Key Features
+## Key Feature
 
 
-* Awesome feature
-  - Explain feature
-* Cool Feature
-  - Windows, macOS and Linux ready.
+* Find roommates at Purdue
+  - Our easy to use app allows you to find the perfect roommate
 
 ## How To Use
 
-Note: If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use `node` from the command prompt.
-
-
-## Download
-
+Download the Expo Go app and follow the link
+https://expo.dev/@jackfoster246/CS-307-Project
 
 
 ## Credits
@@ -31,13 +25,6 @@ Note: If you're using Linux Bash for Windows, [see this guide](https://www.howto
 This software uses the following open source packages:
 
 - [Electron](http://electron.atom.io/)
-- [Node.js](https://nodejs.org/)
-- [Marked - a markdown parser](https://github.com/chjj/marked)
-- [showdown](http://showdownjs.github.io/showdown/)
+- [Expo Go](https://expo.dev/client)
 - [CodeMirror](http://codemirror.net/)
 - Emojis are taken from [here](https://github.com/arvida/emoji-cheat-sheet.com)
-- [highlight.js](https://highlightjs.org/)
-
-## License
-
-MIT
