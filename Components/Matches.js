@@ -2,12 +2,9 @@ import React from 'react';
 import { 
     StyleSheet,
     Text, 
-    View, 
-    ScrollView,
+    View,
     Image,
-    Linking,
     TouchableOpacity,
-    Alert
 } from 'react-native';
 import { getDataFromPath, getInstagramLink } from "../database/readData";
 import Colors from "../constants/Colors";
@@ -21,13 +18,7 @@ const CardItem = (props) => {
     const profile_picture = getDataFromPath("users/" + uid + "/Profile/Images/profile_picture");
     const name = getDataFromPath("users/" + uid + "/Profile/profile_name");
     const location = getDataFromPath("users/" + uid + "/Profile/location");
-    const graduationYear = getDataFromPath("users/" + uid + "/Profile/graduation_year");
     const major = getDataFromPath("users/" + uid + "/Profile/major");
-    const bio = getDataFromPath("users/" + uid + "/Profile/bio");
-    const vaccination = getDataFromPath("users/" + uid + "/Profile/covid_vaccination_status");
-    const preferredNumRoommates = getDataFromPath("users/" + uid + "/Profile/preferred_number_of_roommates");    
-    const instagram = getDataFromPath("users/" + uid + "/Profile/instagram");
-    const instagramLink = getInstagramLink(uid);
     const bday = getDataFromPath("users/" + uid + "/Critical Information/birthday");
 
     var age;
@@ -53,29 +44,21 @@ const CardItem = (props) => {
 
 
     return (
-        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-            <View style={styles.contentContainer}>
-
-
-                {/* Profile Picture */}
-                <View style={styles.imageWrapper}>
-                    <Image style={styles.profilePic}
-                        source={{uri: profile_picture}}
-                    />
-                </View>
-
-
-                {/* Name and Age */}
-                <View style={styles.nameWrapper}>
-                    <Text style={styles.nameText}>{name}, {age}</Text>
-                </View>
-
-
-                
-
-
+        <View style ={styles.containerMatch}>
+            <Image style = {styles.profileImage}
+                source={{uri: profile_picture}}
+            />
+            <View style={styles.container}>
+                <Text>{name}</Text>
+                <Text style={styles.description}>{location}, {major}</Text>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={onPress}
+                >
+                    <Text>Send a message</Text>
+                </TouchableOpacity>
             </View>
-        </ScrollView>
+        </View>
     );
 }
 
@@ -91,7 +74,21 @@ const styles = StyleSheet.create({
         borderRadius: 25,
     },
 
-    
-
-
+    description: {
+        color: Colors.gray,
+        fontSize: 12,
+        paddingTop: 5,
+    },
+    containerMatch: {
+        justifyContent: "space-between",
+		flex: 1,
+		paddingHorizontal: 10
+    },
+    profileImage: {
+        borderRadius: 30,
+		width: 60,
+		height: 60,
+		marginRight: 20,
+		marginVertical: 15
+    },
 });
