@@ -91,4 +91,7 @@ const styles = StyleSheet.create({
 		marginRight: 20,
 		marginVertical: 15
     },
+    button: {
+        backgroundColor: Colors.green,
+    }
 });
