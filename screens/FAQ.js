@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-//import * as Animatable from 'react-native-animatable';
 import Collapsible from 'react-native-collapsible';
-//import Accordion from 'react-native-collapsible/Accordion';
 import Colors from "../constants/Colors";
 
 
