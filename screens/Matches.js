@@ -14,7 +14,7 @@ import MatchItem from '../components/MatchItem';
 export default ( {navigation} ) => {
 	return (
 		<View style={styles.container}>
-			<MatchItem> id = {"mfinder"}</MatchItem>
+			<MatchItem id = {"mfinder"}/>
 		</View>
 	);
 }
@@ -30,5 +30,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
+  
 
 });

@@ -12,7 +12,7 @@ import { renderIcon } from "../images/Icons";
 
 
 
-const CardItem = (props) => {
+const MatchItem = (props) => {
     
     const uid = props.id;
     const profile_picture = getDataFromPath("users/" + uid + "/Profile/Images/profile_picture");
@@ -51,18 +51,12 @@ const CardItem = (props) => {
             <View style={styles.container}>
                 <Text>{name}</Text>
                 <Text style={styles.description}>{location}, {major}</Text>
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={onPress}
-                >
-                    <Text>Send a message</Text>
-                </TouchableOpacity>
             </View>
         </View>
     );
 }
 
-export default CardItem;
+export default MatchItem;
 
 // styles
 const styles = StyleSheet.create({
