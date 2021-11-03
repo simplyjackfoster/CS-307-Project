@@ -10,14 +10,14 @@ import {
 } from 'react-native';
 
 import Colors from "../constants/Colors";
-import { AuthContext } from "../context";
+import { AuthContext, VerificationContext } from "../context";
 import { Picker } from '@react-native-picker/picker';
 import { Divider } from 'react-native-elements';
 
 // authentication imports
 import { auth, rtdb } from '../database/RTDB';
-import { AuthCredential, createUserWithEmailAndPassword, getAuth, sendEmailVerification, updateProfile } from 'firebase/auth';
-import { ref, child, get, set } from 'firebase/database';
+import { AuthCredential, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, reload, sendEmailVerification, updateProfile } from 'firebase/auth';
+import { ref, child, get, set, onChildChanged } from 'firebase/database';
         
 
 // data value imports from Signup screen
@@ -50,6 +50,7 @@ var updatedTheSelected = false;
 
 export default ( {navigation} ) => {
   const { userToken, setUserToken }  = React.useContext(AuthContext);
+  const { userVerified, setUserVerified } = React.useContext(VerificationContext);
 
   const [selectedOne, setSelectedOne] = React.useState(3); // has_people_over
   const [selectedTwo, setSelectedTwo] = React.useState(3); // is_clean
@@ -122,7 +123,7 @@ export default ( {navigation} ) => {
    * Set the selection boxes to the database values if we are in
    * the HomeStack
    */
-  if (userToken && (updatedTheSelected == false)) {
+  if (userVerified && (updatedTheSelected == false)) {
     setSelection(1, "has_people_over"); 
     setSelection(2, "is_clean");
     setSelection(3, "week_bedtime");
@@ -158,8 +159,8 @@ export default ( {navigation} ) => {
   const attemptCreate = () => {
     createUserWithEmailAndPassword(auth, Gemail, Gpassword)
       .then((userCredential) => {
-        const user = userCredential.user;
         // move to Questionnaire screen
+        const user = userCredential.user;
         console.log("Successfully Created Account!");
         writeNewUser(Gemail, Gname, Gphone, Gbirthday, Ggender, Gvaccinated,
           GsecurityQuestion, GsecurityAnswer, selectedOne, selectedTwo,
@@ -174,8 +175,46 @@ export default ( {navigation} ) => {
         console.log("Error Message: " + error.message);
         // move back to create account screen
         navigation.pop();
-      });
+      })
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        attemptDisplayNameUpdate();
+      }
+      else {
+        console.log("Waiting for user auth state change");
+      }
+    });
   } // attemptCreate()
+
+  const attemptDisplayNameUpdate = () => {
+    updateProfile(auth.currentUser, { displayName: Gname })
+      .then(() => {
+        //displayName has been updated
+        console.log(auth.currentUser.displayName);
+        attemptEmail();
+      })
+      .catch((error) => {
+        Alert.alert("Error", "Error: There was an issue updating your name");
+        console.log("Error Code: " + error.code);
+        console.log("Error Message: " + error.message);
+        // move back to create account screen
+        navigation.pop();
+      })
+  }
+
+  const attemptEmail = () => {
+    sendEmailVerification(auth.currentUser)
+      .then(() => {
+        navigation.push("VerifyEmail");
+      })
+      .catch((error) => {
+        Alert.alert("Error", "Error: There was an issue sending your account verification link");
+        console.log("Error Code: " + error.code);
+        console.log("Error Message: " + error.message);
+        // move back to create account screen
+        navigation.pop();
+      })
+  }
 
 
 	return (
@@ -401,13 +440,15 @@ export default ( {navigation} ) => {
           {/* Create Account Button - when we are in the AuthStack */}
           <TouchableOpacity
             style={
-              userToken ? (
+              userVerified ? (
                 {display: 'none'}
               ) : (
                 styles.createButton
               )
             }
-            onPress={attemptCreate}
+            onPress={() => {
+                attemptCreate()
+            }}
           >
             <Text style={styles.createText}>Create Account</Text>
           </TouchableOpacity> 
@@ -417,7 +458,7 @@ export default ( {navigation} ) => {
 
       {/* Save Button - when we are in the HomeStack */}
       <View
-        style= {userToken ? (
+        style= {userVerified ? (
           styles.footer
         ) : (
           {display: 'none'}

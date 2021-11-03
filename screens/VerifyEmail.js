@@ -10,29 +10,37 @@ import {
 } from 'react-native';
 
 import Colors from "../constants/Colors";
-import { AuthContext } from "../context";
-import { sendVerification } from '../database/sendEmail';
+import { VerificationContext } from '../context';
 
 // authentication imports
 import { auth, rtdb } from '../database/RTDB';
-import { AuthCredential, createUserWithEmailAndPassword, getAuth, sendEmailVerification, updateProfile } from 'firebase/auth';
+import { AuthCredential, createUserWithEmailAndPassword, getAuth, onIdTokenChanged, reload, sendEmailVerification, updateProfile } from 'firebase/auth';
 import { ref, child, get, set, update } from 'firebase/database';
 import { FirebaseError } from '@firebase/util';
 
 export default ({ navigation }) => {
 
-    const { userToken, setUserToken } = React.useContext(AuthContext);
+    // Set up a state variable to tell whether we are verified in or not
+    const { userVerified, setUserVerified } = React.useContext(VerificationContext);
 
     const checkVerification = () => {
-        auth.currentUser.reload
-        if (auth.currentUser.emailVerified == true) {
-            //navigation.pop()
-        }
-        else {
-            Alert.alert("Error", "Error: Verify your Email to Proceed");
-        }
-    };
-    sendVerification();
+        //auth.currentUser.reload
+        reload(auth.currentUser);
+        onIdTokenChanged(auth, (user) => {
+            if (user) {
+                if (auth.currentUser.emailVerified == true) {
+                    //navigation.pop()
+                    setUserVerified('Arbitrary Value');
+                }
+                else {
+                    Alert.alert("Verify Email", "Email has not been verified with UniRoom");
+                }
+            } else {
+                console.log("Waiting for user reload");
+            }
+        });
+    }
+    console.log("Verify Email Page Opened");
 
     return (
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={90}>
@@ -41,16 +49,10 @@ export default ({ navigation }) => {
                 <View style={styles.form}>
                     {/* Continue Button -- Auth Stack */}
                     <View
-                        style={userToken ? (
-                            styles.footer
-                        ) : (
-                            { display: 'none' }
-                        )}
+                        style={styles.footer}
                     >
                         <TouchableOpacity style={styles.continueButton}
-                            onPress={() => {
-                                checkVerification()
-                            }}
+                            onPress={checkVerification}
                         >
                             <Text style={styles.continueText}>Continue</Text>
                         </TouchableOpacity>

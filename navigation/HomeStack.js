@@ -3,7 +3,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { BackHandler } from 'react-native';
 
 import HomeDrawer from './HomeDrawer';
-import VerifyEmail from '../screens/VerifyEmail';
 import EditProfile from '../screens/EditProfile';
 import ResetPassword from '../screens/ResetPassword';
 import DeleteAccount from '../screens/DeleteAccount';
@@ -18,20 +17,11 @@ const Stack = createStackNavigator();
 const HomeStack = () => {
 	return (
 		<Stack.Navigator>
-			{auth.currentUser.emailVerified ? (
-				<Stack.Screen name="HomeDrawer" component={HomeDrawer}
-					options={{
-						headerShown: false,
-					}}
-				/>) : (
-				<Stack.Screen name="VerifyEmail" component={VerifyEmail}
-					options={{
-						title: "Verify Email",
-						headerBackTitle: "Back",
-					}}
-				/>)
-			}
-
+			<Stack.Screen name="HomeDrawer" component={HomeDrawer}
+				options={{
+					headerShown: false,
+				}}
+			/>
 			<Stack.Screen name="EditProfile" component={EditProfile}
 				options={{
 					headerTitle: "Edit Profile",
