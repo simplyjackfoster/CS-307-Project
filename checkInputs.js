@@ -482,9 +482,6 @@ export const isValidNumberOfRoommates = (numRoommates) => {
  * Otherwise, returns false.
  */
 export const isValidLivingLocation = (livingLocation, gender) => {
-	// print fields for testing
-	console.log("location: " + livingLocation);
-	console.log("gender: " + gender);
 
 	if (!livingLocation) {
 		return true;
@@ -503,7 +500,6 @@ export const isValidLivingLocation = (livingLocation, gender) => {
 			[{ text: "Ok" }]);
 			return false;
 	}
-
 
 	return true;
 } // isValidLivingLocation()

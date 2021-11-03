@@ -93,7 +93,7 @@ const CardItem = (props) => {
                     )}
                 >
                     <View>
-                        {renderIcon("graduation-cap", 25, Colors.darkBlue)}
+                        {renderIcon("graduation-cap", 25, Colors.royalBlue)}
                     </View>
                     <Text style={styles.graduationYearContent}>Class of {graduationYear}</Text>
                 </View>
@@ -108,7 +108,7 @@ const CardItem = (props) => {
                     )}
                 >
                     <View>
-                        {renderIcon("book", 25, Colors.darkBlue)}
+                        {renderIcon("book", 25, Colors.royalBlue)}
                     </View>
                     <Text style={styles.majorContent}>Major: {major}</Text>
                 </View>
@@ -123,7 +123,7 @@ const CardItem = (props) => {
                     )}
                 >
                     <View>
-                        {renderIcon("map-pin", 25, Colors.darkBlue)}
+                        {renderIcon("map-pin", 25, Colors.royalBlue)}
                     </View>
                     <Text style={styles.locationContent}>Location: {location}</Text>
                 </View>
@@ -138,14 +138,25 @@ const CardItem = (props) => {
                     )}
                 >
                     <View>
-                        {renderIcon("users", 25, Colors.darkBlue)}
+                        {renderIcon("users", 22, Colors.royalBlue)}
                     </View>
                     <Text style={styles.preferredNumRoommatesContent}>Preferred # of Roommates: {preferredNumRoommates}</Text>
                 </View>
 
 
                 {/* Preferred living location (optional) */}
-
+                <View style=
+                    {preferredLivingLocation ? (
+                        styles.preferredLivingLocationWrapper
+                    ) : (
+                        {display: 'none'}
+                    )}
+                >
+                    <View>
+                        {renderIcon("home", 25, Colors.royalBlue)}
+                    </View>
+                    <Text style={styles.preferredLivingLocationContent}>Preferred Housing:{"\n"}{preferredLivingLocation}</Text>
+                </View>
 
 
                 {/* Instagram (optional) */}
@@ -289,6 +300,18 @@ const styles = StyleSheet.create({
     },
 
     preferredNumRoommatesContent: {
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+
+
+    /* Preferred Living Location */
+    preferredLivingLocationWrapper: {
+        paddingTop: 20,
+        flexDirection: 'row',
+    },
+
+    preferredLivingLocationContent: {
         paddingLeft: 15,
         fontSize: 20,
     },
