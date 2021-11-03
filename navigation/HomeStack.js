@@ -10,7 +10,6 @@ import Questionnaire from '../screens/Questionnaire';
 
 import Colors from '../constants/Colors';
 import { auth } from '../database/RTDB';
-import { sendVerification } from '../database/sendEmail';
 
 const Stack = createStackNavigator();
 

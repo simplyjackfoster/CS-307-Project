@@ -13,7 +13,7 @@ import {
 	KeyboardAvoidingView
 } from 'react-native';
 
-import { AuthContext } from "../context";
+import { AuthContext, VerificationContext } from "../context";
 import Colors from "../constants/Colors";
 import { render } from 'react-dom';
 
@@ -30,6 +30,7 @@ import { Title } from 'react-native-paper';
 export default ({ navigation }) => {
 
 	const { userToken, setUserToken } = React.useContext(AuthContext);
+	const { userVerified, setUserVerified } = React.useContext(VerificationContext);
 
 	/* Functions to handle text input changes */
 	const [email, onChangeEmail] = React.useState(null);
@@ -61,6 +62,7 @@ export default ({ navigation }) => {
 				.then((userCredential, success) => {
 					const user = userCredential.user;
 					setUserToken('Arbitrary text');
+					setUserVerified('Arbitrary text');
 					console.log("Successful Login!");
 				})
 				.catch((error) => {

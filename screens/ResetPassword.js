@@ -1,3 +1,4 @@
+import { sendPasswordResetEmail } from 'firebase/auth';
 import React from 'react';
 import {
   TouchableOpacity,
@@ -11,13 +12,36 @@ import {
 } from 'react-native';
 
 import Colors from "../constants/Colors";
+import { AuthContext, VerificationContext } from "../context";
+
+// authentication imports
+import { auth, rtdb } from '../database/RTDB';
 
 /*
  * This is the screen where the user resets their password.
  */
 
+var emailIn = "";
+
 export default ( {navigation} ) => {
 const [email, onChangeEmail] = React.useState("");
+const { userToken, setUserToken }  = React.useContext(AuthContext);
+const { userVerified, setUserVerified } = React.useContext(VerificationContext);
+
+  const attemptResetEmail = () => {
+    sendPasswordResetEmail(auth, emailIn)
+      .then(() => {
+        console.log("Reset Password Email Sent");
+        setUserToken(null)
+				setUserVerified(null)
+      })
+      .catch((error) => {
+        Alert.alert("Error", "Error: There was an issue sending you a password link");
+        console.log("Error Code: " + error.code);
+        console.log("Error Message: " + error.message);
+        navigation.pop();
+      })
+  }
 
   return (
     <KeyboardAvoidingView style={{flex: 1}} behavior={"padding"}>
@@ -35,13 +59,16 @@ const [email, onChangeEmail] = React.useState("");
                 onPress={() => {
                   console.log("reseting with " + email)
                   Alert.alert("Notice", 
-                  "An email has been sent to your email address. Please follow the contained instructions to reset your password.",
+                  "An email has been sent to your email address. Please follow the contained instructions to reset your password. You will now be logged out.",
                   [
                     {
                       text: "Ok",
                       onPress: () => { 
                         //handleEmail
-                        navigation.pop()}
+                        emailIn = email
+                        attemptResetEmail()
+                        //navigation.pop()
+                      }
                     }
                   ]
                   );}}

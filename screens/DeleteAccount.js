@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
-import { AuthContext } from "../context";
+import { AuthContext, VerificationContext } from "../context";
 import Colors from "../constants/Colors";
 
 
@@ -11,6 +11,7 @@ import Colors from "../constants/Colors";
 export default ({ navigation }) => {
 
 	const { userToken, setUserToken } = React.useContext(AuthContext);
+	const { userVerified, setUserVerified } = React.useContext(VerificationContext);
 
 	return (
 		// If user clicks "No, Cancel", then return to Account screen
@@ -20,7 +21,10 @@ export default ({ navigation }) => {
 			<Text>WARNING: This cannot be undone.</Text>
 			<Text>Are you sure you want to delete your account?</Text>
 			<Button title="No, Cancel" onPress={() => navigation.pop()}></Button>
-			<Button title="Yes, Delete Account" onPress={() => setUserToken(null)}></Button>
+			<Button title="Yes, Delete Account" onPress={() => {
+				setUserToken(null) 
+				setUserVerified(null)
+			}}></Button>
 		</View>
 	);
 }
