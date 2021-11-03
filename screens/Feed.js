@@ -42,6 +42,7 @@ export default () => {
       {/* Card */}
       <View id='card' style={styles.contentContainer}>
         <CardItem id={uid}/>
+
       </View>
 
       {/* Like, Refresh, and Dislike Buttons */}

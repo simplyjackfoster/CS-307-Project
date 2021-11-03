@@ -2,6 +2,7 @@ import React from 'react';
 import { rtdb, auth } from './RTDB';
 import { ref, set, update, exists, val, child, get, remove} from "firebase/database"
 import { getID } from './ID';
+import { getDataFromPath } from './readData';
 
 
 /* 
@@ -371,4 +372,25 @@ export const writeQuestionnaire = (email_or_id, a1, a2, a3, a4, a5, a6, a7, a8,
 		has_significant_other: a13
 	});
 } // writeQuestionnaire
+
+
+/*
+ * reportUser()
+ *
+ * called when a user would like to report a user on their feed
+ * writes the reported userid to the /reported branch of database
+ * starts/increments counter of numReports in the same branch
+ * 
+ * @param email_or_id -> the email or id of the user
+ * @param numReports -> previous number of reports that the user has received
+ */
+export const reportUser = (email_or_id, currentReports) => {
+	const id = getID(email_or_id);
+	console.log("Current reports: " + currentReports);
+	currentReports = currentReports + 1;
+	console.log("Updated reports: " + currentReports);
+	update(ref(rtdb, "reported/" + id), {
+		num_reports: currentReports
+	});
+}
 

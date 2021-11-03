@@ -12,6 +12,7 @@ import {
 import { getDataFromPath, getInstagramLink } from "../database/readData";
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
+import { reportUser } from '../database/writeData';
 
 
 
@@ -30,6 +31,7 @@ const CardItem = (props) => {
     const instagram = getDataFromPath("users/" + uid + "/Profile/instagram");
     const instagramLink = getInstagramLink(uid);
     const bday = getDataFromPath("users/" + uid + "/Critical Information/birthday");
+    const reports = getDataFromPath("reported/" + uid + "/num_reports");
 
     var age;
     /* Used for age calculation */
@@ -110,7 +112,8 @@ const CardItem = (props) => {
                     <View>
                         {renderIcon("book", 25, Colors.royalBlue)}
                     </View>
-                    <Text style={styles.majorContent}>Major: {major}</Text>
+                    <Text style={styles.infoHeader}>Major: </Text>
+                    <Text style={styles.infoContent}>{major}</Text>
                 </View>
 
 
@@ -125,7 +128,8 @@ const CardItem = (props) => {
                     <View>
                         {renderIcon("map-pin", 25, Colors.royalBlue)}
                     </View>
-                    <Text style={styles.locationContent}>Location: {location}</Text>
+                    <Text style={styles.infoHeader}>Location: </Text>
+                    <Text style={styles.infoContent}>{location}</Text>
                 </View>
 
 
@@ -140,7 +144,8 @@ const CardItem = (props) => {
                     <View>
                         {renderIcon("users", 22, Colors.royalBlue)}
                     </View>
-                    <Text style={styles.preferredNumRoommatesContent}>Preferred # of Roommates: {preferredNumRoommates}</Text>
+                    <Text style={styles.infoHeader}>Preferred # of Roommates: </Text>
+                    <Text style={styles.infoContent}>{preferredNumRoommates}</Text>
                 </View>
 
 
@@ -192,7 +197,12 @@ const CardItem = (props) => {
                         <Text style={styles.reportUserText}
                             onPress={() => {
                                 Alert.alert("Report User", "Are you sure you want to report " + name + "?",
-                                [{ text: "No" }, {text: "Yes"}]); 
+                                [{ 
+                                    text: "No" 
+                                }, {
+                                    text: "Yes",
+                                    onPress: () => reportUser(uid, reports)
+                                }]); 
                             }}
                         >
                             Report User
@@ -274,24 +284,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
 
-    majorContent: {
-        paddingLeft: 15,
-        fontSize: 20,
-    },
-
-
     /* Location */
     locationWrapper: {
         paddingTop: 20,
         paddingLeft: 5,
         flexDirection: 'row',
     },
-
-    locationContent: {
-        paddingLeft: 20,
-        fontSize: 20,
-    },
-
    
     /* Preferred Roommates */
     preferredNumRoommatesWrapper: {
@@ -299,11 +297,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
 
-    preferredNumRoommatesContent: {
+
+    infoHeader: {
+        fontStyle: 'italic',
         paddingLeft: 15,
         fontSize: 20,
     },
 
+    infoContent: {
+		flex: 1,
+		flexWrap: 'wrap',
+        fontSize: 20,
+    },
 
     /* Preferred Living Location */
     preferredLivingLocationWrapper: {
