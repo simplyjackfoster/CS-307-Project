@@ -538,8 +538,8 @@ export default ( {navigation} ) => {
           </SafeAreaView> 
 
 
-          {/* Living Location (text), living locations (picker) */}
-          <Text style={styles.prompt}>Preferred Living Location</Text>
+          {/* Preferred Housing (text), living locations (picker) */}
+          <Text style={styles.prompt}>Preferred Housing</Text>
           <Picker
             style={styles.picker}
             selectedValue={
