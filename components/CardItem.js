@@ -25,7 +25,8 @@ const CardItem = (props) => {
     const major = getDataFromPath("users/" + uid + "/Profile/major");
     const bio = getDataFromPath("users/" + uid + "/Profile/bio");
     const vaccination = getDataFromPath("users/" + uid + "/Profile/covid_vaccination_status");
-    const preferredNumRoommates = getDataFromPath("users/" + uid + "/Profile/preferred_number_of_roommates");    
+    const preferredNumRoommates = getDataFromPath("users/" + uid + "/Profile/preferred_number_of_roommates");
+    const preferredLivingLocation = getDataFromPath("users/" + uid + "/Profile/preferred_living_location");
     const instagram = getDataFromPath("users/" + uid + "/Profile/instagram");
     const instagramLink = getInstagramLink(uid);
     const bday = getDataFromPath("users/" + uid + "/Critical Information/birthday");
@@ -141,6 +142,10 @@ const CardItem = (props) => {
                     </View>
                     <Text style={styles.preferredNumRoommatesContent}>Preferred # of Roommates: {preferredNumRoommates}</Text>
                 </View>
+
+
+                {/* Preferred living location (optional) */}
+
 
 
                 {/* Instagram (optional) */}

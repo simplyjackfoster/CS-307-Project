@@ -224,7 +224,25 @@ export const writePreferredNumRoommates = (email_or_id, numRoommates) => {
 
 
 /*
- * writeIstagram()
+ * writePreferredLivingLocation()
+ *
+ * Writes the preferred living location to the specified user in the RTDB.
+ * @param email_or_id -> the email or id specifying the user.
+ * @param livingLocation -> the preferred living location of the user
+ * 												that we are writing to the database.
+ */
+export const writePreferredLivingLocation = (email_or_id, livingLocation) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		preferred_living_location: livingLocation
+	});
+} // writePreferredLivingLocation()
+
+
+
+/*
+ * writeInstagram()
  *
  * Writes the instagram of the specified user in the RTDB.
  * @param email_or_id -> the email or id of the user.

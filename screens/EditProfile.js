@@ -33,6 +33,7 @@ import {
   writeGender,
   writeVaccinated,
   writePreferredNumRoommates,
+  writePreferredLivingLocation,
   writeInstagram
 } from '../database/writeData';
 
@@ -77,6 +78,10 @@ export default ( {navigation} ) => {
   const [locationChanged, setLocationChanged] = React.useState(false);
   const [numRoommates, setNumRoommates] = React.useState(null);
   const [numRoommatesChanged, setNumRoommatesChanged] = React.useState(false);
+
+  const [livingLocation, setlivingLocation] = React.useState(null);
+  const [livingLocationChanged, setlivingLocationChanged] = React.useState(false);
+
   const [instagram, onChangeInstagram] = React.useState(null);
   const [instagramChanged, setInstagramChanged] = React.useState(false);
 
@@ -314,6 +319,7 @@ export default ( {navigation} ) => {
 
     // write the gender and vaccination status data
     writeGender(auth.currentUser.email, gender);
+    writePreferredLivingLocation(auth.currentUser.email);
     writeVaccinated(auth.currentUser.email, vaccinated);
 
 
@@ -500,6 +506,25 @@ export default ( {navigation} ) => {
               placeholder={"Number of people you want to live with"}
             />
           </SafeAreaView> 
+
+
+          {/* Living Location (text), living locations (picker) */}
+          <Text style={styles.prompt}>Living Location</Text>
+          <Picker
+            style={styles.picker}
+            selectedValue={
+              livingLocation
+            }
+            onValueChange={(itemValue, itemIndex) =>
+              setlivingLocation(itemValue)
+            }
+          >
+            <Picker.Item label="Male" value={1} />
+            <Picker.Item label="Female" value={2} />
+            <Picker.Item label="Other" value={3} />
+            <Picker.Item label="Prefer not to say" value={4} />
+          </Picker>
+
 
           {/* Instagram Link (field) */}
           <Text style={styles.prompt}>Instagram</Text>
