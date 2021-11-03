@@ -118,9 +118,12 @@ export default ( {navigation} ) => {
 				</Text>
 			</View>
 
-
 			{/* Instagram Link */}
-			<View style={styles.infoWrapper}>
+			<View style={
+				getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram") ?
+					(styles.infoWrapper)
+					: ({display: 'none'})
+				}>
 				<View style={styles.icon}>
 					{renderIcon("instagram", 25, Colors.darkBlue)}
 				</View>
