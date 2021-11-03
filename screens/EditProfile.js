@@ -80,7 +80,6 @@ export default ( {navigation} ) => {
   const [numRoommatesChanged, setNumRoommatesChanged] = React.useState(false);
 
   const [livingLocation, setlivingLocation] = React.useState(null);
-  const [livingLocationChanged, setlivingLocationChanged] = React.useState(false);
 
   const [instagram, onChangeInstagram] = React.useState(null);
   const [instagramChanged, setInstagramChanged] = React.useState(false);
@@ -92,6 +91,29 @@ export default ( {navigation} ) => {
   // function for setting the selection boxes to the correct value
   const setSelection = () => {
     const dbRef = ref(rtdb);
+
+    // set the living location to the correct value
+    get(child(dbRef, "users/" + getID(auth.currentUser.email) +
+              "/Profile/preferred_living_location")).then((snapshot) => {
+      if (snapshot.exists()) {
+        const data_val = snapshot.val();
+        if (data_val == "Dorm1") {
+          setGender(1);
+        }
+        else if (data_val == "Dorm2") {
+          setGender(2);
+        }
+        else if (data_val == "Dorm3") {
+          setGender(3);
+        }
+        else if (data_val == "Dorm4") {
+          setGender(4);
+        }
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+
 
     // set the gender to the correct value
     get(child(dbRef, "users/" + getID(auth.currentUser.email) +
@@ -519,10 +541,10 @@ export default ( {navigation} ) => {
               setlivingLocation(itemValue)
             }
           >
-            <Picker.Item label="Male" value={1} />
-            <Picker.Item label="Female" value={2} />
-            <Picker.Item label="Other" value={3} />
-            <Picker.Item label="Prefer not to say" value={4} />
+            <Picker.Item label="Dorm1" value={1} />
+            <Picker.Item label="Dorm2" value={2} />
+            <Picker.Item label="Dorm3" value={3} />
+            <Picker.Item label="Dorm4" value={4} />
           </Picker>
 
 

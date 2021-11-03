@@ -315,20 +315,20 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignSelf: 'center',
     },
-
+    
     viewInstagramText: {
         fontSize: 15,
         paddingTop: 5,
         paddingLeft: 12,
     },
-
+    
     instagramUsernameText: {
         color: Colors.darkGray,
         fontSize: 12,
         paddingTop: 3,
         alignSelf: 'center',
     },
-
+    
 
     /* Report User */
     reportUserWrapper: {
