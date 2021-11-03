@@ -45,12 +45,10 @@ const MatchItem = (props) => {
 
     return (
         <View style ={styles.containerMatch}>
-            <Image style = {styles.profileImage}
-                source={{uri: profile_picture}}
-            />
             <View style={styles.container}>
+                <Image style = {styles.profileImage}source={{uri: profile_picture}}/>
                 <Text>{name}</Text>
-                <Text style={styles.description}>{location}, {major}</Text>
+                <Text style={styles.description}>Hometown: {location}, Major: {major}</Text>
             </View>
         </View>
     );
@@ -75,7 +73,6 @@ const styles = StyleSheet.create({
     },
     containerMatch: {
         justifyContent: "space-between",
-		flex: 1,
 		paddingHorizontal: 10
     },
     profileImage: {
@@ -83,7 +80,9 @@ const styles = StyleSheet.create({
 		width: 60,
 		height: 60,
 		marginRight: 20,
-		marginVertical: 15
+		marginVertical: 15,
+        paddingTop: 5,
+        alignSelf: 'flex-start',
     },
     button: {
         backgroundColor: Colors.green,
