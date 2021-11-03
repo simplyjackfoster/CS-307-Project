@@ -96,13 +96,15 @@ export default ( {navigation} ) => {
 			</View>
 			<View style={{marginTop: 40}}/>
 
-			{/* Email: <email> */}
-			<View style={styles.infoWrapper}>
-				<View style={styles.icon}>
-					{renderIcon("envelope", 25, Colors.darkBlue)}
+			<View style={styles.fullInfoWrapper}>
+				{/* Email: <email> */}
+				<View style={styles.infoWrapper}>
+					<View style={styles.icon}>
+						{renderIcon("envelope", 25, Colors.darkBlue)}
+					</View>
+					<Text style={styles.infoHeader}>Email:</Text>
+					<Text style={styles.infoContent}>{auth.currentUser.email}</Text>
 				</View>
-				<Text style={styles.infoHeader}>Email:</Text>
-				<Text style={styles.infoContent}>{auth.currentUser.email}</Text>
 			</View>
 			
 			{/* Phone: <phone number> */}
@@ -111,7 +113,9 @@ export default ( {navigation} ) => {
 					{renderIcon("phone-square", 25, Colors.darkBlue)}
 				</View>
 				<Text style={styles.infoHeader}>Phone:</Text>
-				<Text style={styles.infoContent}>123-456-7890</Text>
+				<Text style={styles.infoContent}>
+					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Critical Information/phone")}
+				</Text>
 			</View>
 
 
@@ -184,6 +188,7 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		fontSize: 25,
 		fontWeight: 'bold',
+		marginHorizontal: 12,
 	},
 	
 	profilePic: {
@@ -212,8 +217,10 @@ const styles = StyleSheet.create({
 	},
 
 	infoContent: {
-		alignSelf: 'flex-start',
+		flex: 1,
+		flexWrap: 'wrap',
 		fontSize: 20,
+		marginRight: 25,
 	},
 
 	disableWrapper: {
@@ -251,7 +258,10 @@ const styles = StyleSheet.create({
 
 	/* Instagram Link Text */
 	instagramLink: {
+		flex: 1,
+		flexWrap: 'wrap',
 		fontSize: 20,
+		marginRight: 25,
 		color: Colors.blue,
 		textDecorationLine: 'underline',
 	},
