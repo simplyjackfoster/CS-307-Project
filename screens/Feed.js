@@ -17,24 +17,51 @@ import { renderIcon } from "../images/Icons";
  * users profiles.
  */
 export default () => {
+
+  const uid = "thylan";
+
+
+
+  const refreshScreen = () => {
+  //   console.log(1);
+  //   var cardContainer = getElementById('card');
+  //   console.log(2);
+  //   var newCard = createElement("CardItem");
+  //   console.log(3);
+  //   newCard.setAttribute("id", uid);
+  //   console.log(4);
+  //   cardContainer.removeChild(cardContainer.firstChild);
+  //   console.log(5);
+  //   cardContainer.appendChild(newCard);
+  } 
+
+
 	return (
 		<View style={styles.container}>
 
       {/* Card */}
-      <View style={styles.contentContainer}>
-        <CardItem id={"test"}/>
+      <View id='card' style={styles.contentContainer}>
+        <CardItem id={uid}/>
+
       </View>
 
-      {/* Like and Dislike Buttons */}
+      {/* Like, Refresh, and Dislike Buttons */}
       <View style={styles.footer}>
         <TouchableOpacity style={styles.dislikeWrapper} onPress={() => {
-          console.log("Dislike pressed")
+          console.log("Dislike pressed");
         }}>
           {renderIcon("times", 50, Colors.red)}
         </TouchableOpacity>
 
+        <TouchableOpacity style={styles.refreshWrapper} onPress={() => {
+          console.log("Refresh pressed");
+          refreshScreen();
+        }}>
+          {renderIcon("refresh", 50, Colors.yellow)}
+        </TouchableOpacity>
+
         <TouchableOpacity style={styles.likeWrapper} onPress={() => {
-          console.log("Like pressed")
+          console.log("Like pressed");
         }}>
           {renderIcon("check", 50, Colors.green)}
         </TouchableOpacity>
@@ -74,12 +101,21 @@ const styles = StyleSheet.create({
 
   /* Dislike Button */
   dislikeWrapper: {
-    marginRight: 45,
+    // marginLeft: 25,
+    // marginRight: 25,
+  },
+  
+  /* Refresh Button */
+  refreshWrapper: {
+    // marginLeft: 20,
+    // marginRight: 20,
+    alignContent: 'center',
   },
 
   /* Like Button */
   likeWrapper: {
-    marginLeft: 45,
+    // marginLeft: 25,
+    // marginRight: 25,
   },
 
 

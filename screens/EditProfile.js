@@ -33,6 +33,7 @@ import {
   writeGender,
   writeVaccinated,
   writePreferredNumRoommates,
+  writePreferredLivingLocation,
   writeInstagram
 } from '../database/writeData';
 
@@ -47,7 +48,8 @@ import {
   isValidInstagram,
   isValidGraduationYear,
   isValidMajor,
-  isValidNumberOfRoommates
+  isValidNumberOfRoommates,
+  isValidLivingLocation
 } from '../checkInputs';
 import { set } from 'react-native-reanimated';
 import Interests from './Interests';
@@ -77,6 +79,9 @@ export default ( {navigation} ) => {
   const [locationChanged, setLocationChanged] = React.useState(false);
   const [numRoommates, setNumRoommates] = React.useState(null);
   const [numRoommatesChanged, setNumRoommatesChanged] = React.useState(false);
+
+  const [livingLocation, setLivingLocation] = React.useState(1);
+
   const [instagram, onChangeInstagram] = React.useState(null);
   const [instagramChanged, setInstagramChanged] = React.useState(false);
 
@@ -87,6 +92,33 @@ export default ( {navigation} ) => {
   // function for setting the selection boxes to the correct value
   const setSelection = () => {
     const dbRef = ref(rtdb);
+
+    // set the living location to the correct value
+    get(child(dbRef, "users/" + getID(auth.currentUser.email) +
+              "/Profile/preferred_living_location")).then((snapshot) => {
+      if (snapshot.exists()) {
+        const data_val = snapshot.val();
+        if (data_val == "Earhart") { setLivingLocation(1); }
+        else if (data_val == "Freida Parker Hall") { setLivingLocation(2); }
+        else if (data_val == "Winifred Parker Hall") { setLivingLocation(3); }
+        else if (data_val == "Harrison Hall") { setLivingLocation(4); }
+        else if (data_val == "Hawkins Hall") { setLivingLocation(5); }
+        else if (data_val == "Hillenbrand Hall") { setLivingLocation(6); }
+        else if (data_val == "Honors College and Residences") { setLivingLocation(7); }
+        else if (data_val == "Owen Hall") { setLivingLocation(8); }
+        else if (data_val == "Shreve Hall") { setLivingLocation(9); }
+        else if (data_val == "Meredith (female only)") { setLivingLocation(10); }
+        else if (data_val == "Meredith South (female only)") { setLivingLocation(11); }
+        else if (data_val == "Windsor (female only)") { setLivingLocation(12); }
+        else if (data_val == "Cary Quad (male only)") { setLivingLocation(13); }
+        else if (data_val == "McCutcheon (male only)") { setLivingLocation(14); }
+        else if (data_val == "Tarkington (male only)") { setLivingLocation(15); }
+        else if (data_val == "Wiley (male only)") { setLivingLocation(16); }
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+
 
     // set the gender to the correct value
     get(child(dbRef, "users/" + getID(auth.currentUser.email) +
@@ -314,6 +346,7 @@ export default ( {navigation} ) => {
 
     // write the gender and vaccination status data
     writeGender(auth.currentUser.email, gender);
+    writePreferredLivingLocation(auth.currentUser.email, livingLocation);
     writeVaccinated(auth.currentUser.email, vaccinated);
 
 
@@ -355,6 +388,9 @@ export default ( {navigation} ) => {
     if (numRoommatesChanged != false) {
       if (!isValidNumberOfRoommates(numRoommates)) {return}
     }
+
+    // Check if the preferred living location is valid
+    if (!isValidLivingLocation(livingLocation, gender)) {return}
 
 
 
@@ -503,6 +539,37 @@ export default ( {navigation} ) => {
               placeholder={"Number of people you want to live with"}
             />
           </SafeAreaView> 
+
+
+          {/* Preferred Housing (text), living locations (picker) */}
+          <Text style={styles.prompt}>Preferred Housing</Text>
+          <Picker
+            style={styles.picker}
+            selectedValue={
+              livingLocation
+            }
+            onValueChange={(itemValue, itemIndex) =>
+              setLivingLocation(itemValue)
+            }
+          >
+            <Picker.Item label="Earhart" value={1} />
+            <Picker.Item label="Freida Parker Hall" value={2} />
+            <Picker.Item label="Winifred Parker Hall" value={3} />
+            <Picker.Item label="Harrison Hall" value={4} />
+            <Picker.Item label="Hawkins Hall" value={5} />
+            <Picker.Item label="Hillenbrand Hall" value={6} />
+            <Picker.Item label="Honors College and Residences" value={7} />
+            <Picker.Item label="Owen Hall" value={8} />
+            <Picker.Item label="Shreve Hall" value={9} />
+            <Picker.Item label="Meredith (female only)" value={10} />
+            <Picker.Item label="Meredith South (female only)" value={11} />
+            <Picker.Item label="Windsor (female only)" value={12} />
+            <Picker.Item label="Cary Quad (male only)" value={13} />
+            <Picker.Item label="McCutcheon (male only)" value={14} />
+            <Picker.Item label="Tarkington (male only)" value={15} />
+            <Picker.Item label="Wiley (male only)" value={16} />
+          </Picker>
+
 
           {/* Instagram Link (field) */}
           <Text style={styles.prompt}>Instagram</Text>

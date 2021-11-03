@@ -476,6 +476,38 @@ export const isValidNumberOfRoommates = (numRoommates) => {
 
 
 
+/*
+ * isValidLivingLocation()
+ *
+ * function to check if teh living location is valid based on gender
+ * returns true if it gender matches the residence hall
+ * Otherwise, returns false.
+ */
+export const isValidLivingLocation = (livingLocation, gender) => {
+
+	if (!livingLocation) {
+		return true;
+	}
+
+	// check for male in female residence halls
+	if (gender == 1 && livingLocation >= 10 && livingLocation <= 12) {
+		Alert.alert("Error", "Living location is not compatible with gender, please try again.", 
+			[{ text: "Ok" }]);
+			return false;
+	}
+	
+	// check for female in male residence halls
+	if (gender == 2 && livingLocation >= 13 && livingLocation <= 16) {
+		Alert.alert("Error", "Living location is not compatible with gender, please try again.", 
+			[{ text: "Ok" }]);
+			return false;
+	}
+
+	return true;
+} // isValidLivingLocation()
+
+
+
 
 /*
  * isValidInstagram()

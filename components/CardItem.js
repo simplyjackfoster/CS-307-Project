@@ -26,7 +26,8 @@ const CardItem = (props) => {
     const major = getDataFromPath("users/" + uid + "/Profile/major");
     const bio = getDataFromPath("users/" + uid + "/Profile/bio");
     const vaccination = getDataFromPath("users/" + uid + "/Profile/covid_vaccination_status");
-    const preferredNumRoommates = getDataFromPath("users/" + uid + "/Profile/preferred_number_of_roommates");    
+    const preferredNumRoommates = getDataFromPath("users/" + uid + "/Profile/preferred_number_of_roommates");
+    const preferredLivingLocation = getDataFromPath("users/" + uid + "/Profile/preferred_living_location");
     const instagram = getDataFromPath("users/" + uid + "/Profile/instagram");
     const instagramLink = getInstagramLink(uid);
     const bday = getDataFromPath("users/" + uid + "/Critical Information/birthday");
@@ -94,7 +95,7 @@ const CardItem = (props) => {
                     )}
                 >
                     <View>
-                        {renderIcon("graduation-cap", 25, Colors.darkBlue)}
+                        {renderIcon("graduation-cap", 25, Colors.royalBlue)}
                     </View>
                     <Text style={styles.graduationYearContent}>Class of {graduationYear}</Text>
                 </View>
@@ -109,7 +110,7 @@ const CardItem = (props) => {
                     )}
                 >
                     <View>
-                        {renderIcon("book", 25, Colors.darkBlue)}
+                        {renderIcon("book", 25, Colors.royalBlue)}
                     </View>
                     <Text style={styles.infoHeader}>Major: </Text>
                     <Text style={styles.infoContent}>{major}</Text>
@@ -125,7 +126,7 @@ const CardItem = (props) => {
                     )}
                 >
                     <View>
-                        {renderIcon("map-pin", 25, Colors.darkBlue)}
+                        {renderIcon("map-pin", 25, Colors.royalBlue)}
                     </View>
                     <Text style={styles.infoHeader}>Location: </Text>
                     <Text style={styles.infoContent}>{location}</Text>
@@ -141,10 +142,25 @@ const CardItem = (props) => {
                     )}
                 >
                     <View>
-                        {renderIcon("users", 25, Colors.darkBlue)}
+                        {renderIcon("users", 22, Colors.royalBlue)}
                     </View>
                     <Text style={styles.infoHeader}>Preferred # of Roommates: </Text>
                     <Text style={styles.infoContent}>{preferredNumRoommates}</Text>
+                </View>
+
+
+                {/* Preferred living location (optional) */}
+                <View style=
+                    {preferredLivingLocation ? (
+                        styles.preferredLivingLocationWrapper
+                    ) : (
+                        {display: 'none'}
+                    )}
+                >
+                    <View>
+                        {renderIcon("home", 25, Colors.royalBlue)}
+                    </View>
+                    <Text style={styles.preferredLivingLocationContent}>Preferred Housing:{"\n"}{preferredLivingLocation}</Text>
                 </View>
 
 
@@ -294,6 +310,18 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
 
+    /* Preferred Living Location */
+    preferredLivingLocationWrapper: {
+        paddingTop: 20,
+        flexDirection: 'row',
+    },
+
+    preferredLivingLocationContent: {
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+
+
     /* Instagram */
     instagramWrapper: {
         flexDirection: 'row',
@@ -315,20 +343,20 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignSelf: 'center',
     },
-
+    
     viewInstagramText: {
         fontSize: 15,
         paddingTop: 5,
         paddingLeft: 12,
     },
-
+    
     instagramUsernameText: {
         color: Colors.darkGray,
         fontSize: 12,
         paddingTop: 3,
         alignSelf: 'center',
     },
-
+    
 
     /* Report User */
     reportUserWrapper: {

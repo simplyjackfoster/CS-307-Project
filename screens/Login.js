@@ -43,8 +43,8 @@ export default ({ navigation }) => {
 	 */
 	const attemptLogin = () => {
 		// log inputs for testing
-		console.log("\nEmail: " + email);
-		console.log("Password: " + password);
+		// console.log("\nEmail: " + email);
+		// console.log("Password: " + password);
 
 		if (!email || !password) {
 			// at least one of the fields has not been filled out
