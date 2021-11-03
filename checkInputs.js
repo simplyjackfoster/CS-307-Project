@@ -461,9 +461,11 @@ export const isValidNumberOfRoommates = (numRoommates) => {
 			[{ text: "Ok" }]);
 			return false;
 	}
+	let count = 0
 	for (const c in numRoommates) {
-		if (numRoommates[c] < '0' || numRoommates[c] > '9') {
-			Alert.alert("Error", "Preferred # of Roommates field has invalid number, please try again.", 
+		count++
+		if (numRoommates[c] < '0' || numRoommates[c] > '6' || count >= 2) {
+			Alert.alert("Error", "Preferred # of Roommates field has invalid number, please try again. Note: maximum number of roommates is 9.", 
 				[{ text: "Ok" }]);
 				return false;
 		}

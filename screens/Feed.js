@@ -22,7 +22,7 @@ export default () => {
 
       {/* Card */}
       <View style={styles.contentContainer}>
-        <CardItem id={"mfinder"}/>
+        <CardItem id={"test"}/>
       </View>
 
       {/* Like and Dislike Buttons */}

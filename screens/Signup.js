@@ -128,6 +128,7 @@ export default ( {navigation} ) => {
                 onChangeText={onChangeName}
                 autoCapitalize='none'
                 autoComplete='off'
+                maxLength={50}
                 autoCorrect={false}
                 spellCheck={false}
                 placeholder={name}
@@ -143,6 +144,7 @@ export default ( {navigation} ) => {
                 onChangeText={onChangeEmail}
                 autoCapitalize='none'
                 autoComplete='off'
+                maxLength={50}
                 autoCorrect={false}
                 spellCheck={false}
                 placeholder={email}
@@ -275,6 +277,7 @@ export default ( {navigation} ) => {
                 autoComplete='off'
                 autoCorrect={false}
                 spellCheck={false}
+                maxLength={50}
                 placeholder={"Answer"}
               />
             </SafeAreaView>
