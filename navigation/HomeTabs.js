@@ -21,8 +21,8 @@ const HomeTabs = () => {
 
             if (route.name === 'Profile') {
               iconName = focused
-                ? 'home'
-                : 'home';
+                ? 'user'
+                : 'user';
             }
 			else if (route.name === 'Feed') {
               iconName = focused ? 'align-justify' : 'align-justify';

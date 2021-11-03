@@ -86,6 +86,21 @@ const CardItem = (props) => {
                 </View>
 
 
+                {/* Vaccination status */}
+                <View style={styles.vaccinationWrapper}>
+                    <View>
+                        {renderIcon("medkit", 25, Colors.royalBlue)}
+                    </View>
+                    <Text style={styles.vaccinationContent}>
+                        {(vaccination == "Vaccinated") ? (
+                            "Vaccinated for Covid-19"
+                        ) : (
+                            "Not vaccinated for Covid-19"
+                        )}
+                    </Text>
+                </View>
+
+
                 {/* Graduation year (optional) */}
                 <View style={
                     graduationYear ? (
@@ -265,6 +280,20 @@ const styles = StyleSheet.create({
     bioContent: {
        fontSize: 15, 
     },
+
+
+    /* Vaccination */
+    vaccinationWrapper: {
+        paddingTop: 20,
+        flexDirection: 'row',
+    },
+
+    vaccinationContent: {
+        marginLeft: 5,
+        paddingLeft: 5,
+        fontSize: 20, 
+    },
+
 
     /* Graduation Year */
     graduationYearWrapper: {
