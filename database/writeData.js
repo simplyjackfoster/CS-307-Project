@@ -348,9 +348,9 @@ export const writeQuestionnaire = (email_or_id, a1, a2, a3, a4, a5, a6, a7, a8,
  */
 export const reportUser = (email_or_id, currentReports) => {
 	const id = getID(email_or_id);
-	console.log(currentReports);
+	console.log("Current reports: " + currentReports);
 	currentReports = currentReports + 1;
-	console.log("updated reports: " + currentReports);
+	console.log("Updated reports: " + currentReports);
 	update(ref(rtdb, "reported/" + id), {
 		num_reports: currentReports
 	});
