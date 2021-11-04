@@ -56,7 +56,6 @@ export const writeNewUser = (email, name, phone,
 		profile_picture: default_profile_picture, 
 	});
 	set(ref(rtdb, "users/" + id + "/Profile/Interests"), {
-		interest_count: 0,
 		interest1: "",
 		interest2: "",
 		interest3: "",
