@@ -9,7 +9,7 @@ import {
     TouchableOpacity,
     Alert
 } from 'react-native';
-import { getDataFromPath, getInstagramLink } from "../database/readData";
+import { getDataFromPath, getInstagramLink, getInterests } from "../database/readData";
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
 import { reportUser } from '../database/writeData';
@@ -32,6 +32,8 @@ const CardItem = (props) => {
     const instagramLink = getInstagramLink(uid);
     const bday = getDataFromPath("users/" + uid + "/Critical Information/birthday");
     const reports = getDataFromPath("reported/" + uid + "/num_reports");
+    const interests = getInterests(uid);
+
 
     var age;
     /* Used for age calculation */
@@ -86,7 +88,55 @@ const CardItem = (props) => {
                 </View>
 
 
-                
+                {/* Interests */} 
+                <View style={styles.interestsContainer}>
+                    <View style=
+                        {interests[0] ? (
+                            styles.interestWrapper
+                        ) : (
+                            {display: 'none'}
+                        )}
+                    >
+                        <Text style={styles.interestText}>{interests[0]}</Text>
+                    </View>
+                    <View style=
+                        {interests[1] ? (
+                            styles.interestWrapper
+                        ) : (
+                            {display: 'none'}
+                        )}
+                    >
+                        <Text style={styles.interestText}>{interests[1]}</Text>
+                    </View>
+                    <View style=
+                        {interests[2] ? (
+                            styles.interestWrapper
+                        ) : (
+                            {display: 'none'}
+                        )}
+                    >
+                        <Text style={styles.interestText}>{interests[2]}</Text>
+                    </View>
+                    <View style=
+                        {interests[3] ? (
+                            styles.interestWrapper
+                        ) : (
+                            {display: 'none'}
+                        )}
+                    >
+                        <Text style={styles.interestText}>{interests[3]}</Text>
+                    </View>
+                    <View style=
+                        {interests[4] ? (
+                            styles.interestWrapper
+                        ) : (
+                            {display: 'none'}
+                        )}
+                    >
+                        <Text style={styles.interestText}>{interests[4]}</Text>
+                    </View>
+                </View>
+
 
 
                 {/* Graduation year (optional) */}
@@ -281,7 +331,30 @@ const styles = StyleSheet.create({
     },
 
     bioContent: {
-       fontSize: 15, 
+        fontSize: 15, 
+    },
+
+
+    /* Interets */
+    interestsContainer: {
+        flex: 1,
+        marginTop: 20,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
+
+    interestWrapper: {
+        flexDirection: 'row',
+        marginTop: 5,
+        borderWidth: 1,
+        borderRadius: 20,
+        marginHorizontal: 2,
+        padding: 7,
+
+    },
+
+    interestText: {
+        fontSize: 12,
     },
     
 
