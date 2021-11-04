@@ -1,4 +1,4 @@
-import { sendPasswordResetEmail } from 'firebase/auth';
+import { sendPasswordResetEmail, sendSignInLinkToEmail, updatePassword, onAuthStateChanged } from 'firebase/auth';
 import React from 'react';
 import {
   TouchableOpacity,
@@ -10,6 +10,7 @@ import {
   Alert,
   KeyboardAvoidingView
 } from 'react-native';
+import { isValidPassword } from '../checkInputs';
 
 import Colors from "../constants/Colors";
 import { AuthContext } from "../context";
@@ -25,14 +26,19 @@ var emailIn = "";
 
 export default ( {navigation} ) => {
   const [email, onChangeEmail] = React.useState("");
+  const [password, onChangePassword] = React.useState(null);
   const { userToken, setUserToken } = React.useContext(AuthContext);
 
+  const actionCode = () => {
+    url: 'none'
+    handleCodeInApp: true
+  }
+
   const attemptResetEmail = () => {
+    //may need to look into way to send to internal link
     sendPasswordResetEmail(auth, emailIn)
       .then(() => {
         console.log("Reset Password Email Sent");
-        auth.signOut();
-        setUserToken(null);
       })
       .catch((error) => {
         Alert.alert("Error", "Error: There was an issue sending you a password link");
@@ -40,12 +46,47 @@ export default ( {navigation} ) => {
         console.log("Error Message: " + error.message);
         navigation.pop();
       })
+      var authState = onAuthStateChanged(auth, (user) => {
+				if (user) {
+					console.log("Auth State Changed From Reset Password");
+          closeAuthState(authState);
+				}
+				else {
+					console.log("Waiting for user auth state change from login");
+				}
+			});
+  }
+
+  const closeAuthState = (authState) => {
+    authState();
+  }
+
+  const attempPasswordReset = () => {
+    // validate passwords
+    if (isValidPassword(password, password)){
+      updatePassword(auth.currentUser, password).then(() => {
+        console.log("reset successful")
+        auth.signOut();
+        setUserToken(null);
+      })
+      .catch((error) => {
+        Alert.alert("Error", "Error: There was an issue updating your password");
+        console.log("Error Code: " + error.code);
+        console.log("Error Message: " + error.message);
+      })
+    }
   }
 
   return (
     <KeyboardAvoidingView style={{flex: 1}} behavior={"padding"}>
       <View style={styles.container}>
-        <View style={styles.form}>
+        {/* Display email prompt to give access to reset password page if not logged in  */}
+        <View style={userToken ? (
+          { display: 'none' }
+        ) : (
+          styles.form 
+        )}
+        >
           <Text style={styles.email}>Enter your email address</Text>
           <SafeAreaView>
             <TextInput
@@ -64,13 +105,38 @@ export default ( {navigation} ) => {
                       text: "Ok",
                       onPress: () => { 
                         //handleEmail
-                        emailIn = email
                         attemptResetEmail()
-                        navigation.pop()
                       }
                     }
                   ]
                   );}}
+            >
+            <Text style={styles.resetText}>Send Reset Password Email</Text>
+          </TouchableOpacity>
+            </SafeAreaView>
+        </View>
+
+        {/* Display Reset Password Page when logged in  */}
+        <View style={userToken ? (
+          styles.form 
+        ) : (
+          { display: 'none' }
+        )}
+        >
+          <Text style={styles.email}>Enter your new password</Text>
+          <SafeAreaView>
+            <TextInput
+              style={styles.emailInput}
+              onChangeText={onChangePassword}
+              placeholder={password}
+            />
+            <TouchableOpacity
+                style={styles.resetButton}
+                onPress={() => {
+                  console.log("reseting password")
+                  attempPasswordReset()
+                  navigation.pop()
+                }}
             >
             <Text style={styles.resetText}>Reset Password</Text>
           </TouchableOpacity>
