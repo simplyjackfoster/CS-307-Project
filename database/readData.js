@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import { rtdb, auth } from './RTDB';
-import {ref, set, exists, val, child, get, remove} from "firebase/database";
+import {ref, set, exists, val, child, get, remove, onValue } from "firebase/database";
 import { getID } from './ID';
-
+import { Value } from 'react-native-reanimated';
 
 
 /*
@@ -10,12 +10,15 @@ import { getID } from './ID';
  *
  * This function can be used to grab data from the Firebase RTDB.
  * @param path -> a path to the data that we want to retrieve.
- * 								ex. "users/" + id + "/Profile/profile_name"
+ * 								ex. getDataFromPath("users/" + id + "/Profile/profile_name");
  * @return -> the respective data from the database.
  */
 export const getDataFromPath = (path) => {
 	const dbRef = ref(rtdb);
 	const [data, setData] = useState(null);
+
+	// end of path
+	const endPath = path.split('/').pop();
 
 	// get the data
 	get(child(dbRef, path)).then((snapshot) => {
@@ -24,7 +27,7 @@ export const getDataFromPath = (path) => {
 			setData(data_val);
 		}
 		else {
-			console.log("This data is unavailable");
+			console.log("This data is unavailable: " + path);
 		}
 	}).catch((error) => {
 		console.error(error);
@@ -35,44 +38,36 @@ export const getDataFromPath = (path) => {
 
 
 
+
 /*
- * Gets the answers from a user's questionnaire and
- * returns them in the form of an array.
- * @param email_or_id -> the email or id of the user
- * @return -> an array containing the answers to the questionnaire
- * 						questions.
+ * getInstagramLink()
+ *
+ * This function can be used to get the url link to a users instagram.
+ * @param email_or_id -> the email or id to the specified user.
+ * @return -> the url link to the specified user's instagram.
  */
-export const getQuestionnaireData = (email_or_id) => {
-	// create the variable that we will store the answers in
-	const answers = [];	
-
-	// Answer 1
-	var a1 = getDataFromPath("users/" + getID(email_or_id) +
-															 "/Roommate Compatibility/is_clean");
-	if (!a1) {
-		a1 = 3;
-	}
-
-	// Answer 2
-	var a2 = getDataFromPath("users/" + getID(email_or_id) +
-															 "/Roommate Compatibility/week_bedtime");
-	if (!a2) {
-		a2 = 3;
-	}
-
-	answers[0] = a1;
-	answers[1] = a2;
-
-	return answers;
-} // getQuestionnaireData
+export const getInstagramLink = (email_or_id) => {
+	const id = getID(email_or_id);
+	var instagram_username = getDataFromPath("users/" + id + "/Profile/instagram");
+	var url = "https://www.instagram.com/" + instagram_username + "/";
+	return url;
+} // getInstagramLink()
 
 
 
-export const getAnswerOne = (email_or_id) => {
-	const id = getID(auth.currentUser.email);
-	var answer = getDataFromPath("users/" + id + "/Roommate Compatibility/has_people_over");
-	if (!answer) {
-		return 3;
-	}
-	return answer;
-}
+
+
+/*
+ *
+ */
+export const getInterests = (email_or_id) => {
+	const id = getID(email_or_id);
+	const interest1 = getDataFromPath("users/" + id + "/Profile/Interests/interest1");
+	const interest2 = getDataFromPath("users/" + id + "/Profile/Interests/interest2");
+	const interest3 = getDataFromPath("users/" + id + "/Profile/Interests/interest3");
+	const interest4 = getDataFromPath("users/" + id + "/Profile/Interests/interest4");
+	const interest5 = getDataFromPath("users/" + id + "/Profile/Interests/interest5");
+
+	const interests = [interest1, interest2, interest3, interest4, interest5];
+	return interests;
+} // getInterests()

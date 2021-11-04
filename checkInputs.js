@@ -38,7 +38,6 @@ export const isValidName = (name) => {
 
 
 
-
 /*
  * isValidEmail
  * function to check if the email is valid, checks that the email is a purdue email
@@ -385,7 +384,7 @@ export const isValidGraduationYear = (year) => {
 	}
 
 	for (const c in year) {
-		if (c < '0' || c > '9') {
+		if (year[c] < '0' || year[c] > '9') {
 			Alert.alert("Error", "Graduation year field must be a 4 digit number, please try again.", 
 			[{ text: "Ok" }]);	
 			return false;
@@ -405,4 +404,141 @@ export const isValidGraduationYear = (year) => {
 	}
 	return true;
 } // isValidGraduationYear()
+
+
+
+
+/*
+ * isValidMajor()
+ *
+ * function to check if a major is valid. returns true if it is either
+ * null or contains only letters. Otherwise returns false.
+ */
+export const isValidMajor = (major) => {
+	if (!major) {
+		return true;
+	}
+
+	// iterate through the characters in the name
+	for (const c of major) {
+
+		// 8216 and 8217 are the acsii values for apostrophes in iOS
+		if ((c.charCodeAt(0) == 8217) || (c.charCodeAt(0) == 8216) || (c === '-') || 
+				(c === ' ') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
+			// valid character
+		}
+		else {
+			// invalid character
+			Alert.alert("Error", "Major field contains invalid character: '" + c + 
+				"', please try again.", [{ text: "Ok" }]);
+
+			return false;
+		}
+	}
+
+	return true;
+} // isValidMajor()
+
+
+
+
+
+
+
+/*
+ * isValidNumberOfRoommates()
+ *
+ * function to check if a string is a valid number of roommates
+ * returns true if its either null, or a positive number.
+ * Otherwise, returns false.
+ */
+export const isValidNumberOfRoommates = (numRoommates) => {
+	if (!numRoommates) {
+		return true;
+	}
+	if (numRoommates[0] == '0') {
+		Alert.alert("Error", "Preferred # of Roommates field cannot have leading zeros, please try again.", 
+			[{ text: "Ok" }]);
+			return false;
+	}
+	let count = 0
+	for (const c in numRoommates) {
+		count++
+		if (numRoommates[c] < '0' || numRoommates[c] > '6' || count >= 2) {
+			Alert.alert("Error", "Preferred # of Roommates field has invalid number, please try again. Note: maximum number of roommates is 9.", 
+				[{ text: "Ok" }]);
+				return false;
+		}
+	}
+	return true;
+} // isValidNumberOfRoommates()
+
+
+
+
+/*
+ * isValidLivingLocation()
+ *
+ * function to check if teh living location is valid based on gender
+ * returns true if it gender matches the residence hall
+ * Otherwise, returns false.
+ */
+export const isValidLivingLocation = (livingLocation, gender) => {
+
+	if (!livingLocation) {
+		return true;
+	}
+
+	// check for male in female residence halls
+	if (gender == 1 && livingLocation >= 10 && livingLocation <= 12) {
+		Alert.alert("Error", "Living location is not compatible with gender, please try again.", 
+			[{ text: "Ok" }]);
+			return false;
+	}
+	
+	// check for female in male residence halls
+	if (gender == 2 && livingLocation >= 13 && livingLocation <= 16) {
+		Alert.alert("Error", "Living location is not compatible with gender, please try again.", 
+			[{ text: "Ok" }]);
+			return false;
+	}
+
+	return true;
+} // isValidLivingLocation()
+
+
+
+
+/*
+ * isValidInstagram()
+ *
+ * function to check if the instagram name entered is valid.
+ * @param username -> the username of the user.
+ * @return -> true if the username is valid, false if it is invalid.
+ */
+export const isValidInstagram = (username) => {
+	if (!username) {
+		return true;
+	}
+
+	// iterate through the characters in the name
+	for (const c of username) {
+
+		// 8216 and 8217 are the acsii values for apostrophes in iOS
+		if ((c === '.') || (c === '_') || (c.charCodeAt(0) == 8217) || (c.charCodeAt(0) == 8216) || (c === '-') || 
+				(c === ' ') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
+				(c >= '0' && c <= '9')) {
+			// valid character
+		}
+		else {
+			// invalid character
+			Alert.alert("Error", "Instagram field contains invalid character: '" + c + 
+				"', please try again.", [{ text: "Ok" }]);
+
+			return false;
+		}
+	}
+
+	return true;
+} // isValidInstagram()
 

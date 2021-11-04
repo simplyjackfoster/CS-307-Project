@@ -9,7 +9,7 @@ import {
   Image,
   Button,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
@@ -31,7 +31,10 @@ import {
   writeMajor,
   writeLocation,
   writeGender,
-  writeVaccinated
+  writeVaccinated,
+  writePreferredNumRoommates,
+  writePreferredLivingLocation,
+  writeInstagram
 } from '../database/writeData';
 
 import {
@@ -42,10 +45,16 @@ import {
   isValidPassword,
   isValidSecurity,
   isValidCheckbox,
-  isValidGraduationYear
+  isValidInstagram,
+  isValidGraduationYear,
+  isValidMajor,
+  isValidNumberOfRoommates,
+  isValidLivingLocation
 } from '../checkInputs';
 import { set } from 'react-native-reanimated';
+import Interests from './Interests';
 
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 // used so that the hooks don't get set rapidly in edit questionnaire
 var updatedTheSelected = false;
@@ -68,14 +77,51 @@ export default ( {navigation} ) => {
   const [majorChanged, setMajorChanged] = React.useState(false);
   const [location, setLocation] = React.useState(null);
   const [locationChanged, setLocationChanged] = React.useState(false);
+  const [numRoommates, setNumRoommates] = React.useState(null);
+  const [numRoommatesChanged, setNumRoommatesChanged] = React.useState(false);
+
+  const [livingLocation, setLivingLocation] = React.useState(1);
+
+  const [instagram, onChangeInstagram] = React.useState(null);
+  const [instagramChanged, setInstagramChanged] = React.useState(false);
 
   const [gender, setGender] = React.useState(1);
   const [vaccinated, setVaccinated] = React.useState(1);
+
+  // DELETE
+  const [interest, setInterest] = React.useState("Football");
 
 
   // function for setting the selection boxes to the correct value
   const setSelection = () => {
     const dbRef = ref(rtdb);
+
+    // set the living location to the correct value
+    get(child(dbRef, "users/" + getID(auth.currentUser.email) +
+              "/Profile/preferred_living_location")).then((snapshot) => {
+      if (snapshot.exists()) {
+        const data_val = snapshot.val();
+        if (data_val == "Earhart") { setLivingLocation(1); }
+        else if (data_val == "Freida Parker Hall") { setLivingLocation(2); }
+        else if (data_val == "Winifred Parker Hall") { setLivingLocation(3); }
+        else if (data_val == "Harrison Hall") { setLivingLocation(4); }
+        else if (data_val == "Hawkins Hall") { setLivingLocation(5); }
+        else if (data_val == "Hillenbrand Hall") { setLivingLocation(6); }
+        else if (data_val == "Honors College and Residences") { setLivingLocation(7); }
+        else if (data_val == "Owen Hall") { setLivingLocation(8); }
+        else if (data_val == "Shreve Hall") { setLivingLocation(9); }
+        else if (data_val == "Meredith (female only)") { setLivingLocation(10); }
+        else if (data_val == "Meredith South (female only)") { setLivingLocation(11); }
+        else if (data_val == "Windsor (female only)") { setLivingLocation(12); }
+        else if (data_val == "Cary Quad (male only)") { setLivingLocation(13); }
+        else if (data_val == "McCutcheon (male only)") { setLivingLocation(14); }
+        else if (data_val == "Tarkington (male only)") { setLivingLocation(15); }
+        else if (data_val == "Wiley (male only)") { setLivingLocation(16); }
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+
 
     // set the gender to the correct value
     get(child(dbRef, "users/" + getID(auth.currentUser.email) +
@@ -123,7 +169,6 @@ export default ( {navigation} ) => {
     setSelection();
     updatedTheSelected = true;
   }
-
 
   /*
    * Effect that resets the value of updatedTheSelected to false, so that when
@@ -178,6 +223,8 @@ export default ( {navigation} ) => {
   } // nameInputHandler()
 
 
+
+  
   /*
    * This function is called when the text in the bio 
    * input is changed. It changes the value of the bio hook
@@ -228,6 +275,31 @@ export default ( {navigation} ) => {
 
 
   /*
+    * This function is called when the preferred number of roommates input is changed. It 
+    * changes the value of the numRoommates hook and also changes the boolean that tells
+    * us if the user has changed the value.
+    */
+  const numRoommatesInputHandler = (input) => {
+    setNumRoommates(input);
+    setNumRoommatesChanged(true);
+  } // numRoommatesInputHandler()
+
+
+
+  /*
+   * This function is called when the text in the instagram 
+   * input is changed. It changes the value of the name hook
+   * and also changes the boolean that tells us if the user has
+   * changed the value.
+   */
+  const instagramInputHandler = (input) => {
+    onChangeInstagram(input);
+    setInstagramChanged(true);
+  } // instagramInputHandler()
+
+
+
+  /*
    * This function is called when the user clicks "Save".
    * It updates all of the profile data in the database.
    */
@@ -266,8 +338,18 @@ export default ( {navigation} ) => {
       writeLocation(auth.currentUser.email, location);
     }
 
+    // if the preferred # of roommates changed, then update it
+    if (numRoommatesChanged) {
+      writePreferredNumRoommates(auth.currentUser.email, numRoommates);
+    }
+
+    if (instagramChanged) {
+      writeInstagram(auth.currentUser.email, instagram);
+    }
+
     // write the gender and vaccination status data
     writeGender(auth.currentUser.email, gender);
+    writePreferredLivingLocation(auth.currentUser.email, livingLocation);
     writeVaccinated(auth.currentUser.email, vaccinated);
 
 
@@ -297,8 +379,22 @@ export default ( {navigation} ) => {
 
     // Check if major is valid (same as checking name)
     if (majorChanged != false) {
-      if (!isValidName(major)) {return}
+      if (!isValidMajor(major)) {return}
     }
+
+    // Check if instagram is valid 
+    if (instagramChanged != false) {
+      if(!isValidInstagram(instagram)) {return}
+    }
+
+    // Check if the preferred # of roommates is valid
+    if (numRoommatesChanged != false) {
+      if (!isValidNumberOfRoommates(numRoommates)) {return}
+    }
+
+    // Check if the preferred living location is valid
+    if (!isValidLivingLocation(livingLocation, gender)) {return}
+
 
 
     // update the information and navigate to Profile
@@ -355,6 +451,7 @@ export default ( {navigation} ) => {
               autoComplete='off'
               autoCorrect={false}
               spellCheck={false}
+              maxLength={50}
               onChangeText={nameInputHandler}
               defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/profile_name")}
               placeholder={"Name"}
@@ -377,6 +474,22 @@ export default ( {navigation} ) => {
               defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/bio")}
               placeholder={"Enter a description of yourself"}
             />
+          </SafeAreaView>
+
+
+          {/* Edit Interests */}
+          <SafeAreaView>
+            <TouchableOpacity style={styles.interestsButton}
+              onPress={() => navigation.push("Interests")}
+            >
+              <Text style={styles.interestsText}>Add Interests</Text>
+              <Icon
+                style={styles.interestsIcon}
+                name={'caret-right'}
+                size={20}
+                color={Colors.black}
+              />
+            </TouchableOpacity>
           </SafeAreaView>
 
 
@@ -405,6 +518,7 @@ export default ( {navigation} ) => {
               autoComplete='off'
               autoCorrect={false}
               spellCheck={false}
+              maxLength={50}
               onChangeText={majorInputHandler}
               defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/major")}
               placeholder={"Enter your major"}
@@ -421,11 +535,93 @@ export default ( {navigation} ) => {
               autoComplete='off'
               autoCorrect={false}
               spellCheck={false}
+              maxLength={50}
               onChangeText={locationInputHandler}
               defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/location")}
               placeholder={"Where you are from"}
             />
+          </SafeAreaView>
+
+
+
+          {/* Preferred Number of Roommates */}
+          <SafeAreaView>
+            <Text style={styles.prompt}>Preferred # of Roommates</Text>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              onChangeText={numRoommatesInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/preferred_number_of_roommates")}
+              placeholder={"Number of people you want to live with"}
+            />
           </SafeAreaView> 
+
+
+          {/* Instagram Link (field) */}
+          <Text style={styles.prompt}>Instagram</Text>
+          <SafeAreaView>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              maxLength={32}
+              onChangeText={instagramInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram")}
+              placeholder={"Instagram username"}
+            />
+          </SafeAreaView>
+
+
+          {/* Preferred Housing (text), living locations (picker) */}
+          <Text style={styles.prompt}>Preferred Housing</Text>
+          <Picker
+            style={styles.picker}
+            selectedValue={
+              livingLocation
+            }
+            onValueChange={(itemValue, itemIndex) =>
+              setLivingLocation(itemValue)
+            }
+          >
+            <Picker.Item label="Earhart" value={1} />
+            <Picker.Item label="Freida Parker Hall" value={2} />
+            <Picker.Item label="Winifred Parker Hall" value={3} />
+            <Picker.Item label="Harrison Hall" value={4} />
+            <Picker.Item label="Hawkins Hall" value={5} />
+            <Picker.Item label="Hillenbrand Hall" value={6} />
+            <Picker.Item label="Honors College and Residences" value={7} />
+            <Picker.Item label="Owen Hall" value={8} />
+            <Picker.Item label="Shreve Hall" value={9} />
+            <Picker.Item label="Meredith (female only)" value={10} />
+            <Picker.Item label="Meredith South (female only)" value={11} />
+            <Picker.Item label="Windsor (female only)" value={12} />
+            <Picker.Item label="Cary Quad (male only)" value={13} />
+            <Picker.Item label="McCutcheon (male only)" value={14} />
+            <Picker.Item label="Tarkington (male only)" value={15} />
+            <Picker.Item label="Wiley (male only)" value={16} />
+          </Picker>
+
+
+          {/* Vaccination status (text), vaccination status (field) */}
+          <Text style={styles.prompt}>Vaccination Status*</Text>
+          <Picker
+            style={styles.picker}
+            selectedValue={
+              vaccinated
+            }
+            onValueChange={(itemValue, itemIndex) =>
+              setVaccinated(itemValue)
+            }
+          >
+            <Picker.Item label="Not Vaccinated" value={1} />
+            <Picker.Item label="Vaccinated" value={2} />
+          </Picker>
+
 
 
 
@@ -445,26 +641,6 @@ export default ( {navigation} ) => {
             <Picker.Item label="Other" value={3} />
             <Picker.Item label="Prefer not to say" value={4} />
           </Picker>
-
-
-
-          
-          {/* Vaccination status (text), vaccination status (field) */}
-          <Text style={styles.prompt}>Vaccination Status*</Text>
-          <Picker
-            style={styles.picker}
-            selectedValue={
-              vaccinated
-            }
-            onValueChange={(itemValue, itemIndex) =>
-              setVaccinated(itemValue)
-            }
-          >
-            <Picker.Item label="Not Vaccinated" value={1} />
-            <Picker.Item label="Vaccinated" value={2} />
-          </Picker>
-
-
 
 
 
@@ -600,6 +776,35 @@ const styles = StyleSheet.create({
   },
 
 
+  /* Interests Button */
+  interestsText: {
+    flex: 1,
+    fontSize: 20,
+    alignSelf: 'auto',
+  },
+
+  interestsIcon: {
+    flex: 1,
+    textAlign: 'right',
+    fontSize: 25,
+    marginRight: '5%',
+  },
+
+  interestsButton: {
+    flexDirection: 'row',
+    textAlign: 'left',
+    borderWidth: 1,
+    borderRadius: 11,
+    margin: 10,
+    marginTop: 25,
+    marginBottom: 40,
+    padding: 10,
+    width: '90%',
+    backgroundColor: Colors.offWhite,
+  },
+
+
+
   /* Questionnaire Button */
   questionnaireText: {
     fontSize: 16,
@@ -631,6 +836,4 @@ const styles = StyleSheet.create({
     width: 175,
     backgroundColor: Colors.offWhite,
   },
-
-
 });

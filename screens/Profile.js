@@ -8,7 +8,8 @@ import {
   Image,
   TouchableOpacity,
   Alert,
-  Switch
+  Switch,
+	Linking
 } from 'react-native';
 import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
@@ -19,7 +20,7 @@ import { renderIcon } from "../images/Icons";
 import { auth } from '../database/RTDB';
 
 // database read/write/remove imports
-import { getDataFromPath } from '../database/readData';
+import { getDataFromPath, getInstagramLink } from '../database/readData';
 import { getID } from '../database/ID';
 
 
@@ -43,6 +44,9 @@ export default ( {navigation} ) => {
 	const [isEnabled, setIsEnabled] = useState(false);
 	const [refreshing, setRefreshing] = React.useState(false);
 	const [profilePicture, setProfilePicture] = React.useState(null);
+	
+	const instagramLink = getInstagramLink(auth.currentUser.email);
+
 
 
 	// Function that refreshes
@@ -92,28 +96,60 @@ export default ( {navigation} ) => {
 			</View>
 			<View style={{marginTop: 40}}/>
 
-			{/* Email: <email> */}
-			<View style={styles.infoWrapper}>
-				<View style={styles.icon}>
-					{renderIcon("envelope", 25, Colors.darkBlue)}
+
+			<View style={styles.fullInfoWrapper}>
+				{/* Email: <email> */}
+				<View style={styles.infoWrapper}>
+					<View style={styles.icon}>
+						{renderIcon("envelope", 25, Colors.royalBlue)}
+					</View>
+					<Text style={styles.infoHeader}>Email:</Text>
+					<Text style={styles.infoContent}>{auth.currentUser.email}</Text>
+
 				</View>
-				<Text style={styles.infoHeader}>Email:</Text>
-				<Text style={styles.infoContent}>{auth.currentUser.email}</Text>
 			</View>
 			
 			{/* Phone: <phone number> */}
 			<View style={styles.infoWrapper}>
 				<View style={styles.icon}>
-					{renderIcon("phone-square", 25, Colors.darkBlue)}
+					{renderIcon("phone-square", 27, Colors.royalBlue)}
 				</View>
 				<Text style={styles.infoHeader}>Phone:</Text>
-				<Text style={styles.infoContent}>123-456-7890</Text>
+				<Text style={styles.infoContent}>
+					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Critical Information/phone")}
+				</Text>
 			</View>
+
+			{/* Instagram Link */}
+			<View style={
+				getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram") ?
+					(styles.infoWrapper)
+					: ({display: 'none'})
+				}>
+				<View style={styles.icon}>
+					{renderIcon("instagram", 28, Colors.royalBlue)}
+				</View>
+				<Text style={styles.infoHeader}>Instagram:</Text>
+				<Text style={styles.instagramLink}
+					onPress={async () => {
+						const supported = await Linking.canOpenURL(instagramLink);
+						if (supported) {
+							Linking.openURL(instagramLink);
+						}
+						else {
+							console.log("Instagram Link doesn't exist");
+						}
+					}}
+				>
+					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram")}
+				</Text>
+			</View>
+
 
 			{/* Ghost Mode */}
 			<View style={styles.disableWrapper}>
 				<View style={styles.icon}>
-					{renderIcon("eye-slash", 25, Colors.darkBlue)}
+					{renderIcon("eye-slash", 30, Colors.royalBlue)}
 				</View>
 				<Text style={styles.disableText}>Ghost Mode</Text>
 				<Switch
@@ -157,13 +193,18 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		fontSize: 25,
 		fontWeight: 'bold',
+		marginTop: 10,
 	},
-
+	
 	profilePic: {
 		width: 300,
 		height: 300,
 		borderRadius: 200, // makes image circular
 		alignSelf: 'center',
+	},
+
+	icon: {
+		paddingRight: 5,
 	},
 
 	infoWrapper: {
@@ -172,11 +213,7 @@ const styles = StyleSheet.create({
 		marginLeft: 25,
 		marginBottom: 25,
 	},
-
-	icon: {
-		paddingRight: 5,
-	},
-
+	
 	infoHeader: {
 		fontSize: 20,
 		marginLeft: 8,
@@ -185,8 +222,10 @@ const styles = StyleSheet.create({
 	},
 
 	infoContent: {
-		alignSelf: 'flex-start',
+		flex: 1,
+		flexWrap: 'wrap',
 		fontSize: 20,
+		marginRight: 25,
 	},
 
 	disableWrapper: {
@@ -219,6 +258,17 @@ const styles = StyleSheet.create({
 		padding: 10,
 		fontWeight: 'bold',
 		fontSize: 15,
+	},
+
+
+	/* Instagram Link Text */
+	instagramLink: {
+		flex: 1,
+		flexWrap: 'wrap',
+		fontSize: 20,
+		marginRight: 25,
+		color: Colors.blue,
+		textDecorationLine: 'underline',
 	},
 
 });

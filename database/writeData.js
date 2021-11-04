@@ -1,7 +1,8 @@
 import React from 'react';
 import { rtdb, auth } from './RTDB';
-import { ref, set, update, exists, val, child, get, remove} from "firebase/database"
+import { ref, set, update, exists, val, child, get, remove, push } from "firebase/database"
 import { getID } from './ID';
+import { getDataFromPath } from './readData';
 
 
 /* 
@@ -43,21 +44,24 @@ export const writeNewUser = (email, name, phone,
 		profile_name: name,
 		bio: "",
 		graduation_year: "", 
-		location: "", 
 		major: "", 
-		covid_vaccination_status: "vaccine" // change
+		location: "", 
+		preferred_number_of_roommates: "",
+		preferred_living_location: "",
+		instagram: "",
 	});
 	writeGender(auth.currentUser.email, gender);
 	writeVaccinated(auth.currentUser.email, vaccinated);
 	set(ref(rtdb, "users/" + id + "/Profile/Images"), {
 		profile_picture: default_profile_picture, 
 	});
-	set(ref(rtdb, "users/" + id + "/Profile/Social Media"), {
-		instagram: "insta", // change
-		facebook: "fb" // change
-	});
-	set(ref(rtdb, "users/" + id + "/Profile/Activities"), {
-		activity_count: 0
+	set(ref(rtdb, "users/" + id + "/Profile/Interests"), {
+		interest_count: 0,
+		interest1: "",
+		interest2: "",
+		interest3: "",
+		interest4: "",
+		interest5: "",
 	});
 
 	// write the "Roomate Compatibility" data
@@ -134,6 +138,8 @@ export const writeProfileName = (email_or_id, name) => {
 
 
 
+
+
 /*
  * writeBio()
  *
@@ -201,6 +207,104 @@ export const writeLocation = (email_or_id, location) => {
 		location: location
 	});
 } // writeLocation()
+
+
+
+
+
+/*
+ * writePreferredNumRoommates()
+ *
+ * Writes the preferred number of roommates to the specified user in the RTDB.
+ * @param email_or_id -> the email or id specifying the user.
+ * @param numRoommates -> the preferred number of roommates of the user
+ * 												that we are writing to the database.
+ */
+export const writePreferredNumRoommates = (email_or_id, numRoommates) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		preferred_number_of_roommates: numRoommates
+	});
+} // writePreferredNumRoommates()
+
+
+
+/*
+ * writePreferredLivingLocation()
+ *
+ * Writes the preferred living location to the specified user in the RTDB.
+ * @param email_or_id -> the email or id specifying the user.
+ * @param livingLocation -> the preferred living location of the user
+ * 												that we are writing to the database.
+ */
+export const writePreferredLivingLocation = (email_or_id, livingLocation) => {
+	const id = getID(email_or_id);
+
+	// convert the value of the selection to a string
+	var livingLocationStr = "";
+	if (livingLocation == 1) livingLocationStr = "Earhart";
+	if (livingLocation == 2) livingLocationStr = "Freida Parker Hall";
+	if (livingLocation == 3) livingLocationStr = "Winifred Parker Hall";
+	if (livingLocation == 4) livingLocationStr = "Harrison Hall";
+	if (livingLocation == 5) livingLocationStr = "Hawkins Hall";
+	if (livingLocation == 6) livingLocationStr = "Hillenbrand Hall";
+	if (livingLocation == 7) livingLocationStr = "Honors College and Residences";
+	if (livingLocation == 8) livingLocationStr = "Owen Hall";
+	if (livingLocation == 9) livingLocationStr = "Shreve Hall";
+	if (livingLocation == 10) livingLocationStr = "Meredith (female only)";
+	if (livingLocation == 11) livingLocationStr = "Meredith South (female only)";
+	if (livingLocation == 12) livingLocationStr = "Windsor (female only)";
+	if (livingLocation == 13) livingLocationStr = "Cary Quad (male only)";
+	if (livingLocation == 14) livingLocationStr = "McCutcheon (male only)";
+	if (livingLocation == 15) livingLocationStr = "Tarkington (male only)";
+	if (livingLocation == 16) livingLocationStr = "Wiley (male only)";
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		preferred_living_location: livingLocationStr
+	});
+} // writePreferredLivingLocation()
+
+
+
+/*
+ * writeInstagram()
+ *
+ * Writes the instagram of the specified user in the RTDB.
+ * @param email_or_id -> the email or id of the user.
+ * @param instagram -> the instagram username of the user.
+ */
+export const writeInstagram = (email_or_id, instagram) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		instagram: instagram
+	});
+} // writeInstagram()
+
+
+
+
+
+/*
+ * Writes the interests to the database
+ * @param email_or_id -> the email or id of the user we are writing to. 
+ * @param interest<i> -> the ith interest
+ */
+export const writeInterests = (email_or_id, interest1, interest2, interest3, interest4, interest5) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile/Interests"), {
+		interest1: interest1,
+		interest2: interest2,
+		interest3: interest3,
+		interest4: interest4,
+		interest5: interest5,
+	});
+} // writeInterest()
+
+
+
 
 
 
@@ -297,4 +401,25 @@ export const writeQuestionnaire = (email_or_id, a1, a2, a3, a4, a5, a6, a7, a8,
 		has_significant_other: a13
 	});
 } // writeQuestionnaire
+
+
+/*
+ * reportUser()
+ *
+ * called when a user would like to report a user on their feed
+ * writes the reported userid to the /reported branch of database
+ * starts/increments counter of numReports in the same branch
+ * 
+ * @param email_or_id -> the email or id of the user
+ * @param numReports -> previous number of reports that the user has received
+ */
+export const reportUser = (email_or_id, currentReports) => {
+	const id = getID(email_or_id);
+	console.log("Current reports: " + currentReports);
+	currentReports = currentReports + 1;
+	console.log("Updated reports: " + currentReports);
+	update(ref(rtdb, "reported/" + id), {
+		num_reports: currentReports
+	});
+}
 
