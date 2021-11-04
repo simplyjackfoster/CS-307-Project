@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import Colors from '../constants/Colors';
 import InterestItem from '../components/InterestItem';
-import InterestList from '../components/InterestList';
 
 import { auth, rtdb } from '../database/RTDB';
 import { getID } from '../database/ID';
