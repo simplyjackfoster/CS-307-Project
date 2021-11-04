@@ -18,7 +18,7 @@ import Colors from "../constants/Colors";
 import { render } from 'react-dom';
 
 import { auth } from '../database/RTDB';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, onAuthStateChanged, sendEmailVerification } from 'firebase/auth';
 import { Title } from 'react-native-paper';
 
 
@@ -60,7 +60,6 @@ export default ({ navigation }) => {
 			signInWithEmailAndPassword(auth, email, password)
 				.then((userCredential, success) => {
 					const user = userCredential.user;
-					setUserToken('Arbitrary text');
 					console.log("Successful Login!");
 				})
 				.catch((error) => {
@@ -71,8 +70,39 @@ export default ({ navigation }) => {
 
 					console.log("Failed Login!");
 				})
+			
+			var authState = onAuthStateChanged(auth, (user) => {
+				if (user) {
+					console.log("Auth State Changed From Login");
+					checkUserVerification(authState);
+					return;
+				}
+				else {
+					console.log("Waiting for user auth state change from login");
+				}
+			});
 		}
 	} // attemptLogin()
+
+	const checkUserVerification = (authState) => {
+		authState();
+		if (auth.currentUser.emailVerified == true) {
+			console.log("logged in");
+			setUserToken('Arbitrary Text');
+		}
+		else {
+			Alert.alert("Account Not Verified", "Attention: Your account's email has not been verified. A new verification link will be sent to your email.");
+			sendEmailVerification(auth.currentUser)
+				.then(() => {
+					//navigation.push("VerifyEmail");
+				})
+				.catch((error) => {
+					Alert.alert("Error", "Error: There was an issue sending your account verification link");
+					console.log("Error Code: " + error.code);
+					console.log("Error Message: " + error.message);
+				})
+		}
+	}
 
 
 
