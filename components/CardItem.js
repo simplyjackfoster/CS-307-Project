@@ -61,12 +61,22 @@ const CardItem = (props) => {
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             <View style={styles.contentContainer}>
 
-
                 {/* Profile Picture */}
                 <View style={styles.imageWrapper}>
                     <Image style={styles.profilePic}
                         source={{uri: profile_picture}}
                     />
+                </View>
+
+
+                {/* Like and Nope Text */}
+                <View style={styles.swipeTextWrapper}>
+                    <View style={styles.likeWrapper}>
+                        <Text style={styles.likeText}>LIKE</Text>
+                    </View>
+                    <View style={styles.nopeWrapper}>
+                        <Text style={styles.nopeText}>NOPE</Text>
+                    </View>
                 </View>
 
 
@@ -310,6 +320,47 @@ const styles = StyleSheet.create({
         marginTop: 35,
         marginBottom: 10,
         alignSelf: 'center',
+    },
+
+
+    /* Like and Nope wrapper */
+    swipeTextWrapper: {
+        flexDirection: 'row',
+        alignSelf: 'center',
+        marginTop: -320,
+        marginBottom: 250,
+    },
+
+
+    /* Like */
+    likeWrapper: {
+        borderWidth: 4,
+        padding: 8,
+        borderColor: Colors.green,
+        borderRadius: 10,
+        marginRight: 30,
+    },
+
+    likeText: {
+        fontSize: 40,
+        fontWeight: '800',
+        color: Colors.green,
+    },
+
+
+    /* Nope */
+    nopeWrapper: {
+        borderWidth: 4,
+        padding: 8,
+        borderColor: Colors.red,
+        borderRadius: 10,
+        marginLeft: 30,
+    },
+
+    nopeText: {
+        fontSize: 40,
+        fontWeight: '800',
+        color: Colors.red,
     },
 
 
