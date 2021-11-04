@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
         paddingTop: 5,
         paddingHorizontal: 150,
         paddingBottom: 25,
-        backgroundColor: Colors.lightGray,
+        backgroundColor: Colors.offWhite,
     },
 
     form: {

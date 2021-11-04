@@ -29,16 +29,13 @@ export default ( {navigation} ) => {
   const [password, onChangePassword] = React.useState(null);
   const { userToken, setUserToken } = React.useContext(AuthContext);
 
-  const actionCode = () => {
-    url: 'none'
-    handleCodeInApp: true
-  }
-
   const attemptResetEmail = () => {
     //may need to look into way to send to internal link
-    sendPasswordResetEmail(auth, emailIn)
+    sendPasswordResetEmail(auth, email)
       .then(() => {
         console.log("Reset Password Email Sent");
+        auth.signOut();
+        navigation.pop();
       })
       .catch((error) => {
         Alert.alert("Error", "Error: There was an issue sending you a password link");
@@ -46,25 +43,13 @@ export default ( {navigation} ) => {
         console.log("Error Message: " + error.message);
         navigation.pop();
       })
-      var authState = onAuthStateChanged(auth, (user) => {
-				if (user) {
-					console.log("Auth State Changed From Reset Password");
-          closeAuthState(authState);
-				}
-				else {
-					console.log("Waiting for user auth state change from login");
-				}
-			});
   }
 
-  const closeAuthState = (authState) => {
-    authState();
-  }
-
-  const attempPasswordReset = () => {
+  const attemptPasswordReset = () => {
     // validate passwords
     if (isValidPassword(password, password)){
       updatePassword(auth.currentUser, password).then(() => {
+        Alert.alert("Password Reset", "Your password has been successfully reset. You will now be logged out.");
         console.log("reset successful")
         auth.signOut();
         setUserToken(null);
@@ -123,7 +108,8 @@ export default ( {navigation} ) => {
           { display: 'none' }
         )}
         >
-          <Text style={styles.email}>Enter your new password</Text>
+          <Text style={styles.email}>Enter your new password.</Text>
+          <Text style={styles.email}>Note: Resetting your password will automatically log you out.</Text>
           <SafeAreaView>
             <TextInput
               style={styles.emailInput}
@@ -134,7 +120,7 @@ export default ( {navigation} ) => {
                 style={styles.resetButton}
                 onPress={() => {
                   console.log("reseting password")
-                  attempPasswordReset()
+                  attemptPasswordReset()
                   navigation.pop()
                 }}
             >

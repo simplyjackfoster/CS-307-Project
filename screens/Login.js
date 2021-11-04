@@ -87,6 +87,7 @@ export default ({ navigation }) => {
 	const checkUserVerification = (authState) => {
 		authState();
 		if (auth.currentUser.emailVerified == true) {
+			console.log("logged in");
 			setUserToken('Arbitrary Text');
 		}
 		else {
