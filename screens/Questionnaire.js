@@ -174,21 +174,21 @@ export default ( {navigation} ) => {
         // move back to create account screen
         navigation.pop();
       })
-    onAuthStateChanged(auth, (user) => {
+    var authState = onAuthStateChanged(auth, (user) => {
       if (user) {
         if (auth.currentUser.emailVerified != true) {
           console.log("Auth State Changed From Questionnaire");
-          attemptDisplayNameUpdate();
+          attemptDisplayNameUpdate(authState);
         }
         return;
       }
       else {
-        console.log("Waiting for user auth state change");
+        console.log("Waiting for user auth state change from Questionnaire");
       }
     });
   } // attemptCreate()
 
-  const attemptDisplayNameUpdate = () => {
+  const attemptDisplayNameUpdate = (authState) => {
     updateProfile(auth.currentUser, { displayName: Gname })
       .then(() => {
         //displayName has been updated
@@ -202,6 +202,8 @@ export default ( {navigation} ) => {
         // move back to create account screen
         navigation.pop();
       })
+      authState();
+
   }
 
   const attemptEmail = () => {

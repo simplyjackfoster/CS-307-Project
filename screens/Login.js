@@ -71,20 +71,21 @@ export default ({ navigation }) => {
 					console.log("Failed Login!");
 				})
 			
-			onAuthStateChanged(auth, (user) => {
+			var authState = onAuthStateChanged(auth, (user) => {
 				if (user) {
 					console.log("Auth State Changed From Login");
-					checkUserVerification();
+					checkUserVerification(authState);
 					return;
 				}
 				else {
-					console.log("Waiting for user auth state change");
+					console.log("Waiting for user auth state change from login");
 				}
 			});
 		}
 	} // attemptLogin()
 
-	const checkUserVerification = () => {
+	const checkUserVerification = (authState) => {
+		authState();
 		if (auth.currentUser.emailVerified == true) {
 			setUserToken('Arbitrary Text');
 		}
