@@ -32,11 +32,11 @@ export default class InterestItem extends Component {
 	 * returns false if it is not in the database.
 	 */
 	interestSelected() {
-		console.log("interest1: " + this.props.interest1);
+		/*console.log("interest1: " + this.props.interest1);
 		console.log("interest2: " + this.props.interest2);
 		console.log("interest3: " + this.props.interest3);
 		console.log("interest4: " + this.props.interest4);
-		console.log("interest5: " + this.props.interest5);
+		console.log("interest5: " + this.props.interest5);*/
 		if (this.props.interest1 == this.props.value ||
 				this.props.interest2 == this.props.value ||
 				this.props.interest3 == this.props.value ||
@@ -110,7 +110,6 @@ export default class InterestItem extends Component {
 													this.props.setInterest5(data_val);
 												}
 
-												console.log("DONE GETTING DATA");
 												this.setState({toggle: this.interestSelected()})
 
 											} // if snapshot 5 exists
@@ -147,22 +146,128 @@ export default class InterestItem extends Component {
 
 
 
+	/*
+	 * Returns the current number of items that are selected.
+	 */
+	getNumItems() {
+		var count = 0;
+		if (this.props.interest1) {
+			count++;
+		}
+		if (this.props.interest2) {
+			count++;
+		}
+		if (this.props.interest3 ) {
+			count++;
+		}
+		if (this.props.interest4) {
+			count++;
+		}
+		if (this.props.interest5) {
+			count++;
+		}
+		return count;
+	} // getNumItems
 
 
+
+	/*
+	 * Removes the interest from the selected interests
+	 */
+	removeInterest() {
+		// get the position of the interest we are removing
+		var position;
+		if (this.props.interest1 == this.props.value) {
+			position = 1;
+		}
+		else if (this.props.interest2 == this.props.value) {
+			position = 2;
+		}
+		else if (this.props.interest3 == this.props.value) {
+			position = 3;
+		}
+		else if (this.props.interest4 == this.props.value) {
+			position = 4;
+		}
+		else {
+			position = 5;
+		}
+
+		// shift everything position to the left
+		for (var i = position; i <= 5; i++) {
+			if (i == 1) {
+				this.props.setInterest1(this.props.interest2);
+				this.props.setInterest2("");
+			}
+			else if (i == 2) {
+				this.props.setInterest2(this.props.interest3);
+				this.props.setInterest3("");
+			}
+			else if (i == 3) {
+				this.props.setInterest3(this.props.interest4);
+				this.props.setInterest4("");
+			}
+			else if (i == 4) {
+				this.props.setInterest4(this.props.interest5);
+				this.props.setInterest5("");
+			}
+			else {
+				this.props.setInterest5("");
+			}
+		}
+
+
+	} // removeInterest()
+
+
+
+	/*
+	 * Add the interest to the selected interests
+	 */
+	addInterest() {
+		var count = this.getNumItems();	
+		if (count == 0) {
+			this.props.setInterest1(this.props.value);
+		}
+		else if (count == 1) {
+			this.props.setInterest2(this.props.value);
+		}
+		else if (count == 2) {
+			this.props.setInterest3(this.props.value);
+		}
+		else if (count == 3) {
+			this.props.setInterest4(this.props.value);
+		}
+		else if (count == 4) {
+			this.props.setInterest5(this.props.value);
+		}
+	} // addInterest()
 
 
 
 	press() {
-		const newState = !this.state.toggle;
-		this.setState({toggle:newState});
+		console.log("numItems: " + this.getNumItems());
 
-		console.log("loading: " + this.props.loading);
-		console.log("interest1: " + this.props.interest1);
-		console.log("interest2: " + this.props.interest2);
-		console.log("interest3: " + this.props.interest3);
-		console.log("interest4: " + this.props.interest4);
-		console.log("interest5: " + this.props.interest5);
+		// if the state is selected, then remove the item
+		if (this.state.toggle) {
+			console.log("removing: " + this.props.value);
+			const newState = !this.state.toggle;
+			this.setState({toggle:newState});
+			this.removeInterest();
+		}
+		else if (this.getNumItems() < 5) { 
+			console.log("atempting to add: " + this.props.value);
+			const newState = !this.state.toggle;
+			this.setState({toggle:newState});
+			this.addInterest();
+		}
+		else {
+			console.log("Can't add more than 5 interests");
+		}
+
 	} // press()
+
+
 
 
 

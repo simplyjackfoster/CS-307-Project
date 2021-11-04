@@ -88,6 +88,9 @@ export default ( {navigation} ) => {
   const [gender, setGender] = React.useState(1);
   const [vaccinated, setVaccinated] = React.useState(1);
 
+  // DELETE
+  const [interest, setInterest] = React.useState("Football");
+
 
   // function for setting the selection boxes to the correct value
   const setSelection = () => {
@@ -474,7 +477,7 @@ export default ( {navigation} ) => {
           </SafeAreaView>
 
 
-          {/* Navigate to Edit Interests */}
+          {/* Edit Interests */}
           <SafeAreaView>
             <TouchableOpacity style={styles.interestsButton}
               onPress={() => navigation.push("Interests")}
