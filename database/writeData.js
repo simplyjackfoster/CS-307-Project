@@ -242,7 +242,7 @@ export const writePreferredLivingLocation = (email_or_id, livingLocation) => {
 	const id = getID(email_or_id);
 
 	// convert the value of the selection to a string
-	livingLocationStr = "";
+	var livingLocationStr = "";
 	if (livingLocation == 1) livingLocationStr = "Earhart";
 	if (livingLocation == 2) livingLocationStr = "Freida Parker Hall";
 	if (livingLocation == 3) livingLocationStr = "Winifred Parker Hall";
@@ -287,19 +287,20 @@ export const writeInstagram = (email_or_id, instagram) => {
 
 
 /*
- *
+ * Writes the interests to the database
+ * @param email_or_id -> the email or id of the user we are writing to. 
+ * @param interest<i> -> the ith interest
  */
 export const writeInterests = (email_or_id, interest1, interest2, interest3, interest4, interest5) => {
 	const id = getID(email_or_id);
 
-	update(ref(rtdb), "users/" + id + "Profile/Interests", {
+	update(ref(rtdb, "users/" + id + "/Profile/Interests"), {
 		interest1: interest1,
 		interest2: interest2,
 		interest3: interest3,
 		interest4: interest4,
 		interest5: interest5,
 	});
-
 } // writeInterest()
 
 

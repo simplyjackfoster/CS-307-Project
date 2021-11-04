@@ -474,7 +474,7 @@ const styles = StyleSheet.create({
     flex: 0.15,
     alignSelf: 'center',
     paddingTop: 5,
-    paddingHorizontal: 150,
+    paddingHorizontal: 300,
     paddingBottom: 25,
     backgroundColor: Colors.lightGray,
   },
