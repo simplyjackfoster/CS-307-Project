@@ -1,468 +1,809 @@
-import React, {use} from 'react';
+import React, {useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native';
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import {
+	StyleSheet,
+	View,
+	Text,
+	TouchableOpacity,
+	ScrollView
+} from 'react-native';
 import Colors from '../constants/Colors';
+import InterestItem from '../components/InterestItem';
+import InterestList from '../components/InterestList';
+
+import { auth, rtdb } from '../database/RTDB';
+import { getID } from '../database/ID';
+
+import { writeInterests } from '../database/writeData';
+import { getInterests, getDataFromPath } from '../database/readData';
+import { ref, child, get, set } from 'firebase/database';
 
 
-
+// used so that the hooks don't get set in interests 
+var updatedTheSelected = false;
 
 
 export default ( {navigation } ) => {
+ 
 
+	// store the interests here
+	const [interest1, setInterest1] = React.useState(null);
+	const [interest2, setInterest2] = React.useState(null);
+	const [interest3, setInterest3] = React.useState(null);
+	const [interest4, setInterest4] = React.useState(null);
+	const [interest5, setInterest5] = React.useState(null);
 
 
 
 
 	return (
+
 		<ScrollView style={styles.container}>
 			<Text style={styles.instructionsText}>Select Up to 5 Interests!</Text>
 
-
-
 			<View style={styles.interestsConainer}>
+				
+				{/*
+				<TouchableOpacity onPress={() => console.log("loading: " + loading)}>
+					<Text>Yes</Text>
+				</TouchableOpacity>
+				*/}
+
+
 				{/* Music */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton} 
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Music</Text>
-					</TouchableOpacity>
-				</SafeAreaView>				
+				<InterestItem
+					value={"Music"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
+
 
 				{/* Working Out */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.selectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Working Out</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Working Out"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
+
 
 				{/* Yoga */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Yoga</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Yoga"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
+
+
+
 
 				{/* Swimming */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Swimming</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Swimming"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Football */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Football</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Football"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Netflix */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Netflix</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Netflix"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Theatre */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Theatre</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
+				<InterestItem
+					value={"Theatre"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Comedy */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Comedy</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
+				<InterestItem
+					value={"Comedy"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Outdoors */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Outdoors</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
+				<InterestItem
+					value={"Outdoors"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Shopping */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Shopping</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Shopping"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Politics */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Politics</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Politics"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Cycling */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Cycling</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Cycling"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Art */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Art</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Art"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Dancing */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Dancing</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Dancing"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Soccer */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Soccer</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Soccer"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Cooking */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Cooking</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Cooking"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Spirituality */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Spirituality</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Spirituality"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Astrology */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Astrology</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Astrology"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Bars */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Bars</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Bars"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Coffee */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Coffee</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Coffee"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Watching Sports */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Watching Sports</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Watching Sports"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Reading */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Reading</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Reading"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Surfing */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Surfing</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Surfing"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Gaming */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Gaming</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Gaming"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Photography */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Photography</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Photography"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Skateboarding */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Skateboarding</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Skateboarding"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
+
+				{/* Tennis */}
+				<InterestItem
+					value={"Tennis"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Gambling */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Gambling</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Gambling"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Chess */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Chess</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Chess"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Movies */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Movies</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Movies"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Golf */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Golf</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Golf"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Writing */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Writing</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Writing"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Climbing */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Climbing</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Climbing"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Skiing */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Skiing</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Skiing"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Snowboarding */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Snowboarding</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Snowboarding"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Social Media */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Social Media</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Social Media"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Running */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Running</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Running"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Rowing */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Rowing</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Rowing"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Walking */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Walking</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Walking"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Concerts */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Concerts</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Concerts"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Basketball */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Basketball</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Basketball"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Fishing */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Fishing</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Fishing"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Water Sports */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Water Sports</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Water Sports"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Racing */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Racing</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Racing"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Programming */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Programming</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Programming"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Baseball */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Baseball</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Baseball"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Hockey */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Hockey</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Hockey"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Frisbee */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Frisbee</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Frisbee"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Investing */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Investing</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Investing"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 				{/* Greek Life */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Greek Life</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+				<InterestItem
+					value={"Greek Life"}
+					interest1={interest1}
+					interest2={interest2}
+					interest3={interest3}
+					interest4={interest4}
+					interest5={interest5}
+					setInterest1={setInterest1}
+					setInterest2={setInterest2}
+					setInterest3={setInterest3}
+					setInterest4={setInterest4}
+					setInterest5={setInterest5}
+				></InterestItem>
 
 
 			</View>

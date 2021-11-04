@@ -1,6 +1,6 @@
 import React from 'react';
 import { rtdb, auth } from './RTDB';
-import { ref, set, update, exists, val, child, get, remove} from "firebase/database"
+import { ref, set, update, exists, val, child, get, remove, push } from "firebase/database"
 import { getID } from './ID';
 
 
@@ -53,8 +53,13 @@ export const writeNewUser = (email, name, phone,
 	set(ref(rtdb, "users/" + id + "/Profile/Images"), {
 		profile_picture: default_profile_picture, 
 	});
-	set(ref(rtdb, "users/" + id + "/Profile/Activities"), {
-		activity_count: 0
+	set(ref(rtdb, "users/" + id + "/Profile/Interests"), {
+		interest_count: 0,
+		interest1: "",
+		interest2: "",
+		interest3: "",
+		interest4: "",
+		interest5: "",
 	});
 
 	// write the "Roomate Compatibility" data
@@ -235,8 +240,31 @@ export const writeInstagram = (email_or_id, instagram) => {
 
 	update(ref(rtdb, "users/" + id + "/Profile"), {
 		instagram: instagram
-	})
+	});
 } // writeInstagram()
+
+
+
+
+
+/*
+ *
+ */
+export const writeInterests = (email_or_id, interest1, interest2, interest3, interest4, interest5) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb), "users/" + id + "Profile/Interests", {
+		interest1: interest1,
+		interest2: interest2,
+		interest3: interest3,
+		interest4: interest4,
+		interest5: interest5,
+	});
+
+} // writeInterest()
+
+
+
 
 
 
