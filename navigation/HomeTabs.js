@@ -28,7 +28,7 @@ const HomeTabs = () => {
               iconName = focused ? 'align-justify' : 'align-justify';
             }
 			else if (route.name === 'Matches') {
-              iconName = focused ? 'heart' : 'heart';
+              iconName = focused ? 'check-square' : 'check-square';
             }
 			else if (route.name === 'Messages') {
               iconName = focused ? 'comment' : 'comment';
