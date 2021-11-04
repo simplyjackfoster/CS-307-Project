@@ -7,10 +7,10 @@ import AuthStack from './AuthStack';
 const Stack = createStackNavigator();
 
 // The root stack for the authentication screen and the home screen
-const RootStack = ({ userToken, userVerified }) => {
+const RootStack = ({ userToken }) => {
 	return (
 			<Stack.Navigator>
-				{userVerified ? (
+				{userToken ? (
 					// If we have a userToken, render home screen. Otherwise render auth screen.
 					<Stack.Screen name="Home" component={HomeStack}
 					options={{ headerShown: false, animationEnabled: false}}/>

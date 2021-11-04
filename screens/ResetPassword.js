@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 import Colors from "../constants/Colors";
-import { AuthContext, VerificationContext } from "../context";
+import { AuthContext } from "../context";
 
 // authentication imports
 import { auth, rtdb } from '../database/RTDB';
@@ -24,16 +24,15 @@ import { auth, rtdb } from '../database/RTDB';
 var emailIn = "";
 
 export default ( {navigation} ) => {
-const [email, onChangeEmail] = React.useState("");
-const { userToken, setUserToken }  = React.useContext(AuthContext);
-const { userVerified, setUserVerified } = React.useContext(VerificationContext);
+  const [email, onChangeEmail] = React.useState("");
+  const { userToken, setUserToken } = React.useContext(AuthContext);
 
   const attemptResetEmail = () => {
     sendPasswordResetEmail(auth, emailIn)
       .then(() => {
         console.log("Reset Password Email Sent");
-        setUserToken(null)
-				setUserVerified(null)
+        auth.signOut();
+        setUserToken(null);
       })
       .catch((error) => {
         Alert.alert("Error", "Error: There was an issue sending you a password link");
@@ -59,7 +58,7 @@ const { userVerified, setUserVerified } = React.useContext(VerificationContext);
                 onPress={() => {
                   console.log("reseting with " + email)
                   Alert.alert("Notice", 
-                  "An email has been sent to your email address. Please follow the contained instructions to reset your password. You will now be logged out.",
+                  "An email has been sent to your email address. Please follow the contained instructions to reset your password.",
                   [
                     {
                       text: "Ok",
@@ -67,7 +66,7 @@ const { userVerified, setUserVerified } = React.useContext(VerificationContext);
                         //handleEmail
                         emailIn = email
                         attemptResetEmail()
-                        //navigation.pop()
+                        navigation.pop()
                       }
                     }
                   ]

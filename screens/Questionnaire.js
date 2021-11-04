@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import Colors from "../constants/Colors";
-import { AuthContext, VerificationContext } from "../context";
+import { AuthContext } from "../context";
 import { Picker } from '@react-native-picker/picker';
 import { Divider } from 'react-native-elements';
 
@@ -50,7 +50,6 @@ var updatedTheSelected = false;
 
 export default ( {navigation} ) => {
   const { userToken, setUserToken }  = React.useContext(AuthContext);
-  const { userVerified, setUserVerified } = React.useContext(VerificationContext);
 
   const [selectedOne, setSelectedOne] = React.useState(3); // has_people_over
   const [selectedTwo, setSelectedTwo] = React.useState(3); // is_clean
@@ -123,7 +122,7 @@ export default ( {navigation} ) => {
    * Set the selection boxes to the database values if we are in
    * the HomeStack
    */
-  if (userVerified && (updatedTheSelected == false)) {
+  if (userToken && (updatedTheSelected == false)) {
     setSelection(1, "has_people_over"); 
     setSelection(2, "is_clean");
     setSelection(3, "week_bedtime");
@@ -167,7 +166,6 @@ export default ( {navigation} ) => {
           selectedThree, selectedFour, selectedFive, selectedSix, selectedSeven,
           selectedEight, selectedNine, selectedTen, selectedEleven, selectedTwelve,
           selectedThirteen);
-        setUserToken('Arbitrary Value');
       })
       .catch((error) => {
         Alert.alert("Error", "Error: Email Already in Use");
@@ -179,6 +177,7 @@ export default ( {navigation} ) => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         attemptDisplayNameUpdate();
+        return;
       }
       else {
         console.log("Waiting for user auth state change");
@@ -440,7 +439,7 @@ export default ( {navigation} ) => {
           {/* Create Account Button - when we are in the AuthStack */}
           <TouchableOpacity
             style={
-              userVerified ? (
+              userToken ? (
                 {display: 'none'}
               ) : (
                 styles.createButton
@@ -458,7 +457,7 @@ export default ( {navigation} ) => {
 
       {/* Save Button - when we are in the HomeStack */}
       <View
-        style= {userVerified ? (
+        style= {userToken ? (
           styles.footer
         ) : (
           {display: 'none'}

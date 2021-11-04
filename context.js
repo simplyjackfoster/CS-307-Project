@@ -5,6 +5,5 @@ import React from 'react';
  * the user authentication status.
  */
 export const AuthContext = React.createContext(null);
-export const VerificationContext = React.createContext(null);
 
 

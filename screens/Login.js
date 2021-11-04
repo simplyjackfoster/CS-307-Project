@@ -13,7 +13,7 @@ import {
 	KeyboardAvoidingView
 } from 'react-native';
 
-import { AuthContext, VerificationContext } from "../context";
+import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
 import { render } from 'react-dom';
 
@@ -30,7 +30,6 @@ import { Title } from 'react-native-paper';
 export default ({ navigation }) => {
 
 	const { userToken, setUserToken } = React.useContext(AuthContext);
-	const { userVerified, setUserVerified } = React.useContext(VerificationContext);
 
 	/* Functions to handle text input changes */
 	const [email, onChangeEmail] = React.useState(null);
@@ -61,7 +60,6 @@ export default ({ navigation }) => {
 			signInWithEmailAndPassword(auth, email, password)
 				.then((userCredential, success) => {
 					const user = userCredential.user;
-					setUserToken('Arbitrary text');
 					console.log("Successful Login!");
 				})
 				.catch((error) => {
@@ -72,9 +70,11 @@ export default ({ navigation }) => {
 
 					console.log("Failed Login!");
 				})
+			
 			onAuthStateChanged(auth, (user) => {
 				if (user) {
 					checkUserVerification();
+					return;
 				}
 				else {
 					console.log("Waiting for user auth state change");
@@ -85,19 +85,18 @@ export default ({ navigation }) => {
 
 	const checkUserVerification = () => {
 		if (auth.currentUser.emailVerified == true) {
-			setUserVerified('Arbitrary Text');
+			setUserToken('Arbitrary Text');
 		}
 		else {
 			Alert.alert("Account Not Verified", "Attention: Your account's email has not been verified. A new verification link will be sent to your email.");
 			sendEmailVerification(auth.currentUser)
 				.then(() => {
-					navigation.push("VerifyEmail");
+					//navigation.push("VerifyEmail");
 				})
 				.catch((error) => {
 					Alert.alert("Error", "Error: There was an issue sending your account verification link");
 					console.log("Error Code: " + error.code);
 					console.log("Error Message: " + error.message);
-					navigation.pop();
 				})
 		}
 	}

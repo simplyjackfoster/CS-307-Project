@@ -5,10 +5,11 @@ import { StyleSheet,
 	Button,
 	TouchableOpacity,
 	ScrollView, 
-	Alert
+	Alert,
+	SliderComponent
 } from 'react-native';
 
-import { AuthContext, VerificationContext } from "../context";
+import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
 import { auth, rtdb } from '../database/RTDB';
 import { deleteUser } from 'firebase/auth';
@@ -25,7 +26,6 @@ import { deleteUserImages } from '../database/deleteStorage';
 export default ( {navigation} ) => {
 
 	const { userToken, setUserToken } = React.useContext(AuthContext);
-	const { userVerified, setUserVerified } = React.useContext(VerificationContext);
 
 	// attempts to delete a user from the database and take them to the login screen
 	const attemptDelete = () => {
@@ -42,7 +42,6 @@ export default ( {navigation} ) => {
 
 			// navigate to log in screen
 			setUserToken(null);
-			setUserVerified(null);
 
 		}).catch((error) => {
 			console.log(error.message);
@@ -77,7 +76,7 @@ export default ( {navigation} ) => {
 						text: "Yes",
 						onPress: () => {
 							setUserToken(null)
-							setUserVerified(null)
+							auth.signOut()
 						}
 					}]
 				)}

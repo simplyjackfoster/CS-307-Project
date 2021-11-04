@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import Colors from "../constants/Colors";
-import { VerificationContext } from '../context';
+import { AuthContext } from '../context';
 
 // authentication imports
 import { auth, rtdb } from '../database/RTDB';
@@ -21,7 +21,7 @@ import { FirebaseError } from '@firebase/util';
 export default ({ navigation }) => {
 
     // Set up a state variable to tell whether we are verified in or not
-    const { userVerified, setUserVerified } = React.useContext(VerificationContext);
+    const { userToken, setUserToken }  = React.useContext(AuthContext);
 
     const checkVerification = () => {
         //auth.currentUser.reload
@@ -30,7 +30,7 @@ export default ({ navigation }) => {
             if (user) {
                 if (auth.currentUser.emailVerified == true) {
                     //navigation.pop()
-                    setUserVerified('Arbitrary Value');
+                    setUserToken('Arbitrary Value');
                 }
                 else {
                     Alert.alert("Verify Email", "Email has not been verified with UniRoom");
