@@ -22,6 +22,7 @@ export default ({ navigation }) => {
 
     // Set up a state variable to tell whether we are verified in or not
     const { userToken, setUserToken }  = React.useContext(AuthContext);
+    var alertDisplayed = false;
 
     const checkVerification = () => {
         //auth.currentUser.reload
@@ -32,8 +33,12 @@ export default ({ navigation }) => {
                     //navigation.pop()
                     setUserToken('Arbitrary Value');
                 }
-                else {
-                    Alert.alert("Verify Email", "Email has not been verified with UniRoom");
+                else if (alertDisplayed == false) {
+                    //may send multiple alerts?
+                    alertDisplayed = true;
+                    Alert.alert("Verify Email", "Email has not been verified with UniRoom", {onDismiss: () => {
+                        alertDisplayed = false
+                    }});
                 }
             } else {
                 console.log("Waiting for user reload");

@@ -73,6 +73,7 @@ export default ({ navigation }) => {
 			
 			onAuthStateChanged(auth, (user) => {
 				if (user) {
+					console.log("Auth State Changed From Login");
 					checkUserVerification();
 					return;
 				}

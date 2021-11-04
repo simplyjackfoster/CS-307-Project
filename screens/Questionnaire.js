@@ -176,7 +176,10 @@ export default ( {navigation} ) => {
       })
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        attemptDisplayNameUpdate();
+        if (auth.currentUser.emailVerified != true) {
+          console.log("Auth State Changed From Questionnaire");
+          attemptDisplayNameUpdate();
+        }
         return;
       }
       else {
