@@ -9,6 +9,8 @@ import {
     TouchableOpacity,
     Alert
 } from 'react-native';
+import Animated from 'react-native-reanimated';
+
 import { getDataFromPath, getInstagramLink, getInterests } from "../database/readData";
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
@@ -17,6 +19,7 @@ import { reportUser } from '../database/writeData';
 
 
 const CardItem = (props) => {
+    const { likeOpacity, nopeOpacity } = props;
     
     const uid = props.id;
     const profile_picture = getDataFromPath("users/" + uid + "/Profile/Images/profile_picture");
@@ -71,12 +74,12 @@ const CardItem = (props) => {
 
                 {/* Like and Nope Text */}
                 <View style={styles.swipeTextWrapper}>
-                    <View style={styles.likeWrapper}>
+                    <Animated.View style={[styles.likeWrapper, { opacity: likeOpacity }]}>
                         <Text style={styles.likeText}>LIKE</Text>
-                    </View>
-                    <View style={styles.nopeWrapper}>
+                    </Animated.View>
+                    <Animated.View style={[styles.nopeWrapper, { opacity: nopeOpacity }]}>
                         <Text style={styles.nopeText}>NOPE</Text>
-                    </View>
+                    </Animated.View>
                 </View>
 
 
