@@ -11,18 +11,12 @@ import {
 } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
-/*import {
-  Extrapolate,
-  Value,
-  interpolate,
-  concat,
-  Extrapolate,
-} from 'react-native-reanimated';*/
 
 const { event, Value, interpolateNode, concat, Extrapolate } = Animated;
 const { width } = Dimensions.get("window");
 
 import CardItem from '../components/CardItem';
+import Card from '../components/Card';
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
 
@@ -65,11 +59,27 @@ export default class Feed extends Component {
     const uid = "mfinder";
 
     const { onGestureEvent, translationX: translateX, translationY: translateY } = this;
+
+    // Adds rotation when translateX changes 
     const rotateZ = concat(interpolateNode(translateX, {
       inputRange: [-width / 2, width / 2],
-      outputRange: [10, -10],
+      outputRange: [15, -15],
       extrapolate: Extrapolate.CLAMP,
     }), "deg");
+
+    // changes the opacity based on translateX
+    const likeOpacity = interpolateNode(translateX, {
+      inputRange: [0, width / 4],
+      outputRange: [0, 1],
+      extrapolate: Extrapolate.CLAMP,
+    });
+
+    // changes the opacity based on translateX
+    const nopeOpacity = interpolateNode(translateX, {
+      inputRange: [-width / 4, 0],
+      outputRange: [1, 0],
+      extrapolate: Extrapolate.CLAMP,
+    });
 
     const style = {
       ...StyleSheet.absoluteFillObject,
@@ -92,7 +102,8 @@ export default class Feed extends Component {
             onGestureEvent={onGestureEvent}
           >
             <Animated.View {...{style}}>
-                <CardItem id={uid}/>
+                {/*<CardItem id={uid}/>*/}
+                <Card id={uid} {...{likeOpacity, nopeOpacity}}></Card>
             </Animated.View>
           </PanGestureHandler>
         </View>

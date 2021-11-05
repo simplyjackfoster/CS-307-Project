@@ -18,7 +18,7 @@ import { reportUser } from '../database/writeData';
 
 
 
-const CardItem = (props) => {
+export const CardItem = (props) => {
     const { likeOpacity, nopeOpacity } = props;
     
     const uid = props.id;
@@ -69,17 +69,6 @@ const CardItem = (props) => {
                     <Image style={styles.profilePic}
                         source={{uri: profile_picture}}
                     />
-                </View>
-
-
-                {/* Like and Nope Text */}
-                <View style={styles.swipeTextWrapper}>
-                    <Animated.View style={[styles.likeWrapper, { opacity: likeOpacity }]}>
-                        <Text style={styles.likeText}>LIKE</Text>
-                    </Animated.View>
-                    <Animated.View style={[styles.nopeWrapper, { opacity: nopeOpacity }]}>
-                        <Text style={styles.nopeText}>NOPE</Text>
-                    </Animated.View>
                 </View>
 
 
@@ -323,47 +312,6 @@ const styles = StyleSheet.create({
         marginTop: 20,
         marginBottom: 10,
         alignSelf: 'center',
-    },
-
-
-    /* Like and Nope wrapper */
-    swipeTextWrapper: {
-        flexDirection: 'row',
-        alignSelf: 'center',
-        marginTop: -330,
-        marginBottom: 260,
-    },
-
-
-    /* Like */
-    likeWrapper: {
-        borderWidth: 4,
-        padding: 8,
-        borderColor: Colors.green,
-        borderRadius: 10,
-        marginRight: 35,
-    },
-
-    likeText: {
-        fontSize: 40,
-        fontWeight: '800',
-        color: Colors.green,
-    },
-
-
-    /* Nope */
-    nopeWrapper: {
-        borderWidth: 4,
-        padding: 8,
-        borderColor: Colors.red,
-        borderRadius: 10,
-        marginLeft: 35,
-    },
-
-    nopeText: {
-        fontSize: 40,
-        fontWeight: '800',
-        color: Colors.red,
     },
 
 
