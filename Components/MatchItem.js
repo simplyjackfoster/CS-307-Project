@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
     StyleSheet,
     Text, 
@@ -18,6 +18,8 @@ import HomeTabs from '../navigation/HomeTabs';
 
 const MatchItem = (props) => {
     //const { userToken, setUserToken }  = React.useContext();
+    const [displayMatch, setDisplayMatch] = React.useState(true);
+
     const uid = props.id;
     const profile_picture = getDataFromPath("users/" + uid + "/Profile/Images/profile_picture");
     const name = getDataFromPath("users/" + uid + "/Profile/profile_name");
@@ -50,6 +52,9 @@ const MatchItem = (props) => {
     const removeMatch = () => {
         // remove the uid from the match list in the database
         console.log("Removing match: " + uid);
+        
+        setDisplayMatch(false);
+
 
         // implement after adding the matches to the database
     }
@@ -64,10 +69,17 @@ const MatchItem = (props) => {
 
 
     return (
-        <View style={styles.container}>
+        
+        <View style=
+            {displayMatch ? (
+                styles.container
+            ) : (
+                {display: 'none'}
+            )}
+        >
             <Image style = {styles.profileImage}source={{uri: profile_picture}}/>
             <Text style={styles.name}>{name}</Text>
-            <Text style={styles.description}>Hometown: {location}</Text>
+            <Text style={styles.description}>Location: {location}</Text>
             <Text style={styles.description}>Major: {major}</Text>
             <View style={styles.buttonWrapper}>
 
@@ -128,7 +140,8 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.white,
         borderRadius: 25,
         flexWrap: 'wrap',
-        marginVertical: 15,
+        marginTop: 10,
+        marginBottom: 20,
     },
 
     name: {
