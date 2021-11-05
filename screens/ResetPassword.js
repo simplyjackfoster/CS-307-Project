@@ -1,3 +1,4 @@
+import { sendPasswordResetEmail, sendSignInLinkToEmail, updatePassword, onAuthStateChanged } from 'firebase/auth';
 import React from 'react';
 import {
   TouchableOpacity,
@@ -9,20 +10,68 @@ import {
   Alert,
   KeyboardAvoidingView
 } from 'react-native';
+import { isValidPassword } from '../checkInputs';
 
 import Colors from "../constants/Colors";
+import { AuthContext } from "../context";
+
+// authentication imports
+import { auth, rtdb } from '../database/RTDB';
 
 /*
  * This is the screen where the user resets their password.
  */
 
+var emailIn = "";
+
 export default ( {navigation} ) => {
-const [email, onChangeEmail] = React.useState("");
+  const [email, onChangeEmail] = React.useState("");
+  const [password, onChangePassword] = React.useState(null);
+  const { userToken, setUserToken } = React.useContext(AuthContext);
+
+  const attemptResetEmail = () => {
+    //may need to look into way to send to internal link
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        console.log("Reset Password Email Sent");
+        auth.signOut();
+        navigation.pop();
+      })
+      .catch((error) => {
+        Alert.alert("Error", "Error: There was an issue sending you a password link");
+        console.log("Error Code: " + error.code);
+        console.log("Error Message: " + error.message);
+        navigation.pop();
+      })
+  }
+
+  const attemptPasswordReset = () => {
+    // validate passwords
+    if (isValidPassword(password, password)){
+      updatePassword(auth.currentUser, password).then(() => {
+        Alert.alert("Password Reset", "Your password has been successfully reset. You will now be logged out.");
+        console.log("reset successful")
+        auth.signOut();
+        setUserToken(null);
+      })
+      .catch((error) => {
+        Alert.alert("Error", "Error: There was an issue updating your password");
+        console.log("Error Code: " + error.code);
+        console.log("Error Message: " + error.message);
+      })
+    }
+  }
 
   return (
     <KeyboardAvoidingView style={{flex: 1}} behavior={"padding"}>
       <View style={styles.container}>
-        <View style={styles.form}>
+        {/* Display email prompt to give access to reset password page if not logged in  */}
+        <View style={userToken ? (
+          { display: 'none' }
+        ) : (
+          styles.form 
+        )}
+        >
           <Text style={styles.email}>Enter your email address</Text>
           <SafeAreaView>
             <TextInput
@@ -41,10 +90,39 @@ const [email, onChangeEmail] = React.useState("");
                       text: "Ok",
                       onPress: () => { 
                         //handleEmail
-                        navigation.pop()}
+                        attemptResetEmail()
+                      }
                     }
                   ]
                   );}}
+            >
+            <Text style={styles.resetText}>Send Reset Password Email</Text>
+          </TouchableOpacity>
+            </SafeAreaView>
+        </View>
+
+        {/* Display Reset Password Page when logged in  */}
+        <View style={userToken ? (
+          styles.form 
+        ) : (
+          { display: 'none' }
+        )}
+        >
+          <Text style={styles.email}>Enter your new password.</Text>
+          <Text style={styles.email}>Note: Resetting your password will automatically log you out.</Text>
+          <SafeAreaView>
+            <TextInput
+              style={styles.emailInput}
+              onChangeText={onChangePassword}
+              placeholder={password}
+            />
+            <TouchableOpacity
+                style={styles.resetButton}
+                onPress={() => {
+                  console.log("reseting password")
+                  attemptPasswordReset()
+                  navigation.pop()
+                }}
             >
             <Text style={styles.resetText}>Reset Password</Text>
           </TouchableOpacity>

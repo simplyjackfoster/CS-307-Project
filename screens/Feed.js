@@ -22,7 +22,6 @@ import { renderIcon } from "../images/Icons";
 
 
 
-
 /*const refreshScreen = () => {
     //   console.log(1);
     //   var cardContainer = getElementById('card');

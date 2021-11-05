@@ -215,7 +215,7 @@ export const CardItem = (props) => {
                     <View>
                         {renderIcon("home", 25, Colors.royalBlue)}
                     </View>
-                    <Text style={styles.preferredLivingLocationContent}>Preferred Housing:{"\n"}{preferredLivingLocation}</Text>
+                    <Text style={styles.preferredLivingLocationContent}>Preferred Housing: {preferredLivingLocation}</Text>
                 </View>
 
 
@@ -300,7 +300,8 @@ const styles = StyleSheet.create({
     contentContainer: {
         flex: 1,
         alignSelf: 'center',
-        width: 340,
+        width: 325,
+        padding: 7,
     },
 
 
@@ -340,7 +341,7 @@ const styles = StyleSheet.create({
     /* Interets */
     interestsContainer: {
         flex: 1,
-        marginTop: 20,
+        marginTop: 10,
         flexDirection: 'row',
         flexWrap: 'wrap',
     },
