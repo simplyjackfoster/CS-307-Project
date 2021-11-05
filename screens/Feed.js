@@ -222,12 +222,12 @@ export default class Feed extends Component {
             {renderIcon("times", 50, Colors.red)}
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.refreshWrapper} onPress={() => {
+          {/* <TouchableOpacity style={styles.refreshWrapper} onPress={() => {
             console.log("Refresh pressed");
             refreshScreen();
           }}>
             {renderIcon("refresh", 50, Colors.yellow)}
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <TouchableOpacity style={styles.likeWrapper} onPress={() => {
             console.log("Like pressed");
