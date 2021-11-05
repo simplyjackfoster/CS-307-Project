@@ -308,16 +308,16 @@ const styles = StyleSheet.create({
     contentContainer: {
         flex: 1,
         alignSelf: 'center',
-        width: 325,
+        width: 340,
     },
 
 
     /* Profile Picture */
     profilePic: {
-        width: 325,
-        height: 325, 
+        width: 340,
+        height: 340, 
         borderRadius: 25,
-        marginTop: 35,
+        marginTop: 20,
         marginBottom: 10,
         alignSelf: 'center',
     },
@@ -327,8 +327,8 @@ const styles = StyleSheet.create({
     swipeTextWrapper: {
         flexDirection: 'row',
         alignSelf: 'center',
-        marginTop: -320,
-        marginBottom: 250,
+        marginTop: -330,
+        marginBottom: 260,
     },
 
 
@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
         padding: 8,
         borderColor: Colors.green,
         borderRadius: 10,
-        marginRight: 30,
+        marginRight: 35,
     },
 
     likeText: {
@@ -354,7 +354,7 @@ const styles = StyleSheet.create({
         padding: 8,
         borderColor: Colors.red,
         borderRadius: 10,
-        marginLeft: 30,
+        marginLeft: 35,
     },
 
     nopeText: {
