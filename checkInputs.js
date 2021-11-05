@@ -156,6 +156,7 @@ export const isValidBirthday = (birthday) => {
 		// no slash
 		Alert.alert("Error", "Birthday field is missing '/' character, please try again.", 
 			[{ text: "Ok" }]);
+		return false;
 	}
 
 	const slashTwoIndex = birthday.indexOf('/', slashOneIndex + 1)
@@ -163,6 +164,7 @@ export const isValidBirthday = (birthday) => {
 		// no second slash
 		Alert.alert("Error", "Birthday field is missing second '/' character, please try again.", 
 			[{ text: "Ok" }]);
+		return false;
 	}
 
 	const month = birthday.substring(0, slashOneIndex);
@@ -219,6 +221,7 @@ export const isValidBirthday = (birthday) => {
 			break;
 		default:
 			// month was invalid
+			return false;
 	}
 
 	if (!dayIsValid) {

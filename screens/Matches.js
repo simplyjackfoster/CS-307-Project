@@ -6,7 +6,9 @@ import {
   Alert,
   useState,
   useEffect,
-  Button } from 'react-native';
+  ScrollView,
+  Button 
+} from 'react-native';
 import Colors from "../constants/Colors";
 import MatchItem from '../components/MatchItem';
 import Messages from './Messages';
@@ -29,15 +31,19 @@ export default ( {navigation} ) => {
 		</View>);
   }
   return (
-    <><View style={styles.container}>
-        <View style={styles.buttonStyle}>
+    <ScrollView>
+      <View style={styles.container}>
+        {/* <View style={styles.buttonStyle}>
           <Button title={"📱"} onPress={() => navigation.navigate('Messages')}></Button>
         </View>
         <View style={styles.buttonStyle}>
           <Button title="X" onPress={() => navigation.navigate('Messages')}></Button>
-        </View>
+        </View> */}
         <MatchItem id={"foste205"} />
-    </View></>
+        <MatchItem id={"thylan"} />
+        <MatchItem id={"mfinder"} />
+      </View>
+    </ScrollView>
 
   );
   
@@ -55,9 +61,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 40,
   },
+
   buttonStyle: {
     alignItems: 'flex-start'
   },
+
   noMatchContainer: {
     flex: 1,
     fontSize: 50,
