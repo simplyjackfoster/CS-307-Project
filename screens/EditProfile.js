@@ -80,7 +80,7 @@ export default ( {navigation} ) => {
   const [numRoommates, setNumRoommates] = React.useState(null);
   const [numRoommatesChanged, setNumRoommatesChanged] = React.useState(false);
 
-  const [livingLocation, setLivingLocation] = React.useState(1);
+  const [livingLocation, setLivingLocation] = React.useState(0);
 
   const [instagram, onChangeInstagram] = React.useState(null);
   const [instagramChanged, setInstagramChanged] = React.useState(false);
@@ -101,7 +101,8 @@ export default ( {navigation} ) => {
               "/Profile/preferred_living_location")).then((snapshot) => {
       if (snapshot.exists()) {
         const data_val = snapshot.val();
-        if (data_val == "Earhart") { setLivingLocation(1); }
+        if (data_val == "No Preference") { setLivingLocation(0); }
+        else if (data_val == "Earhart") { setLivingLocation(1); }
         else if (data_val == "Freida Parker Hall") { setLivingLocation(2); }
         else if (data_val == "Winifred Parker Hall") { setLivingLocation(3); }
         else if (data_val == "Harrison Hall") { setLivingLocation(4); }
@@ -117,6 +118,7 @@ export default ( {navigation} ) => {
         else if (data_val == "McCutcheon (male only)") { setLivingLocation(14); }
         else if (data_val == "Tarkington (male only)") { setLivingLocation(15); }
         else if (data_val == "Wiley (male only)") { setLivingLocation(16); }
+        else { setLivingLocation(0); }
       }
     }).catch((error) => {
       console.error(error);
@@ -588,6 +590,7 @@ export default ( {navigation} ) => {
               setLivingLocation(itemValue)
             }
           >
+            <Picker.Item label="No Preference" value={0} />
             <Picker.Item label="Earhart" value={1} />
             <Picker.Item label="Freida Parker Hall" value={2} />
             <Picker.Item label="Winifred Parker Hall" value={3} />
