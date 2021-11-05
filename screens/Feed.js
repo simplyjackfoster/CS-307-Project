@@ -1,74 +1,138 @@
 import React from 'react';
+import { Component } from 'react';
 import {
   StyleSheet,
   Text,
   View,
   SafeAreaView,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  Dimensions,
 } from 'react-native';
+import { PanGestureHandler } from 'react-native-gesture-handler';
+import Animated from 'react-native-reanimated';
+
+const { event, Value, interpolateNode, concat, Extrapolate } = Animated;
+const { width } = Dimensions.get("window");
+
 import CardItem from '../components/CardItem';
+import Card from '../components/Card';
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
 
 
-/*
- * This is the screen where the user can swipe on other
- * users profiles.
- */
-export default () => {
 
-  const uid = "thylan";
+/*const refreshScreen = () => {
+    //   console.log(1);
+    //   var cardContainer = getElementById('card');
+    //   console.log(2);
+    //   var newCard = createElement("CardItem");
+    //   console.log(3);
+    //   newCard.setAttribute("id", uid);
+    //   console.log(4);
+    //   cardContainer.removeChild(cardContainer.firstChild);
+    //   console.log(5);
+    //   cardContainer.appendChild(newCard);
+    } 
+*/
+
+export default class Feed extends Component {
+
+  constructor() {
+    super();
+    this.translationX = new Value(0);
+    this.translationY = new Value(0);
+
+    this.onGestureEvent = event([{
+      nativeEvent: {
+        translationX: this.translationX,
+        translationY: this.translationY,
+      }
+    }], { useNativeDriver: true });
+  }
 
 
 
-  const refreshScreen = () => {
-  //   console.log(1);
-  //   var cardContainer = getElementById('card');
-  //   console.log(2);
-  //   var newCard = createElement("CardItem");
-  //   console.log(3);
-  //   newCard.setAttribute("id", uid);
-  //   console.log(4);
-  //   cardContainer.removeChild(cardContainer.firstChild);
-  //   console.log(5);
-  //   cardContainer.appendChild(newCard);
-  } 
+
+  render() { 
+    const uid = "mfinder";
+
+    const { onGestureEvent, translationX: translateX, translationY: translateY } = this;
+
+    // Adds rotation when translateX changes 
+    const rotateZ = concat(interpolateNode(translateX, {
+      inputRange: [-width / 2, width / 2],
+      outputRange: [15, -15],
+      extrapolate: Extrapolate.CLAMP,
+    }), "deg");
+
+    // changes the opacity based on translateX
+    const likeOpacity = interpolateNode(translateX, {
+      inputRange: [0, width / 4],
+      outputRange: [0, 1],
+      extrapolate: Extrapolate.CLAMP,
+    });
+
+    // changes the opacity based on translateX
+    const nopeOpacity = interpolateNode(translateX, {
+      inputRange: [-width / 4, 0],
+      outputRange: [1, 0],
+      extrapolate: Extrapolate.CLAMP,
+    });
+
+    const style = {
+      ...StyleSheet.absoluteFillObject,
+      transform: [
+        { translateX },
+        { translateY },
+        { rotateZ },
+      ],
+    };
 
 
-	return (
-		<View style={styles.container}>
+    
 
-      {/* Card */}
-      <View id='card' style={styles.contentContainer}>
-        <CardItem id={uid}/>
+    return (
+      <View style={styles.container}>
+
+        {/* Card */}
+        <View id='card' style={styles.contentContainer}>
+          <PanGestureHandler
+            onGestureEvent={onGestureEvent}
+          >
+            <Animated.View {...{style}}>
+                {/*<CardItem id={uid}/>*/}
+                <Card id={uid} {...{likeOpacity, nopeOpacity}}></Card>
+            </Animated.View>
+          </PanGestureHandler>
+        </View>
+
+
+        {/* Like, Refresh, and Dislike Buttons */}
+        <View style={styles.footer}>
+          <TouchableOpacity style={styles.dislikeWrapper} onPress={() => {
+            console.log("Dislike pressed");
+          }}>
+            {renderIcon("times", 50, Colors.red)}
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.refreshWrapper} onPress={() => {
+            console.log("Refresh pressed");
+            refreshScreen();
+          }}>
+            {renderIcon("refresh", 50, Colors.yellow)}
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.likeWrapper} onPress={() => {
+            console.log("Like pressed");
+          }}>
+            {renderIcon("check", 50, Colors.green)}
+          </TouchableOpacity>
+        </View>
 
       </View>
-
-      {/* Like, Refresh, and Dislike Buttons */}
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.dislikeWrapper} onPress={() => {
-          console.log("Dislike pressed");
-        }}>
-          {renderIcon("times", 50, Colors.red)}
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.refreshWrapper} onPress={() => {
-          console.log("Refresh pressed");
-          refreshScreen();
-        }}>
-          {renderIcon("refresh", 50, Colors.yellow)}
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.likeWrapper} onPress={() => {
-          console.log("Like pressed");
-        }}>
-          {renderIcon("check", 50, Colors.green)}
-        </TouchableOpacity>
-      </View>
-
-		</View>
-	);
+    );
+  }
 }
 
 

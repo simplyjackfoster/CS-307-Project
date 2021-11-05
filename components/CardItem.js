@@ -9,6 +9,8 @@ import {
     TouchableOpacity,
     Alert
 } from 'react-native';
+import Animated from 'react-native-reanimated';
+
 import { getDataFromPath, getInstagramLink, getInterests } from "../database/readData";
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
@@ -16,7 +18,8 @@ import { reportUser } from '../database/writeData';
 
 
 
-const CardItem = (props) => {
+export const CardItem = (props) => {
+    const { likeOpacity, nopeOpacity } = props;
     
     const uid = props.id;
     const profile_picture = getDataFromPath("users/" + uid + "/Profile/Images/profile_picture");
@@ -60,7 +63,6 @@ const CardItem = (props) => {
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             <View style={styles.contentContainer}>
-
 
                 {/* Profile Picture */}
                 <View style={styles.imageWrapper}>
@@ -305,10 +307,10 @@ const styles = StyleSheet.create({
 
     /* Profile Picture */
     profilePic: {
-        width: 325,
-        height: 325, 
+        width: 340,
+        height: 340, 
         borderRadius: 25,
-        marginTop: 35,
+        marginTop: 20,
         marginBottom: 10,
         alignSelf: 'center',
     },
