@@ -12,7 +12,6 @@ import {
 import { getDataFromPath, getInstagramLink } from "../database/readData";
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
-import HomeTabs from '../navigation/HomeTabs';
 
 
 
