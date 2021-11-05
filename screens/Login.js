@@ -13,6 +13,8 @@ import {
 	KeyboardAvoidingView
 } from 'react-native';
 
+import {DateTime} from 'luxon';
+
 import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
 import { render } from 'react-dom';
@@ -27,6 +29,8 @@ import { Title } from 'react-native-paper';
  * to log in, or they can click the sign up button to be brought
  * to the sign up screen. 
  */
+var startTime = DateTime.now();
+var endTime = DateTime.now();
 export default ({ navigation }) => {
 
 	const { userToken, setUserToken } = React.useContext(AuthContext);
@@ -45,7 +49,7 @@ export default ({ navigation }) => {
 		// log inputs for testing
 		// console.log("\nEmail: " + email);
 		// console.log("Password: " + password);
-
+		startTime = DateTime.now();
 		if (!email || !password) {
 			// at least one of the fields has not been filled out
 			// alert user to fill out both fields and return
@@ -74,6 +78,21 @@ export default ({ navigation }) => {
 			var authState = onAuthStateChanged(auth, (user) => {
 				if (user) {
 					console.log("Auth State Changed From Login");
+					endTime = DateTime.now();
+					var startMin = startTime.toString();
+					startMin = startMin.substring(14, 16);
+					var startSec = startTime.toString();
+					startSec = startSec.substring(17, 19);
+					var endMin = endTime.toString();
+					endMin = endMin.substring(14, 16);
+					var endSec = endTime.toString();
+					endSec = endSec.substring(17, 19);
+					var diff = (eval(endMin - startMin) * 60) + (eval(endSec - startSec));
+					if (diff < 30) {
+						console.log("Passed Auth Checkpoint, total time: " + diff);
+					} else {
+						console.log("Failed Auth Checkpoint, total time: " + diff);
+					}
 					checkUserVerification(authState);
 					return;
 				}
@@ -89,6 +108,21 @@ export default ({ navigation }) => {
 		if (auth.currentUser.emailVerified == true) {
 			console.log("logged in");
 			setUserToken('Arbitrary Text');
+			endTime = DateTime.now();
+			var startMin = startTime.toString();
+			startMin = startMin.substring(14, 16);
+			var startSec = startTime.toString();
+			startSec = startSec.substring(17,19);
+			var endMin = endTime.toString();
+			endMin = endMin.substring(14, 16);
+			var endSec = endTime.toString();
+			endSec = endSec.substring(17,19);
+			var diff = (eval(endMin - startMin) * 60) + (eval(endSec - startSec));
+			if (diff < 30) {
+				console.log("Passed Homepage Checkpoint, total time: " + diff);
+			} else {
+				console.log("Failed Homepage Checkpoint, total time: " + diff);
+			}
 		}
 		else {
 			Alert.alert("Account Not Verified", "Attention: Your account's email has not been verified. A new verification link will be sent to your email.");
