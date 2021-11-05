@@ -42,7 +42,7 @@ export default ( {navigation} ) => {
         </View>
       </TouchableOpacity>
       <Collapsible collapsed={collapsedOne} align="center">
-        <View >
+        <View>
           <Text style={styles.content}>
           UniRoom is a fantastic way to connect with a likeminded roommate
           </Text>
