@@ -9,11 +9,33 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import { PanGestureHandler } from 'react-native-gesture-handler';
+import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 
-const { event, Value, interpolateNode, concat, Extrapolate } = Animated;
-const { width } = Dimensions.get("window");
+const {
+  event,
+  Value,
+  interpolateNode,
+  concat,
+  Extrapolate,
+  cond,
+  eq,
+  set,
+  clockRunning,
+  startClock,
+  stopClock,
+  spring,
+  Clock,
+  greaterThan,
+  lessThan,
+  and,
+  neq,
+  call,
+} = Animated;
+const { width, height } = Dimensions.get("window");
+
+// calculate the width of the card when it's rotated 15 degrees
+const rotatedWidth = width * Math.sin(75 * Math.PI/180) + height * Math.sin(15 * Math.PI / 180);
 
 import CardItem from '../components/CardItem';
 import Card from '../components/Card';
@@ -22,19 +44,41 @@ import { renderIcon } from "../images/Icons";
 
 
 
-/*const refreshScreen = () => {
-    //   console.log(1);
-    //   var cardContainer = getElementById('card');
-    //   console.log(2);
-    //   var newCard = createElement("CardItem");
-    //   console.log(3);
-    //   newCard.setAttribute("id", uid);
-    //   console.log(4);
-    //   cardContainer.removeChild(cardContainer.firstChild);
-    //   console.log(5);
-    //   cardContainer.appendChild(newCard);
-    } 
-*/
+const runSpring = (clock, value, velocity, dest) => {
+  const state = {
+    finished: new Value(0),
+    velocity: new Value(0),
+    position: new Value(0),
+    time: new Value(0),
+  };
+
+  const config = {
+    damping: 15,
+    mass: 1,
+    stiffness: 120,
+    overshootClamping: false,
+    restSpeedThreshold: 0.001,
+    restDisplacementThreshold: 0.001,
+    toValue: new Value(0),
+  };
+
+  return [
+    cond(clockRunning(clock), 0, [
+      set(state.finished, 0),
+      set(state.velocity, velocity),
+      set(state.position, value),
+      set(config.toValue, dest),
+      startClock(clock),
+    ]),
+    spring(clock, state, config),
+    cond(state.finished, stopClock(clock)),
+    state.position,
+  ];
+} // runSpring()
+
+
+
+
 
 export default class Feed extends Component {
 
@@ -42,14 +86,75 @@ export default class Feed extends Component {
     super();
     this.translationX = new Value(0);
     this.translationY = new Value(0);
+    this.velocityX = new Value(0);
+    this.gestureState = new Value(State.UNDETERMINED);
 
     this.onGestureEvent = event([{
       nativeEvent: {
         translationX: this.translationX,
         translationY: this.translationY,
+        velocityX: this.velocityX,
+        state: this.gestureState,
       }
     }], { useNativeDriver: true });
+
+    this.init();
   }
+
+
+
+  init() {
+    const { gestureState, translationX, translationY, velocityX } = this;
+    const clockX = new Clock();
+    const clockY = new Clock();
+
+    const snapPoint = cond(and(lessThan(translationX, 0), lessThan(velocityX, -15)),
+      -rotatedWidth,
+      cond(
+        and(greaterThan(translationX, 0), greaterThan(velocityX, 15)),
+        rotatedWidth,
+        0,
+      )
+    );
+
+    this.translateX = cond(eq(gestureState, State.END), [
+      set(translationX, runSpring(clockX, translationX, velocityX, snapPoint)),
+        cond(
+          and(
+            eq(clockRunning(clockX), 0),
+            neq(translationX, 0),
+          ),
+          call([translationX], this.onSwiped),
+        ),
+      translationX
+    ],
+      translationX 
+    )
+
+    this.translateY = cond(eq(gestureState, State.END), [
+      set(translationY, runSpring(clockY, translationY, 0, 0)),
+      translationY
+    ],
+      translationY 
+    )
+
+  } // init()
+
+
+
+
+
+  // Function that is called when the user swipes
+  onSwiped = ([translateX]) => {
+    const isLiked = translateX > 0;
+    if (isLiked) {
+      console.log("Profile Liked!");
+    }
+    else {
+      console.log("Profile Disliked!");
+    }
+  } // onSwiped()
+
 
 
 
@@ -57,7 +162,7 @@ export default class Feed extends Component {
   render() { 
     const uid = "mfinder";
 
-    const { onGestureEvent, translationX: translateX, translationY: translateY } = this;
+    const { onGestureEvent, translateX, translateY } = this;
 
     // Adds rotation when translateX changes 
     const rotateZ = concat(interpolateNode(translateX, {
@@ -98,6 +203,7 @@ export default class Feed extends Component {
         {/* Card */}
         <View id='card' style={styles.contentContainer}>
           <PanGestureHandler
+            onHandlerStateChange={onGestureEvent}
             onGestureEvent={onGestureEvent}
           >
             <Animated.View {...{style}}>
