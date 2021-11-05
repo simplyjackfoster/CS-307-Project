@@ -256,8 +256,8 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     marginHorizontal: '3%',
-    marginTop: '3%',
-    marginBottom: '3%',
+    marginTop: '2%',
+    marginBottom: '1%',
   },
 
   footer: {
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
 		flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: 8,
   },
 
 
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
   refreshWrapper: {
     // marginLeft: 20,
     // marginRight: 20,
-    alignContent: 'center',
+    // alignContent: 'center',
   },
 
   /* Like Button */
