@@ -61,6 +61,16 @@ export default ({ navigation }) => {
 				.then((userCredential, success) => {
 					const user = userCredential.user;
 					console.log("Successful Login!");
+					var authState = onAuthStateChanged(auth, (user) => {
+						if (user) {
+							console.log("Auth State Changed From Login");
+							checkUserVerification(authState);
+							return;
+						}
+						else {
+							console.log("Waiting for user auth state change from login");
+						}
+					});
 				})
 				.catch((error) => {
 					console.log("Error Code: " + error.code);
@@ -70,17 +80,6 @@ export default ({ navigation }) => {
 
 					console.log("Failed Login!");
 				})
-			
-			var authState = onAuthStateChanged(auth, (user) => {
-				if (user) {
-					console.log("Auth State Changed From Login");
-					checkUserVerification(authState);
-					return;
-				}
-				else {
-					console.log("Waiting for user auth state change from login");
-				}
-			});
 		}
 	} // attemptLogin()
 
