@@ -4,16 +4,19 @@ import {
     Text, 
     View,
     Image,
+    Button,
+    Alert,
     TouchableOpacity,
 } from 'react-native';
 import { getDataFromPath, getInstagramLink } from "../database/readData";
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
+import HomeTabs from '../navigation/HomeTabs';
 
 
 
 const MatchItem = (props) => {
-    
+    //const { userToken, setUserToken }  = React.useContext();
     const uid = props.id;
     const profile_picture = getDataFromPath("users/" + uid + "/Profile/Images/profile_picture");
     const name = getDataFromPath("users/" + uid + "/Profile/profile_name");
@@ -49,6 +52,18 @@ const MatchItem = (props) => {
                 <Image style = {styles.profileImage}source={{uri: profile_picture}}/>
                 <Text>{name}</Text>
                 <Text style={styles.description}>Hometown: {location}, Major: {major}</Text>
+                <Button title={"      💬"} onPress={() => Alert.prompt("Message", "Send your message",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          {
+            text: "Send",
+          }
+        ],
+        )}></Button>
             </View>
         </View>
     );
@@ -84,6 +99,15 @@ const styles = StyleSheet.create({
         paddingTop: 5,
         alignSelf: 'flex-start',
     },
+    editProfile: {
+		alignSelf: 'flex-end',
+	},
+
+	textEditProfile: {
+		margin: 20,
+		fontSize: 18,
+		color: Colors.lightBlue,
+	},
     button: {
         backgroundColor: Colors.green,
     }
