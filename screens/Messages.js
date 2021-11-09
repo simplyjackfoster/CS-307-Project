@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
-import Chat from '../components/Chat';
 import { GiftedChat } from 'react-native-gifted-chat';
 import Colors from '../constants/Colors';
 import { getDataFromPath, getInstagramLink } from "../database/readData";
