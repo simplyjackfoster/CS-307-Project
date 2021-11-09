@@ -34,13 +34,8 @@
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",
     "react-native-vector-icons": "^8.1.0",
-<<<<<<< HEAD
-    "react-native-web": "~0.13.12",
-    "react-navigation": "^2.18.3",
-=======
     "react-native-web": "^0.17.5",
     "react-navigation": "^2.0.4",
->>>>>>> origin/main
     "uuid": "^8.3.2",
     "uuid4": "^2.0.2"
   },
