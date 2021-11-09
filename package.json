@@ -17,9 +17,10 @@
     "expo": "~42.0.1",
     "expo-image-picker": "~10.2.2",
     "expo-status-bar": "~1.0.4",
-    "firebase": "^9.1.1",
+    "firebase": "^9.2.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
+    "react-event-observer": "^0.5.11",
     "react-icon": "^1.0.0",
     "react-icons": "^4.3.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
@@ -33,8 +34,13 @@
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",
     "react-native-vector-icons": "^8.1.0",
+<<<<<<< HEAD
     "react-native-web": "~0.13.12",
     "react-navigation": "^2.18.3",
+=======
+    "react-native-web": "^0.17.5",
+    "react-navigation": "^2.0.4",
+>>>>>>> origin/main
     "uuid": "^8.3.2",
     "uuid4": "^2.0.2"
   },

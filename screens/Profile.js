@@ -96,29 +96,38 @@ export default ( {navigation} ) => {
 			</View>
 			<View style={{marginTop: 40}}/>
 
-			{/* Email: <email> */}
-			<View style={styles.infoWrapper}>
-				<View style={styles.icon}>
-					{renderIcon("envelope", 25, Colors.darkBlue)}
+
+			<View style={styles.fullInfoWrapper}>
+				{/* Email: <email> */}
+				<View style={styles.infoWrapper}>
+					<View style={styles.icon}>
+						{renderIcon("envelope", 25, Colors.royalBlue)}
+					</View>
+					<Text style={styles.infoHeader}>Email:</Text>
+					<Text style={styles.infoContent}>{auth.currentUser.email}</Text>
+
 				</View>
-				<Text style={styles.infoHeader}>Email:</Text>
-				<Text style={styles.infoContent}>{auth.currentUser.email}</Text>
 			</View>
 			
 			{/* Phone: <phone number> */}
 			<View style={styles.infoWrapper}>
 				<View style={styles.icon}>
-					{renderIcon("phone-square", 25, Colors.darkBlue)}
+					{renderIcon("phone-square", 27, Colors.royalBlue)}
 				</View>
 				<Text style={styles.infoHeader}>Phone:</Text>
-				<Text style={styles.infoContent}>123-456-7890</Text>
+				<Text style={styles.infoContent}>
+					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Critical Information/phone")}
+				</Text>
 			</View>
 
-
 			{/* Instagram Link */}
-			<View style={styles.infoWrapper}>
+			<View style={
+				getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram") ?
+					(styles.infoWrapper)
+					: ({display: 'none'})
+				}>
 				<View style={styles.icon}>
-					{renderIcon("instagram", 25, Colors.darkBlue)}
+					{renderIcon("instagram", 28, Colors.royalBlue)}
 				</View>
 				<Text style={styles.infoHeader}>Instagram:</Text>
 				<Text style={styles.instagramLink}
@@ -140,7 +149,7 @@ export default ( {navigation} ) => {
 			{/* Ghost Mode */}
 			<View style={styles.disableWrapper}>
 				<View style={styles.icon}>
-					{renderIcon("eye-slash", 25, Colors.darkBlue)}
+					{renderIcon("eye-slash", 30, Colors.royalBlue)}
 				</View>
 				<Text style={styles.disableText}>Ghost Mode</Text>
 				<Switch
@@ -184,6 +193,7 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		fontSize: 25,
 		fontWeight: 'bold',
+		marginTop: 10,
 	},
 	
 	profilePic: {
@@ -212,8 +222,10 @@ const styles = StyleSheet.create({
 	},
 
 	infoContent: {
-		alignSelf: 'flex-start',
+		flex: 1,
+		flexWrap: 'wrap',
 		fontSize: 20,
+		marginRight: 25,
 	},
 
 	disableWrapper: {
@@ -251,7 +263,10 @@ const styles = StyleSheet.create({
 
 	/* Instagram Link Text */
 	instagramLink: {
+		flex: 1,
+		flexWrap: 'wrap',
 		fontSize: 20,
+		marginRight: 25,
 		color: Colors.blue,
 		textDecorationLine: 'underline',
 	},

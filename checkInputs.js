@@ -156,6 +156,7 @@ export const isValidBirthday = (birthday) => {
 		// no slash
 		Alert.alert("Error", "Birthday field is missing '/' character, please try again.", 
 			[{ text: "Ok" }]);
+		return false;
 	}
 
 	const slashTwoIndex = birthday.indexOf('/', slashOneIndex + 1)
@@ -163,6 +164,7 @@ export const isValidBirthday = (birthday) => {
 		// no second slash
 		Alert.alert("Error", "Birthday field is missing second '/' character, please try again.", 
 			[{ text: "Ok" }]);
+		return false;
 	}
 
 	const month = birthday.substring(0, slashOneIndex);
@@ -219,6 +221,7 @@ export const isValidBirthday = (birthday) => {
 			break;
 		default:
 			// month was invalid
+			return false;
 	}
 
 	if (!dayIsValid) {
@@ -461,9 +464,11 @@ export const isValidNumberOfRoommates = (numRoommates) => {
 			[{ text: "Ok" }]);
 			return false;
 	}
+	let count = 0
 	for (const c in numRoommates) {
-		if (numRoommates[c] < '0' || numRoommates[c] > '9') {
-			Alert.alert("Error", "Preferred # of Roommates field has invalid number, please try again.", 
+		count++
+		if (numRoommates[c] < '0' || numRoommates[c] > '6' || count >= 2) {
+			Alert.alert("Error", "Preferred # of Roommates field has invalid number, please try again. Note: maximum number of roommates is 9.", 
 				[{ text: "Ok" }]);
 				return false;
 		}
@@ -471,6 +476,38 @@ export const isValidNumberOfRoommates = (numRoommates) => {
 	return true;
 } // isValidNumberOfRoommates()
 
+
+
+
+/*
+ * isValidLivingLocation()
+ *
+ * function to check if teh living location is valid based on gender
+ * returns true if it gender matches the residence hall
+ * Otherwise, returns false.
+ */
+export const isValidLivingLocation = (livingLocation, gender) => {
+
+	if (!livingLocation) {
+		return true;
+	}
+
+	// check for male in female residence halls
+	if (gender == 1 && livingLocation >= 10 && livingLocation <= 12) {
+		Alert.alert("Error", "Living location is not compatible with gender, please try again.", 
+			[{ text: "Ok" }]);
+			return false;
+	}
+	
+	// check for female in male residence halls
+	if (gender == 2 && livingLocation >= 13 && livingLocation <= 16) {
+		Alert.alert("Error", "Living location is not compatible with gender, please try again.", 
+			[{ text: "Ok" }]);
+			return false;
+	}
+
+	return true;
+} // isValidLivingLocation()
 
 
 

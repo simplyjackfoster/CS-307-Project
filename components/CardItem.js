@@ -9,13 +9,17 @@ import {
     TouchableOpacity,
     Alert
 } from 'react-native';
-import { getDataFromPath, getInstagramLink } from "../database/readData";
+import Animated from 'react-native-reanimated';
+
+import { getDataFromPath, getInstagramLink, getInterests } from "../database/readData";
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
+import { reportUser } from '../database/writeData';
 
 
 
-const CardItem = (props) => {
+export const CardItem = (props) => {
+    const { likeOpacity, nopeOpacity } = props;
     
     const uid = props.id;
     const profile_picture = getDataFromPath("users/" + uid + "/Profile/Images/profile_picture");
@@ -25,10 +29,14 @@ const CardItem = (props) => {
     const major = getDataFromPath("users/" + uid + "/Profile/major");
     const bio = getDataFromPath("users/" + uid + "/Profile/bio");
     const vaccination = getDataFromPath("users/" + uid + "/Profile/covid_vaccination_status");
-    const preferredNumRoommates = getDataFromPath("users/" + uid + "/Profile/preferred_number_of_roommates");    
+    const preferredNumRoommates = getDataFromPath("users/" + uid + "/Profile/preferred_number_of_roommates");
+    const preferredLivingLocation = getDataFromPath("users/" + uid + "/Profile/preferred_living_location");
     const instagram = getDataFromPath("users/" + uid + "/Profile/instagram");
     const instagramLink = getInstagramLink(uid);
     const bday = getDataFromPath("users/" + uid + "/Critical Information/birthday");
+    const reports = getDataFromPath("reported/" + uid + "/num_reports");
+    const interests = getInterests(uid);
+
 
     var age;
     /* Used for age calculation */
@@ -56,7 +64,6 @@ const CardItem = (props) => {
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             <View style={styles.contentContainer}>
 
-
                 {/* Profile Picture */}
                 <View style={styles.imageWrapper}>
                     <Image style={styles.profilePic}
@@ -83,6 +90,57 @@ const CardItem = (props) => {
                 </View>
 
 
+                {/* Interests */} 
+                <View style={styles.interestsContainer}>
+                    <View style=
+                        {interests[0] ? (
+                            styles.interestWrapper
+                        ) : (
+                            {display: 'none'}
+                        )}
+                    >
+                        <Text style={styles.interestText}>{interests[0]}</Text>
+                    </View>
+                    <View style=
+                        {interests[1] ? (
+                            styles.interestWrapper
+                        ) : (
+                            {display: 'none'}
+                        )}
+                    >
+                        <Text style={styles.interestText}>{interests[1]}</Text>
+                    </View>
+                    <View style=
+                        {interests[2] ? (
+                            styles.interestWrapper
+                        ) : (
+                            {display: 'none'}
+                        )}
+                    >
+                        <Text style={styles.interestText}>{interests[2]}</Text>
+                    </View>
+                    <View style=
+                        {interests[3] ? (
+                            styles.interestWrapper
+                        ) : (
+                            {display: 'none'}
+                        )}
+                    >
+                        <Text style={styles.interestText}>{interests[3]}</Text>
+                    </View>
+                    <View style=
+                        {interests[4] ? (
+                            styles.interestWrapper
+                        ) : (
+                            {display: 'none'}
+                        )}
+                    >
+                        <Text style={styles.interestText}>{interests[4]}</Text>
+                    </View>
+                </View>
+
+
+
                 {/* Graduation year (optional) */}
                 <View style={
                     graduationYear ? (
@@ -92,7 +150,7 @@ const CardItem = (props) => {
                     )}
                 >
                     <View>
-                        {renderIcon("graduation-cap", 25, Colors.darkBlue)}
+                        {renderIcon("graduation-cap", 25, Colors.royalBlue)}
                     </View>
                     <Text style={styles.graduationYearContent}>Class of {graduationYear}</Text>
                 </View>
@@ -107,9 +165,10 @@ const CardItem = (props) => {
                     )}
                 >
                     <View>
-                        {renderIcon("book", 25, Colors.darkBlue)}
+                        {renderIcon("book", 25, Colors.royalBlue)}
                     </View>
-                    <Text style={styles.majorContent}>Major: {major}</Text>
+                    <Text style={styles.infoHeader}>Major: </Text>
+                    <Text style={styles.infoContent}>{major}</Text>
                 </View>
 
 
@@ -122,9 +181,10 @@ const CardItem = (props) => {
                     )}
                 >
                     <View>
-                        {renderIcon("map-pin", 25, Colors.darkBlue)}
+                        {renderIcon("map-pin", 25, Colors.royalBlue)}
                     </View>
-                    <Text style={styles.locationContent}>Location: {location}</Text>
+                    <Text style={styles.infoHeader}>Location: </Text>
+                    <Text style={styles.infoContent}>{location}</Text>
                 </View>
 
 
@@ -137,9 +197,40 @@ const CardItem = (props) => {
                     )}
                 >
                     <View>
-                        {renderIcon("users", 25, Colors.darkBlue)}
+                        {renderIcon("users", 22, Colors.royalBlue)}
                     </View>
-                    <Text style={styles.preferredNumRoommatesContent}>Preferred # of Roommates: {preferredNumRoommates}</Text>
+                    <Text style={styles.infoHeader}>Preferred # of Roommates: </Text>
+                    <Text style={styles.infoContent}>{preferredNumRoommates}</Text>
+                </View>
+
+
+                {/* Preferred living location (optional) */}
+                <View style=
+                    {preferredLivingLocation ? (
+                        styles.preferredLivingLocationWrapper
+                    ) : (
+                        {display: 'none'}
+                    )}
+                >
+                    <View>
+                        {renderIcon("home", 25, Colors.royalBlue)}
+                    </View>
+                    <Text style={styles.preferredLivingLocationContent}>Preferred Housing: {preferredLivingLocation}</Text>
+                </View>
+
+
+                {/* Vaccination status */}
+                <View style={styles.vaccinationWrapper}>
+                    <View>
+                        {renderIcon("medkit", 25, Colors.royalBlue)}
+                    </View>
+                    <Text style={styles.vaccinationContent}>
+                        {(vaccination == "Vaccinated") ? (
+                            "Vaccinated for Covid-19"
+                        ) : (
+                            "Not vaccinated for Covid-19"
+                        )}
+                    </Text>
                 </View>
 
 
@@ -176,7 +267,12 @@ const CardItem = (props) => {
                         <Text style={styles.reportUserText}
                             onPress={() => {
                                 Alert.alert("Report User", "Are you sure you want to report " + name + "?",
-                                [{ text: "No" }, {text: "Yes"}]); 
+                                [{ 
+                                    text: "No" 
+                                }, {
+                                    text: "Yes",
+                                    onPress: () => reportUser(uid, reports)
+                                }]); 
                             }}
                         >
                             Report User
@@ -205,15 +301,16 @@ const styles = StyleSheet.create({
         flex: 1,
         alignSelf: 'center',
         width: 325,
+        padding: 7,
     },
 
 
     /* Profile Picture */
     profilePic: {
-        width: 325,
-        height: 325, 
+        width: 340,
+        height: 340, 
         borderRadius: 25,
-        marginTop: 35,
+        marginTop: 20,
         marginBottom: 10,
         alignSelf: 'center',
     },
@@ -237,8 +334,32 @@ const styles = StyleSheet.create({
     },
 
     bioContent: {
-       fontSize: 15, 
+        fontSize: 15, 
     },
+
+
+    /* Interets */
+    interestsContainer: {
+        flex: 1,
+        marginTop: 10,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
+
+    interestWrapper: {
+        flexDirection: 'row',
+        marginTop: 5,
+        borderWidth: 1,
+        borderRadius: 20,
+        marginHorizontal: 2,
+        padding: 7,
+
+    },
+
+    interestText: {
+        fontSize: 12,
+    },
+    
 
     /* Graduation Year */
     graduationYearWrapper: {
@@ -258,24 +379,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
 
-    majorContent: {
-        paddingLeft: 15,
-        fontSize: 20,
-    },
-
-
     /* Location */
     locationWrapper: {
         paddingTop: 20,
         paddingLeft: 5,
         flexDirection: 'row',
     },
-
-    locationContent: {
-        paddingLeft: 20,
-        fontSize: 20,
-    },
-
    
     /* Preferred Roommates */
     preferredNumRoommatesWrapper: {
@@ -283,9 +392,40 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
 
-    preferredNumRoommatesContent: {
+
+    infoHeader: {
+        fontStyle: 'italic',
         paddingLeft: 15,
         fontSize: 20,
+    },
+
+    infoContent: {
+		flex: 1,
+		flexWrap: 'wrap',
+        fontSize: 20,
+    },
+
+    /* Preferred Living Location */
+    preferredLivingLocationWrapper: {
+        paddingTop: 20,
+        flexDirection: 'row',
+    },
+
+    preferredLivingLocationContent: {
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+
+
+    /* Vaccination */
+    vaccinationWrapper: {
+        paddingTop: 20,
+        flexDirection: 'row',
+    },
+
+    vaccinationContent: {
+        paddingLeft: 15,
+        fontSize: 20, 
     },
 
 
@@ -310,20 +450,20 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignSelf: 'center',
     },
-
+    
     viewInstagramText: {
         fontSize: 15,
         paddingTop: 5,
         paddingLeft: 12,
     },
-
+    
     instagramUsernameText: {
         color: Colors.darkGray,
         fontSize: 12,
         paddingTop: 3,
         alignSelf: 'center',
     },
-
+    
 
     /* Report User */
     reportUserWrapper: {

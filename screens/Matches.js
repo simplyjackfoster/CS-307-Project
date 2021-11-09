@@ -6,7 +6,9 @@ import {
   Alert,
   useState,
   useEffect,
-  Button } from 'react-native';
+  ScrollView,
+  Button 
+} from 'react-native';
 import Colors from "../constants/Colors";
 import MatchItem from '../components/MatchItem';
 import Messages from './Messages';
@@ -16,28 +18,26 @@ import Messages from './Messages';
 /*
  * This is the screen where the user can view their matches.
  */
-var testUUid = "foste205"
+var testUid = "foste205"
 //const [showProfile] = React.useState(true)
-var matched = 'true'
+var matched = true;
 export default ( {navigation} ) => {
-  //const [count, setCount] = useState(0);
-  //<Button title={"X"} onPress={() => matched = false}></Button>
-  //const showMatch = ({ matched }) => {
-  if (matched != 'true') {
-    return (<View style={styles.noMatchContainer}>
-			<Text>You have no matches</Text>
-		</View>);
+
+  if (!matched) {
+    return (
+      <View style={styles.noMatchContainer}>
+        <Text>You have no matches</Text>
+      </View>
+    );
   }
   return (
-    <><View style={styles.container}>
-        <View style={styles.buttonStyle}>
-          <Button title={"📱"} onPress={() => navigation.navigate('Messages')}></Button>
-        </View>
-        <View style={styles.buttonStyle}>
-          <Button title="X" onPress={() => navigation.navigate('Messages')}></Button>
-        </View>
+    <ScrollView style={styles.container}>
+      <View>
         <MatchItem id={"foste205"} />
-    </View></>
+        <MatchItem id={"thylan"} />
+        <MatchItem id={"mfinder"} />
+      </View>
+    </ScrollView>
 
   );
   
@@ -51,13 +51,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    padding: 40,
+    paddingHorizontal: 30,
+    paddingTop: 20,
+    paddingBottom: 100,
   },
-  buttonStyle: {
-    alignItems: 'flex-start'
-  },
+
   noMatchContainer: {
     flex: 1,
     fontSize: 50,
