@@ -14,6 +14,9 @@
 * Find roommates at Purdue
   - Our easy to use app allows you to find the perfect roommate
 
+## Screenshots
+![Simulator Screen Shot - iPhone 12 - 2021-11-10 at 17 40 15](https://user-images.githubusercontent.com/17282599/141206243-6e32a03a-825a-4fb2-ac3c-a3ee65ad4892.png)
+
 ## How To Use
 
 Note: This only works on Android devices
