@@ -16,6 +16,7 @@
 
 ## Screenshots
 ![Simulator Screen Shot - iPhone 12 - 2021-11-10 at 17 40 15](https://user-images.githubusercontent.com/17282599/141206243-6e32a03a-825a-4fb2-ac3c-a3ee65ad4892.png width="200" height="400")
+<img src="https://user-images.githubusercontent.com/17282599/141206243-6e32a03a-825a-4fb2-ac3c-a3ee65ad4892.png" width="199.5" height="430">
 
 ## How To Use
 
