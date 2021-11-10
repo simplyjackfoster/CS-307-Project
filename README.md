@@ -3,6 +3,7 @@
 <p align="center">
   <a href="#key-feature">Key Features</a> •
   <a href="#how-to-use">How To Use</a> •
+  <a href="#screenshots">Screenshots</a> •
 
 </p>
 
