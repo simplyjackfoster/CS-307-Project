@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
-//import { GiftedChat } from 'react-native-gifted-chat';
+import { GiftedChat } from 'react-native-gifted-chat';
 import Colors from '../constants/Colors';
 import { getDataFromPath, getInstagramLink } from "../database/readData";
 
@@ -34,14 +34,14 @@ export default ({ navigation }) =>{
   }, [])
 
   return (
-    // <GiftedChat
-    //   messages={messages}
-    //   onSend={messages => onSend(messages)}
-    //   user={{
-    //     _id: 1,
-    //   }}
-    // />
-    <View></View>
+     <GiftedChat
+       messages={messages}
+       onSend={messages => onSend(messages)}
+       user={{
+         _id: 1,
+       }}
+     />
+    //<View></View>
   )
 }
 
