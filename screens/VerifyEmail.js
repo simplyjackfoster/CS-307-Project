@@ -24,24 +24,19 @@ export default ({ navigation }) => {
     const { userToken, setUserToken }  = React.useContext(AuthContext);
     var alertDisplayed = false;
 
-    const checkVerification = () => {
-        //auth.currentUser.reload
-        reload(auth.currentUser);
+    const checkVerification = async () => {
+        await reload(auth.currentUser);
         onIdTokenChanged(auth, (user) => {
             if (user) {
                 if (auth.currentUser.emailVerified == true) {
-                    //navigation.pop()
                     setUserToken('Arbitrary Value');
                 }
                 else if (alertDisplayed == false) {
-                    //may send multiple alerts?
                     alertDisplayed = true;
                     Alert.alert("Verify Email", "Email has not been verified with UniRoom", {onDismiss: () => {
                         alertDisplayed = false
                     }});
                 }
-            } else {
-                console.log("Waiting for user reload");
             }
         });
     }
@@ -57,7 +52,7 @@ export default ({ navigation }) => {
                         style={styles.footer}
                     >
                         <TouchableOpacity style={styles.continueButton}
-                            onPress={checkVerification}
+                            onPress={() => checkVerification()}
                         >
                             <Text style={styles.continueText}>Continue</Text>
                         </TouchableOpacity>

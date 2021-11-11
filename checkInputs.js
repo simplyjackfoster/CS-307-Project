@@ -219,9 +219,6 @@ export const isValidBirthday = (birthday) => {
 			if (dayInt < 1 || dayInt > 28) dayIsValid = false;
 			if (dayInt === 29 && yearInt % 4 === 0) dayIsValid = true;
 			break;
-		default:
-			// month was invalid
-			return false;
 	}
 
 	if (!dayIsValid) {

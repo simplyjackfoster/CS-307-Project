@@ -31,7 +31,7 @@ const AuthStack = () => {
 			options={{ title: "Create Account", headerBackTitle: "Back"}}/>
 
 			<Stack.Screen name="VerifyEmail" component={VerifyEmail}
-			options={{ title: "Verify Email"}}/>
+			options={{ title: "Verify Email", headerBackTitleVisible: false, headerLeft: null }}/>
 
 			<Stack.Screen name="ResetPassword" component={ResetPassword}
 			options={{ headerTitle: "Reset Password", headerBackTitle: "Back" }}/>
