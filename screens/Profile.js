@@ -120,6 +120,81 @@ export default ( {navigation} ) => {
 				</Text>
 			</View>
 
+			{/* Bio: <bio> */}
+			<View style={
+				getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/bio") ?
+				(styles.infoWrapper)
+				: ({display: 'none'})
+				}>
+				<View style={styles.icon}>
+					{renderIcon("id-card", 27, Colors.royalBlue)}
+				</View>
+				<Text style={styles.infoHeader}>Bio:</Text>
+				<Text style={styles.infoContent}>
+					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/bio")}
+				</Text>
+			</View>
+
+			{/* Graduation year: <graduation_year> */}
+			<View style={
+				getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/graduation_year") ?
+				(styles.infoWrapper)
+				: ({display: 'none'})
+				}>
+				<View style={styles.icon}>
+					{renderIcon("graduation-cap", 27, Colors.royalBlue)}
+				</View>
+				<Text style={styles.infoHeader}>Graduation Year:</Text>
+				<Text style={styles.infoContent}>
+					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/graduation_year")}
+				</Text>
+			</View>
+
+			{/* Major: <major> */}
+			<View style={
+				getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/major") ?
+				(styles.infoWrapper)
+				: ({display: 'none'})
+				}>
+				<View style={styles.icon}>
+					{renderIcon("book", 27, Colors.royalBlue)}
+				</View>
+				<Text style={styles.infoHeader}>Major:</Text>
+				<Text style={styles.infoContent}>
+					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/major")}
+				</Text>
+			</View>
+
+			{/* Location: <location> */}
+			<View style={
+				getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/location") ?
+				(styles.infoWrapper)
+				: ({display: 'none'})
+				}>
+				<View style={styles.icon}>
+					{renderIcon("map-pin", 27, Colors.royalBlue)}
+				</View>
+				<Text style={styles.infoHeader}>Location:</Text>
+				<Text style={styles.infoContent}>
+					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/location")}
+				</Text>
+			</View>
+
+			{/* Preferred # of roommates */}
+			<View style={
+				getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/preferred_number_of_roommates") ?
+				(styles.infoWrapper)
+				: ({display: 'none'})
+				}>
+				<View style={styles.icon}>
+					{renderIcon("users", 27, Colors.royalBlue)}
+				</View>
+				<Text style={styles.infoHeader}>Preffered # of Roommates:</Text>
+				<Text style={styles.infoContent}>
+					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/preferred_number_of_roommates")}
+				</Text>
+			</View>
+
 			{/* Instagram Link */}
 			<View style={
 				getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram") ?
@@ -145,6 +220,35 @@ export default ( {navigation} ) => {
 				</Text>
 			</View>
 
+			{/* Housing: <housing> */}
+			<View style={
+				getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/preferred_living_location") ?
+				(styles.infoWrapper)
+				: ({display: 'none'})
+				}>
+				<View style={styles.icon}>
+					{renderIcon("home", 27, Colors.royalBlue)}
+				</View>
+				<Text style={styles.infoHeader}>Preferred Housing:</Text>
+				<Text style={styles.infoContent}>
+					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/preferred_living_location")}
+				</Text>
+			</View>
+
+			{/* Vaccination status: <vaccinated_status> */}
+			<View style={
+				getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/covid_vaccination_status") ?
+				(styles.infoWrapper)
+				: ({display: 'none'})
+				}>
+				<View style={styles.icon}>
+					{renderIcon("medkit", 27, Colors.royalBlue)}
+				</View>
+				<Text style={styles.infoHeader}>Vaccination Status:</Text>
+				<Text style={styles.infoContent}>
+					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/covid_vaccination_status")}
+				</Text>
+			</View>
 
 			{/* Ghost Mode */}
 			<View style={styles.disableWrapper}>
