@@ -156,7 +156,6 @@ export const isValidBirthday = (birthday) => {
 		// no slash
 		Alert.alert("Error", "Birthday field is missing '/' character, please try again.", 
 			[{ text: "Ok" }]);
-		return false;
 	}
 
 	const slashTwoIndex = birthday.indexOf('/', slashOneIndex + 1)
@@ -164,7 +163,6 @@ export const isValidBirthday = (birthday) => {
 		// no second slash
 		Alert.alert("Error", "Birthday field is missing second '/' character, please try again.", 
 			[{ text: "Ok" }]);
-		return false;
 	}
 
 	const month = birthday.substring(0, slashOneIndex);
@@ -219,6 +217,8 @@ export const isValidBirthday = (birthday) => {
 			if (dayInt < 1 || dayInt > 28) dayIsValid = false;
 			if (dayInt === 29 && yearInt % 4 === 0) dayIsValid = true;
 			break;
+		default:
+			// month was invalid
 	}
 
 	if (!dayIsValid) {
@@ -441,38 +441,84 @@ export const isValidMajor = (major) => {
 
 
 
+/*
+ * isValidMajor()
+ *
+ * function to check if a major is valid. returns true if it is either
+ * null or contains only letters. Otherwise returns false.
+ */
+export const isValidAgeMin = (ageMin) => {
+	if (!ageMin) {
+		return true;
+	}
 
+	// iterate through the characters in the name
+	for (const c of ageMin) {
 
+		// 8216 and 8217 are the acsii values for apostrophes in iOS
+		if ((c.charCodeAt(0) == 8217) || (c.charCodeAt(0) == 8216) || (c === '-') || 
+				(c === ' ') || (c >= '0' && c <= '9')) {
+			// valid character
+		}
+		else {
+			// invalid character
+			Alert.alert("Error", "Age Range Minimum field contains invalid character: '" + c + 
+				"', please try again.", [{ text: "Ok" }]);
+
+			return false;
+		}
+	}
+
+	let ageMinInt = parseInt(ageMin);
+	console.log(ageMinInt);
+
+	if(ageMinInt < 18 || ageMinInt > 100) {
+		Alert.alert("Error", "Age Range Minimum field must be between 18 and 100. Please try again.", [{text: "Ok"}])
+		return false;
+	}
+
+	return true;
+} // isValidMajor()
 
 
 /*
- * isValidNumberOfRoommates()
+ * isValidMajor()
  *
- * function to check if a string is a valid number of roommates
- * returns true if its either null, or a positive number.
- * Otherwise, returns false.
+ * function to check if a major is valid. returns true if it is either
+ * null or contains only letters. Otherwise returns false.
  */
-export const isValidNumberOfRoommates = (numRoommates) => {
-	if (!numRoommates) {
+export const isValidAgeMax = (ageMax) => {
+	if (!ageMax) {
 		return true;
 	}
-	if (numRoommates[0] == '0') {
-		Alert.alert("Error", "Preferred # of Roommates field cannot have leading zeros, please try again.", 
-			[{ text: "Ok" }]);
+
+	// iterate through the characters in the name
+	for (const c of ageMax) {
+
+		// 8216 and 8217 are the acsii values for apostrophes in iOS
+		if ((c.charCodeAt(0) == 8217) || (c.charCodeAt(0) == 8216) || (c === '-') || 
+				(c === ' ') || (c >= '0' && c <= '9')) {
+			// valid character
+		}
+		else {
+			// invalid character
+			Alert.alert("Error", "Age Range Maximum field contains invalid character: '" + c + 
+				"', please try again.", [{ text: "Ok" }]);
+
 			return false;
-	}
-	let count = 0
-	for (const c in numRoommates) {
-		count++
-		if (numRoommates[c] < '0' || numRoommates[c] > '6' || count >= 2) {
-			Alert.alert("Error", "Preferred # of Roommates field has invalid number, please try again. Note: maximum number of roommates is 9.", 
-				[{ text: "Ok" }]);
-				return false;
 		}
 	}
-	return true;
-} // isValidNumberOfRoommates()
 
+	let ageMaxInt = parseInt(ageMax);
+	console.log(ageMaxInt);
+
+	if(ageMaxInt < 18 || ageMaxInt > 100) {
+		Alert.alert("Error", "Age Range Maximum field must be between 18 and 100. Please try again.", [{text: "Ok"}])
+		return false;
+	}
+
+	return true;
+} // isValidMajor()
 
 
 
@@ -505,6 +551,36 @@ export const isValidLivingLocation = (livingLocation, gender) => {
 
 	return true;
 } // isValidLivingLocation()
+
+
+/*
+ * isValidNumberOfRoommates()
+ *
+ * function to check if a string is a valid number of roommates
+ * returns true if its either null, or a positive number.
+ * Otherwise, returns false.
+ */
+export const isValidNumberOfRoommates = (numRoommates) => {
+	if (!numRoommates) {
+		return true;
+	}
+	if (numRoommates[0] == '0') {
+		Alert.alert("Error", "Preferred # of Roommates field cannot have leading zeros, please try again.", 
+			[{ text: "Ok" }]);
+			return false;
+	}
+	let count = 0
+	for (const c in numRoommates) {
+		count++
+		if (numRoommates[c] < '0' || numRoommates[c] > '6' || count >= 2) {
+			Alert.alert("Error", "Preferred # of Roommates field has invalid number, please try again. Note: maximum number of roommates is 6.", 
+				[{ text: "Ok" }]);
+				return false;
+		}
+	}
+	return true;
+} // isValidNumberOfRoommates()
+
 
 
 

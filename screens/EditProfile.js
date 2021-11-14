@@ -34,7 +34,9 @@ import {
   writeVaccinated,
   writePreferredNumRoommates,
   writePreferredLivingLocation,
-  writeInstagram
+  writeInstagram,
+  writeAgeMin,
+  writeAgeMax,
 } from '../database/writeData';
 
 import {
@@ -49,7 +51,9 @@ import {
   isValidGraduationYear,
   isValidMajor,
   isValidNumberOfRoommates,
-  isValidLivingLocation
+  isValidLivingLocation,
+  isValidAgeMax,
+  isValidAgeMin,
 } from '../checkInputs';
 import { set } from 'react-native-reanimated';
 import Interests from './Interests';
@@ -79,17 +83,19 @@ export default ( {navigation} ) => {
   const [locationChanged, setLocationChanged] = React.useState(false);
   const [numRoommates, setNumRoommates] = React.useState(null);
   const [numRoommatesChanged, setNumRoommatesChanged] = React.useState(false);
-
   const [livingLocation, setLivingLocation] = React.useState(0);
-
   const [instagram, onChangeInstagram] = React.useState(null);
   const [instagramChanged, setInstagramChanged] = React.useState(false);
-
   const [gender, setGender] = React.useState(1);
   const [vaccinated, setVaccinated] = React.useState(1);
 
   // DELETE
   const [interest, setInterest] = React.useState("Football");
+
+  const [ageMin, setAgeMin] = React.useState(null);
+  const [ageMinChanged, setAgeMinChanged] = React.useState(false);
+  const [ageMax, setAgeMax] = React.useState(null);
+  const [ageMaxChanged, setAgeMaxChanged] = React.useState(false);
 
 
   // function for setting the selection boxes to the correct value
@@ -263,7 +269,26 @@ export default ( {navigation} ) => {
     setMajorChanged(true);
   } // majorInputHandler()
 
+  
+  /*
+   * This function is called when the ageMin input is changed. It changes
+   * the value of the ageMin hook and also changes the boolean that tells
+   * us if the user has changed the value.
+   */
+  const ageMinInputHandler = (input) => {
+    setAgeMin(input);
+    setAgeMinChanged(true);
+  }
 
+  /*
+   * This function is called when the ageMax input is changed. It changes
+   * the value of the ageMax hook and also changes the boolean that tells
+   * us if the user has changed the value.
+   */
+  const ageMaxInputHandler = (input) => {
+    setAgeMax(input);
+    setAgeMaxChanged(true);
+  }
 
   /*
     * This function is called when the location input is changed. It changes
@@ -349,6 +374,14 @@ export default ( {navigation} ) => {
       writeInstagram(auth.currentUser.email, instagram);
     }
 
+    if(ageMinChanged) {
+      writeAgeMin(auth.currentUser.email, ageMin);
+    }
+
+    if (ageMaxChanged) {
+      writeAgeMax(auth.currentUser.email, ageMax);
+    }
+
     // write the gender and vaccination status data
     writeGender(auth.currentUser.email, gender);
     writePreferredLivingLocation(auth.currentUser.email, livingLocation);
@@ -397,7 +430,13 @@ export default ( {navigation} ) => {
     // Check if the preferred living location is valid
     if (!isValidLivingLocation(livingLocation, gender)) {return}
 
+    if(ageMinChanged != false) {
+      if(!isValidAgeMin(ageMin)) {return}
+    }
 
+    if(ageMaxChanged != false) {
+      if(!isValidAgeMax(ageMax)) {return}
+    }
 
     // update the information and navigate to Profile
     updateProfileData();
@@ -510,6 +549,8 @@ export default ( {navigation} ) => {
             />
           </SafeAreaView>
 
+          
+
 
          {/* Major (text), major (field) */}
          <SafeAreaView>
@@ -525,7 +566,39 @@ export default ( {navigation} ) => {
               defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/major")}
               placeholder={"Enter your major"}
             />
-          </SafeAreaView> 
+          </SafeAreaView>
+
+          {/* Age range minimum field */}
+          <SafeAreaView>
+            <Text style={styles.prompt}>Age Range Minimum</Text>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              maxLength={3}
+              onChangeText={ageMinInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/age_min")}
+              placeholder={"18"}
+            />
+          </SafeAreaView>
+
+          {/* Age range maximum field */}
+          <SafeAreaView>
+            <Text style={styles.prompt}>Age Range Maximum</Text>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              maxLength={3}
+              onChangeText={ageMaxInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/age_max")}
+              placeholder={"100"}
+            />
+          </SafeAreaView>
 
 
           {/* Location (text), location (field) */}
