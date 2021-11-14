@@ -18,7 +18,7 @@ import { renderIcon } from "../images/Icons";
  */
 export default () => {
 
-  const uid = "thylan";
+  const uid = "test2";
 
 
 
