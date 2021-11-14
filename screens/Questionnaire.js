@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   ScrollView,
-  Alert
+  Alert,
+  Linking
 } from 'react-native';
 
 import Colors from "../constants/Colors";
@@ -15,8 +16,8 @@ import { Divider } from 'react-native-elements';
 
 // authentication imports
 import { auth, rtdb } from '../database/RTDB';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { ref, child, get, set } from 'firebase/database';
+import { AuthCredential, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, reload, sendEmailVerification, updateProfile } from 'firebase/auth';
+import { ref, child, get, set, onChildChanged } from 'firebase/database';
         
 
 // data value imports from Signup screen
@@ -36,6 +37,7 @@ import {
 import { writeNewUser, writeQuestionnaire } from '../database/writeData';
 import { getDataFromPath } from '../database/readData';
 import { getID } from '../database/ID';
+import { FirebaseError } from '@firebase/util';
 
 // used so that the hooks don't get set rapidly in edit questionnaire
 var updatedTheSelected = false;
@@ -62,8 +64,6 @@ export default ( {navigation} ) => {
   const [selectedEleven, setSelectedEleven] = React.useState(1); // check_before_having_people_over
   const [selectedTwelve, setSelectedTwelve] = React.useState(1); // joint_grocery_shopping
   const [selectedThirteen, setSelectedThirteen] = React.useState(1); // has_significant_other
-
-  
 
   // function for setting the selection boxes to the correct value
   const setSelection = (question_num, field) => {
@@ -158,15 +158,14 @@ export default ( {navigation} ) => {
   const attemptCreate = () => {
     createUserWithEmailAndPassword(auth, Gemail, Gpassword)
       .then((userCredential) => {
-        const user = userCredential.user;
         // move to Questionnaire screen
+        const user = userCredential.user;
         console.log("Successfully Created Account!");
         writeNewUser(Gemail, Gname, Gphone, Gbirthday, Ggender, Gvaccinated,
           GsecurityQuestion, GsecurityAnswer, selectedOne, selectedTwo,
           selectedThree, selectedFour, selectedFive, selectedSix, selectedSeven,
           selectedEight, selectedNine, selectedTen, selectedEleven, selectedTwelve,
           selectedThirteen);
-        setUserToken('Arbitrary Value');
       })
       .catch((error) => {
         Alert.alert("Error", "Error: Email Already in Use");
@@ -175,11 +174,51 @@ export default ( {navigation} ) => {
         // move back to create account screen
         navigation.pop();
       })
+    var authState = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        if (auth.currentUser.emailVerified != true) {
+          console.log("Auth State Changed From Questionnaire");
+          attemptDisplayNameUpdate(authState);
+        }
+        return;
+      }
+      else {
+        console.log("Waiting for user auth state change from Questionnaire");
+      }
+    });
   } // attemptCreate()
 
+  const attemptDisplayNameUpdate = (authState) => {
+    updateProfile(auth.currentUser, { displayName: Gname })
+      .then(() => {
+        //displayName has been updated
+        console.log(auth.currentUser.displayName);
+        attemptEmail();
+      })
+      .catch((error) => {
+        Alert.alert("Error", "Error: There was an issue updating your name");
+        console.log("Error Code: " + error.code);
+        console.log("Error Message: " + error.message);
+        // move back to create account screen
+        navigation.pop();
+      })
+      authState();
 
+  }
 
-
+  const attemptEmail = () => {
+    sendEmailVerification(auth.currentUser)
+      .then(() => {
+        navigation.push("VerifyEmail");
+      })
+      .catch((error) => {
+        Alert.alert("Error", "Error: There was an issue sending your account verification link");
+        console.log("Error Code: " + error.code);
+        console.log("Error Message: " + error.message);
+        // move back to create account screen
+        navigation.pop();
+      })
+  }
 
 
 	return (
@@ -412,7 +451,7 @@ export default ( {navigation} ) => {
               )
             }
             onPress={() => {
-              attemptCreate()
+                attemptCreate()
             }}
           >
             <Text style={styles.createText}>Create Account</Text>
@@ -474,7 +513,7 @@ const styles = StyleSheet.create({
     flex: 0.15,
     alignSelf: 'center',
     paddingTop: 5,
-    paddingHorizontal: 150,
+    paddingHorizontal: 300,
     paddingBottom: 25,
     backgroundColor: Colors.lightGray,
   },

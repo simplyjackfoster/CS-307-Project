@@ -80,13 +80,16 @@ export default ( {navigation} ) => {
   const [numRoommates, setNumRoommates] = React.useState(null);
   const [numRoommatesChanged, setNumRoommatesChanged] = React.useState(false);
 
-  const [livingLocation, setLivingLocation] = React.useState(1);
+  const [livingLocation, setLivingLocation] = React.useState(0);
 
   const [instagram, onChangeInstagram] = React.useState(null);
   const [instagramChanged, setInstagramChanged] = React.useState(false);
 
   const [gender, setGender] = React.useState(1);
   const [vaccinated, setVaccinated] = React.useState(1);
+
+  // DELETE
+  const [interest, setInterest] = React.useState("Football");
 
 
   // function for setting the selection boxes to the correct value
@@ -98,7 +101,8 @@ export default ( {navigation} ) => {
               "/Profile/preferred_living_location")).then((snapshot) => {
       if (snapshot.exists()) {
         const data_val = snapshot.val();
-        if (data_val == "Earhart") { setLivingLocation(1); }
+        if (data_val == "No Preference") { setLivingLocation(0); }
+        else if (data_val == "Earhart") { setLivingLocation(1); }
         else if (data_val == "Freida Parker Hall") { setLivingLocation(2); }
         else if (data_val == "Winifred Parker Hall") { setLivingLocation(3); }
         else if (data_val == "Harrison Hall") { setLivingLocation(4); }
@@ -114,6 +118,7 @@ export default ( {navigation} ) => {
         else if (data_val == "McCutcheon (male only)") { setLivingLocation(14); }
         else if (data_val == "Tarkington (male only)") { setLivingLocation(15); }
         else if (data_val == "Wiley (male only)") { setLivingLocation(16); }
+        else { setLivingLocation(0); }
       }
     }).catch((error) => {
       console.error(error);
@@ -474,6 +479,22 @@ export default ( {navigation} ) => {
           </SafeAreaView>
 
 
+          {/* Edit Interests */}
+          <SafeAreaView>
+            <TouchableOpacity style={styles.interestsButton}
+              onPress={() => navigation.push("Interests")}
+            >
+              <Text style={styles.interestsText}>Add Interests</Text>
+              <Icon
+                style={styles.interestsIcon}
+                name={'caret-right'}
+                size={20}
+                color={Colors.black}
+              />
+            </TouchableOpacity>
+          </SafeAreaView>
+
+
           {/* Graduation Year (text), Graduation Year (field) */}
           <SafeAreaView>
             <Text style={styles.prompt}>Graduation Year</Text>
@@ -541,6 +562,23 @@ export default ( {navigation} ) => {
           </SafeAreaView> 
 
 
+          {/* Instagram Link (field) */}
+          <Text style={styles.prompt}>Instagram</Text>
+          <SafeAreaView>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              maxLength={32}
+              onChangeText={instagramInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram")}
+              placeholder={"Instagram username"}
+            />
+          </SafeAreaView>
+
+
           {/* Preferred Housing (text), living locations (picker) */}
           <Text style={styles.prompt}>Preferred Housing</Text>
           <Picker
@@ -552,6 +590,7 @@ export default ( {navigation} ) => {
               setLivingLocation(itemValue)
             }
           >
+            <Picker.Item label="No Preference" value={0} />
             <Picker.Item label="Earhart" value={1} />
             <Picker.Item label="Freida Parker Hall" value={2} />
             <Picker.Item label="Winifred Parker Hall" value={3} />
@@ -571,40 +610,23 @@ export default ( {navigation} ) => {
           </Picker>
 
 
-          {/* Instagram Link (field) */}
-          <Text style={styles.prompt}>Instagram</Text>
-          <SafeAreaView>
-            <TextInput
-              style={styles.input}
-              autoCapitalize='none'
-              autoComplete='off'
-              autoCorrect={false}
-              spellCheck={false}
-              maxLength={32}
-              onChangeText={instagramInputHandler}
-              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram")}
-              placeholder={"Instagram username"}
-            />
-          </SafeAreaView>
+          {/* Vaccination status (text), vaccination status (field) */}
+          <Text style={styles.prompt}>Vaccination Status*</Text>
+          <Picker
+            style={styles.picker}
+            selectedValue={
+              vaccinated
+            }
+            onValueChange={(itemValue, itemIndex) =>
+              setVaccinated(itemValue)
+            }
+          >
+            <Picker.Item label="Not Vaccinated" value={1} />
+            <Picker.Item label="Vaccinated" value={2} />
+          </Picker>
 
 
-          {/* Navigate to Edit Interests */}
-          <SafeAreaView>
-            <TouchableOpacity style={styles.interestsButton}
-              onPress={() => navigation.push("Interests")}
-            >
-              <Text style={styles.interestsText}>Add Interests</Text>
-              <Icon
-                style={styles.interestsIcon}
-                name={'caret-right'}
-                size={20}
-                color={Colors.black}
-              />
-            </TouchableOpacity>
-          </SafeAreaView>
 
-
-        
 
           {/* Gender (text), Gender (field) */}
           <Text style={styles.prompt}>Gender*</Text>
@@ -622,26 +644,6 @@ export default ( {navigation} ) => {
             <Picker.Item label="Other" value={3} />
             <Picker.Item label="Prefer not to say" value={4} />
           </Picker>
-
-
-
-          
-          {/* Vaccination status (text), vaccination status (field) */}
-          <Text style={styles.prompt}>Vaccination Status*</Text>
-          <Picker
-            style={styles.picker}
-            selectedValue={
-              vaccinated
-            }
-            onValueChange={(itemValue, itemIndex) =>
-              setVaccinated(itemValue)
-            }
-          >
-            <Picker.Item label="Not Vaccinated" value={1} />
-            <Picker.Item label="Vaccinated" value={2} />
-          </Picker>
-
-
 
 
 

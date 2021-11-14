@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import { rtdb, auth } from './RTDB';
-import {ref, set, exists, val, child, get, remove} from "firebase/database";
+import {ref, set, exists, val, child, get, remove, onValue } from "firebase/database";
 import { getID } from './ID';
+import { Value } from 'react-native-reanimated';
 
 
 /*
@@ -52,3 +53,21 @@ export const getInstagramLink = (email_or_id) => {
 	return url;
 } // getInstagramLink()
 
+
+
+
+
+/*
+ *
+ */
+export const getInterests = (email_or_id) => {
+	const id = getID(email_or_id);
+	const interest1 = getDataFromPath("users/" + id + "/Profile/Interests/interest1");
+	const interest2 = getDataFromPath("users/" + id + "/Profile/Interests/interest2");
+	const interest3 = getDataFromPath("users/" + id + "/Profile/Interests/interest3");
+	const interest4 = getDataFromPath("users/" + id + "/Profile/Interests/interest4");
+	const interest5 = getDataFromPath("users/" + id + "/Profile/Interests/interest5");
+
+	const interests = [interest1, interest2, interest3, interest4, interest5];
+	return interests;
+} // getInterests()

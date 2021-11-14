@@ -1,472 +1,830 @@
-import React, {use} from 'react';
+import React, {useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native';
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import {
+	StyleSheet,
+	View,
+	Text,
+	TouchableOpacity,
+	ScrollView
+} from 'react-native';
 import Colors from '../constants/Colors';
+import InterestItem from '../components/InterestItem';
+
+import { auth, rtdb } from '../database/RTDB';
+import { getID } from '../database/ID';
+
+import { writeInterests } from '../database/writeData';
+import { getInterests, getDataFromPath } from '../database/readData';
+import { ref, child, get, set } from 'firebase/database';
 
 
+// used so that the hooks don't get set in interests 
+var updatedTheSelected = false;
 
 
+export default ( {navigation} ) => {
 
-export default ( {navigation } ) => {
-
-
+	// store the interests here
+	const [interest1, setInterest1] = React.useState("");
+	const [interest2, setInterest2] = React.useState("");
+	const [interest3, setInterest3] = React.useState("");
+	const [interest4, setInterest4] = React.useState("");
+	const [interest5, setInterest5] = React.useState("");
 
 
 
 	return (
-		<ScrollView style={styles.container}>
-			<Text style={styles.instructionsText}>Select Up to 5 Interests!</Text>
+		<View style={styles.container}>
+			<ScrollView style={styles.scroll}>
+				<Text style={styles.instructionsText}>Select Up to 5 Interests!</Text>
 
-
-
-			<View style={styles.interestsConainer}>
-				{/* Music */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton} 
-						onPress={() => {}}
+				<View style={styles.interestsConainer}>
+					
+				{/*	<TouchableOpacity 
+						onPress={() => {
+							console.log("interest1: " + interest1);
+							console.log("interest2: " + interest2);
+							console.log("interest3: " + interest3);
+							console.log("interest4: " + interest4);
+							console.log("interest5: " + interest5);
+						}}
 					>
-						<Text style={styles.interestText}>Music</Text>
-					</TouchableOpacity>
-				</SafeAreaView>				
-
-				{/* Working Out */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.selectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Working Out</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Yoga */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Yoga</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Swimming */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Swimming</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Football */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Football</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Netflix */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Netflix</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Theatre */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Theatre</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+						<Text>Yes</Text>
+					</TouchableOpacity> */}
 
 
-				{/* Comedy */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Comedy</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+					{/* Music */}
+					<InterestItem
+						value={"Music"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
 
 
-				{/* Outdoors */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Outdoors</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+					{/* Working Out */}
+					<InterestItem
+						value={"Working Out"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
 
 
-				{/* Shopping */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Shopping</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Politics */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Politics</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Cycling */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Cycling</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Art */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Art</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Dancing */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Dancing</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Soccer */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Soccer</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Cooking */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Cooking</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Spirituality */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Spirituality</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Astrology */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Astrology</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Bars */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Bars</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Coffee */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Coffee</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Watching Sports */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Watching Sports</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Reading */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Reading</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Surfing */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Surfing</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Gaming */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Gaming</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Photography */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Photography</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Skateboarding */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Skateboarding</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Gambling */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Gambling</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Chess */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Chess</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Movies */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Movies</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Golf */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Golf</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Writing */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Writing</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Climbing */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Climbing</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Skiing */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Skiing</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Snowboarding */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Snowboarding</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Social Media */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Social Media</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Running */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Running</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Rowing */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Rowing</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Walking */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Walking</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Concerts */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Concerts</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Basketball */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Basketball</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Fishing */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Fishing</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Water Sports */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Water Sports</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Racing */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Racing</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Programming */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Programming</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Baseball */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Baseball</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Hockey */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Hockey</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Frisbee */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Frisbee</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Investing */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Investing</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-
-				{/* Greek Life */}
-				<SafeAreaView>
-					<TouchableOpacity style={styles.unselectedInterestButton}
-						onPress={() => {}}
-					>
-						<Text style={styles.interestText}>Greek Life</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
+					{/* Yoga */}
+					<InterestItem
+						value={"Yoga"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
 
 
+
+
+					{/* Swimming */}
+					<InterestItem
+						value={"Swimming"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Football */}
+					<InterestItem
+						value={"Football"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Netflix */}
+					<InterestItem
+						value={"Netflix"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Theatre */}
+					<InterestItem
+						value={"Theatre"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Comedy */}
+					<InterestItem
+						value={"Comedy"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Outdoors */}
+					<InterestItem
+						value={"Outdoors"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Shopping */}
+					<InterestItem
+						value={"Shopping"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Politics */}
+					<InterestItem
+						value={"Politics"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Cycling */}
+					<InterestItem
+						value={"Cycling"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Art */}
+					<InterestItem
+						value={"Art"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Dancing */}
+					<InterestItem
+						value={"Dancing"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Soccer */}
+					<InterestItem
+						value={"Soccer"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Cooking */}
+					<InterestItem
+						value={"Cooking"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Spirituality */}
+					<InterestItem
+						value={"Spirituality"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Astrology */}
+					<InterestItem
+						value={"Astrology"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Bars */}
+					<InterestItem
+						value={"Bars"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Coffee */}
+					<InterestItem
+						value={"Coffee"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Watching Sports */}
+					<InterestItem
+						value={"Watching Sports"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Reading */}
+					<InterestItem
+						value={"Reading"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Surfing */}
+					<InterestItem
+						value={"Surfing"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Gaming */}
+					<InterestItem
+						value={"Gaming"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Photography */}
+					<InterestItem
+						value={"Photography"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Skateboarding */}
+					<InterestItem
+						value={"Skateboarding"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Tennis */}
+					<InterestItem
+						value={"Tennis"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Gambling */}
+					<InterestItem
+						value={"Gambling"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Chess */}
+					<InterestItem
+						value={"Chess"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Movies */}
+					<InterestItem
+						value={"Movies"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Golf */}
+					<InterestItem
+						value={"Golf"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Writing */}
+					<InterestItem
+						value={"Writing"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Climbing */}
+					<InterestItem
+						value={"Climbing"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Skiing */}
+					<InterestItem
+						value={"Skiing"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Snowboarding */}
+					<InterestItem
+						value={"Snowboarding"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Social Media */}
+					<InterestItem
+						value={"Social Media"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Running */}
+					<InterestItem
+						value={"Running"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Rowing */}
+					<InterestItem
+						value={"Rowing"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Walking */}
+					<InterestItem
+						value={"Walking"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Concerts */}
+					<InterestItem
+						value={"Concerts"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Basketball */}
+					<InterestItem
+						value={"Basketball"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Fishing */}
+					<InterestItem
+						value={"Fishing"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Water Sports */}
+					<InterestItem
+						value={"Water Sports"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Racing */}
+					<InterestItem
+						value={"Racing"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Programming */}
+					<InterestItem
+						value={"Programming"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Baseball */}
+					<InterestItem
+						value={"Baseball"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Hockey */}
+					<InterestItem
+						value={"Hockey"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Frisbee */}
+					<InterestItem
+						value={"Frisbee"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Investing */}
+					<InterestItem
+						value={"Investing"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+					{/* Greek Life */}
+					<InterestItem
+						value={"Greek Life"}
+						interest1={interest1}
+						interest2={interest2}
+						interest3={interest3}
+						interest4={interest4}
+						interest5={interest5}
+						setInterest1={setInterest1}
+						setInterest2={setInterest2}
+						setInterest3={setInterest3}
+						setInterest4={setInterest4}
+						setInterest5={setInterest5}
+					></InterestItem>
+
+
+				</View>
+			</ScrollView>
+
+			<View style={styles.footer}>
+				<TouchableOpacity style={styles.saveButton}
+					onPress={() => {
+						writeInterests(auth.currentUser.email, interest1, interest2,
+							interest3, interest4, interest5)
+					
+						navigation.pop()
+					}}
+				>
+					<Text style={styles.saveText}>Save Changes</Text>
+				</TouchableOpacity>
 			</View>
-		</ScrollView>
+		</View>
 	);
 } // export default () 
 
@@ -483,9 +841,22 @@ const styles = StyleSheet.create({
 
 	interestsConainer: {
 		flex: 1,
-		marginHorizontal: 30,
 		flexDirection: 'row',
 		flexWrap: 'wrap',
+	},
+
+	scroll: {
+		flex: 1,
+		paddingHorizontal: 30,
+	},
+
+	footer: {
+		flex: 0.15,
+    alignSelf: 'center',
+    paddingTop: 5,
+    paddingHorizontal: 300,
+    paddingBottom: 25,
+    backgroundColor: Colors.lightGray,
 	},
 
 
@@ -521,7 +892,23 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.green,
 	},
 
+	/* Save Changes Button */
+	saveText: {
+		fontSize: 16,
+		alignSelf: 'center',
+	},
 
+	saveButton: {
+		backgroundColor: Colors.offWhite,
+		borderWidth: 1,
+		borderRadius: 25,
+		margin: 10,
+		padding: 10,
+		top: 15,
+		width: 175,
+		alignSelf: 'center',
+		textAlign: 'center',
+	},
 
 });
 

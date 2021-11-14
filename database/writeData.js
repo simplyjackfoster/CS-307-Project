@@ -1,6 +1,6 @@
 import React from 'react';
 import { rtdb, auth } from './RTDB';
-import { ref, set, update, exists, val, child, get, remove} from "firebase/database"
+import { ref, set, update, exists, val, child, get, remove, push } from "firebase/database"
 import { getID } from './ID';
 import { getDataFromPath } from './readData';
 
@@ -55,8 +55,12 @@ export const writeNewUser = (email, name, phone,
 	set(ref(rtdb, "users/" + id + "/Profile/Images"), {
 		profile_picture: default_profile_picture, 
 	});
-	set(ref(rtdb, "users/" + id + "/Profile/Activities"), {
-		activity_count: 0
+	set(ref(rtdb, "users/" + id + "/Profile/Interests"), {
+		interest1: "",
+		interest2: "",
+		interest3: "",
+		interest4: "",
+		interest5: "",
 	});
 
 	// write the "Roomate Compatibility" data
@@ -237,23 +241,25 @@ export const writePreferredLivingLocation = (email_or_id, livingLocation) => {
 	const id = getID(email_or_id);
 
 	// convert the value of the selection to a string
-	livingLocationStr = "";
-	if (livingLocation == 1) livingLocationStr = "Earhart";
-	if (livingLocation == 2) livingLocationStr = "Freida Parker Hall";
-	if (livingLocation == 3) livingLocationStr = "Winifred Parker Hall";
-	if (livingLocation == 4) livingLocationStr = "Harrison Hall";
-	if (livingLocation == 5) livingLocationStr = "Hawkins Hall";
-	if (livingLocation == 6) livingLocationStr = "Hillenbrand Hall";
-	if (livingLocation == 7) livingLocationStr = "Honors College and Residences";
-	if (livingLocation == 8) livingLocationStr = "Owen Hall";
-	if (livingLocation == 9) livingLocationStr = "Shreve Hall";
-	if (livingLocation == 10) livingLocationStr = "Meredith (female only)";
-	if (livingLocation == 11) livingLocationStr = "Meredith South (female only)";
-	if (livingLocation == 12) livingLocationStr = "Windsor (female only)";
-	if (livingLocation == 13) livingLocationStr = "Cary Quad (male only)";
-	if (livingLocation == 14) livingLocationStr = "McCutcheon (male only)";
-	if (livingLocation == 15) livingLocationStr = "Tarkington (male only)";
-	if (livingLocation == 16) livingLocationStr = "Wiley (male only)";
+	var livingLocationStr = "";
+
+	if (livingLocation == 0) livingLocationStr = "";
+	else if (livingLocation == 1) livingLocationStr = "Earhart";
+	else if (livingLocation == 2) livingLocationStr = "Freida Parker Hall";
+	else if (livingLocation == 3) livingLocationStr = "Winifred Parker Hall";
+	else if (livingLocation == 4) livingLocationStr = "Harrison Hall";
+	else if (livingLocation == 5) livingLocationStr = "Hawkins Hall";
+	else if (livingLocation == 6) livingLocationStr = "Hillenbrand Hall";
+	else if (livingLocation == 7) livingLocationStr = "Honors College and Residences";
+	else if (livingLocation == 8) livingLocationStr = "Owen Hall";
+	else if (livingLocation == 9) livingLocationStr = "Shreve Hall";
+	else if (livingLocation == 10) livingLocationStr = "Meredith (female only)";
+	else if (livingLocation == 11) livingLocationStr = "Meredith South (female only)";
+	else if (livingLocation == 12) livingLocationStr = "Windsor (female only)";
+	else if (livingLocation == 13) livingLocationStr = "Cary Quad (male only)";
+	else if (livingLocation == 14) livingLocationStr = "McCutcheon (male only)";
+	else if (livingLocation == 15) livingLocationStr = "Tarkington (male only)";
+	else if (livingLocation == 16) livingLocationStr = "Wiley (male only)";
 
 	update(ref(rtdb, "users/" + id + "/Profile"), {
 		preferred_living_location: livingLocationStr
@@ -274,8 +280,32 @@ export const writeInstagram = (email_or_id, instagram) => {
 
 	update(ref(rtdb, "users/" + id + "/Profile"), {
 		instagram: instagram
-	})
+	});
 } // writeInstagram()
+
+
+
+
+
+/*
+ * Writes the interests to the database
+ * @param email_or_id -> the email or id of the user we are writing to. 
+ * @param interest<i> -> the ith interest
+ */
+export const writeInterests = (email_or_id, interest1, interest2, interest3, interest4, interest5) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile/Interests"), {
+		interest1: interest1,
+		interest2: interest2,
+		interest3: interest3,
+		interest4: interest4,
+		interest5: interest5,
+	});
+} // writeInterest()
+
+
+
 
 
 

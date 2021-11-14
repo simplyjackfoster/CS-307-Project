@@ -107,6 +107,7 @@ export default ( {navigation} ) => {
     Gvaccinated = vaccinated;
     GsecurityQuestion = selectedQuestion;
     GsecurityAnswer = securityAnswer;
+    
     navigation.push("Questionnaire");
   } // validateInputs()
 
@@ -315,7 +316,7 @@ export default ( {navigation} ) => {
             {/* Continue to Questionnaire (button) */}
             <TouchableOpacity
               style={styles.continueButton}
-              onPress={validateInputs}
+              onPress={() => validateInputs()}
             >
               <Text style={styles.continueText}>Continue</Text>
             </TouchableOpacity>

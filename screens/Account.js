@@ -5,7 +5,8 @@ import { StyleSheet,
 	Button,
 	TouchableOpacity,
 	ScrollView, 
-	Alert
+	Alert,
+	SliderComponent
 } from 'react-native';
 
 import { AuthContext } from "../context";
@@ -73,7 +74,10 @@ export default ( {navigation} ) => {
 					},
 					{
 						text: "Yes",
-						onPress: () => setUserToken(null)
+						onPress: () => {
+							setUserToken(null)
+							auth.signOut()
+						}
 					}]
 				)}
 			>

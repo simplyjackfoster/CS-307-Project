@@ -9,14 +9,17 @@ import {
     TouchableOpacity,
     Alert
 } from 'react-native';
-import { getDataFromPath, getInstagramLink } from "../database/readData";
+import Animated from 'react-native-reanimated';
+
+import { getDataFromPath, getInstagramLink, getInterests } from "../database/readData";
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
 import { reportUser } from '../database/writeData';
 
 
 
-const CardItem = (props) => {
+export const CardItem = (props) => {
+    const { likeOpacity, nopeOpacity } = props;
     
     const uid = props.id;
     const profile_picture = getDataFromPath("users/" + uid + "/Profile/Images/profile_picture");
@@ -32,6 +35,8 @@ const CardItem = (props) => {
     const instagramLink = getInstagramLink(uid);
     const bday = getDataFromPath("users/" + uid + "/Critical Information/birthday");
     const reports = getDataFromPath("reported/" + uid + "/num_reports");
+    const interests = getInterests(uid);
+
 
     var age;
     /* Used for age calculation */
@@ -59,7 +64,6 @@ const CardItem = (props) => {
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             <View style={styles.contentContainer}>
 
-
                 {/* Profile Picture */}
                 <View style={styles.imageWrapper}>
                     <Image style={styles.profilePic}
@@ -86,19 +90,55 @@ const CardItem = (props) => {
                 </View>
 
 
-                {/* Vaccination status */}
-                <View style={styles.vaccinationWrapper}>
-                    <View>
-                        {renderIcon("medkit", 25, Colors.royalBlue)}
-                    </View>
-                    <Text style={styles.vaccinationContent}>
-                        {(vaccination == "Vaccinated") ? (
-                            "Vaccinated for Covid-19"
+                {/* Interests */} 
+                <View style={styles.interestsContainer}>
+                    <View style=
+                        {interests[0] ? (
+                            styles.interestWrapper
                         ) : (
-                            "Not vaccinated for Covid-19"
+                            {display: 'none'}
                         )}
-                    </Text>
+                    >
+                        <Text style={styles.interestText}>{interests[0]}</Text>
+                    </View>
+                    <View style=
+                        {interests[1] ? (
+                            styles.interestWrapper
+                        ) : (
+                            {display: 'none'}
+                        )}
+                    >
+                        <Text style={styles.interestText}>{interests[1]}</Text>
+                    </View>
+                    <View style=
+                        {interests[2] ? (
+                            styles.interestWrapper
+                        ) : (
+                            {display: 'none'}
+                        )}
+                    >
+                        <Text style={styles.interestText}>{interests[2]}</Text>
+                    </View>
+                    <View style=
+                        {interests[3] ? (
+                            styles.interestWrapper
+                        ) : (
+                            {display: 'none'}
+                        )}
+                    >
+                        <Text style={styles.interestText}>{interests[3]}</Text>
+                    </View>
+                    <View style=
+                        {interests[4] ? (
+                            styles.interestWrapper
+                        ) : (
+                            {display: 'none'}
+                        )}
+                    >
+                        <Text style={styles.interestText}>{interests[4]}</Text>
+                    </View>
                 </View>
+
 
 
                 {/* Graduation year (optional) */}
@@ -175,7 +215,22 @@ const CardItem = (props) => {
                     <View>
                         {renderIcon("home", 25, Colors.royalBlue)}
                     </View>
-                    <Text style={styles.preferredLivingLocationContent}>Preferred Housing:{"\n"}{preferredLivingLocation}</Text>
+                    <Text style={styles.preferredLivingLocationContent}>Preferred Housing: {preferredLivingLocation}</Text>
+                </View>
+
+
+                {/* Vaccination status */}
+                <View style={styles.vaccinationWrapper}>
+                    <View>
+                        {renderIcon("medkit", 25, Colors.royalBlue)}
+                    </View>
+                    <Text style={styles.vaccinationContent}>
+                        {(vaccination == "Vaccinated") ? (
+                            "Vaccinated for Covid-19"
+                        ) : (
+                            "Not vaccinated for Covid-19"
+                        )}
+                    </Text>
                 </View>
 
 
@@ -246,15 +301,16 @@ const styles = StyleSheet.create({
         flex: 1,
         alignSelf: 'center',
         width: 325,
+        padding: 7,
     },
 
 
     /* Profile Picture */
     profilePic: {
-        width: 325,
-        height: 325, 
+        width: 340,
+        height: 340, 
         borderRadius: 25,
-        marginTop: 35,
+        marginTop: 20,
         marginBottom: 10,
         alignSelf: 'center',
     },
@@ -278,22 +334,32 @@ const styles = StyleSheet.create({
     },
 
     bioContent: {
-       fontSize: 15, 
+        fontSize: 15, 
     },
 
 
-    /* Vaccination */
-    vaccinationWrapper: {
-        paddingTop: 20,
+    /* Interets */
+    interestsContainer: {
+        flex: 1,
+        marginTop: 10,
         flexDirection: 'row',
+        flexWrap: 'wrap',
     },
 
-    vaccinationContent: {
-        marginLeft: 5,
-        paddingLeft: 5,
-        fontSize: 20, 
+    interestWrapper: {
+        flexDirection: 'row',
+        marginTop: 5,
+        borderWidth: 1,
+        borderRadius: 20,
+        marginHorizontal: 2,
+        padding: 7,
+
     },
 
+    interestText: {
+        fontSize: 12,
+    },
+    
 
     /* Graduation Year */
     graduationYearWrapper: {
@@ -348,6 +414,18 @@ const styles = StyleSheet.create({
     preferredLivingLocationContent: {
         paddingLeft: 15,
         fontSize: 20,
+    },
+
+
+    /* Vaccination */
+    vaccinationWrapper: {
+        paddingTop: 20,
+        flexDirection: 'row',
+    },
+
+    vaccinationContent: {
+        paddingLeft: 15,
+        fontSize: 20, 
     },
 
 

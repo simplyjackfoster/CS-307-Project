@@ -7,6 +7,8 @@ import ResetPassword from '../screens/ResetPassword';
 import Questionnaire from '../screens/Questionnaire';
 import CodeOfConduct from '../screens/CodeOfConduct';
 import PrivacyPolicy from '../screens/PrivacyPolicy';
+import VerifyEmail from '../screens/VerifyEmail';
+
 
 const Stack = createStackNavigator();
 
@@ -27,6 +29,9 @@ const AuthStack = () => {
 
 			<Stack.Screen name="Questionnaire" component={Questionnaire}
 			options={{ title: "Create Account", headerBackTitle: "Back"}}/>
+
+			<Stack.Screen name="VerifyEmail" component={VerifyEmail}
+			options={{ title: "Verify Email", headerBackTitleVisible: false, headerLeft: null }}/>
 
 			<Stack.Screen name="ResetPassword" component={ResetPassword}
 			options={{ headerTitle: "Reset Password", headerBackTitle: "Back" }}/>
