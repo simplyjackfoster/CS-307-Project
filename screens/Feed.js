@@ -44,7 +44,13 @@ import { renderIcon } from "../images/Icons";
 
 
 
-  const uid = "test2";
+const runSpring = (clock, value, velocity, dest) => {
+  const state = {
+    finished: new Value(0),
+    velocity: new Value(0),
+    position: new Value(0),
+    time: new Value(0),
+  };
 
   const config = {
     damping: 15,
@@ -68,7 +74,7 @@ import { renderIcon } from "../images/Icons";
     cond(state.finished, stopClock(clock)),
     state.position,
   ];
- // runSpring()
+} // runSpring()
 
 
 
