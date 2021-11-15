@@ -15,7 +15,6 @@ import CardItem from '../components/CardItem';
 import Card from '../components/Card';
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
-import Profiles from '../components/Profiles';
 
 const {
   event,
@@ -43,8 +42,6 @@ const { width, height } = Dimensions.get("window");
 const rotatedWidth = width * Math.sin(75 * Math.PI/180) + height * Math.sin(15 * Math.PI / 180);
 
 
-
-
 const runSpring = (clock, value, velocity, dest) => {
   const state = {
     finished: new Value(0),
@@ -63,7 +60,7 @@ const runSpring = (clock, value, velocity, dest) => {
     toValue: new Value(0),
   };
 
-  return [
+	return [
     cond(clockRunning(clock), 0, [
       set(state.finished, 0),
       set(state.velocity, velocity),
@@ -81,10 +78,12 @@ const runSpring = (clock, value, velocity, dest) => {
 
 
 
-export default class Feed extends Component {
+export default class Profiles extends React.Component<ProfilesProps, ProfilesState> {
 
-  constructor() {
-    super();
+  constructor(props: ProfilesProps) {
+    super(props);
+		const { profiles } = props;
+		this.state = { profiles };
     this.translationX = new Value(0);
     this.translationY = new Value(0);
     this.velocityX = new Value(0);
@@ -143,8 +142,7 @@ export default class Feed extends Component {
 
 
 
-
-
+	
   // Function that is called when the user swipes
   onSwiped = ([translateX]) => {
     const isLiked = translateX > 0;
@@ -159,9 +157,11 @@ export default class Feed extends Component {
 
 
 
-  render() { 
-    const uid = "mfinder";
-    var profiles = ["mfinder", "thylan"];
+
+	render () {
+		const { profiles: [lastProfile, ...profiles] } = this.state;
+		const uid = "mfinder";
+		
 
     const { onGestureEvent, translateX, translateY } = this;
 
@@ -196,15 +196,13 @@ export default class Feed extends Component {
     };
 
 
+    
 
-    return (
-      <View style={styles.container}>
+		return (
+			<View style={styles.container}>
 
-
-        <Profiles {...{profiles}} ></Profiles>
-
-        {/* Card */}
-        {/*<View id='card' style={styles.contentContainer}>
+				{/* Card */}
+				<View id='card' style={styles.contentContainer}>
           <PanGestureHandler
             onHandlerStateChange={onGestureEvent}
             onGestureEvent={onGestureEvent}
@@ -213,36 +211,15 @@ export default class Feed extends Component {
                 <Card id={uid} {...{likeOpacity, nopeOpacity}}></Card>
             </Animated.View>
           </PanGestureHandler>
-    </View>*/}
-
-
-
-        {/* Like, Refresh, and Dislike Buttons */}
-        <View style={styles.footer}>
-          <TouchableOpacity style={styles.dislikeWrapper} onPress={() => {
-            console.log("Dislike pressed");
-          }}>
-            {renderIcon("times", 50, Colors.red)}
-          </TouchableOpacity>
-
-          {/* <TouchableOpacity style={styles.refreshWrapper} onPress={() => {
-            console.log("Refresh pressed");
-            refreshScreen();
-          }}>
-            {renderIcon("refresh", 50, Colors.yellow)}
-          </TouchableOpacity> */}
-
-          <TouchableOpacity style={styles.likeWrapper} onPress={() => {
-            console.log("Like pressed");
-          }}>
-            {renderIcon("check", 50, Colors.green)}
-          </TouchableOpacity>
         </View>
 
-      </View>
-    );
-  }
-}
+			</View>
+		);
+	} // render()
+
+} // class Profiles
+
+
 
 
 
