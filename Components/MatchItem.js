@@ -13,8 +13,6 @@ import { getDataFromPath, getInstagramLink } from "../database/readData";
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
 
-
-
 const MatchItem = (props) => {
     //const { userToken, setUserToken }  = React.useContext();
     const [displayMatch, setDisplayMatch] = React.useState(true);
@@ -76,7 +74,15 @@ const MatchItem = (props) => {
                 {display: 'none'}
             )}
         >
-            <Image style = {styles.profileImage}source={{uri: profile_picture}}/>
+
+            <TouchableOpacity
+                onPress={() =>
+                    //something
+                    props.func()
+                }
+            >
+                <Image style = {styles.profileImage}source={{uri: profile_picture}}/>
+            </TouchableOpacity>
             <Text style={styles.name}>{name}</Text>
             <Text style={styles.description}>Location: {location}</Text>
             <Text style={styles.description}>Major: {major}</Text>

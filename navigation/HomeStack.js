@@ -7,6 +7,7 @@ import EditProfile from '../screens/EditProfile';
 import ResetPassword from '../screens/ResetPassword';
 import Questionnaire from '../screens/Questionnaire';
 import Interests from '../screens/Interests';
+import MatchProfile from '../screens/MatchProfile';
 
 import Colors from '../constants/Colors';
 
@@ -49,6 +50,13 @@ const HomeStack = () => {
 			<Stack.Screen name="ResetPassword" component={ResetPassword}
 				options={{
 					headerTitle: "Reset Password",
+					headerBackTitle: "Back"
+				}}
+			/>
+
+			<Stack.Screen name="MatchProfile" component={MatchProfile}
+				options={{
+					headerTitle: "Match Profile",
 					headerBackTitle: "Back"
 				}}
 			/>
