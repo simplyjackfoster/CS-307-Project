@@ -103,18 +103,29 @@ export default ( {navigation} ) => {
 					<View style={styles.icon}>
 						{renderIcon("envelope", 25, Colors.royalBlue)}
 					</View>
-					<Text style={styles.infoHeader}>Email:</Text>
+					<Text style={styles.infoHeaderEmail}>Email:</Text>
 					<Text style={styles.infoContent}>{auth.currentUser.email}</Text>
 
 				</View>
 			</View>
 			
+			{/* Gender: <gender> */}
+			<View style={styles.infoWrapper}>
+				<View style={styles.icon}>
+					{renderIcon("male", 25, Colors.royalBlue)}
+				</View>
+				<Text style={styles.infoHeaderGender}>Gender:</Text>
+				<Text style={styles.infoContent}>
+					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/gender")}
+				</Text>
+			</View>
+
 			{/* Phone: <phone number> */}
 			<View style={styles.infoWrapper}>
 				<View style={styles.icon}>
-					{renderIcon("phone-square", 27, Colors.royalBlue)}
+					{renderIcon("phone-square", 25, Colors.royalBlue)}
 				</View>
-				<Text style={styles.infoHeader}>Phone:</Text>
+				<Text style={styles.infoHeaderPhone}>Phone:</Text>
 				<Text style={styles.infoContent}>
 					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Critical Information/phone")}
 				</Text>
@@ -127,11 +138,26 @@ export default ( {navigation} ) => {
 				: ({display: 'none'})
 				}>
 				<View style={styles.icon}>
-					{renderIcon("id-card", 27, Colors.royalBlue)}
+					{renderIcon("id-card", 25, Colors.royalBlue)}
 				</View>
-				<Text style={styles.infoHeader}>Bio:</Text>
+				<Text style={styles.infoHeaderBio}>Bio:</Text>
 				<Text style={styles.infoContent}>
 					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/bio")}
+				</Text>
+			</View>
+
+			{/* Location: <location> */}
+			<View style={
+				getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/location") ?
+				(styles.infoWrapper)
+				: ({display: 'none'})
+				}>
+				<View style={styles.icon}>
+					{renderIcon("map-pin", 25, Colors.royalBlue)}
+				</View>
+				<Text style={styles.infoHeaderLocation}>Location:</Text>
+				<Text style={styles.infoContent}>
+					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/location")}
 				</Text>
 			</View>
 
@@ -142,7 +168,7 @@ export default ( {navigation} ) => {
 				: ({display: 'none'})
 				}>
 				<View style={styles.icon}>
-					{renderIcon("graduation-cap", 27, Colors.royalBlue)}
+					{renderIcon("graduation-cap", 25, Colors.royalBlue)}
 				</View>
 				<Text style={styles.infoHeader}>Graduation Year:</Text>
 				<Text style={styles.infoContent}>
@@ -157,26 +183,11 @@ export default ( {navigation} ) => {
 				: ({display: 'none'})
 				}>
 				<View style={styles.icon}>
-					{renderIcon("book", 27, Colors.royalBlue)}
+					{renderIcon("book", 25, Colors.royalBlue)}
 				</View>
-				<Text style={styles.infoHeader}>Major:</Text>
+				<Text style={styles.infoHeaderMajor}>Major:</Text>
 				<Text style={styles.infoContent}>
 					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/major")}
-				</Text>
-			</View>
-
-			{/* Location: <location> */}
-			<View style={
-				getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/location") ?
-				(styles.infoWrapper)
-				: ({display: 'none'})
-				}>
-				<View style={styles.icon}>
-					{renderIcon("map-pin", 27, Colors.royalBlue)}
-				</View>
-				<Text style={styles.infoHeader}>Location:</Text>
-				<Text style={styles.infoContent}>
-					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/location")}
 				</Text>
 			</View>
 
@@ -187,9 +198,9 @@ export default ( {navigation} ) => {
 				: ({display: 'none'})
 				}>
 				<View style={styles.icon}>
-					{renderIcon("users", 27, Colors.royalBlue)}
+					{renderIcon("users", 25, Colors.royalBlue)}
 				</View>
-				<Text style={styles.infoHeader}>Preffered # of Roommates:</Text>
+				<Text style={styles.infoHeaderRoommates}>Preffered # of Roommates:</Text>
 				<Text style={styles.infoContent}>
 					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/preferred_number_of_roommates")}
 				</Text>
@@ -202,9 +213,9 @@ export default ( {navigation} ) => {
 					: ({display: 'none'})
 				}>
 				<View style={styles.icon}>
-					{renderIcon("instagram", 28, Colors.royalBlue)}
+					{renderIcon("instagram", 25, Colors.royalBlue)}
 				</View>
-				<Text style={styles.infoHeader}>Instagram:</Text>
+				<Text style={styles.infoHeaderIG}>Instagram:</Text>
 				<Text style={styles.instagramLink}
 					onPress={async () => {
 						const supported = await Linking.canOpenURL(instagramLink);
@@ -227,9 +238,9 @@ export default ( {navigation} ) => {
 				: ({display: 'none'})
 				}>
 				<View style={styles.icon}>
-					{renderIcon("home", 27, Colors.royalBlue)}
+					{renderIcon("home", 25, Colors.royalBlue)}
 				</View>
-				<Text style={styles.infoHeader}>Preferred Housing:</Text>
+				<Text style={styles.infoHeaderPrefHouse}>Preferred Housing:</Text>
 				<Text style={styles.infoContent}>
 					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/preferred_living_location")}
 				</Text>
@@ -242,9 +253,9 @@ export default ( {navigation} ) => {
 				: ({display: 'none'})
 				}>
 				<View style={styles.icon}>
-					{renderIcon("medkit", 27, Colors.royalBlue)}
+					{renderIcon("medkit", 25, Colors.royalBlue)}
 				</View>
-				<Text style={styles.infoHeader}>Vaccination Status:</Text>
+				<Text style={styles.infoHeaderVax}>Vaccination Status:</Text>
 				<Text style={styles.infoContent}>
 					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/covid_vaccination_status")}
 				</Text>
@@ -320,7 +331,76 @@ const styles = StyleSheet.create({
 	
 	infoHeader: {
 		fontSize: 20,
+		marginRight: 8,
+		fontWeight: 'bold',
+	},
+
+	infoHeaderBio: {
+		fontSize: 20,
+		marginLeft: 4,
+		marginRight: 8,
+		fontWeight: 'bold',
+	},
+
+	infoHeaderEmail: {
+		fontSize: 20,
+		marginLeft: 7,
+		marginRight: 8,
+		fontWeight: 'bold',
+	},
+
+	infoHeaderGender: {
+		fontSize: 20,
+		marginLeft: 17,
+		marginRight: 8,
+		fontWeight: 'bold',
+	},
+
+	infoHeaderIG: {
+		fontSize: 20,
 		marginLeft: 8,
+		marginRight: 8,
+		fontWeight: 'bold',
+	},
+
+	infoHeaderLocation: {
+		fontSize: 20,
+		marginLeft: 20,
+		marginRight: 8,
+		fontWeight: 'bold',
+	},
+
+	infoHeaderMajor: {
+		fontSize: 20,
+		marginLeft: 10,
+		marginRight: 8,
+		fontWeight: 'bold',
+	},
+
+	infoHeaderPhone: {
+		fontSize: 20,
+		marginLeft: 11,
+		marginRight: 8,
+		fontWeight: 'bold',
+	},
+
+	infoHeaderPrefHouse: {
+		fontSize: 20,
+		marginLeft: 12,
+		marginRight: 8,
+		fontWeight: 'bold',
+	},
+
+	infoHeaderRoommates: {
+		fontSize: 20,
+		marginLeft: 8,
+		marginRight: 8,
+		fontWeight: 'bold',
+	},
+
+	infoHeaderVax: {
+		fontSize: 20,
+		marginLeft: 10,
 		marginRight: 8,
 		fontWeight: 'bold',
 	},
