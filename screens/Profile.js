@@ -83,7 +83,7 @@ export default ( {navigation} ) => {
 			</TouchableOpacity>
 
 			{/* Profile Picture */}
-			<View style={styles.imageWrapper}>
+			<View>
 				<Image style={styles.profilePic}
 					source={{uri: getDataFromPath("users/" + getID(auth.currentUser.email) 
 									 + "/Profile/Images/profile_picture")}}
@@ -128,6 +128,31 @@ export default ( {navigation} ) => {
 				<Text style={styles.infoHeaderPhone}>Phone:</Text>
 				<Text style={styles.infoContent}>
 					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Critical Information/phone")}
+				</Text>
+			</View>
+
+			{/* Instagram Link */}
+			<View style={
+				getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram") ?
+					(styles.infoWrapper)
+					: ({display: 'none'})
+				}>
+				<View style={styles.icon}>
+					{renderIcon("instagram", 25, Colors.royalBlue)}
+				</View>
+				<Text style={styles.infoHeaderIG}>Instagram:</Text>
+				<Text style={styles.instagramLink}
+					onPress={async () => {
+						const supported = await Linking.canOpenURL(instagramLink);
+						if (supported) {
+							Linking.openURL(instagramLink);
+						}
+						else {
+							console.log("Instagram Link doesn't exist");
+						}
+					}}
+				>
+					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram")}
 				</Text>
 			</View>
 
@@ -206,28 +231,23 @@ export default ( {navigation} ) => {
 				</Text>
 			</View>
 
-			{/* Instagram Link */}
+			{/* Viewing users from <age_range_min> to <age_range_max> */}
+			{/* Due to edit profile logic, only need to ensure 1 field exists below */}
 			<View style={
-				getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram") ?
-					(styles.infoWrapper)
-					: ({display: 'none'})
+				getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/age_min") ?
+				(styles.infoWrapper)
+				: ({display: 'none'})
 				}>
 				<View style={styles.icon}>
-					{renderIcon("instagram", 25, Colors.royalBlue)}
+					{renderIcon("binoculars", 25, Colors.royalBlue)}
 				</View>
-				<Text style={styles.infoHeaderIG}>Instagram:</Text>
-				<Text style={styles.instagramLink}
-					onPress={async () => {
-						const supported = await Linking.canOpenURL(instagramLink);
-						if (supported) {
-							Linking.openURL(instagramLink);
-						}
-						else {
-							console.log("Instagram Link doesn't exist");
-						}
-					}}
-				>
-					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram")}
+				<Text style={styles.infoHeaderRoommates}>Seeing users between:</Text>
+				<Text style={styles.infoContentAgeHead}>
+					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/age_min")}
+				</Text>
+				<Text style={styles.infoContentAgeMiddle}> and </Text>
+				<Text style={styles.infoContentAgeTail}>
+					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/age_max")}
 				</Text>
 			</View>
 
@@ -280,10 +300,6 @@ export default ( {navigation} ) => {
 	); //return()
 } // default export ()
 
-
-
-
-
 // styles
 const styles = StyleSheet.create({
 
@@ -299,9 +315,6 @@ const styles = StyleSheet.create({
 		margin: 20,
 		fontSize: 18,
 		color: Colors.lightBlue,
-	},
-
-	imageWrapper: {
 	},
 
 	imageName: {
@@ -358,7 +371,7 @@ const styles = StyleSheet.create({
 
 	infoHeaderIG: {
 		fontSize: 20,
-		marginLeft: 8,
+		marginLeft: 12,
 		marginRight: 8,
 		fontWeight: 'bold',
 	},
@@ -410,6 +423,18 @@ const styles = StyleSheet.create({
 		flexWrap: 'wrap',
 		fontSize: 20,
 		marginRight: 25,
+	},
+
+	infoContentAgeHead: {
+		fontSize: 20,
+	},
+
+	infoContentAgeMiddle: {
+		fontSize: 20,
+	},
+
+	infoContentAgeTail: {
+		fontSize: 20,
 	},
 
 	disableWrapper: {

@@ -10,6 +10,7 @@ import {
   Button,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
@@ -88,6 +89,10 @@ export default ( {navigation} ) => {
   const [instagramChanged, setInstagramChanged] = React.useState(false);
   const [gender, setGender] = React.useState(1);
   const [vaccinated, setVaccinated] = React.useState(1);
+  const [min, setMin] = React.useState(false);
+  const [max, setMax] = React.useState(false);
+  const [fMin, setFMin] = React.useState(null);
+  const [fMax, setFMax] = React.useState(null);
 
   // DELETE
   const [interest, setInterest] = React.useState("Football");
@@ -147,6 +152,41 @@ export default ( {navigation} ) => {
         }
         else {
           setGender(4);
+        }
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+
+    get(child(dbRef, "users/" + getID(auth.currentUser.email) +
+              "/Profile/age_min")).then((snapshot) => {
+      if (snapshot.exists()) {
+        const min = snapshot.val();
+        console.log("MIN BEFORE " + min)
+        setFMin(min);
+        if(min == "") {
+          setMin(false);
+        }
+        else {
+          setMin(true);
+        }
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+
+    get(child(dbRef, "users/" + getID(auth.currentUser.email) +
+              "/Profile/age_max")).then((snapshot) => {
+      if (snapshot.exists()) {
+        const max = snapshot.val();
+        console.log("MAX BEFORE " + max)
+        setFMax(max);
+
+        if(max == "") {
+          setMax(false);
+        }
+        else {
+          setMax(true);
         }
       }
     }).catch((error) => {
@@ -278,6 +318,12 @@ export default ( {navigation} ) => {
   const ageMinInputHandler = (input) => {
     setAgeMin(input);
     setAgeMinChanged(true);
+    if(input == "") {
+      setMin(false);
+    }
+    else {
+      setMin(true);
+    }
   }
 
   /*
@@ -288,6 +334,13 @@ export default ( {navigation} ) => {
   const ageMaxInputHandler = (input) => {
     setAgeMax(input);
     setAgeMaxChanged(true);
+    setMax(input);
+    if(input == "") {
+      setMax(false);
+    }
+    else {
+      setMax(true);
+    }
   }
 
   /*
@@ -387,7 +440,6 @@ export default ( {navigation} ) => {
     writePreferredLivingLocation(auth.currentUser.email, livingLocation);
     writeVaccinated(auth.currentUser.email, vaccinated);
 
-
   } // updateProfileData()
 
 
@@ -436,6 +488,72 @@ export default ( {navigation} ) => {
 
     if(ageMaxChanged != false) {
       if(!isValidAgeMax(ageMax)) {return}
+    }
+
+    // Very confusing and redundant logic to ensure entered age range min and max are acceptable values
+    if(min && max) {
+    let fMinInt = parseInt(fMin)
+    let fMaxInt = parseInt(fMax)
+      if(ageMin != null && ageMax != null) { // Both are not null, use their values to compare
+        let ageMinInt = parseInt(ageMin)
+        let ageMaxInt = parseInt(ageMax)
+
+        if(ageMinInt == ageMaxInt) {
+          Alert.alert("Error", "Age minimum range and age maximum range must not be the same number.", 
+          [{ text: "Ok" }]);
+          return;
+        }
+        else if(ageMinInt > ageMaxInt) {
+          Alert.alert("Error", "Age minimum range must be less than age maximum range.", 
+          [{ text: "Ok" }]);
+          return;
+        }
+      }
+      else if (ageMin != null) { // Min is null, use last max (fMax) to compare
+        console.log("Age min is not null!")
+        let ageMinInt = parseInt(ageMin)
+        if(ageMinInt == fMaxInt) {
+          Alert.alert("Error", "Age minimum range and age maximum range must not be the same number.", 
+          [{ text: "Ok" }]);
+          return;
+        }
+        else if(ageMinInt > fMaxInt) {
+          Alert.alert("Error", "Age minimum range must be less than age maximum range.", 
+          [{ text: "Ok" }]);
+          return;
+        }
+      }
+      else if(ageMax != null) { // Max is null, use last min (fMin) to compare
+        console.log("Age max is not null!")
+        let ageMaxInt = parseInt(ageMax)
+        if(ageMaxInt == fMinInt) {
+          Alert.alert("Error", "Age minimum range and age maximum range must not be the same number.", 
+          [{ text: "Ok" }]);
+          return;
+        }
+        else if(fMinInt > ageMaxInt) {
+          Alert.alert("Error", "Age minimum range must be less than age maximum range.", 
+          [{ text: "Ok" }]);
+          return;
+        }
+      }
+      else { // Max and min are null, use last min (fMin) and last max (fMax) to compare
+        if(fMaxInt == fMinInt) {
+          Alert.alert("Error", "Age minimum range and age maximum range must not be the same number.", 
+          [{ text: "Ok" }]);
+          return;
+        }
+        else if(fMinInt > fMaxInt) {
+          Alert.alert("Error", "Age minimum range must be less than age maximum range.", 
+          [{ text: "Ok" }]);
+          return;
+        }
+      }
+    }
+    else if(min || max) {
+      Alert.alert("Error", "If you are setting an age range minimum or maximum, you must set both.", 
+			[{ text: "Ok" }]);
+      return;
     }
 
     // update the information and navigate to Profile
