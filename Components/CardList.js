@@ -108,6 +108,11 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
     const clockX = new Clock();
     const clockY = new Clock();
 
+    this.translationX.setValue(0);
+    this.translationY.setValue(0);
+    this.velocityX.setValue(0);
+    this.gestureState.setValue(State.UNDETERMINED);
+
     const snapPoint = cond(and(lessThan(translationX, 0), lessThan(velocityX, -15)),
       -rotatedWidth,
       cond(
@@ -152,6 +157,11 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
     else {
       console.log("Profile Disliked!");
     }
+
+    // remove profile from the state
+    const { profiles: [lastProfile, ...profiles] } = this.state;
+    this.setState({ profiles }, this.init());
+
   } // onSwiped()
 
 
