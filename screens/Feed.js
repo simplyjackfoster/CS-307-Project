@@ -160,7 +160,7 @@ export default class Feed extends Component {
 
 
   render() { 
-    const uid = "thylan";
+    const uid = "mfinder";
 
     const { onGestureEvent, translateX, translateY } = this;
 

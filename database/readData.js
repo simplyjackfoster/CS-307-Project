@@ -96,8 +96,8 @@ export const getQuestionnaire = (email_or_id) => {
 	const response12 = getDataFromPath("users/" + id + "/Roommate Compatibility/joint_grocery_shopping");
 	const response13 = getDataFromPath("users/" + id + "/Roommate Compatibility/has_significant_other");
 
-
-	const responses = [response1, response2, response3, response4, response5, response6, response7, 
+	// start indexing at 1 for simplicity
+	const responses = [-1, response1, response2, response3, response4, response5, response6, response7, 
 		response8, response9, response10, response11, response12, response13];
 
 	return responses;

@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import Animated from 'react-native-reanimated';
 
-import { getDataFromPath, getInstagramLink, getInterests } from "../database/readData";
+import { getDataFromPath, getInstagramLink, getInterests, getQuestionnaire } from "../database/readData";
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
 import { reportUser } from '../database/writeData';
@@ -37,6 +37,10 @@ export const CardItem = (props) => {
     const reports = getDataFromPath("reported/" + uid + "/num_reports");
     const interests = getInterests(uid);
 
+    // add the current user's uid
+    const myQuestionnaire = getQuestionnaire("thylan")
+    const questionnaire = getQuestionnaire(uid);
+
 
     var age;
     /* Used for age calculation */
@@ -57,6 +61,50 @@ export const CardItem = (props) => {
                 age -= 1
             }
         }
+    }
+
+
+
+    /*
+     * calculateCompatibility()
+     * Function that takes in questionnaire data of the current user and the user being viewed on the card 
+     * and returns a compatibility score between 0 and 100
+     */
+    const calculateCompatibility = () => {
+        const values = [
+            -1,
+            /* 1 */3,
+            /* 2 */3,
+            /* 3 */4,
+            /* 4 */4,
+            /* 5 */2,
+            /* 6 */2,
+            /* 7 */3,
+            /* 8 */1,
+            /* 9 */3,
+            /* 10 */2,
+            /* 11 */2,
+            /* 12 */1,
+            /* 13 */1,
+        ];
+
+        // keep track of difference adjusted for value and the sum of those differences
+        let diff = 0;
+        let sumOfDiff = 0;
+
+        // sum up the differences
+        for (let i = 1; i <= 13; i++) {
+            diff = values[i] * (questionnaire[i] - myQuestionnaire[i]);
+            if (diff < 0) diff = -diff;
+            console.log("Diff " + i + " = " + diff);
+            sumOfDiff += diff;
+        }
+        console.log("Sum of Differences: " + sumOfDiff);
+
+        // turn the sum of differences into a scale from 0 to 100
+        // higher score -> lower compatibility
+
+        return(sumOfDiff);
     }
 
 
@@ -231,6 +279,21 @@ export const CardItem = (props) => {
                             "Not vaccinated for Covid-19"
                         )}
                     </Text>
+                </View>
+
+
+                {/* Compatibility Score (if in feed) */}
+                <View style=
+                    {"thylan" != uid ? (
+                        styles.compatibilityScoreWrapper
+                    ) : (
+                        {display: 'none'}
+                    )}
+                >
+                    <View>
+                        {renderIcon("clone", 25, Colors.royalBlue)}
+                    </View>
+                    <Text style={styles.compatibilityScoreContent}>Compatibility Score: {calculateCompatibility()}</Text>
                 </View>
 
 
@@ -424,6 +487,18 @@ const styles = StyleSheet.create({
     },
 
     vaccinationContent: {
+        paddingLeft: 15,
+        fontSize: 20, 
+    },
+    
+
+    /* Compatibility Score */
+    compatibilityScoreWrapper: {
+        paddingTop: 20,
+        flexDirection: 'row',
+    },
+
+    compatibilityScoreContent: {
         paddingLeft: 15,
         fontSize: 20, 
     },
