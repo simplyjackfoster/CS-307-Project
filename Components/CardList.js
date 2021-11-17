@@ -200,16 +200,28 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
       ],
     };
 
-
-		const { profiles: [lastProfile, ...profiles] } = this.state;
+    var noProfiles = false;
+    if (this.state.profiles.length == 0) {
+      noProfiles = true;
+      console.log("No more profiles");
+    }
+    const { profiles: [lastProfile, ...profiles] } = this.state;
     console.log("lastProfile: " + lastProfile);
     console.log("profiles: " + profiles);
+    
 
-    ;
+    if (noProfiles) {
+      return (
+        <View style={styles.container}>
+          <View style={{alignSelf: 'center'}}>
+            <Text style={{fontSize: 25}}>No More Profiles</Text>
+          </View>
+        </View>
+      );
+    }
 
 		return (
 			<View style={styles.container}>
-
 
         {/* Cards Stack */}
         <View style={styles.contentContainer}>
