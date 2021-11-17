@@ -81,20 +81,21 @@ export const getInterests = (email_or_id) => {
 export const getQuestionnaire = (email_or_id) => {
 	const id = getID(email_or_id);
 
-	// might have to swap around the order later on
-	const response1 = getDataFromPath("users/" + id + "/Roommate Compatibility/check_before_having_people_over");
-	const response2 = getDataFromPath("users/" + id + "/Roommate Compatibility/drinks_alcohol");
-	const response3 = getDataFromPath("users/" + id + "/Roommate Compatibility/handle_chores");
-	const response4 = getDataFromPath("users/" + id + "/Roommate Compatibility/has_car");
-	const response5 = getDataFromPath("users/" + id + "/Roommate Compatibility/has_people_over");
-	const response6 = getDataFromPath("users/" + id + "/Roommate Compatibility/has_significant_other");
-	const response7 = getDataFromPath("users/" + id + "/Roommate Compatibility/introverted_or_extraverted");
-	const response8 = getDataFromPath("users/" + id + "/Roommate Compatibility/is_clean");
-	const response9 = getDataFromPath("users/" + id + "/Roommate Compatibility/joint_grocery_shopping");
-	const response10 = getDataFromPath("users/" + id + "/Roommate Compatibility/smokes");
-	const response11 = getDataFromPath("users/" + id + "/Roommate Compatibility/wants_pets");
-	const response12 = getDataFromPath("users/" + id + "/Roommate Compatibility/week_bedtime");
-	const response13 = getDataFromPath("users/" + id + "/Roommate Compatibility/weekend_bedtime");
+	// this is the display order, not the databse order
+	const response1 = getDataFromPath("users/" + id + "/Roommate Compatibility/has_people_over");
+	const response2 = getDataFromPath("users/" + id + "/Roommate Compatibility/is_clean");
+	const response3 = getDataFromPath("users/" + id + "/Roommate Compatibility/week_bedtime");
+	const response4 = getDataFromPath("users/" + id + "/Roommate Compatibility/weekend_bedtime");
+	const response5 = getDataFromPath("users/" + id + "/Roommate Compatibility/drinks_alcohol");
+	const response6 = getDataFromPath("users/" + id + "/Roommate Compatibility/smokes");
+	const response7 = getDataFromPath("users/" + id + "/Roommate Compatibility/handle_chores");
+	const response8 = getDataFromPath("users/" + id + "/Roommate Compatibility/has_car");
+	const response9 = getDataFromPath("users/" + id + "/Roommate Compatibility/wants_pets");
+	const response10 = getDataFromPath("users/" + id + "/Roommate Compatibility/introverted_or_extraverted");
+	const response11 = getDataFromPath("users/" + id + "/Roommate Compatibility/check_before_having_people_over");
+	const response12 = getDataFromPath("users/" + id + "/Roommate Compatibility/joint_grocery_shopping");
+	const response13 = getDataFromPath("users/" + id + "/Roommate Compatibility/has_significant_other");
+
 
 	const responses = [response1, response2, response3, response4, response5, response6, response7, 
 		response8, response9, response10, response11, response12, response13];
