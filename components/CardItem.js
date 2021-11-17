@@ -15,6 +15,8 @@ import { getDataFromPath, getInstagramLink, getInterests, getQuestionnaire } fro
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
 import { reportUser } from '../database/writeData';
+import { auth } from './RTDB';
+import { getID } from './ID';
 
 
 
@@ -37,8 +39,9 @@ export const CardItem = (props) => {
     const reports = getDataFromPath("reported/" + uid + "/num_reports");
     const interests = getInterests(uid);
 
-    // add the current user's uid
-    const myQuestionnaire = getQuestionnaire("thylan")
+    // get my own questionnaire as well as the other user
+    const myUid = getID(auth.currentUser.email);
+    const myQuestionnaire = getQuestionnaire(myUid);
     const questionnaire = getQuestionnaire(uid);
 
 
@@ -103,8 +106,9 @@ export const CardItem = (props) => {
 
         // turn the sum of differences into a scale from 0 to 100
         // higher score -> lower compatibility
+        let compatibilityScore = 100 - sumOfDiff;
 
-        return(sumOfDiff);
+        return(compatibilityScore);
     }
 
 
@@ -284,7 +288,7 @@ export const CardItem = (props) => {
 
                 {/* Compatibility Score (if in feed) */}
                 <View style=
-                    {"thylan" != uid ? (
+                    {myUid != uid ? (
                         styles.compatibilityScoreWrapper
                     ) : (
                         {display: 'none'}
