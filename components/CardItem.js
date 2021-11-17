@@ -264,19 +264,19 @@ export const CardItem = (props) => {
 
                 {/* Report User */}
                 <View style={styles.reportUserWrapper}>
-                        <Text style={styles.reportUserText}
-                            onPress={() => {
-                                Alert.alert("Report User", "Are you sure you want to report " + name + "?",
-                                [{ 
-                                    text: "No" 
-                                }, {
-                                    text: "Yes",
-                                    onPress: () => reportUser(uid, reports)
-                                }]); 
-                            }}
-                        >
-                            Report User
-                        </Text>
+                    <Text style={styles.reportUserText}
+                        onPress={() => {
+                            Alert.alert("Report User", "Are you sure you want to report " + name + "?",
+                            [{ 
+                                text: "No" 
+                            }, {
+                                text: "Yes",
+                                onPress: () => reportUser(uid, reports)
+                            }]); 
+                        }}
+                    >
+                        Report User
+                    </Text>
                 </View>
 
 
@@ -286,6 +286,8 @@ export const CardItem = (props) => {
 }
 
 export default CardItem;
+
+
 
 // styles
 const styles = StyleSheet.create({

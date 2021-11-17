@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Component } from 'react';
 import {
   StyleSheet,
@@ -11,8 +11,8 @@ import {
 } from 'react-native';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
-import CardItem from '../components/CardItem';
-import Card from '../components/Card';
+import CardItem from './CardItem';
+import Card from './Card';
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
 
@@ -156,12 +156,7 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
 
 
 
-
-
 	render () {
-		const { profiles: [lastProfile, ...profiles] } = this.state;
-		const uid = "mfinder";
-		
 
     const { onGestureEvent, translateX, translateY } = this;
 
@@ -196,19 +191,36 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
     };
 
 
-    
+		const { profiles: [lastProfile, ...profiles] } = this.state;
+    console.log("lastProfile: " + lastProfile);
+    console.log("profiles: " + profiles);
+
+    ;
 
 		return (
 			<View style={styles.container}>
 
-				{/* Card */}
+
+        {/* Cards Stack */}
+        <View style={styles.contentContainer}>
+          <View style={styles.cards}>
+          {
+            profiles.reverse().map((profile) => (
+              <Card key={profile} id={profile}></Card>
+            ))
+          }
+          </View>
+        </View>
+
+
+				{/* Swipable Card */}
 				<View id='card' style={styles.contentContainer}>
           <PanGestureHandler
             onHandlerStateChange={onGestureEvent}
             onGestureEvent={onGestureEvent}
           >
             <Animated.View {...{style}}>
-                <Card id={uid} {...{likeOpacity, nopeOpacity}}></Card>
+                <Card id={lastProfile} {...{likeOpacity, nopeOpacity}}></Card>
             </Animated.View>
           </PanGestureHandler>
         </View>
@@ -230,11 +242,12 @@ const styles = StyleSheet.create({
   /* Container styles */
   container: {
     flex: 1,
+    ...StyleSheet.absoluteFillObject,
     backgroundColor: Colors.lightGray,
   },
 
   contentContainer: {
-    flex: 1,
+    ...StyleSheet.absoluteFillObject,
     marginHorizontal: '3%',
     marginTop: '2%',
     marginBottom: '1%',
@@ -249,18 +262,23 @@ const styles = StyleSheet.create({
   },
 
 
+  /* Cards */
+  cards: {
+    flex: 1,
+    zIndex: 100,
+    //alignSelf: 'center',
+    //marginHorizontal: '3%',
+    //marginTop: '2%',
+    //marginBottom: '1%',
+  },
+
+
   /* Dislike Button */
   dislikeWrapper: {
     // marginLeft: 25,
     // marginRight: 25,
   },
-  
-  /* Refresh Button */
-  refreshWrapper: {
-    // marginLeft: 20,
-    // marginRight: 20,
-    // alignContent: 'center',
-  },
+ 
 
   /* Like Button */
   likeWrapper: {
