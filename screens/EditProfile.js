@@ -58,8 +58,9 @@ import {
 } from '../checkInputs';
 import { set } from 'react-native-reanimated';
 import Interests from './Interests';
-
 import Icon from 'react-native-vector-icons/FontAwesome';
+
+
 
 // used so that the hooks don't get set rapidly in edit questionnaire
 var updatedTheSelected = false;
