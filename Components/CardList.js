@@ -288,25 +288,6 @@ const styles = StyleSheet.create({
   cards: {
     flex: 1,
     zIndex: 100,
-    //alignSelf: 'center',
-    //marginHorizontal: '3%',
-    //marginTop: '2%',
-    //marginBottom: '1%',
   },
-
-
-  /* Dislike Button */
-  dislikeWrapper: {
-    // marginLeft: 25,
-    // marginRight: 25,
-  },
- 
-
-  /* Like Button */
-  likeWrapper: {
-    // marginLeft: 25,
-    // marginRight: 25,
-  },
-
 
 });

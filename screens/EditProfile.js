@@ -158,6 +158,9 @@ export default ( {navigation} ) => {
       console.error(error);
     });
 
+
+
+
     get(child(dbRef, "users/" + getID(auth.currentUser.email) +
               "/Profile/age_min")).then((snapshot) => {
       if (snapshot.exists()) {
@@ -192,6 +195,8 @@ export default ( {navigation} ) => {
     }).catch((error) => {
       console.error(error);
     });
+
+
 
     // set vaccination status to the correct value
     get(child(dbRef, "users/" + getID(auth.currentUser.email) +
