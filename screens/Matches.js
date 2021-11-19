@@ -27,7 +27,7 @@ export default ( {navigation} ) => {
   const viewProfile = () => {
     // remove the uid from the match list in the database
     console.log("Pressed");
-    navigation.push("MatchProfile")
+    navigation.push("ViewProfile")
   }
 
   if (!matched) {
