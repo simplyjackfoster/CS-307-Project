@@ -15,6 +15,7 @@ import CardList from '../components/CardList';
 import { Asset } from 'expo-asset';
 import Profile from '../components/Profile';
 import { getDataFromPath, getDataFromPathAsync, getAgeAsync } from '../database/readData';
+import { getBlobAsync } from '../database/uploadStorage';
 
 
 
@@ -23,16 +24,16 @@ var loaded = false;
 
 export default () => {
   const [ready, setReady] = React.useState(false);
-  const [profileList, setProfileList] = React.useState(null);
+  const [profiles, setProfiles] = React.useState(null);
 
 
   /*
-   *
+   * Gets all of the profile data from users,
+   * and puts the Profile objects in "profiles" hook
    */
   const getProfiles = async () => {
     // get the profile ids from the database (USE ALGORITHM)
     var ids = ["mfinder", "thylan", "buckle14"]; // using fixed value
-
 
     // STEP 1: GET THE PROFILE INFORMATION
 
@@ -93,6 +94,7 @@ export default () => {
         getDataFromPathAsync("users/" + id + "/Profile/covid_vaccination_status"), // 15
         getDataFromPathAsync("users/" + id + "/Profile/instagram"), // 16
       ]);
+    
 
       // add fields to their list
       profile_picture_list.push(profile_picture);
@@ -116,11 +118,11 @@ export default () => {
 
 
     // STEP 2: ASSEMBLE THE PROFILES
-    var profiles: Profile[] = [];
+    var profile_list: Profile[] = [];
     for (let i = 0; i < ids.length; i++) {
       var profile: Profile = {
         id: ids[i],
-        profile_picture: profile_picture_list[i],
+        profile_picture: await Asset.loadAsync(profile_picture_list[i]), // load the profile picture asset
         name: name_list[i],
         age: age_list[i],
         bio: bio_list[i],
@@ -139,26 +141,21 @@ export default () => {
       };
 
       // add profile to array
-      profiles.push(profile);
+      profile_list.push(profile);
     } // for-loop
 
-
-    // STEP 3: LOAD THE PROFILE PICTURES IN PARALLEL
-    await Promise.all(profiles.map(profile => Asset.loadAsync(profile.profile_picture)));
-
     
-    // STEP 4: SET PROFILES AND READY STATE TO TRUE
-    await setProfileList(profiles);
+    // STEP 3: SET PROFILES AND READY STATE TO TRUE
+    await setProfiles(profile_list);
     setReady(true);
 
   } // getProfiles()
 
 
 
+ 
   
-
-
-  var profiles = ["mfinder", "thylan", "buckle14"];
+  // if we have not loaded the users, then load them
   if (!loaded) {
     getProfiles();
     loaded = true;
@@ -182,7 +179,7 @@ export default () => {
       </View>
 
 
-      {/* Like, Refresh, and Dislike Buttons */}
+      {/* Like and Dislike Buttons */}
       <View style={styles.footer}>
         <TouchableOpacity onPress={() => {
           console.log("Dislike pressed");

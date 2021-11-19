@@ -27,13 +27,12 @@ export default class Card extends Component {
 
 
 	render() {
-		const uid = this.props.id;
-		const { likeOpacity, nopeOpacity } = this.props;
+		const { profile, likeOpacity, nopeOpacity } = this.props;
 
         return (
             <View style={styles.container}>
                 {/* The Card */}
-                <CardItem id={uid} style={styles.cardWrapper}></CardItem>
+                <CardItem profile={profile} style={styles.cardWrapper}></CardItem>
 
                 {/* Like and Nope Text */}
                 <View style={styles.swipeTextWrapper}>

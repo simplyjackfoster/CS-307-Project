@@ -83,7 +83,7 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
   constructor(props: ProfilesProps) {
     super(props);
 		const { profiles } = props;
-		this.state = { profiles };
+		this.state = { profiles, loadingNext: true};
     this.translationX = new Value(0);
     this.translationY = new Value(0);
     this.velocityX = new Value(0);
@@ -228,7 +228,7 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
           <View style={styles.cards}>
           {
             profiles.reverse().map((profile) => (
-              <Card key={profile} id={profile}></Card>
+              <Card key={profile.id} profile={profile}></Card>
             ))
           }
           </View>
@@ -242,7 +242,7 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
             onGestureEvent={onGestureEvent}
           >
             <Animated.View {...{style}}>
-                <Card id={lastProfile} {...{likeOpacity, nopeOpacity}}></Card>
+                <Card profile={lastProfile} {...{likeOpacity, nopeOpacity}}></Card>
             </Animated.View>
           </PanGestureHandler>
         </View>

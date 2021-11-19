@@ -19,45 +19,7 @@ import { reportUser } from '../database/writeData';
 
 
 export const CardItem = (props) => {
-    const { likeOpacity, nopeOpacity } = props;
-    
-    const uid = props.id;
-    const profile_picture = getDataFromPath("users/" + uid + "/Profile/Images/profile_picture");
-    const name = getDataFromPath("users/" + uid + "/Profile/profile_name");
-    const location = getDataFromPath("users/" + uid + "/Profile/location");
-    const graduationYear = getDataFromPath("users/" + uid + "/Profile/graduation_year");
-    const major = getDataFromPath("users/" + uid + "/Profile/major");
-    const bio = getDataFromPath("users/" + uid + "/Profile/bio");
-    const vaccination = getDataFromPath("users/" + uid + "/Profile/covid_vaccination_status");
-    const preferredNumRoommates = getDataFromPath("users/" + uid + "/Profile/preferred_number_of_roommates");
-    const preferredLivingLocation = getDataFromPath("users/" + uid + "/Profile/preferred_living_location");
-    const instagram = getDataFromPath("users/" + uid + "/Profile/instagram");
-    const instagramLink = getInstagramLink(uid);
-    const bday = getDataFromPath("users/" + uid + "/Critical Information/birthday");
-    const reports = getDataFromPath("reported/" + uid + "/num_reports");
-    const interests = getInterests(uid);
-
-
-    var age;
-    /* Used for age calculation */
-    if(bday != null) { // Seems redundant, but during loading page, bday is briefly null
-        const bday_day = bday.substring(0, 2)
-        const bday_month = bday.substring(3, 5)
-        const bday_year = bday.substring(6)
-
-        const date = new Date();
-        const curr_day = date.getDate();
-        const curr_month = date.getMonth() + 1;
-        const curr_year = date.getFullYear();
-        age = curr_year - bday_year;
-
-        /* Giga brain math to calculate true age */
-        if(bday_month >= curr_month) {
-            if(bday_day > curr_day) {
-                age -= 1
-            }
-        }
-    }
+    const { profile, likeOpacity, nopeOpacity } = props;
 
 
     return (
@@ -67,75 +29,75 @@ export const CardItem = (props) => {
                 {/* Profile Picture */}
                 <View style={styles.imageWrapper}>
                     <Image style={styles.profilePic}
-                        source={{uri: profile_picture}}
+                        source={profile.profile_picture}
                     />
                 </View>
 
 
                 {/* Name and Age */}
                 <View style={styles.nameWrapper}>
-                    <Text style={styles.nameText}>{name}, {age}</Text>
+                    <Text style={styles.nameText}>{profile.name}, {profile.age}</Text>
                 </View>
 
 
                 {/* Bio (optional) */}
                 <View style=
-                    {bio ? (
+                    {profile.bio ? (
                         styles.bioWrapper
                     ) : (
                         {display: 'none'}
                     )}
                 >
-                    <Text style={styles.bioContent}>{bio}</Text>
+                    <Text style={styles.bioContent}>{profile.bio}</Text>
                 </View>
 
 
                 {/* Interests */} 
                 <View style={styles.interestsContainer}>
                     <View style=
-                        {interests[0] ? (
+                        {profile.interest1 ? (
                             styles.interestWrapper
                         ) : (
                             {display: 'none'}
                         )}
                     >
-                        <Text style={styles.interestText}>{interests[0]}</Text>
+                        <Text style={styles.interestText}>{profile.interest1}</Text>
                     </View>
                     <View style=
-                        {interests[1] ? (
+                        {profile.interest2 ? (
                             styles.interestWrapper
                         ) : (
                             {display: 'none'}
                         )}
                     >
-                        <Text style={styles.interestText}>{interests[1]}</Text>
+                        <Text style={styles.interestText}>{profile.interest2}</Text>
                     </View>
                     <View style=
-                        {interests[2] ? (
+                        {profile.interest3 ? (
                             styles.interestWrapper
                         ) : (
                             {display: 'none'}
                         )}
                     >
-                        <Text style={styles.interestText}>{interests[2]}</Text>
+                        <Text style={styles.interestText}>{profile.interest3}</Text>
                     </View>
                     <View style=
-                        {interests[3] ? (
+                        {profile.interest4 ? (
                             styles.interestWrapper
                         ) : (
                             {display: 'none'}
                         )}
                     >
-                        <Text style={styles.interestText}>{interests[3]}</Text>
+                        <Text style={styles.interestText}>{profile.interest4}</Text>
                     </View>
                     <View style=
-                        {interests[4] ? (
+                        {profile.interest5 ? (
                             styles.interestWrapper
                         ) : (
                             {display: 'none'}
                         )}
                     >
-                        <Text style={styles.interestText}>{interests[4]}</Text>
+                        <Text style={styles.interestText}>{profile.interest5}</Text>
                     </View>
                 </View>
 
@@ -143,7 +105,7 @@ export const CardItem = (props) => {
 
                 {/* Graduation year (optional) */}
                 <View style={
-                    graduationYear ? (
+                    profile.graduation_year ? (
                         styles.graduationYearWrapper
                     ) : (
                         {display: 'none'}
@@ -152,13 +114,13 @@ export const CardItem = (props) => {
                     <View>
                         {renderIcon("graduation-cap", 25, Colors.royalBlue)}
                     </View>
-                    <Text style={styles.graduationYearContent}>Class of {graduationYear}</Text>
+                    <Text style={styles.graduationYearContent}>Class of {profile.graduation_year}</Text>
                 </View>
 
 
                 {/* Major (optional) */}
                 <View style=
-                    {major ? (
+                    {profile.major ? (
                         styles.majorWrapper
                     ) : (
                         {display: 'none'}
@@ -168,13 +130,13 @@ export const CardItem = (props) => {
                         {renderIcon("book", 25, Colors.royalBlue)}
                     </View>
                     <Text style={styles.infoHeader}>Major: </Text>
-                    <Text style={styles.infoContent}>{major}</Text>
+                    <Text style={styles.infoContent}>{profile.major}</Text>
                 </View>
 
 
                 {/* Location (optional) */}
                 <View style=
-                    {location ? (
+                    {profile.location ? (
                         styles.locationWrapper
                     ) : (
                         {display: 'none'}
@@ -184,13 +146,13 @@ export const CardItem = (props) => {
                         {renderIcon("map-pin", 25, Colors.royalBlue)}
                     </View>
                     <Text style={styles.infoHeader}>Location: </Text>
-                    <Text style={styles.infoContent}>{location}</Text>
+                    <Text style={styles.infoContent}>{profile.location}</Text>
                 </View>
 
 
                 {/* Preferred # of Roommates (optional) */}
                 <View style=
-                    {preferredNumRoommates ? (
+                    {profile.preferred_num_roommates ? (
                         styles.preferredNumRoommatesWrapper
                     ) : (
                         {display: 'none'}
@@ -200,13 +162,13 @@ export const CardItem = (props) => {
                         {renderIcon("users", 22, Colors.royalBlue)}
                     </View>
                     <Text style={styles.infoHeader}>Preferred # of Roommates: </Text>
-                    <Text style={styles.infoContent}>{preferredNumRoommates}</Text>
+                    <Text style={styles.infoContent}>{profile.preferred_num_roommates}</Text>
                 </View>
 
 
                 {/* Preferred living location (optional) */}
                 <View style=
-                    {preferredLivingLocation ? (
+                    {profile.preferred_living_location ? (
                         styles.preferredLivingLocationWrapper
                     ) : (
                         {display: 'none'}
@@ -215,7 +177,7 @@ export const CardItem = (props) => {
                     <View>
                         {renderIcon("home", 25, Colors.royalBlue)}
                     </View>
-                    <Text style={styles.preferredLivingLocationContent}>Preferred Housing: {preferredLivingLocation}</Text>
+                    <Text style={styles.preferredLivingLocationContent}>Preferred Housing: {profile.preferred_living_location}</Text>
                 </View>
 
 
@@ -225,7 +187,7 @@ export const CardItem = (props) => {
                         {renderIcon("medkit", 25, Colors.royalBlue)}
                     </View>
                     <Text style={styles.vaccinationContent}>
-                        {(vaccination == "Vaccinated") ? (
+                        {(profile.vaccinated == "Vaccinated") ? (
                             "Vaccinated for Covid-19"
                         ) : (
                             "Not vaccinated for Covid-19"
@@ -236,7 +198,7 @@ export const CardItem = (props) => {
 
                 {/* Instagram (optional) */}
                 <View style=
-                    {instagram ? (
+                    {profile.instagram ? (
                         styles.instagramWrapper
                     ) : (
                         {display: 'none'}
@@ -244,9 +206,9 @@ export const CardItem = (props) => {
                 >
                     <TouchableOpacity style={styles.instagramButton}
                         onPress={async () => {
-                            const supported = await Linking.canOpenURL(instagramLink);
+                            const supported = await Linking.canOpenURL(getInstagramLink(profile.instagram));
                             if (supported) {
-                                Linking.openURL(instagramLink);
+                                Linking.openURL(getInstagramLink(profile.instagram));
                             }
                             else {
                                 console.log("Instagram Link doesn't exist");
@@ -257,7 +219,7 @@ export const CardItem = (props) => {
                             {renderIcon("instagram", 25, "#ff00ff")}
                             <Text style={styles.viewInstagramText}>View Instagram</Text>
                         </View>
-                        <Text style={styles.instagramUsernameText}>{instagram}</Text>
+                        <Text style={styles.instagramUsernameText}>{profile.instagram}</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -266,12 +228,12 @@ export const CardItem = (props) => {
                 <View style={styles.reportUserWrapper}>
                     <Text style={styles.reportUserText}
                         onPress={() => {
-                            Alert.alert("Report User", "Are you sure you want to report " + name + "?",
+                            Alert.alert("Report User", "Are you sure you want to report " + profile.name + "?",
                             [{ 
                                 text: "No" 
                             }, {
                                 text: "Yes",
-                                onPress: () => reportUser(uid, reports)
+                                onPress: () => reportUser(profile.id, reports)
                             }]); 
                         }}
                     >
