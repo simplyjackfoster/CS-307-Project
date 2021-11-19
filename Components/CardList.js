@@ -206,8 +206,8 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
       console.log("No more profiles");
     }
     const { profiles: [lastProfile, ...profiles] } = this.state;
-    console.log("lastProfile: " + lastProfile);
-    console.log("profiles: " + profiles);
+    //console.log("lastProfile: " + lastProfile);
+    //console.log("profiles: " + profiles);
     
 
     if (noProfiles) {

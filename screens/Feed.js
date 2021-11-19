@@ -18,22 +18,12 @@ import { getDataFromPath, getDataFromPathAsync, getAgeAsync } from '../database/
 
 
 
-/*
-var profiles: Profile[] = [
-  {
-    id: "mfinder",
-    name: "Max",
-    age: 20,
-    profilePic: "https://firebasestorage.googleapis.com/v0/b/uniroom-fdcd7.appspot.com/o/users%2Fmfinder%2Fprofile_picture?alt=media&token=61706b78-2aab-4270-8bc0-c2212b492dd8",
-  },
-];
-*/
+
 var loaded = false;
-
-
 
 export default () => {
   const [ready, setReady] = React.useState(false);
+  const [profileList, setProfileList] = React.useState(null);
 
 
   /*
@@ -51,7 +41,11 @@ export default () => {
     var name_list = [];
     var age_list = [];
     var bio_list = [];
-    var interests_list = [[]];
+    var interest1_list = [];
+    var interest2_list = [];
+    var interest3_list = [];
+    var interest4_list = [];
+    var interest5_list = [];
     var graduation_year_list = [];
     var major_list = [];
     var location_list = [];
@@ -61,7 +55,6 @@ export default () => {
     var instagram_list = [];
 
     for (const id of ids) {
-      
       // read all the data in parallel
       let
       [
@@ -106,8 +99,11 @@ export default () => {
       name_list.push(name);
       age_list.push(age);
       bio_list.push(bio);
-      const interests = [interest1, interest2, interest3, interest4, interest5];
-      interests_list.push(interests);
+      interest1_list.push(interest1);
+      interest2_list.push(interest2);
+      interest3_list.push(interest3);
+      interest4_list.push(interest4);
+      interest5_list.push(interest5);
       graduation_year_list.push(graduation_year);
       major_list.push(major);
       location_list.push(location);
@@ -115,127 +111,94 @@ export default () => {
       preferred_living_location_list.push(preferred_living_location);
       vaccinated_list.push(vaccinated);
       instagram_list.push(instagram);
-
-
     } // for-loop
 
-
-    // print values
-    console.log("\n\nPICTURES: " + profile_picture_list);
-    console.log("NAMES: " + name_list);
-    console.log("AGES: " + age_list);
-    console.log("BIOS: " + bio_list);
-    console.log("INTERESTS: " + interests_list);
-    console.log("GRADUATION YEARS: " + graduation_year_list);
-    console.log("MAJORS: " + major_list);
-    console.log("LOCATIONS: " + location_list);
-    console.log("PREFERRED # ROOMMATES: " + preferred_num_roommates_list);
-    console.log("PREFERRED LIVING: " + preferred_living_location_list);
-    console.log("VACCINATED: " + vaccinated_list);
-    console.log("INSTAGRAM: " + instagram_list);
 
 
     // STEP 2: ASSEMBLE THE PROFILES
     var profiles: Profile[] = [];
+    for (let i = 0; i < ids.length; i++) {
+      var profile: Profile = {
+        id: ids[i],
+        profile_picture: profile_picture_list[i],
+        name: name_list[i],
+        age: age_list[i],
+        bio: bio_list[i],
+        interest1: interest1_list[i],
+        interest2: interest2_list[i],
+        interest3: interest3_list[i],
+        interest4: interest4_list[i],
+        interest5: interest5_list[i],
+        graduation_year: graduation_year_list[i],
+        major: major_list[i],
+        location: location_list[i],
+        preferred_num_roommates: preferred_num_roommates_list[i],
+        preferred_living_location: preferred_living_location_list[i],
+        vaccinated: vaccinated_list[i],
+        instagram: instagram_list[i],
+      };
+
+      // add profile to array
+      profiles.push(profile);
+    } // for-loop
 
 
-    // STEP 3: LOAD THE PROFILE PICTURES
+    // STEP 3: LOAD THE PROFILE PICTURES IN PARALLEL
+    await Promise.all(profiles.map(profile => Asset.loadAsync(profile.profile_picture)));
 
-    // load all of the profile pictures
-    //await Promise.all(picturePaths.map(picturePath => Asset.loadAsync(profile.profilePic)));
-
-    // STEP 4: SET READY STATE TO TRUE
+    
+    // STEP 4: SET PROFILES AND READY STATE TO TRUE
+    await setProfileList(profiles);
     setReady(true);
+
   } // getProfiles()
 
 
 
-  /*
-   *
-   */ 
-  const getProfile = async () => {
-
-    // get the profile picture paths for each of the users
-    var picturePaths = [];
-    var profiles: Profile[] = [];
-    for (const id of ids) {
-      const dbRef = ref(rtdb);
-      const picturePath = await get(child(dbRef, "users/" + id +"/Profile/Images/profile_picture")).then((snapshot) => {
-        if (snapshot.exists()) {
-          const data_val = snapshot.val();
-          return data_val;
-        }	
-      }).catch((error) => {
-        console.error(error);
-      });
-      // add it to the array of paths
-      picturePaths.push(picturePath);
-
-
-      // build profile info
-      /*const profile: Profile = {
-        id: id,
-      }; */
-
-
-
-    } // for-loop
-
-  } // getProfile()
-
-
-
-
+  
 
 
   var profiles = ["mfinder", "thylan", "buckle14"];
   if (!loaded) {
-    var pros = getProfiles();
+    getProfiles();
     loaded = true;
   }
 
 
-
-  /*async componentDidMount() {
-    await Promise.all(profiles.map(profile => Asset.loadAsync(profile.profilePic)));
-    this.setState({ ready: true });
-  }*/
-
-
-    if (!ready) {
-      return (
-        <View style={{flex: 1}}>
-          <Text>Loading...</Text>
-        </View>
-      );
-    }
-
+  if (!ready) {
     return (
-      <View style={styles.container}>
-
-        {/* Stack of Cards */}
-        <View style={styles.contentContainer}>
-          <CardList {...{profiles}} ></CardList>
-        </View>
-
-
-        {/* Like, Refresh, and Dislike Buttons */}
-        <View style={styles.footer}>
-          <TouchableOpacity onPress={() => {
-            console.log("Dislike pressed");
-          }}>
-            {renderIcon("times", 50, Colors.red)}
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => {
-            console.log("Like pressed");
-          }}>
-            {renderIcon("check", 50, Colors.green)}
-          </TouchableOpacity>
-        </View>
-
+      <View style={{flex: 1}}>
+        <Text>Loading...</Text>
       </View>
     );
+  }
+
+  return (
+    <View style={styles.container}>
+
+      {/* Stack of Cards */}
+      <View style={styles.contentContainer}>
+        <CardList {...{profiles}} ></CardList>
+      </View>
+
+
+      {/* Like, Refresh, and Dislike Buttons */}
+      <View style={styles.footer}>
+        <TouchableOpacity onPress={() => {
+          console.log("Dislike pressed");
+        }}>
+          {renderIcon("times", 50, Colors.red)}
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => {
+          console.log("Like pressed");
+        }}>
+          {renderIcon("check", 50, Colors.green)}
+        </TouchableOpacity>
+      </View>
+
+    </View>
+  );
 
 } // Feed
 
