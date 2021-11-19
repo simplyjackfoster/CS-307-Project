@@ -41,8 +41,8 @@ export default ( {navigation} ) => {
     <ScrollView style={styles.container}>
       <View>
         <MatchItem id={"foste205"} func={viewProfile}/>
-        <MatchItem id={"thylan"} />
-        <MatchItem id={"mfinder"} />
+        <MatchItem id={"thylan"} func={viewProfile}/>
+        <MatchItem id={"mfinder"} func={viewProfile}/>
       </View>
     </ScrollView>
 

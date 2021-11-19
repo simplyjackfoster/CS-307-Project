@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import Colors from "../constants/Colors";
 import MatchItem from '../components/MatchItem';
+import Card from '../components/Card';
 
 
 /*
@@ -21,17 +22,10 @@ var testUid = "foste205"
 var matched = true;
 export default ( {navigation} ) => {
 
-  if (!matched) {
-    return (
-      <View style={styles.noMatchContainer}>
-        <Text>You have no matches</Text>
-      </View>
-    );
-  }
   return (
     <ScrollView style={styles.container}>
       <View>
-        <MatchItem id={"foste205"}/>
+        <Card id={"foste205"}></Card>
       </View>
     </ScrollView>
 
