@@ -9,17 +9,23 @@ import {
     TouchableOpacity,
     Alert
 } from 'react-native';
-import Animated from 'react-native-reanimated';
+import Animated, { round } from 'react-native-reanimated';
 
-import { getDataFromPath, getInstagramLink, getInterests } from "../database/readData";
+import { getDataFromPath, getInstagramLink, getInterests, getQuestionnaire } from "../database/readData";
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
 import { reportUser } from '../database/writeData';
+import { auth } from '../database/RTDB';
+import { getID } from '../database/ID';
 
 
 
 export const CardItem = (props) => {
     const { profile, likeOpacity, nopeOpacity } = props;
+
+    const getBorderColor = () => {
+        return Math.floor(profile.compatibility_score / 34);
+    }
 
 
     return (
@@ -37,6 +43,31 @@ export const CardItem = (props) => {
                 {/* Name and Age */}
                 <View style={styles.nameWrapper}>
                     <Text style={styles.nameText}>{profile.name}, {profile.age}</Text>
+                </View>
+
+
+                {/* Compatibility Score (if in feed) */}
+                <View style=
+                    {getID(auth.currentUser.email) != profile.id ? (
+                        styles.compatibilityScoreWrapper
+                    ) : (
+                        {display: 'none'}
+                    )}
+                >
+                    {/* <View> */}
+                        {/* <Text style={styles.compatibilityScoreText}>Compatibility: </Text> */}
+
+                        <Text style=
+                            {[styles.compatibilityScoreContent,
+                            getBorderColor() == 0 ? (
+                                {borderColor: Colors.red}
+                            ) : (
+                                {borderColor: getBorderColor() == 1 ? Colors.yellow : Colors.green}
+                            )]}
+                        >
+                            {profile.compatibility_score}%
+                        </Text>
+                    {/* </View> */}
                 </View>
 
 
@@ -194,6 +225,9 @@ export const CardItem = (props) => {
                         )}
                     </Text>
                 </View>
+
+
+                
 
 
                 {/* Instagram (optional) */}
@@ -390,6 +424,28 @@ const styles = StyleSheet.create({
     vaccinationContent: {
         paddingLeft: 15,
         fontSize: 20, 
+    },
+    
+
+    /* Compatibility Score */
+    compatibilityScoreWrapper: {
+        paddingTop: 20,
+        flexDirection: 'row',
+    },
+    
+    compatibilityScoreText: {
+        flexDirection: 'row',
+        fontSize: 20,
+        paddingTop: 5,
+        paddingRight: 10,
+    },
+
+    compatibilityScoreContent: {
+        alignContent: 'flex-end',
+        fontSize: 20,
+        borderWidth: 2.5,
+        borderRadius: 20,
+        padding: 5,
     },
 
 

@@ -18,7 +18,6 @@ import Messages from './Messages';
 /*
  * This is the screen where the user can view their matches.
  */
-var testUid = "foste205"
 //const [showProfile] = React.useState(true)
 var matched = true;
 export default ( {navigation} ) => {

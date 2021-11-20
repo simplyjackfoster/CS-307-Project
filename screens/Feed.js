@@ -16,6 +16,8 @@ import { Asset } from 'expo-asset';
 import { getDataFromPath, getDataFromPathAsync, getAgeAsync } from '../database/readData';
 import { getBlobAsync } from '../database/uploadStorage';
 
+import { getCompatibilityScoreAsync } from '../database/readData';
+
 
 
 
@@ -24,6 +26,7 @@ var loaded = false;
 export default () => {
   const [ready, setReady] = React.useState(false);
   const [profiles, setProfiles] = React.useState(null);
+
 
 
   /*
@@ -53,6 +56,7 @@ export default () => {
     var preferred_living_location_list = [];
     var vaccinated_list = [];
     var instagram_list = [];
+    var compatibility_score_list = [];
 
     for (const id of ids) {
       // read all the data in parallel
@@ -74,6 +78,7 @@ export default () => {
         preferred_living_location, // 14
         vaccinated, // 15
         instagram, // 16
+        compatibility_score, // 17
       ] = await Promise.all(
       [
         getDataFromPathAsync("users/" + id + "/Profile/Images/profile_picture"), // 1
@@ -92,6 +97,7 @@ export default () => {
         getDataFromPathAsync("users/" + id + "/Profile/preferred_living_location"), // 15
         getDataFromPathAsync("users/" + id + "/Profile/covid_vaccination_status"), // 15
         getDataFromPathAsync("users/" + id + "/Profile/instagram"), // 16
+        getCompatibilityScoreAsync(id), // 17
       ]);
     
 
@@ -112,6 +118,7 @@ export default () => {
       preferred_living_location_list.push(preferred_living_location);
       vaccinated_list.push(vaccinated);
       instagram_list.push(instagram);
+      compatibility_score_list.push(compatibility_score);
     } // for-loop
 
 
@@ -137,6 +144,7 @@ export default () => {
         preferred_living_location: preferred_living_location_list[i],
         vaccinated: vaccinated_list[i],
         instagram: instagram_list[i],
+        compatibility_score: compatibility_score_list[i],
       };
 
       // add profile to array
@@ -149,7 +157,6 @@ export default () => {
     setReady(true);
 
   } // getProfiles()
-
 
 
  
@@ -182,12 +189,14 @@ export default () => {
       <View style={styles.footer}>
         <TouchableOpacity onPress={() => {
           console.log("Dislike pressed");
+          // add swipe left function
         }}>
           {renderIcon("times", 50, Colors.red)}
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => {
           console.log("Like pressed");
+          // add swipe right function
         }}>
           {renderIcon("check", 50, Colors.green)}
         </TouchableOpacity>

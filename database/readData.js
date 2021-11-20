@@ -112,6 +112,119 @@ export const getInterests = (email_or_id) => {
 
 
 /*
+ * 
+ */
+export const getQuestionnaireAsync = async (email_or_id) => {
+	const id = getID(email_or_id);
+
+	// this is the display order, not the databse order
+	const [
+		response1,
+		response2,
+		response3,
+		response4,
+		response5,
+		response6,
+		response7,
+		response8,
+		response9,
+		response10,
+		response11,
+		response12,
+		response13,
+	] = await Promise.all(
+	[
+		getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_people_over"),
+		getDataFromPathAsync("users/" + id + "/Roommate Compatibility/is_clean"),
+		getDataFromPathAsync("users/" + id + "/Roommate Compatibility/week_bedtime"),
+		getDataFromPathAsync("users/" + id + "/Roommate Compatibility/weekend_bedtime"),
+		getDataFromPathAsync("users/" + id + "/Roommate Compatibility/drinks_alcohol"),
+		getDataFromPathAsync("users/" + id + "/Roommate Compatibility/smokes"),
+		getDataFromPathAsync("users/" + id + "/Roommate Compatibility/handle_chores"),
+		getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_car"),
+		getDataFromPathAsync("users/" + id + "/Roommate Compatibility/wants_pets"),
+		getDataFromPathAsync("users/" + id + "/Roommate Compatibility/introverted_or_extraverted"),
+		getDataFromPathAsync("users/" + id + "/Roommate Compatibility/check_before_having_people_over"),
+		getDataFromPathAsync("users/" + id + "/Roommate Compatibility/joint_grocery_shopping"),
+		getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_significant_other"),
+	]);
+
+
+	// const response1 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_people_over");
+	// const response2 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/is_clean");
+	// const response3 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/week_bedtime");
+	// const response4 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/weekend_bedtime");
+	// const response5 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/drinks_alcohol");
+	// const response6 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/smokes");
+	// const response7 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/handle_chores");
+	// const response8 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_car");
+	// const response9 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/wants_pets");
+	// const response10 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/introverted_or_extraverted");
+	// const response11 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/check_before_having_people_over");
+	// const response12 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/joint_grocery_shopping");
+	// const response13 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_significant_other");
+
+	// start indexing at 1 for simplicity
+	const responses = [-1, response1, response2, response3, response4, response5, response6, response7, 
+		response8, response9, response10, response11, response12, response13];
+
+	return responses;
+}
+
+
+
+/*
+ * Calculates the compatibility score between teh current user and the user specified in the argument
+ */
+export const getCompatibilityScoreAsync = async (uid) => {
+
+	// get my own questionnaire as well as the other user's
+    const myUid = getID(auth.currentUser.email);
+    const myQuestionnaire = await getQuestionnaireAsync(myUid);
+    const questionnaire = await getQuestionnaireAsync(uid);
+
+    // array of values based on how important each quesiton is to roommate compatibility
+    const values = [
+        -1,
+        /* 1 */3,
+        /* 2 */3,
+        /* 3 */4,
+        /* 4 */4,
+        /* 5 */2,
+        /* 6 */2,
+        /* 7 */3,
+        /* 8 */1,
+        /* 9 */3,
+        /* 10 */2,
+        /* 11 */2,
+        /* 12 */1,
+        /* 13 */1,
+    ];
+
+    // keep track of difference adjusted for value and the sum of those differences
+    let diff = 0;
+    let sumOfDiff = 0;
+
+    // sum up the differences
+    for (let i = 1; i <= 13; i++) {
+        diff = values[i] * (questionnaire[i] - myQuestionnaire[i]);
+        if (diff < 0) diff = -diff;
+        console.log("Diff " + i + " = " + diff);
+        sumOfDiff += diff;
+    }
+
+    // turn the sum of differences (1-110) into a scale from 0 to 100
+    const compatibilityScore = Math.round(100 - ((sumOfDiff / 108) * 100));
+    console.log("Compatibility score between " + myUid + " and " + uid + ": " + compatibilityScore);
+
+    return compatibilityScore;
+
+} //getCompatibilityScoreAsync
+
+
+
+
+/*
  * Reads the birthday of the user and calculates and returns their age.
  * @param email_or_id -> the email or id to the specified user.
  * @return -> the age of the user.
@@ -142,5 +255,5 @@ export const getAgeAsync = async (email_or_id) => {
 	}
 
 	return age;
-} // getAge()
+} // getAgeAsync()
 
