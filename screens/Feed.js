@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Component } from 'react';
 import {
   StyleSheet,
@@ -7,239 +7,205 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
-  Dimensions,
 } from 'react-native';
-import { PanGestureHandler, State } from 'react-native-gesture-handler';
-import Animated from 'react-native-reanimated';
-
-const {
-  event,
-  Value,
-  interpolateNode,
-  concat,
-  Extrapolate,
-  cond,
-  eq,
-  set,
-  clockRunning,
-  startClock,
-  stopClock,
-  spring,
-  Clock,
-  greaterThan,
-  lessThan,
-  and,
-  neq,
-  call,
-} = Animated;
-const { width, height } = Dimensions.get("window");
-
-// calculate the width of the card when it's rotated 15 degrees
-const rotatedWidth = width * Math.sin(75 * Math.PI/180) + height * Math.sin(15 * Math.PI / 180);
-
-import CardItem from '../components/CardItem';
-import Card from '../components/Card';
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
+import CardList from '../components/CardList';
 
+import { Asset } from 'expo-asset';
+import { getDataFromPath, getDataFromPathAsync, getAgeAsync } from '../database/readData';
+import { getBlobAsync } from '../database/uploadStorage';
 
-
-const runSpring = (clock, value, velocity, dest) => {
-  const state = {
-    finished: new Value(0),
-    velocity: new Value(0),
-    position: new Value(0),
-    time: new Value(0),
-  };
-
-  const config = {
-    damping: 15,
-    mass: 1,
-    stiffness: 120,
-    overshootClamping: false,
-    restSpeedThreshold: 0.001,
-    restDisplacementThreshold: 0.001,
-    toValue: new Value(0),
-  };
-
-  return [
-    cond(clockRunning(clock), 0, [
-      set(state.finished, 0),
-      set(state.velocity, velocity),
-      set(state.position, value),
-      set(config.toValue, dest),
-      startClock(clock),
-    ]),
-    spring(clock, state, config),
-    cond(state.finished, stopClock(clock)),
-    state.position,
-  ];
-} // runSpring()
+import { getCompatibilityScoreAsync } from '../database/readData';
 
 
 
 
+var loaded = false;
 
-export default class Feed extends Component {
+export default () => {
+  const [ready, setReady] = React.useState(false);
+  const [profiles, setProfiles] = React.useState(null);
 
-  constructor() {
-    super();
-    this.translationX = new Value(0);
-    this.translationY = new Value(0);
-    this.velocityX = new Value(0);
-    this.gestureState = new Value(State.UNDETERMINED);
 
-    this.onGestureEvent = event([{
-      nativeEvent: {
-        translationX: this.translationX,
-        translationY: this.translationY,
-        velocityX: this.velocityX,
-        state: this.gestureState,
-      }
-    }], { useNativeDriver: true });
 
-    this.init();
+  /*
+   * Gets all of the profile data from users,
+   * and puts the Profile objects in "profiles" hook
+   */
+  const getProfiles = async () => {
+    // get the profile ids from the database (USE ALGORITHM)
+    var ids = ["mfinder", "thylan", "francik"]; // using fixed value
+
+    // STEP 1: GET THE PROFILE INFORMATION
+
+    // get the profile picture paths for each of the users
+    var profile_picture_list = [];
+    var name_list = [];
+    var age_list = [];
+    var bio_list = [];
+    var interest1_list = [];
+    var interest2_list = [];
+    var interest3_list = [];
+    var interest4_list = [];
+    var interest5_list = [];
+    var graduation_year_list = [];
+    var major_list = [];
+    var location_list = [];
+    var preferred_num_roommates_list = [];
+    var preferred_living_location_list = [];
+    var vaccinated_list = [];
+    var instagram_list = [];
+    var compatibility_score_list = [];
+
+    for (const id of ids) {
+      // read all the data in parallel
+      let
+      [
+        profile_picture, // 1
+        name, // 2
+        age, // 3
+        bio, // 4
+        interest1, // 5
+        interest2, // 6
+        interest3, // 7
+        interest4, // 8
+        interest5, // 9
+        graduation_year, // 10
+        major, // 11
+        location, // 12
+        preferred_num_roommates, // 13
+        preferred_living_location, // 14
+        vaccinated, // 15
+        instagram, // 16
+        compatibility_score, // 17
+      ] = await Promise.all(
+      [
+        getDataFromPathAsync("users/" + id + "/Profile/Images/profile_picture"), // 1
+        getDataFromPathAsync("users/" + id + "/Profile/profile_name"), // 2
+        getAgeAsync(id), // 3
+        getDataFromPathAsync("users/" + id + "/Profile/bio"), // 4
+        getDataFromPathAsync("users/" + id + "/Profile/Interests/interest1"), // 5
+        getDataFromPathAsync("users/" + id + "/Profile/Interests/interest2"), // 6
+        getDataFromPathAsync("users/" + id + "/Profile/Interests/interest3"), // 7
+        getDataFromPathAsync("users/" + id + "/Profile/Interests/interest4"), // 8
+        getDataFromPathAsync("users/" + id + "/Profile/Interests/interest5"), // 9
+        getDataFromPathAsync("users/" + id + "/Profile/graduation_year"), // 10
+        getDataFromPathAsync("users/" + id + "/Profile/major"), // 11
+        getDataFromPathAsync("users/" + id + "/Profile/location"), // 12
+        getDataFromPathAsync("users/" + id + "/Profile/preferred_number_of_roommates"), // 13
+        getDataFromPathAsync("users/" + id + "/Profile/preferred_living_location"), // 15
+        getDataFromPathAsync("users/" + id + "/Profile/covid_vaccination_status"), // 15
+        getDataFromPathAsync("users/" + id + "/Profile/instagram"), // 16
+        getCompatibilityScoreAsync(id), // 17
+      ]);
+    
+
+      // add fields to their list
+      profile_picture_list.push(profile_picture);
+      name_list.push(name);
+      age_list.push(age);
+      bio_list.push(bio);
+      interest1_list.push(interest1);
+      interest2_list.push(interest2);
+      interest3_list.push(interest3);
+      interest4_list.push(interest4);
+      interest5_list.push(interest5);
+      graduation_year_list.push(graduation_year);
+      major_list.push(major);
+      location_list.push(location);
+      preferred_num_roommates_list.push(preferred_num_roommates);
+      preferred_living_location_list.push(preferred_living_location);
+      vaccinated_list.push(vaccinated);
+      instagram_list.push(instagram);
+      compatibility_score_list.push(compatibility_score);
+    } // for-loop
+
+
+
+    // STEP 2: ASSEMBLE THE PROFILES
+    var profile_list = [];
+    for (let i = 0; i < ids.length; i++) {
+      var profile = {
+        id: ids[i],
+        profile_picture: await Asset.loadAsync(profile_picture_list[i]), // load the profile picture asset
+        name: name_list[i],
+        age: age_list[i],
+        bio: bio_list[i],
+        interest1: interest1_list[i],
+        interest2: interest2_list[i],
+        interest3: interest3_list[i],
+        interest4: interest4_list[i],
+        interest5: interest5_list[i],
+        graduation_year: graduation_year_list[i],
+        major: major_list[i],
+        location: location_list[i],
+        preferred_num_roommates: preferred_num_roommates_list[i],
+        preferred_living_location: preferred_living_location_list[i],
+        vaccinated: vaccinated_list[i],
+        instagram: instagram_list[i],
+        compatibility_score: compatibility_score_list[i],
+      };
+
+      // add profile to array
+      profile_list.push(profile);
+    } // for-loop
+
+    
+    // STEP 3: SET PROFILES AND READY STATE TO TRUE
+    await setProfiles(profile_list);
+    setReady(true);
+
+  } // getProfiles()
+
+
+ 
+  
+  // if we have not loaded the users, then load them
+  if (!loaded) {
+    getProfiles();
+    loaded = true;
   }
 
 
-
-  init() {
-    const { gestureState, translationX, translationY, velocityX } = this;
-    const clockX = new Clock();
-    const clockY = new Clock();
-
-    const snapPoint = cond(and(lessThan(translationX, 0), lessThan(velocityX, -15)),
-      -rotatedWidth,
-      cond(
-        and(greaterThan(translationX, 0), greaterThan(velocityX, 15)),
-        rotatedWidth,
-        0,
-      )
-    );
-
-    this.translateX = cond(eq(gestureState, State.END), [
-      set(translationX, runSpring(clockX, translationX, velocityX, snapPoint)),
-        cond(
-          and(
-            eq(clockRunning(clockX), 0),
-            neq(translationX, 0),
-          ),
-          call([translationX], this.onSwiped),
-        ),
-      translationX
-    ],
-      translationX 
-    )
-
-    this.translateY = cond(eq(gestureState, State.END), [
-      set(translationY, runSpring(clockY, translationY, 0, 0)),
-      translationY
-    ],
-      translationY 
-    )
-
-  } // init()
-
-
-
-
-
-  // Function that is called when the user swipes
-  onSwiped = ([translateX]) => {
-    const isLiked = translateX > 0;
-    if (isLiked) {
-      console.log("Profile Liked!");
-    }
-    else {
-      console.log("Profile Disliked!");
-    }
-  } // onSwiped()
-
-
-
-
-
-  render() { 
-    const uid = "mfinder";
-
-    const { onGestureEvent, translateX, translateY } = this;
-
-    // Adds rotation when translateX changes 
-    const rotateZ = concat(interpolateNode(translateX, {
-      inputRange: [-width / 2, width / 2],
-      outputRange: [15, -15],
-      extrapolate: Extrapolate.CLAMP,
-    }), "deg");
-
-    // changes the opacity based on translateX
-    const likeOpacity = interpolateNode(translateX, {
-      inputRange: [0, width / 4],
-      outputRange: [0, 1],
-      extrapolate: Extrapolate.CLAMP,
-    });
-
-    // changes the opacity based on translateX
-    const nopeOpacity = interpolateNode(translateX, {
-      inputRange: [-width / 4, 0],
-      outputRange: [1, 0],
-      extrapolate: Extrapolate.CLAMP,
-    });
-
-    const style = {
-      ...StyleSheet.absoluteFillObject,
-      transform: [
-        { translateX },
-        { translateY },
-        { rotateZ },
-      ],
-    };
-
-
-    
-
+  if (!ready) {
     return (
-      <View style={styles.container}>
-
-        {/* Card */}
-        <View id='card' style={styles.contentContainer}>
-          <PanGestureHandler
-            onHandlerStateChange={onGestureEvent}
-            onGestureEvent={onGestureEvent}
-          >
-            <Animated.View {...{style}}>
-                {/*<CardItem id={uid}/>*/}
-                <Card id={uid} {...{likeOpacity, nopeOpacity}}></Card>
-            </Animated.View>
-          </PanGestureHandler>
-        </View>
-
-
-        {/* Like, Refresh, and Dislike Buttons */}
-        <View style={styles.footer}>
-          <TouchableOpacity style={styles.dislikeWrapper} onPress={() => {
-            console.log("Dislike pressed");
-          }}>
-            {renderIcon("times", 50, Colors.red)}
-          </TouchableOpacity>
-
-          {/* <TouchableOpacity style={styles.refreshWrapper} onPress={() => {
-            console.log("Refresh pressed");
-            refreshScreen();
-          }}>
-            {renderIcon("refresh", 50, Colors.yellow)}
-          </TouchableOpacity> */}
-
-          <TouchableOpacity style={styles.likeWrapper} onPress={() => {
-            console.log("Like pressed");
-          }}>
-            {renderIcon("check", 50, Colors.green)}
-          </TouchableOpacity>
-        </View>
-
+      <View style={{flex: 1}}>
+        <Text>Loading...</Text>
       </View>
     );
   }
-}
+
+  return (
+    <View style={styles.container}>
+
+      {/* Stack of Cards */}
+      <View style={styles.contentContainer}>
+        <CardList {...{profiles}} ></CardList>
+      </View>
+
+
+      {/* Like and Dislike Buttons */}
+      <View style={styles.footer}>
+        <TouchableOpacity onPress={() => {
+          console.log("Dislike pressed");
+          // add swipe left function
+        }}>
+          {renderIcon("times", 50, Colors.red)}
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => {
+          console.log("Like pressed");
+          // add swipe right function
+        }}>
+          {renderIcon("check", 50, Colors.green)}
+        </TouchableOpacity>
+      </View>
+
+    </View>
+  );
+
+} // Feed
 
 
 
@@ -267,26 +233,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 8,
   },
-
-
-  /* Dislike Button */
-  dislikeWrapper: {
-    // marginLeft: 25,
-    // marginRight: 25,
-  },
-  
-  /* Refresh Button */
-  refreshWrapper: {
-    // marginLeft: 20,
-    // marginRight: 20,
-    // alignContent: 'center',
-  },
-
-  /* Like Button */
-  likeWrapper: {
-    // marginLeft: 25,
-    // marginRight: 25,
-  },
-
 
 });

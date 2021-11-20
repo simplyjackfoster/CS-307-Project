@@ -49,6 +49,8 @@ export const writeNewUser = (email, name, phone,
 		preferred_number_of_roommates: "",
 		preferred_living_location: "",
 		instagram: "",
+		age_min: 18,
+		age_max: 100,
 	});
 	writeGender(auth.currentUser.email, gender);
 	writeVaccinated(auth.currentUser.email, vaccinated);
@@ -89,6 +91,7 @@ export const writeNewUser = (email, name, phone,
 	set(ref(rtdb, "users/" + id + "/Feed/Swipe Left List"), {
 		user_count: 0
 	});
+
 	set(ref(rtdb, "users/" + id + "/Feed/Swipe Right List"), {
 		user_count: 0
 	});
@@ -135,6 +138,37 @@ export const writeProfileName = (email_or_id, name) => {
 	});
 } // writeName()
 
+
+/*
+ * writeAgeMin()
+ *
+ * Writes an age min to the specified user in the RTDB
+ * @param email_or_id -> the email or id specifying the user.
+ * @param ageMin -> the ageMin that we will write to the database.
+ */
+export const writeAgeMin = (email_or_id, ageMin) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		age_min: ageMin
+	});
+} // writeAgeMin()
+
+
+/*
+ * writeAgeMax()
+ *
+ * Writes an age max to the specified user in the RTDB
+ * @param email_or_id -> the email or id specifying the user.
+ * @param ageMax -> the ageMax that we will write to the database.
+ */
+export const writeAgeMax = (email_or_id, ageMax) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		age_max: ageMax
+	});
+} // writeAgeMax()
 
 
 
