@@ -13,7 +13,6 @@ import { renderIcon } from "../images/Icons";
 import CardList from '../components/CardList';
 
 import { Asset } from 'expo-asset';
-import Profile from '../components/Profile';
 import { getDataFromPath, getDataFromPathAsync, getAgeAsync } from '../database/readData';
 import { getBlobAsync } from '../database/uploadStorage';
 
@@ -118,9 +117,9 @@ export default () => {
 
 
     // STEP 2: ASSEMBLE THE PROFILES
-    var profile_list: Profile[] = [];
+    var profile_list = [];
     for (let i = 0; i < ids.length; i++) {
-      var profile: Profile = {
+      var profile = {
         id: ids[i],
         profile_picture: await Asset.loadAsync(profile_picture_list[i]), // load the profile picture asset
         name: name_list[i],
