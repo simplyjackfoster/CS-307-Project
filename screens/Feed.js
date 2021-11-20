@@ -33,7 +33,7 @@ export default () => {
    */
   const getProfiles = async () => {
     // get the profile ids from the database (USE ALGORITHM)
-    var ids = ["mfinder", "thylan", "buckle14"]; // using fixed value
+    var ids = ["mfinder", "thylan", "francik"]; // using fixed value
 
     // STEP 1: GET THE PROFILE INFORMATION
 

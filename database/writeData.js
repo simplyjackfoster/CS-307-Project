@@ -91,9 +91,6 @@ export const writeNewUser = (email, name, phone,
 	set(ref(rtdb, "users/" + id + "/Feed/Swipe Left List"), {
 		user_count: 0
 	});
-	set(ref(rtdb, "users/" + id + "/Profile"), {
-		user_count: 0
-	});
 
 	set(ref(rtdb, "users/" + id + "/Feed/Swipe Right List"), {
 		user_count: 0
