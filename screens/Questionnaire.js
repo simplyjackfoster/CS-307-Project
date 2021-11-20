@@ -37,7 +37,6 @@ import {
 import { writeNewUser, writeQuestionnaire } from '../database/writeData';
 import { getDataFromPath } from '../database/readData';
 import { getID } from '../database/ID';
-import { FirebaseError } from '@firebase/util';
 
 // used so that the hooks don't get set rapidly in edit questionnaire
 var updatedTheSelected = false;
@@ -447,7 +446,6 @@ export default ( {navigation} ) => {
             <Picker.Item label={responses[11][2]} value={2} />
             <Picker.Item label={responses[11][3]} value={3} />
             <Picker.Item label={responses[11][4]} value={4} />
-            <Picker.Item label={responses[11][5]} value={5} />
           </Picker>
 
 

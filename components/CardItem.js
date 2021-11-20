@@ -9,14 +9,14 @@ import {
     TouchableOpacity,
     Alert
 } from 'react-native';
-import Animated from 'react-native-reanimated';
+import Animated, { round } from 'react-native-reanimated';
 
 import { getDataFromPath, getInstagramLink, getInterests, getQuestionnaire } from "../database/readData";
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
 import { reportUser } from '../database/writeData';
-import { auth } from './RTDB';
-import { getID } from './ID';
+import { auth } from '../database/RTDB';
+import { getID } from '../database/ID';
 
 
 
@@ -39,10 +39,62 @@ export const CardItem = (props) => {
     const reports = getDataFromPath("reported/" + uid + "/num_reports");
     const interests = getInterests(uid);
 
-    // get my own questionnaire as well as the other user
+    // get my own questionnaire as well as the other user's
     const myUid = getID(auth.currentUser.email);
     const myQuestionnaire = getQuestionnaire(myUid);
     const questionnaire = getQuestionnaire(uid);
+
+    // border color based on the compatibility score (0-33 score is red(0), 34-67 score is yellow(1), 68-100 score is green(2))
+    var compatibility = -1;
+    var borderColor = -1; 
+
+    /*
+     * Utilize the questionnaire data of both users and get a compatibility score between 0 and 100
+     * while also setting
+     */
+    const values = [
+        -1,
+        /* 1 */3,
+        /* 2 */3,
+        /* 3 */4,
+        /* 4 */4,
+        /* 5 */2,
+        /* 6 */2,
+        /* 7 */3,
+        /* 8 */1,
+        /* 9 */3,
+        /* 10 */2,
+        /* 11 */2,
+        /* 12 */1,
+        /* 13 */1,
+    ];
+
+    // keep track of difference adjusted for value and the sum of those differences
+    let diff = 0;
+    let sumOfDiff = 0;
+
+    // sum up the differences
+    for (let i = 1; i <= 13; i++) {
+        diff = values[i] * (questionnaire[i] - myQuestionnaire[i]);
+        if (diff < 0) diff = -diff;
+        console.log("Diff " + i + " = " + diff);
+        sumOfDiff += diff;
+    }
+    console.log("Sum of Differences: " + sumOfDiff);
+
+    // turn the sum of differences (1-110) into a scale from 0 to 100
+    const compatibilityScore = Math.round(100 - ((sumOfDiff / 108) * 100));
+    console.log("Compatibility score between " + myUid + " and " + uid + ": " + compatibilityScore);
+
+    // set the border color based on the score (0-33 is red(0), 34-67 is yellow(1), 68-100 is green(2))
+    borderColor = Math.floor(compatibilityScore / 34);
+
+    // set the global compatibility
+    compatibility = compatibilityScore;
+
+
+
+
 
 
     var age;
@@ -68,49 +120,6 @@ export const CardItem = (props) => {
 
 
 
-    /*
-     * calculateCompatibility()
-     * Function that takes in questionnaire data of the current user and the user being viewed on the card 
-     * and returns a compatibility score between 0 and 100
-     */
-    const calculateCompatibility = () => {
-        const values = [
-            -1,
-            /* 1 */3,
-            /* 2 */3,
-            /* 3 */4,
-            /* 4 */4,
-            /* 5 */2,
-            /* 6 */2,
-            /* 7 */3,
-            /* 8 */1,
-            /* 9 */3,
-            /* 10 */2,
-            /* 11 */2,
-            /* 12 */1,
-            /* 13 */1,
-        ];
-
-        // keep track of difference adjusted for value and the sum of those differences
-        let diff = 0;
-        let sumOfDiff = 0;
-
-        // sum up the differences
-        for (let i = 1; i <= 13; i++) {
-            diff = values[i] * (questionnaire[i] - myQuestionnaire[i]);
-            if (diff < 0) diff = -diff;
-            console.log("Diff " + i + " = " + diff);
-            sumOfDiff += diff;
-        }
-        console.log("Sum of Differences: " + sumOfDiff);
-
-        // turn the sum of differences into a scale from 0 to 100
-        // higher score -> lower compatibility
-        let compatibilityScore = 100 - sumOfDiff;
-
-        return(compatibilityScore);
-    }
-
 
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -127,6 +136,31 @@ export const CardItem = (props) => {
                 {/* Name and Age */}
                 <View style={styles.nameWrapper}>
                     <Text style={styles.nameText}>{name}, {age}</Text>
+                </View>
+
+
+                {/* Compatibility Score (if in feed) */}
+                <View style=
+                    {myUid != uid ? (
+                        styles.compatibilityScoreWrapper
+                    ) : (
+                        {display: 'none'}
+                    )}
+                >
+                    {/* <View> */}
+                        {/* <Text style={styles.compatibilityScoreText}>Compatibility: </Text> */}
+
+                        <Text style=
+                            {[styles.compatibilityScoreContent,
+                            borderColor == 0 ? (
+                                {borderColor: Colors.red}
+                            ) : (
+                                {borderColor: borderColor == 1 ? Colors.yellow : Colors.green}
+                            )]}
+                        >
+                            {compatibilityScore}
+                        </Text>
+                    {/* </View> */}
                 </View>
 
 
@@ -286,19 +320,7 @@ export const CardItem = (props) => {
                 </View>
 
 
-                {/* Compatibility Score (if in feed) */}
-                <View style=
-                    {myUid != uid ? (
-                        styles.compatibilityScoreWrapper
-                    ) : (
-                        {display: 'none'}
-                    )}
-                >
-                    <View>
-                        {renderIcon("clone", 25, Colors.royalBlue)}
-                    </View>
-                    <Text style={styles.compatibilityScoreContent}>Compatibility Score: {calculateCompatibility()}</Text>
-                </View>
+                
 
 
                 {/* Instagram (optional) */}
@@ -501,10 +523,20 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         flexDirection: 'row',
     },
+    
+    compatibilityScoreText: {
+        flexDirection: 'row',
+        fontSize: 20,
+        paddingTop: 5,
+        paddingRight: 10,
+    },
 
     compatibilityScoreContent: {
-        paddingLeft: 15,
-        fontSize: 20, 
+        alignContent: 'flex-end',
+        fontSize: 20,
+        borderWidth: 2.5,
+        borderRadius: 20,
+        padding: 5,
     },
 
 
