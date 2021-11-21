@@ -20,7 +20,7 @@ import { renderIcon } from "../images/Icons";
 import { auth } from '../database/RTDB';
 
 // database read/write/remove imports
-import { getDataFromPath, getInstagramLink } from '../database/readData';
+import { getDataFromPath, getInstagramLink, getInterestListProfile } from '../database/readData';
 import { getID } from '../database/ID';
 
 
@@ -97,8 +97,8 @@ export default ( {navigation} ) => {
 			<View style={{marginTop: 40}}/>
 
 
+			{/* Email: <email> */}
 			<View style={styles.fullInfoWrapper}>
-				{/* Email: <email> */}
 				<View style={styles.infoWrapper}>
 					<View style={styles.icon}>
 						{renderIcon("envelope", 25, Colors.royalBlue)}
@@ -111,7 +111,7 @@ export default ( {navigation} ) => {
 			
 			{/* Gender: <gender> */}
 			<View style={styles.infoWrapper}>
-				<View style={styles.icon}>
+				<View style={styles.iconGender}>
 					{renderIcon("male", 25, Colors.royalBlue)}
 				</View>
 				<Text style={styles.infoHeaderGender}>Gender:</Text>
@@ -177,7 +177,7 @@ export default ( {navigation} ) => {
 				(styles.infoWrapper)
 				: ({display: 'none'})
 				}>
-				<View style={styles.icon}>
+				<View style={styles.iconLocation}>
 					{renderIcon("map-pin", 25, Colors.royalBlue)}
 				</View>
 				<Text style={styles.infoHeaderLocation}>Location:</Text>
@@ -207,7 +207,7 @@ export default ( {navigation} ) => {
 				(styles.infoWrapper)
 				: ({display: 'none'})
 				}>
-				<View style={styles.icon}>
+				<View style={styles.iconMajor}>
 					{renderIcon("book", 25, Colors.royalBlue)}
 				</View>
 				<Text style={styles.infoHeaderMajor}>Major:</Text>
@@ -281,6 +281,22 @@ export default ( {navigation} ) => {
 				</Text>
 			</View>
 
+			{/* Interests: <interest_list> */}
+			{/* "users/" + id + "/Profile/Interests" */}
+			<View style={
+				getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/Interests/interest1") ?
+				(styles.infoWrapper)
+				: ({display: 'none'})
+				}>
+				<View style={styles.icon}>
+					{renderIcon("user-plus", 25, Colors.royalBlue)}
+				</View>
+				<Text style={styles.infoHeaderVax}>Interests:</Text>
+				<Text style={styles.infoContent}>
+					{getInterestListProfile(auth.currentUser.email)} 
+				</Text>
+			</View>
+
 			{/* Ghost Mode */}
 			<View style={styles.disableWrapper}>
 				<View style={styles.icon}>
@@ -333,6 +349,20 @@ const styles = StyleSheet.create({
 
 	icon: {
 		paddingRight: 5,
+	},
+
+	iconGender: {
+		paddingLeft: 4,
+		paddingRight: 1,
+	},
+
+	iconLocation: {
+		paddingLeft: 5,
+	},
+
+	iconMajor: {
+		paddingLeft: 3,
+		paddingRight: 2,
 	},
 
 	infoWrapper: {
