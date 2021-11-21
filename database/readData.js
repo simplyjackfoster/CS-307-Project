@@ -85,6 +85,35 @@ export const getInstagramLink = (email_or_id) => {
 } // getInstagramLink()
 
 
+export const getInterestListProfile = (email_or_id) => {
+	const id = getID(email_or_id);
+	var int1 = getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/Interests/interest1")
+	var int2 = getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/Interests/interest2")
+	var int3 = getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/Interests/interest3")
+	var int4 = getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/Interests/interest4")
+	var int5 = getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/Interests/interest5")
+	console.log(int1)
+	console.log(int2)
+	console.log(int3)
+	console.log(int4)
+	console.log(int5)
+	var out = int1
+
+	if(int2 != '') {
+		out += ', ' + int2
+	}
+	if(int3 != '') {
+		out += ', ' + int3
+	}
+	if(int4 != '') {
+		out += ', ' + int4
+	}
+	if(int5 != '') {
+		out += ', ' + int5
+	}
+	return out
+}
+
 
 
 
