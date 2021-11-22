@@ -12,20 +12,18 @@ import {
 import Colors from "../constants/Colors";
 import MatchItem from '../components/MatchItem';
 import Card from '../components/Card';
-
+import { MatchInteractContext } from '../context';
 
 /*
  * This is the screen where the user can view their matches.
  */
-var testUid = "foste205"
-//const [showProfile] = React.useState(true)
-var matched = true;
 export default ( {navigation} ) => {
-
+  const { matchToken, setMatchToken } = React.useContext(MatchInteractContext);
+  console.log("Viewing user: " + matchToken);
   return (
     <ScrollView style={styles.container}>
       <View>
-        <Card id={"foste205"}></Card>
+        <Card id={matchToken}></Card>
       </View>
     </ScrollView>
 

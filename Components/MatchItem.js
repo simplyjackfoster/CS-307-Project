@@ -12,9 +12,11 @@ import {
 import { getDataFromPath, getInstagramLink } from "../database/readData";
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
+import { MatchInteractContext } from '../context';
 
 const MatchItem = (props) => {
     //const { userToken, setUserToken }  = React.useContext();
+    const { matchToken, setMatchToken } = React.useContext(MatchInteractContext);
     const [displayMatch, setDisplayMatch] = React.useState(true);
 
     const uid = props.id;
@@ -64,6 +66,13 @@ const MatchItem = (props) => {
         // figure out navigation to the messages screen from a component
     }
 
+    const updateMatch = () => {
+        //set match token to display by calling viewProfile's viewProfile function
+        setMatchToken(String(uid));
+        console.log("match: " + matchToken);
+        props.func();
+    }
+
 
     return (
         
@@ -74,11 +83,10 @@ const MatchItem = (props) => {
                 {display: 'none'}
             )}
         >
-
+            {/* Update current match to view, and show them */}
             <TouchableOpacity
                 onPress={() =>
-                    //something
-                    props.func()
+                    updateMatch()
                 }
             >
                 <Image style = {styles.profileImage}source={{uri: profile_picture}}/>

@@ -13,6 +13,7 @@ import {
 import Colors from "../constants/Colors";
 import MatchItem from '../components/MatchItem';
 import Messages from './Messages';
+import { MatchInteractContext } from '../context';
 
 
 
@@ -23,12 +24,14 @@ var testUid = "foste205"
 //const [showProfile] = React.useState(true)
 var matched = true;
 export default ( {navigation} ) => {
+  const { matchToken, setMatchToken } = React.useContext(MatchInteractContext);
 
+  /*
+   *  Open view profile page
+   */
   const viewProfile = () => {
-    // remove the uid from the match list in the database
-    console.log("Pressed");
-    navigation.push("ViewProfile")
-  }
+    navigation.push("ViewProfile");
+  } //viewProfile
 
   if (!matched) {
     return (
