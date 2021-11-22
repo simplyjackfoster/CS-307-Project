@@ -442,10 +442,9 @@ export const isValidMajor = (major) => {
 
 
 /*
- * isValidMajor()
+ * isValidAgeMin()
  *
- * function to check if a major is valid. returns true if it is either
- * null or contains only letters. Otherwise returns false.
+ * function to check if age min is valid.
  */
 export const isValidAgeMin = (ageMin) => {
 	if (!ageMin) {
@@ -478,14 +477,15 @@ export const isValidAgeMin = (ageMin) => {
 	}
 
 	return true;
-} // isValidMajor()
+} // isValidAgeMin()
+
+
 
 
 /*
- * isValidMajor()
+ * isValidAgeMax()
  *
- * function to check if a major is valid. returns true if it is either
- * null or contains only letters. Otherwise returns false.
+ * function to check if age max is valid.
  */
 export const isValidAgeMax = (ageMax) => {
 	if (!ageMax) {
@@ -518,7 +518,12 @@ export const isValidAgeMax = (ageMax) => {
 	}
 
 	return true;
-} // isValidMajor()
+} // isValidAgeMax()
+
+
+
+
+
 
 
 

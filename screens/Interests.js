@@ -1,11 +1,11 @@
 import React, {useState, useEffect } from 'react';
-import { SafeAreaView } from 'react-native';
 import {
 	StyleSheet,
 	View,
 	Text,
 	TouchableOpacity,
-	ScrollView
+	ScrollView,
+	SafeAreaView,
 } from 'react-native';
 import Colors from '../constants/Colors';
 import InterestItem from '../components/InterestItem';
@@ -40,19 +40,6 @@ export default ( {navigation} ) => {
 
 				<View style={styles.interestsConainer}>
 					
-				{/*	<TouchableOpacity 
-						onPress={() => {
-							console.log("interest1: " + interest1);
-							console.log("interest2: " + interest2);
-							console.log("interest3: " + interest3);
-							console.log("interest4: " + interest4);
-							console.log("interest5: " + interest5);
-						}}
-					>
-						<Text>Yes</Text>
-					</TouchableOpacity> */}
-
-
 					{/* Music */}
 					<InterestItem
 						value={"Music"}

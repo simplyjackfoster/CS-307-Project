@@ -45,19 +45,7 @@ export const uploadProfilePicture = (email_or_id, uri) => {
  */
 async function uploadImageAsync(storage_path, uri, rtdb_path) {
 	// get blob from uri so we can upload it to storage
-  const blob = await new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function() {
-      resolve(xhr.response);
-    };
-    xhr.onerror = function(e) {
-      console.log(e);
-      reject(new TypeError('Network request failed'));
-    };
-    xhr.responseType = 'blob';
-    xhr.open('GET', uri, true);
-    xhr.send(null);
-  });
+	const blob = await getBlobAsync(uri);
 
 
 	// upload bytes from the blob to storage
@@ -87,6 +75,33 @@ async function uploadImageAsync(storage_path, uri, rtdb_path) {
   // We're done with the blob, close and release it
   blob.close();
 } // uploadImageAsync()
+
+
+
+
+/*
+ * Given a uri to an image, this function returns the blob of the image.
+ * @param uri -> the uri to an image.
+ * @return -> the blob of the specified image.
+ */
+export const getBlobAsync = async (uri) => {
+  const blob = await new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+      resolve(xhr.response);
+    };
+    xhr.onerror = function(e) {
+      console.log(e);
+      reject(new TypeError('Network request failed'));
+    };
+    xhr.responseType = 'blob';
+    xhr.open('GET', uri, true);
+    xhr.send(null);
+  });
+	return blob;
+} // getBlob()
+
+
 
 
 

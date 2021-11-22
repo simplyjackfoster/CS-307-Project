@@ -49,8 +49,8 @@ export const writeNewUser = (email, name, phone,
 		preferred_number_of_roommates: "",
 		preferred_living_location: "",
 		instagram: "",
-		age_min: 18,
-		age_max: 100,
+		age_min: "18",
+		age_max: "100",
 	});
 	writeGender(auth.currentUser.email, gender);
 	writeVaccinated(auth.currentUser.email, vaccinated);
@@ -89,9 +89,6 @@ export const writeNewUser = (email, name, phone,
 
 	// write the "Feed", "Swipe Left List", and "Swipe Right List"
 	set(ref(rtdb, "users/" + id + "/Feed/Swipe Left List"), {
-		user_count: 0
-	});
-	set(ref(rtdb, "users/" + id + "/Profile"), {
 		user_count: 0
 	});
 
@@ -151,9 +148,11 @@ export const writeProfileName = (email_or_id, name) => {
  */
 export const writeAgeMin = (email_or_id, ageMin) => {
 	const id = getID(email_or_id);
+	const ageMinStr = ageMin.toString();
+
 
 	update(ref(rtdb, "users/" + id + "/Profile"), {
-		age_min: ageMin
+		age_min: ageMinStr
 	});
 } // writeAgeMin()
 
@@ -167,9 +166,10 @@ export const writeAgeMin = (email_or_id, ageMin) => {
  */
 export const writeAgeMax = (email_or_id, ageMax) => {
 	const id = getID(email_or_id);
+	const ageMaxStr = ageMax.toString();
 
 	update(ref(rtdb, "users/" + id + "/Profile"), {
-		age_max: ageMax
+		age_max: ageMaxStr
 	});
 } // writeAgeMax()
 
