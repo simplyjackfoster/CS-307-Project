@@ -19,17 +19,23 @@ import { HeaderBackButton } from 'react-navigation';
 /*
  * This is the screen where the user can view their matches.
  */
+var user;
 export default ( {navigation} ) => {
   const { matchToken, setMatchToken } = React.useContext(MatchInteractContext);
-  var user = matchToken;
+  //Prevents null errors from displaying upon back navigation
+  if (matchToken != null) {
+    //makes a copy of the user string
+    user = JSON.parse(JSON.stringify(matchToken));
+  }
   console.log("Viewing user: " + matchToken);
   return (
     <ScrollView style={styles.container}>
       <View style= {matchToken ? (
-        <Card id={user}></Card>
+        ({/* nothing */})
         ) :
         ({display: 'none'}) 
         }>
+        <Card id={user}></Card>
       </View>
     </ScrollView>
 
@@ -58,6 +64,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  
+  footer: {
+    flex: 0.15,
+    alignSelf: 'center',
+    paddingTop: 5,
+    paddingHorizontal: 300,
+    paddingBottom: 25,
+    backgroundColor: Colors.lightGray,
+  },
 
 });
