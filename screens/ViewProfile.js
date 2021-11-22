@@ -7,51 +7,35 @@ import {
   useState,
   useEffect,
   ScrollView,
-  TouchableOpacity,
-  Button 
+  Button, 
+  BackHandler
 } from 'react-native';
 import Colors from "../constants/Colors";
 import MatchItem from '../components/MatchItem';
-import Messages from './Messages';
+import Card from '../components/Card';
 import { MatchInteractContext } from '../context';
-
-
+import { HeaderBackButton } from 'react-navigation';
 
 /*
  * This is the screen where the user can view their matches.
  */
-//const [showProfile] = React.useState(true)
-var matched = true;
+var user;
 export default ( {navigation} ) => {
   const { matchToken, setMatchToken } = React.useContext(MatchInteractContext);
-
-  React.useEffect(() => {
-    const list = navigation.addListener('focus', () => {
-      setMatchToken(null);
-    });
-    return list;
-  });
-
-  /*
-   *  Open view profile page
-   */
-  const viewProfile = () => {
-    navigation.push("ViewProfile");
-  } //viewProfile
-
-  if (!matched) {
-    return (
-      <View style={styles.noMatchContainer}>
-        <Text>You have no matches</Text>
-      </View>
-    );
+  //Prevents null errors from displaying upon back navigation
+  if (matchToken != null) {
+    //makes a copy of the user string
+    user = JSON.parse(JSON.stringify(matchToken));
   }
+  console.log("Viewing user: " + matchToken);
   return (
     <ScrollView style={styles.container}>
-      <View>
-        <MatchItem id={"foste205"} func={viewProfile}/>
-        <MatchItem id={"thylan"} func={viewProfile}/>
-        <MatchItem id={"mfinder"} func={viewProfile}/>
+      <View style= {matchToken ? (
+        ({/* nothing */})
+        ) :
+        ({display: 'none'}) 
+        }>
+        <Card id={user}></Card>
       </View>
     </ScrollView>
 
@@ -80,6 +64,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  
+  footer: {
+    flex: 0.15,
+    alignSelf: 'center',
+    paddingTop: 5,
+    paddingHorizontal: 300,
+    paddingBottom: 25,
+    backgroundColor: Colors.lightGray,
+  },
 
 });
