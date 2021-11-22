@@ -28,7 +28,7 @@ export default class Card extends Component {
 
 	render() {
 		const { profile, likeOpacity, nopeOpacity } = this.props;
-
+        console.log("Loading card");
         return (
             <View style={styles.container}>
                 {/* The Card */}
