@@ -9,6 +9,8 @@ import Questionnaire from '../screens/Questionnaire';
 import Interests from '../screens/Interests';
 
 import Colors from '../constants/Colors';
+import Messages from '../screens/Messages';
+import ChatScreen from '../screens/ChatScreen';
 
 const Stack = createStackNavigator();
 
@@ -49,6 +51,12 @@ const HomeStack = () => {
 			<Stack.Screen name="ResetPassword" component={ResetPassword}
 				options={{
 					headerTitle: "Reset Password",
+					headerBackTitle: "Back"
+				}}
+			/>
+
+			<Stack.Screen name="Chat" component={ChatScreen}
+				options={{
 					headerBackTitle: "Back"
 				}}
 			/>
