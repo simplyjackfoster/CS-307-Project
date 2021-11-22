@@ -16,7 +16,6 @@ import { renderIcon } from "../images/Icons";
 
 
 const MatchItem = (props) => {
-    //const { userToken, setUserToken }  = React.useContext();
     const [displayMatch, setDisplayMatch] = React.useState(true);
 
     const uid = props.id;
@@ -24,29 +23,6 @@ const MatchItem = (props) => {
     const name = getDataFromPath("users/" + uid + "/Profile/profile_name");
     const location = getDataFromPath("users/" + uid + "/Profile/location");
     const major = getDataFromPath("users/" + uid + "/Profile/major");
-    // const bday = getDataFromPath("users/" + uid + "/Critical Information/birthday");
-
-    /* Used for age calculation */
-    // var age;
-    // if(bday != null) { // Seems redundant, but during loading page, bday is briefly null
-    //     const bday_day = bday.substring(0, 2)
-    //     const bday_month = bday.substring(3, 5)
-    //     const bday_year = bday.substring(6)
-
-    //     const date = new Date();
-    //     const curr_day = date.getDate();
-    //     const curr_month = date.getMonth() + 1;
-    //     const curr_year = date.getFullYear();
-    //     age = curr_year - bday_year;
-
-    //     // Giga brain math to calculate true age
-    //     if(bday_month >= curr_month) {
-    //         if(bday_day > curr_day) {
-    //             age -= 1
-    //         }
-    //     }
-    // }
-
 
     const removeMatch = () => {
         // remove the uid from the match list in the database
