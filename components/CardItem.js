@@ -20,7 +20,7 @@ import { getID } from '../database/ID';
 
 
 
-export const CardItem = (props) => {
+export const CardItem = (props, {navigation}) => {
     const { profile, likeOpacity, nopeOpacity } = props;
 
     const getBorderColor = () => {
@@ -54,20 +54,16 @@ export const CardItem = (props) => {
                         {display: 'none'}
                     )}
                 >
-                    {/* <View> */}
-                        {/* <Text style={styles.compatibilityScoreText}>Compatibility: </Text> */}
-
-                        <Text style=
-                            {[styles.compatibilityScoreContent,
-                            getBorderColor() == 0 ? (
-                                {borderColor: Colors.red}
-                            ) : (
-                                {borderColor: getBorderColor() == 1 ? Colors.yellow : Colors.green}
-                            )]}
-                        >
-                            {profile.compatibility_score}%
-                        </Text>
-                    {/* </View> */}
+                    <Text style=
+                        {[styles.compatibilityScoreContent,
+                        getBorderColor() == 0 ? (
+                            {borderColor: Colors.red}
+                        ) : (
+                            {borderColor: getBorderColor() == 1 ? Colors.yellow : Colors.green}
+                        )]}
+                    >
+                        {profile.compatibility_score}%
+                    </Text>
                 </View>
 
 
@@ -227,7 +223,13 @@ export const CardItem = (props) => {
                 </View>
 
 
-                
+                {/* View Questionnaire (button) */}
+                <TouchableOpacity
+                    style={styles.viewQuestionnaireButton}
+                    onPress={() => navigation.push("ViewQuestionnaire")}				
+                >
+                    <Text style={styles.viewQuestionnaireText}>View Questionnaire</Text>
+                </TouchableOpacity>
 
 
                 {/* Instagram (optional) */}
@@ -482,6 +484,19 @@ const styles = StyleSheet.create({
         fontSize: 12,
         paddingTop: 3,
         alignSelf: 'center',
+    },
+
+    /* View Questionnaire */
+    viewQuestionnaireText: {
+		fontSize: 18, 
+		color: Colors.royalBlue,
+		textDecorationLine: 'none',
+    },
+
+    viewQuestionnaireButton: {
+		margin: 15,
+        marginTop: 20, 
+		alignSelf: 'center',
     },
     
 
