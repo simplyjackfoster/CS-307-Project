@@ -26,7 +26,7 @@ export const CardItem = (props) => {
     const getBorderColor = () => {
         return Math.floor(profile.compatibility_score / 34);
     }
-
+    console.log("Loading card item");
 
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
