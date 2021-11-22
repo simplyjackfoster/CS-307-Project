@@ -23,7 +23,6 @@ export default ({ navigation }) =>{
       style={styles.bg}
     >
       <View style={styles.containerMessages}>
-        <ScrollView>
           <View style={styles.top}>
             <Text style={styles.title}>Messages</Text>
           </View>
@@ -34,7 +33,6 @@ export default ({ navigation }) =>{
               <Message id={item.id} />
             )}
           />
-        </ScrollView>
       </View>
     </ImageBackground>
   );
