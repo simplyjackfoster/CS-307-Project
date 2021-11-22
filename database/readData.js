@@ -17,9 +17,6 @@ export const getDataFromPath = (path) => {
 	const dbRef = ref(rtdb);
 	const [data, setData] = useState(null);
 
-	// end of path
-	//const endPath = path.split('/').pop();
-
 	// get the data
 	get(child(dbRef, path)).then((snapshot) => {
 		if (snapshot.exists()) {
@@ -47,9 +44,6 @@ export const getDataFromPath = (path) => {
  */
 export const getDataFromPathAsync = async (path) => {
 	const dbRef = ref(rtdb);
-
-	// end of path
-	//const endPath = path.split('/').pop();
 
 	// get the data
 	const data = await get(child(dbRef, path)).then((snapshot) => {
@@ -85,6 +79,14 @@ export const getInstagramLink = (email_or_id) => {
 } // getInstagramLink()
 
 
+/*
+ * getInterestListProfile()
+ *
+ * Function that returns the interests in the form that will be displayed
+ * on the profile screen.
+ * @param email_or_id -> the email or id to the specified user.
+ * @return -> the intersts in the form "interest1, interest2, interest3, interest4, interest5".
+ */
 export const getInterestListProfile = (email_or_id) => {
 	const id = getID(email_or_id);
 	var int1 = getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/Interests/interest1")
@@ -92,11 +94,6 @@ export const getInterestListProfile = (email_or_id) => {
 	var int3 = getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/Interests/interest3")
 	var int4 = getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/Interests/interest4")
 	var int5 = getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/Interests/interest5")
-	console.log(int1)
-	console.log(int2)
-	console.log(int3)
-	console.log(int4)
-	console.log(int5)
 	var out = int1
 
 	if(int2 != '') {
@@ -111,8 +108,8 @@ export const getInterestListProfile = (email_or_id) => {
 	if(int5 != '') {
 		out += ', ' + int5
 	}
-	return out
-}
+	return out;
+} // getInterestListProfile()
 
 
 
@@ -179,26 +176,12 @@ export const getQuestionnaireAsync = async (email_or_id) => {
 	]);
 
 
-	// const response1 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_people_over");
-	// const response2 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/is_clean");
-	// const response3 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/week_bedtime");
-	// const response4 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/weekend_bedtime");
-	// const response5 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/drinks_alcohol");
-	// const response6 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/smokes");
-	// const response7 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/handle_chores");
-	// const response8 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_car");
-	// const response9 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/wants_pets");
-	// const response10 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/introverted_or_extraverted");
-	// const response11 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/check_before_having_people_over");
-	// const response12 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/joint_grocery_shopping");
-	// const response13 = await getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_significant_other");
-
 	// start indexing at 1 for simplicity
 	const responses = [-1, response1, response2, response3, response4, response5, response6, response7, 
 		response8, response9, response10, response11, response12, response13];
 
 	return responses;
-}
+} // getQuestionnaireAsync()
 
 
 
@@ -238,7 +221,7 @@ export const getCompatibilityScoreAsync = async (uid) => {
     for (let i = 1; i <= 13; i++) {
         diff = values[i] * (questionnaire[i] - myQuestionnaire[i]);
         if (diff < 0) diff = -diff;
-        console.log("Diff " + i + " = " + diff);
+        //console.log("Diff " + i + " = " + diff);
         sumOfDiff += diff;
     }
 
@@ -248,7 +231,7 @@ export const getCompatibilityScoreAsync = async (uid) => {
 
     return compatibilityScore;
 
-} //getCompatibilityScoreAsync
+} // getCompatibilityScoreAsync()
 
 
 

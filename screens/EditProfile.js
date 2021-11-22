@@ -90,14 +90,11 @@ export default ( {navigation} ) => {
   const [instagramChanged, setInstagramChanged] = React.useState(false);
   const [gender, setGender] = React.useState(1);
   const [vaccinated, setVaccinated] = React.useState(1);
+
   const [min, setMin] = React.useState(false);
   const [max, setMax] = React.useState(false);
   const [fMin, setFMin] = React.useState(null);
   const [fMax, setFMax] = React.useState(null);
-
-  // DELETE
-  const [interest, setInterest] = React.useState("Football");
-
   const [ageMin, setAgeMin] = React.useState(null);
   const [ageMinChanged, setAgeMinChanged] = React.useState(false);
   const [ageMax, setAgeMax] = React.useState(null);
@@ -166,7 +163,6 @@ export default ( {navigation} ) => {
               "/Profile/age_min")).then((snapshot) => {
       if (snapshot.exists()) {
         const min = snapshot.val();
-        console.log("MIN BEFORE " + min)
         setFMin(min);
         if(min == "") {
           setMin(false);
@@ -183,7 +179,6 @@ export default ( {navigation} ) => {
               "/Profile/age_max")).then((snapshot) => {
       if (snapshot.exists()) {
         const max = snapshot.val();
-        console.log("MAX BEFORE " + max)
         setFMax(max);
 
         if(max == "") {
