@@ -26,6 +26,13 @@ var matched = true;
 export default ( {navigation} ) => {
   const { matchToken, setMatchToken } = React.useContext(MatchInteractContext);
 
+  React.useEffect(() => {
+    const list = navigation.addListener('focus', () => {
+      setMatchToken(null);
+    });
+    return list;
+  });
+
   /*
    *  Open view profile page
    */

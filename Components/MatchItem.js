@@ -69,7 +69,7 @@ const MatchItem = (props) => {
     const updateMatch = () => {
         //set match token to display by calling viewProfile's viewProfile function
         setMatchToken(String(uid));
-        console.log("match: " + matchToken);
+        //console.log("match: " + matchToken);
         props.func();
     }
 

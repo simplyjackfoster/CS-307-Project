@@ -7,23 +7,29 @@ import {
   useState,
   useEffect,
   ScrollView,
-  Button 
+  Button, 
+  BackHandler
 } from 'react-native';
 import Colors from "../constants/Colors";
 import MatchItem from '../components/MatchItem';
 import Card from '../components/Card';
 import { MatchInteractContext } from '../context';
+import { HeaderBackButton } from 'react-navigation';
 
 /*
  * This is the screen where the user can view their matches.
  */
 export default ( {navigation} ) => {
   const { matchToken, setMatchToken } = React.useContext(MatchInteractContext);
+  var user = matchToken;
   console.log("Viewing user: " + matchToken);
   return (
     <ScrollView style={styles.container}>
-      <View>
-        <Card id={matchToken}></Card>
+      <View style= {matchToken ? (
+        <Card id={user}></Card>
+        ) :
+        ({display: 'none'}) 
+        }>
       </View>
     </ScrollView>
 
