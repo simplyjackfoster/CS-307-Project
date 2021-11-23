@@ -80,6 +80,36 @@ export const getInstagramLink = (email_or_id) => {
 
 
 /*
+ * getFacebookLink()
+ *
+ * This function can be used to get the url link to a users facebook.
+ * @param email_or_id -> the email or id to the specified user.
+ * @return -> the url link to the specified user's facebook.
+ */
+export const getFacebookLink = (email_or_id) => {
+	const id = getID(email_or_id);
+	var facebook_username = getDataFromPath("users/" + id + "/Profile/facebook");
+	var url = "https://www.facebook.com/" + facebook_username + "/";
+	return url;
+} // getFacebookLink()
+
+
+/*
+ * getLinkedInLink()
+ *
+ * This function can be used to get the url link to a users linkedIn.
+ * @param email_or_id -> the email or id to the specified user.
+ * @return -> the url link to the specified user's linkedIn.
+ */
+export const getLinkedInLink = (email_or_id) => {
+	const id = getID(email_or_id);
+	var linkedIn_username = getDataFromPath("users/" + id + "/Profile/linkedIn");
+	var url = "https://www.linkedin.com/in/" + linkedIn_username + "/";
+	return url;
+} // getLinkedInLink()
+
+
+/*
  * getInterestListProfile()
  *
  * Function that returns the interests in the form that will be displayed

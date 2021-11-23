@@ -623,3 +623,79 @@ export const isValidInstagram = (username) => {
 	return true;
 } // isValidInstagram()
 
+/*
+ * isValidFacebook()
+ *
+ * function to check if the facebook name entered is valid.
+ * @param username -> the username of the user.
+ * @return -> true if the username is valid, false if it is invalid.
+ */
+export const isValidFacebook = (username) => {
+	if (!username) {
+		return true;
+	}
+
+	let count = 0; // verifies min length 
+	// iterate through the characters in the name
+	for (const c of username) {
+		count++;
+
+		// 8216 and 8217 are the acsii values for apostrophes in iOS
+		if ((c === '.') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
+				(c >= '0' && c <= '9')) {
+			// valid character
+		}
+		else {
+			// invalid character
+			Alert.alert("Error", "Facebook field contains invalid character: '" + c + 
+				"', please try again.", [{ text: "Ok" }]);
+
+			return false;
+		}
+	}
+
+	if(count < 5) {
+		Alert.alert("Error", "Facebook field requires at least 5 characters, please try again.", [{ text: "Ok" }]);
+		return false;
+	}
+
+	if(username[username.length - 1] == '.') {
+		Alert.alert("Error", "Facebook field must not end with a '.', please try again.", [{ text: "Ok" }]);
+		return false;
+	}
+
+	return true;
+} // isValidFacebook()
+
+
+/*
+ * isValidLinkedIn()
+ *
+ * function to check if the linkedIn name entered is valid.
+ * @param username -> the username of the user.
+ * @return -> true if the username is valid, false if it is invalid.
+ */
+export const isValidLinkedIn = (username) => {
+	if (!username) {
+		return true;
+	}
+
+	// iterate through the characters in the name
+	for (const c of username) {
+		
+		// All acceptable characters for linkedIn name
+		if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')
+				|| (c == '-')) {
+			// valid character
+		}
+		else {
+			// invalid character
+			Alert.alert("Error", "LinkedIn field contains invalid character: '" + c + 
+				"', please try again.", [{ text: "Ok" }]);
+
+			return false;
+		}
+	}
+
+	return true;
+} // isValidLinkedIn()
