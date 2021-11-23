@@ -26,7 +26,6 @@ export const CardItem = (props) => {
     const getBorderColor = () => {
         return Math.floor(profile.compatibility_score / 34);
     }
-    console.log("Loading card item");
 
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -240,9 +239,11 @@ export const CardItem = (props) => {
                 >
                     <TouchableOpacity style={styles.instagramButton}
                         onPress={async () => {
-                            const supported = await Linking.canOpenURL(getInstagramLink(profile.instagram));
+                            const supported = await Linking.canOpenURL("https://www.instagram.com/"
+                                            + profile.instagram + "/");
                             if (supported) {
-                                Linking.openURL(getInstagramLink(profile.instagram));
+                                Linking.openURL("https://www.instagram.com/"
+                                            + profile.instagram + "/");
                             }
                             else {
                                 console.log("Instagram Link doesn't exist");
