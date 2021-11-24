@@ -21,11 +21,22 @@ import { getID } from '../database/ID';
 
 
 export const CardItem = (props, {navigation}) => {
-    const { profile, likeOpacity, nopeOpacity } = props;
+    const { profile, viewQuest, likeOpacity, nopeOpacity } = props;
 
     const getBorderColor = () => {
         return Math.floor(profile.compatibility_score / 34);
     }
+
+    // this does not work, but it's an idea
+    // const getReports = () => {
+    //     var reportedUser = getDataFromPath("reported/" + profile.id);
+    //     var reports = 0;
+    //     if (typeof reportedUser == Object) {
+    //         console.log("user was reported");
+    //         reports = getDataFromPath("reported/" + profile.id + "/num_reports");
+    //     }
+    // }
+    // getReports();
 
 
     return (
@@ -226,7 +237,11 @@ export const CardItem = (props, {navigation}) => {
                 {/* View Questionnaire (button) */}
                 <TouchableOpacity
                     style={styles.viewQuestionnaireButton}
-                    onPress={() => navigation.push("ViewQuestionnaire")}				
+                    onPress={() => {
+                        console.log("Viewing Questionnaire from card item");
+                        // viewQuest();
+                        navigation.push("ViewQuestionnaire")
+                    }}
                 >
                     <Text style={styles.viewQuestionnaireText}>View Questionnaire</Text>
                 </TouchableOpacity>

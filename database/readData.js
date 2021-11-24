@@ -25,6 +25,7 @@ export const getDataFromPath = (path) => {
 		}
 		else {
 			console.log("This data is unavailable: " + path);
+			return null;
 		}
 	}).catch((error) => {
 		console.error(error);
@@ -138,7 +139,7 @@ export const getInterests = (email_or_id) => {
 
 
 /*
- * 
+ * get the Questionnaire data in an array of response values asynchronously
  */
 export const getQuestionnaireAsync = async (email_or_id) => {
 	const id = getID(email_or_id);

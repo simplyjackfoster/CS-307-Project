@@ -23,7 +23,7 @@ import { getCompatibilityScoreAsync } from '../database/readData';
 
 var loaded = false;
 
-export default () => {
+export default ( {navigation} ) => {
   const [ready, setReady] = React.useState(false);
   const [profiles, setProfiles] = React.useState(null);
 
@@ -35,7 +35,7 @@ export default () => {
    */
   const getProfiles = async () => {
     // get the profile ids from the database (USE ALGORITHM)
-    var ids = ["mfinder", "thylan", "francik"]; // using fixed value
+    var ids = ["mfinder", "test", "francik"]; // using fixed value
 
     // STEP 1: GET THE PROFILE INFORMATION
 
@@ -175,6 +175,7 @@ export default () => {
       </View>
     );
   }
+
 
   return (
     <View style={styles.container}>

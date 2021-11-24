@@ -21,9 +21,11 @@ export default ( {navigation} ) => {
 
 
     return(
-        <ScrollView style={styles.container}>
-        
-        </ScrollView>
+      <ScrollView style={styles.container}>
+          <Text>
+            This is the other user's questionnaire.
+          </Text>
+      </ScrollView>
     );
 }
 

@@ -220,15 +220,24 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
       );
     }
 
+
+    // function that navigates to the view questionnaire screen 
+    const viewQuestionnaire = () => {
+      console.log("Navigating to view questionnaire")
+      navigation.push("ViewQuestionnaire");
+    }
+
 		return (
 			<View style={styles.container}>
+
+        
 
         {/* Cards Stack */}
         <View style={styles.contentContainer}>
           <View style={styles.cards}>
           {
             profiles.reverse().map((profile) => (
-              <Card key={profile.id} profile={profile}></Card>
+              <Card key={profile.id} profile={profile} viewQuest={viewQuestionnaire}></Card>
             ))
           }
           </View>
