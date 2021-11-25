@@ -35,7 +35,7 @@ export default () => {
    */
   const getProfiles = async () => {
     // get the profile ids from the database (USE ALGORITHM)
-    var ids = ["mfinder", "thylan", "francik"]; // using fixed value
+    var ids = ["thylan", "mfinder", "francik"]; // using fixed value
 
     // STEP 1: GET THE PROFILE INFORMATION
 
@@ -56,6 +56,8 @@ export default () => {
     var preferred_living_location_list = [];
     var vaccinated_list = [];
     var instagram_list = [];
+    var facebook_list = [];
+    var linkedIn_list = [];
     var compatibility_score_list = [];
 
     for (const id of ids) {
@@ -78,7 +80,9 @@ export default () => {
         preferred_living_location, // 14
         vaccinated, // 15
         instagram, // 16
-        compatibility_score, // 17
+        facebook, // 17
+        linkedIn, // 18
+        compatibility_score, // 19
       ] = await Promise.all(
       [
         getDataFromPathAsync("users/" + id + "/Profile/Images/profile_picture"), // 1
@@ -97,7 +101,9 @@ export default () => {
         getDataFromPathAsync("users/" + id + "/Profile/preferred_living_location"), // 15
         getDataFromPathAsync("users/" + id + "/Profile/covid_vaccination_status"), // 15
         getDataFromPathAsync("users/" + id + "/Profile/instagram"), // 16
-        getCompatibilityScoreAsync(id), // 17
+        getDataFromPathAsync("users/" + id + "/Profile/facebook"), // 17
+        getDataFromPathAsync("users/" + id + "/Profile/linkedIn"), // 18
+        getCompatibilityScoreAsync(id), // 19
       ]);
     
 
@@ -118,6 +124,8 @@ export default () => {
       preferred_living_location_list.push(preferred_living_location);
       vaccinated_list.push(vaccinated);
       instagram_list.push(instagram);
+      facebook_list.push(facebook);
+      linkedIn_list.push(linkedIn);
       compatibility_score_list.push(compatibility_score);
     } // for-loop
 
@@ -144,6 +152,8 @@ export default () => {
         preferred_living_location: preferred_living_location_list[i],
         vaccinated: vaccinated_list[i],
         instagram: instagram_list[i],
+        facebook: facebook_list[i],
+        linkedIn: linkedIn_list[i],
         compatibility_score: compatibility_score_list[i],
       };
 
