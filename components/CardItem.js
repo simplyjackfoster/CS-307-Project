@@ -259,6 +259,66 @@ export const CardItem = (props) => {
                 </View>
 
 
+                {/* Facebook (optional) */}
+                <View style=
+                    {profile.facebook ? (
+                        styles.instagramWrapper
+                    ) : (
+                        {display: 'none'}
+                    )}
+                >
+                    <TouchableOpacity style={styles.facebookButton}
+                        onPress={async () => {
+                            const supported = await Linking.canOpenURL("https://www.facebook.com/"
+                                            + profile.facebook + "/");
+                            if (supported) {
+                                Linking.openURL("https://www.facebook.com/"
+                                            + profile.facebook + "/");
+                            }
+                            else {
+                                console.log("Facebook Link doesn't exist");
+                            }
+                        }}
+                    >
+                        <View style={styles.viewInstagramWrapper}>
+                            {renderIcon("facebook", 25, "#4267B2")}
+                            <Text style={styles.viewInstagramText}>View Facebook</Text>
+                        </View>
+                        <Text style={styles.instagramUsernameText}>{profile.facebook}</Text>
+                    </TouchableOpacity>
+                </View>
+
+
+                {/* LinkedIn (optional) */}
+                <View style=
+                    {profile.linkedIn ? (
+                        styles.instagramWrapper
+                    ) : (
+                        {display: 'none'}
+                    )}
+                >
+                    <TouchableOpacity style={styles.linkedInButton}
+                        onPress={async () => {
+                            const supported = await Linking.canOpenURL("https://www.linkedin.com/in/"
+                                            + profile.linkedIn + "/");
+                            if (supported) {
+                                Linking.openURL("https://www.linkedin.com/in/"
+                                            + profile.linkedIn + "/");
+                            }
+                            else {
+                                console.log("LinkedIn Link doesn't exist");
+                            }
+                        }}
+                    >
+                        <View style={styles.viewInstagramWrapper}>
+                            {renderIcon("linkedin", 25, "#0077b5")}
+                            <Text style={styles.viewInstagramText}>View LinkedIn</Text>
+                        </View>
+                        <Text style={styles.instagramUsernameText}>{profile.linkedIn}</Text>
+                    </TouchableOpacity>
+                </View>
+
+
                 {/* Report User */}
                 <View style={styles.reportUserWrapper}>
                     <Text style={styles.reportUserText}
@@ -465,6 +525,26 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         borderWidth: 1.15,
         borderColor: Colors.fuchsia,
+    },
+
+    facebookButton: {
+        marginTop: 20,
+        paddingHorizontal: 25,
+        paddingTop: 5,
+        paddingBottom: 10,
+        borderRadius: 20,
+        borderWidth: 1.15,
+        borderColor: '#4267B2',
+    },
+
+    linkedInButton: {
+        marginTop: 20,
+        paddingHorizontal: 25,
+        paddingTop: 5,
+        paddingBottom: 10,
+        borderRadius: 20,
+        borderWidth: 1.15,
+        borderColor: '#0077b5',
     },
 
     viewInstagramWrapper: {
