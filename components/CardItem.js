@@ -228,11 +228,12 @@ export const CardItem = (props) => {
 
                 
 
+                <View style={{paddingTop: 20}}>
 
                 {/* Instagram (optional) */}
                 <View style=
                     {profile.instagram ? (
-                        styles.instagramWrapper
+                        styles.mediaWrapper
                     ) : (
                         {display: 'none'}
                     )}
@@ -250,11 +251,11 @@ export const CardItem = (props) => {
                             }
                         }}
                     >
-                        <View style={styles.viewInstagramWrapper}>
+                        <View style={styles.viewMediaWrapper}>
                             {renderIcon("instagram", 25, "#ff00ff")}
-                            <Text style={styles.viewInstagramText}>View Instagram</Text>
+                            <Text style={styles.viewMediaText}>View Instagram</Text>
                         </View>
-                        <Text style={styles.instagramUsernameText}>{profile.instagram}</Text>
+                        <Text style={styles.mediaUsernameText}>{profile.instagram}</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -262,7 +263,7 @@ export const CardItem = (props) => {
                 {/* Facebook (optional) */}
                 <View style=
                     {profile.facebook ? (
-                        styles.instagramWrapper
+                        styles.mediaWrapper
                     ) : (
                         {display: 'none'}
                     )}
@@ -280,11 +281,11 @@ export const CardItem = (props) => {
                             }
                         }}
                     >
-                        <View style={styles.viewInstagramWrapper}>
+                        <View style={styles.viewMediaWrapper}>
                             {renderIcon("facebook", 25, "#4267B2")}
-                            <Text style={styles.viewInstagramText}>View Facebook</Text>
+                            <Text style={styles.viewMediaText}>View Facebook</Text>
                         </View>
-                        <Text style={styles.instagramUsernameText}>{profile.facebook}</Text>
+                        <Text style={styles.mediaUsernameText}>{profile.facebook}</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -292,7 +293,7 @@ export const CardItem = (props) => {
                 {/* LinkedIn (optional) */}
                 <View style=
                     {profile.linkedIn ? (
-                        styles.instagramWrapper
+                        styles.mediaWrapper
                     ) : (
                         {display: 'none'}
                     )}
@@ -310,13 +311,16 @@ export const CardItem = (props) => {
                             }
                         }}
                     >
-                        <View style={styles.viewInstagramWrapper}>
+                        <View style={styles.viewMediaWrapper}>
                             {renderIcon("linkedin", 25, "#0077b5")}
-                            <Text style={styles.viewInstagramText}>View LinkedIn</Text>
+                            <Text style={styles.viewMediaText}>View LinkedIn</Text>
                         </View>
-                        <Text style={styles.instagramUsernameText}>{profile.linkedIn}</Text>
+                        <Text style={styles.mediaUsernameText}>{profile.linkedIn}</Text>
                     </TouchableOpacity>
                 </View>
+
+                </View>
+
 
 
                 {/* Report User */}
@@ -510,15 +514,14 @@ const styles = StyleSheet.create({
     },
 
 
-    /* Instagram */
-    instagramWrapper: {
+    /* Social Media */
+    mediaWrapper: {
         flexDirection: 'row',
         alignSelf: 'center',
-        paddingTop: 20,
+        marginTop: 15,
     },
 
     instagramButton: {
-        marginTop: 20,
         paddingHorizontal: 25,
         paddingTop: 5,
         paddingBottom: 10,
@@ -528,7 +531,6 @@ const styles = StyleSheet.create({
     },
 
     facebookButton: {
-        marginTop: 20,
         paddingHorizontal: 25,
         paddingTop: 5,
         paddingBottom: 10,
@@ -538,7 +540,6 @@ const styles = StyleSheet.create({
     },
 
     linkedInButton: {
-        marginTop: 20,
         paddingHorizontal: 25,
         paddingTop: 5,
         paddingBottom: 10,
@@ -547,18 +548,18 @@ const styles = StyleSheet.create({
         borderColor: '#0077b5',
     },
 
-    viewInstagramWrapper: {
+    viewMediaWrapper: {
         flexDirection: 'row',
         alignSelf: 'center',
     },
     
-    viewInstagramText: {
+    viewMediaText: {
         fontSize: 15,
         paddingTop: 5,
         paddingLeft: 12,
     },
     
-    instagramUsernameText: {
+    mediaUsernameText: {
         color: Colors.darkGray,
         fontSize: 12,
         paddingTop: 3,
