@@ -258,10 +258,9 @@ export const getCompatibilityScoreAsync = async (uid) => {
 
     // turn the sum of differences (1-110) into a scale from 0 to 100
     const compatibilityScore = Math.round(100 - ((sumOfDiff / 108) * 100));
-    console.log("Compatibility score between " + myUid + " and " + uid + ": " + compatibilityScore);
+    //console.log("Compatibility score between " + myUid + " and " + uid + ": " + compatibilityScore);
 
     return compatibilityScore;
-
 } // getCompatibilityScoreAsync()
 
 

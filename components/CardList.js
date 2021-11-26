@@ -17,6 +17,7 @@ import { getUserData } from '../database/readData';
 
 
 var noProfiles = false;
+var testProfiles = false; // used to toggle between sets of users loaded in the feed
 
 export default class Profiles extends React.Component<ProfilesProps, ProfilesState> {
 
@@ -27,12 +28,39 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
   }
 
 
-  /*
-   *
-   */
-  addFeedProfiles = () => {
 
+
+  /*
+   * Function used to add new users to the feed. It is called when the queue
+   * gets below a certain number of users.
+   */
+  addFeedProfiles = async () => {
+     
+    // get ids to add from database (USE ALGORITHM), make sure to not add
+    // profiles that are currently in the stack    
+    var ids;
+    if (testProfiles) {
+      ids = ["mfinder", "thylan", "francik"]; // use fixed values for now
+      testProfiles = false;
+    } 
+    else {
+      ids = ["buckle14", "munshi", "werner51"]; // use fixed values for now
+      testProfiles = true;
+    }
+
+    // get array of profile objects for the ids
+    const newProfiles = await getUserData(ids);
+
+    // add them to the list of profiles
+    var updatedProfiles = this.state.profiles;
+    for (let i = 0; i < ids.length; i++) {
+      updatedProfiles.push(newProfiles[i]);
+    }
+    this.setState({ profiles: updatedProfiles});
   } // addFeedProfiles()
+
+
+
 
 
 	
@@ -52,8 +80,9 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
       noProfiles = true;
     }
     else if (profiles.length < 3) {
-      console.log("ADDING USERS");
-      // add users using getUsers() function
+      console.log("ADDING USERS\n");
+      // add users
+      this.addFeedProfiles();
     }
     this.setState({ profiles });
   } // onSwiped()
@@ -96,7 +125,6 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
         {/* Like and Dislike Buttons */}
         <View style={styles.footer}>
           <TouchableOpacity onPress={() => {
-            console.log("Dislike pressed");
             // add swipe left function
             this.onSwiped(false);
           }}>
@@ -104,7 +132,6 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => {
-            console.log("Like pressed");
             // add swipe right function
             this.onSwiped(true);
           }}>

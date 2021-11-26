@@ -13,10 +13,7 @@ import { renderIcon } from "../images/Icons";
 import CardList from '../components/CardList';
 
 import { Asset } from 'expo-asset';
-import { getDataFromPath, getDataFromPathAsync, getAgeAsync } from '../database/readData';
-//import { getBlobAsync } from '../database/uploadStorage';
-
-import { getCompatibilityScoreAsync, getUserData } from '../database/readData';
+import { getUserData } from '../database/readData';
 
 
 
