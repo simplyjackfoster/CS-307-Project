@@ -3,6 +3,7 @@ import { rtdb, auth } from './RTDB';
 import {ref, set, exists, val, child, get, remove, onValue } from "firebase/database";
 import { getID } from './ID';
 import { Value } from 'react-native-reanimated';
+import { Asset } from 'expo-asset';
 
 
 /*
@@ -298,4 +299,149 @@ export const getAgeAsync = async (email_or_id) => {
 
 	return age;
 } // getAgeAsync()
+
+
+
+
+
+
+/*
+ * Gets the user data for the users contained in the "ids" array.
+ * The data is assembled into profile objects and returned as an array of
+ * these obejects.
+ * @param ids -> an array of user ids.
+ * @return -> an array containing profile objects that contain the data for
+ * 						the users specified in the "ids" array.
+ */
+export const getUserData = async (ids) => {
+	// get the profile ids from the database (USE ALGORITHM)
+	//var ids = ["mfinder", "thylan", "francik"]; // using fixed value
+
+	// STEP 1: GET THE PROFILE INFORMATION
+
+	// get the profile picture paths for each of the users
+	var profile_picture_list = [];
+	var name_list = [];
+	var age_list = [];
+	var bio_list = [];
+	var interest1_list = [];
+	var interest2_list = [];
+	var interest3_list = [];
+	var interest4_list = [];
+	var interest5_list = [];
+	var graduation_year_list = [];
+	var major_list = [];
+	var location_list = [];
+	var preferred_num_roommates_list = [];
+	var preferred_living_location_list = [];
+	var vaccinated_list = [];
+	var instagram_list = [];
+	var facebook_list = [];
+	var linkedIn_list = [];
+	var compatibility_score_list = [];
+
+	for (const id of ids) {
+		// read all the data in parallel
+		let
+		[
+			profile_picture, // 1
+			name, // 2
+			age, // 3
+			bio, // 4
+			interest1, // 5
+			interest2, // 6
+			interest3, // 7
+			interest4, // 8
+			interest5, // 9
+			graduation_year, // 10
+			major, // 11
+			location, // 12
+			preferred_num_roommates, // 13
+			preferred_living_location, // 14
+			vaccinated, // 15
+			instagram, // 16
+			facebook, // 17
+			linkedIn, // 18
+			compatibility_score, // 19
+		] = await Promise.all(
+		[
+			getDataFromPathAsync("users/" + id + "/Profile/Images/profile_picture"), // 1
+			getDataFromPathAsync("users/" + id + "/Profile/profile_name"), // 2
+			getAgeAsync(id), // 3
+			getDataFromPathAsync("users/" + id + "/Profile/bio"), // 4
+			getDataFromPathAsync("users/" + id + "/Profile/Interests/interest1"), // 5
+			getDataFromPathAsync("users/" + id + "/Profile/Interests/interest2"), // 6
+			getDataFromPathAsync("users/" + id + "/Profile/Interests/interest3"), // 7
+			getDataFromPathAsync("users/" + id + "/Profile/Interests/interest4"), // 8
+			getDataFromPathAsync("users/" + id + "/Profile/Interests/interest5"), // 9
+			getDataFromPathAsync("users/" + id + "/Profile/graduation_year"), // 10
+			getDataFromPathAsync("users/" + id + "/Profile/major"), // 11
+			getDataFromPathAsync("users/" + id + "/Profile/location"), // 12
+			getDataFromPathAsync("users/" + id + "/Profile/preferred_number_of_roommates"), // 13
+			getDataFromPathAsync("users/" + id + "/Profile/preferred_living_location"), // 15
+			getDataFromPathAsync("users/" + id + "/Profile/covid_vaccination_status"), // 15
+			getDataFromPathAsync("users/" + id + "/Profile/instagram"), // 16
+			getDataFromPathAsync("users/" + id + "/Profile/facebook"), // 17
+			getDataFromPathAsync("users/" + id + "/Profile/linkedIn"), // 18
+			getCompatibilityScoreAsync(id), // 19
+		]);
+	
+
+		// add fields to their list
+		profile_picture_list.push(profile_picture);
+		name_list.push(name);
+		age_list.push(age);
+		bio_list.push(bio);
+		interest1_list.push(interest1);
+		interest2_list.push(interest2);
+		interest3_list.push(interest3);
+		interest4_list.push(interest4);
+		interest5_list.push(interest5);
+		graduation_year_list.push(graduation_year);
+		major_list.push(major);
+		location_list.push(location);
+		preferred_num_roommates_list.push(preferred_num_roommates);
+		preferred_living_location_list.push(preferred_living_location);
+		vaccinated_list.push(vaccinated);
+		instagram_list.push(instagram);
+		facebook_list.push(facebook);
+		linkedIn_list.push(linkedIn);
+		compatibility_score_list.push(compatibility_score);
+	} // for-loop
+
+
+
+	// STEP 2: ASSEMBLE THE PROFILES
+	var profile_list = [];
+	for (let i = 0; i < ids.length; i++) {
+		var profile = {
+			id: ids[i],
+			profile_picture: await Asset.loadAsync(profile_picture_list[i]), // load the profile picture asset
+			name: name_list[i],
+			age: age_list[i],
+			bio: bio_list[i],
+			interest1: interest1_list[i],
+			interest2: interest2_list[i],
+			interest3: interest3_list[i],
+			interest4: interest4_list[i],
+			interest5: interest5_list[i],
+			graduation_year: graduation_year_list[i],
+			major: major_list[i],
+			location: location_list[i],
+			preferred_num_roommates: preferred_num_roommates_list[i],
+			preferred_living_location: preferred_living_location_list[i],
+			vaccinated: vaccinated_list[i],
+			instagram: instagram_list[i],
+			facebook: facebook_list[i],
+			linkedIn: linkedIn_list[i],
+			compatibility_score: compatibility_score_list[i],
+		};
+
+		// add profile to array
+		profile_list.push(profile);
+	} // for-loop
+
+	return profile_list;
+} // getUserData()
+
 

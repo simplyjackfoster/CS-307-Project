@@ -12,6 +12,7 @@ import {
 import Card from './Card';
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
+import { getUsers } from '../database/readData';
 
 
 
@@ -41,6 +42,10 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
     if (profiles.length == 0) {
       console.log("NO PROFILES");
       noProfiles = true;
+    }
+    else if (profiles.length < 3) {
+      console.log("ADDING USERS");
+      // add users using getUsers() function
     }
     this.setState({ profiles });
   } // onSwiped()
