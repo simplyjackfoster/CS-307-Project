@@ -51,8 +51,8 @@ export default () => {
     initializeFeedProfiles();
 
     return (
-      <View style={{flex: 1}}>
-        <Text>Loading...</Text>
+      <View style={styles.splashContainer}>
+        <Text style={styles.splashText}>Loading...</Text>
       </View>
     );
   }
@@ -76,6 +76,19 @@ export default () => {
 
 // styles
 const styles = StyleSheet.create({
+
+  /* Splash Screen */
+  splashContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  splashText: {
+    alignSelf: 'center',
+    fontSize: 25,
+  },
+
 
   /* Container styles */
   container: {

@@ -12,7 +12,7 @@ import {
 import Card from './Card';
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
-import { getUsers } from '../database/readData';
+import { getUserData } from '../database/readData';
 
 
 
@@ -25,6 +25,14 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
 		const { profiles } = props;
     this.state = { profiles };
   }
+
+
+  /*
+   *
+   */
+  addFeedProfiles = () => {
+
+  } // addFeedProfiles()
 
 
 	
@@ -59,10 +67,8 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
 
     if (noProfiles) {
       return (
-        <View style={styles.container}>
-          <View style={{alignSelf: 'center'}}>
-            <Text style={{fontSize: 25}}>No More Profiles</Text>
-          </View>
+        <View style={styles.noProfilesContainer}>
+            <Text style={styles.noProfilesText}>No More Profiles</Text>
         </View>
       );
     }
@@ -119,6 +125,18 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
 
 // styles
 const styles = StyleSheet.create({
+
+  /* No More Profiles */
+  noProfilesContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  noProfilesText: {
+    alignSelf: 'center',
+    fontSize: 25,
+  },
 
   /* Container styles */
   container: {
