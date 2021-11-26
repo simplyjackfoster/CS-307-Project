@@ -11,7 +11,12 @@ import {
 } from 'react-native';
 import Animated, { round } from 'react-native-reanimated';
 
-import { getDataFromPath, getInstagramLink, getInterests, getQuestionnaire } from "../database/readData";
+import {
+    getDataFromPath,
+    getInstagramLink,
+    getInterests,
+    getQuestionnaire
+} from "../database/readData";
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
 import { reportUser } from '../database/writeData';
@@ -54,7 +59,6 @@ export const CardItem = (props) => {
                     )}
                 >
                     {/* <View> */}
-                        {/* <Text style={styles.compatibilityScoreText}>Compatibility: </Text> */}
 
                         <Text style=
                             {[styles.compatibilityScoreContent,
