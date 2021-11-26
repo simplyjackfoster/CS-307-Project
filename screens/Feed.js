@@ -22,11 +22,14 @@ import { getCompatibilityScoreAsync } from '../database/readData';
 
 
 var loaded = false;
+var noProfiles = false;
+
+
+
 
 export default () => {
   const [ready, setReady] = React.useState(false);
   const [profiles, setProfiles] = React.useState(null);
-
 
 
   /*
@@ -35,7 +38,7 @@ export default () => {
    */
   const getProfiles = async () => {
     // get the profile ids from the database (USE ALGORITHM)
-    var ids = ["thylan", "mfinder", "francik"]; // using fixed value
+    var ids = ["mfinder", "thylan", "francik"]; // using fixed value
 
     // STEP 1: GET THE PROFILE INFORMATION
 
@@ -169,7 +172,8 @@ export default () => {
   } // getProfiles()
 
 
- 
+
+  
   
   // if we have not loaded the users, then load them
   if (!loaded) {
@@ -195,23 +199,6 @@ export default () => {
       </View>
 
 
-      {/* Like and Dislike Buttons */}
-      <View style={styles.footer}>
-        <TouchableOpacity onPress={() => {
-          console.log("Dislike pressed");
-          // add swipe left function
-        }}>
-          {renderIcon("times", 50, Colors.red)}
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => {
-          console.log("Like pressed");
-          // add swipe right function
-        }}>
-          {renderIcon("check", 50, Colors.green)}
-        </TouchableOpacity>
-      </View>
-
     </View>
   );
 
@@ -226,6 +213,7 @@ const styles = StyleSheet.create({
   /* Container styles */
   container: {
     flex: 1,
+    ...StyleSheet.absoluteFillObject,
     backgroundColor: Colors.lightGray,
   },
 
@@ -234,14 +222,6 @@ const styles = StyleSheet.create({
     marginHorizontal: '3%',
     marginTop: '2%',
     marginBottom: '1%',
-  },
-
-  footer: {
-    flex: .10,
-    justifyContent: 'space-evenly',
-		flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
   },
 
 });
