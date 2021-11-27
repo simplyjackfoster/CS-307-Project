@@ -18,7 +18,7 @@ const MatchItem = (props) => {
     //const { userToken, setUserToken }  = React.useContext();
     const { matchToken, setMatchToken } = React.useContext(MatchInteractContext);
     const [displayMatch, setDisplayMatch] = React.useState(true);
-
+    
     const uid = props.id;
     const profile_picture = getDataFromPath("users/" + uid + "/Profile/Images/profile_picture");
     const name = getDataFromPath("users/" + uid + "/Profile/profile_name");
