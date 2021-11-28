@@ -11,7 +11,12 @@ import {
 } from 'react-native';
 import Animated, { round } from 'react-native-reanimated';
 
-import { getDataFromPath, getInstagramLink, getInterests, getQuestionnaire } from "../database/readData";
+import {
+    getDataFromPath,
+    getInstagramLink,
+    getInterests,
+    getQuestionnaire
+} from "../database/readData";
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
 import { reportUser } from '../database/writeData';
@@ -26,7 +31,6 @@ export const CardItem = (props) => {
     const getBorderColor = () => {
         return Math.floor(profile.compatibility_score / 34);
     }
-    console.log("Loading card item");
 
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -55,7 +59,6 @@ export const CardItem = (props) => {
                     )}
                 >
                     {/* <View> */}
-                        {/* <Text style={styles.compatibilityScoreText}>Compatibility: </Text> */}
 
                         <Text style=
                             {[styles.compatibilityScoreContent,
@@ -229,33 +232,99 @@ export const CardItem = (props) => {
 
                 
 
+                <View style={{paddingTop: 20}}>
 
                 {/* Instagram (optional) */}
                 <View style=
                     {profile.instagram ? (
-                        styles.instagramWrapper
+                        styles.mediaWrapper
                     ) : (
                         {display: 'none'}
                     )}
                 >
                     <TouchableOpacity style={styles.instagramButton}
                         onPress={async () => {
-                            const supported = await Linking.canOpenURL(getInstagramLink(profile.instagram));
+                            const supported = await Linking.canOpenURL("https://www.instagram.com/"
+                                            + profile.instagram + "/");
                             if (supported) {
-                                Linking.openURL(getInstagramLink(profile.instagram));
+                                Linking.openURL("https://www.instagram.com/"
+                                            + profile.instagram + "/");
                             }
                             else {
                                 console.log("Instagram Link doesn't exist");
                             }
                         }}
                     >
-                        <View style={styles.viewInstagramWrapper}>
+                        <View style={styles.viewMediaWrapper}>
                             {renderIcon("instagram", 25, "#ff00ff")}
-                            <Text style={styles.viewInstagramText}>View Instagram</Text>
+                            <Text style={styles.viewMediaText}>View Instagram</Text>
                         </View>
-                        <Text style={styles.instagramUsernameText}>{profile.instagram}</Text>
+                        <Text style={styles.mediaUsernameText}>{profile.instagram}</Text>
                     </TouchableOpacity>
                 </View>
+
+
+                {/* Facebook (optional) */}
+                <View style=
+                    {profile.facebook ? (
+                        styles.mediaWrapper
+                    ) : (
+                        {display: 'none'}
+                    )}
+                >
+                    <TouchableOpacity style={styles.facebookButton}
+                        onPress={async () => {
+                            const supported = await Linking.canOpenURL("https://www.facebook.com/"
+                                            + profile.facebook + "/");
+                            if (supported) {
+                                Linking.openURL("https://www.facebook.com/"
+                                            + profile.facebook + "/");
+                            }
+                            else {
+                                console.log("Facebook Link doesn't exist");
+                            }
+                        }}
+                    >
+                        <View style={styles.viewMediaWrapper}>
+                            {renderIcon("facebook", 25, "#4267B2")}
+                            <Text style={styles.viewMediaText}>View Facebook</Text>
+                        </View>
+                        <Text style={styles.mediaUsernameText}>{profile.facebook}</Text>
+                    </TouchableOpacity>
+                </View>
+
+
+                {/* LinkedIn (optional) */}
+                <View style=
+                    {profile.linkedIn ? (
+                        styles.mediaWrapper
+                    ) : (
+                        {display: 'none'}
+                    )}
+                >
+                    <TouchableOpacity style={styles.linkedInButton}
+                        onPress={async () => {
+                            const supported = await Linking.canOpenURL("https://www.linkedin.com/in/"
+                                            + profile.linkedIn + "/");
+                            if (supported) {
+                                Linking.openURL("https://www.linkedin.com/in/"
+                                            + profile.linkedIn + "/");
+                            }
+                            else {
+                                console.log("LinkedIn Link doesn't exist");
+                            }
+                        }}
+                    >
+                        <View style={styles.viewMediaWrapper}>
+                            {renderIcon("linkedin", 25, "#0077b5")}
+                            <Text style={styles.viewMediaText}>View LinkedIn</Text>
+                        </View>
+                        <Text style={styles.mediaUsernameText}>{profile.linkedIn}</Text>
+                    </TouchableOpacity>
+                </View>
+
+                </View>
+
 
 
                 {/* Report User */}
@@ -449,15 +518,14 @@ const styles = StyleSheet.create({
     },
 
 
-    /* Instagram */
-    instagramWrapper: {
+    /* Social Media */
+    mediaWrapper: {
         flexDirection: 'row',
         alignSelf: 'center',
-        paddingTop: 20,
+        marginTop: 15,
     },
 
     instagramButton: {
-        marginTop: 20,
         paddingHorizontal: 25,
         paddingTop: 5,
         paddingBottom: 10,
@@ -466,18 +534,36 @@ const styles = StyleSheet.create({
         borderColor: Colors.fuchsia,
     },
 
-    viewInstagramWrapper: {
+    facebookButton: {
+        paddingHorizontal: 25,
+        paddingTop: 5,
+        paddingBottom: 10,
+        borderRadius: 20,
+        borderWidth: 1.15,
+        borderColor: '#4267B2',
+    },
+
+    linkedInButton: {
+        paddingHorizontal: 25,
+        paddingTop: 5,
+        paddingBottom: 10,
+        borderRadius: 20,
+        borderWidth: 1.15,
+        borderColor: '#0077b5',
+    },
+
+    viewMediaWrapper: {
         flexDirection: 'row',
         alignSelf: 'center',
     },
     
-    viewInstagramText: {
+    viewMediaText: {
         fontSize: 15,
         paddingTop: 5,
         paddingLeft: 12,
     },
     
-    instagramUsernameText: {
+    mediaUsernameText: {
         color: Colors.darkGray,
         fontSize: 12,
         paddingTop: 3,

@@ -20,7 +20,7 @@ import { renderIcon } from "../images/Icons";
 import { auth } from '../database/RTDB';
 
 // database read/write/remove imports
-import { getDataFromPath, getInstagramLink, getInterestListProfile } from '../database/readData';
+import { getDataFromPath, getInstagramLink, getInterestListProfile, getFacebookLink, getLinkedInLink } from '../database/readData';
 import { getID } from '../database/ID';
 
 
@@ -46,7 +46,8 @@ export default ( {navigation} ) => {
 	const [profilePicture, setProfilePicture] = React.useState(null);
 	
 	const instagramLink = getInstagramLink(auth.currentUser.email);
-
+	const facebookLink = getFacebookLink(auth.currentUser.email);
+	const linkedInLink = getLinkedInLink(auth.currentUser.email);
 
 
 	// Function that refreshes
@@ -155,6 +156,57 @@ export default ( {navigation} ) => {
 					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram")}
 				</Text>
 			</View>
+
+			{/* Facebook Link */}
+			<View style={
+				getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/facebook") ?
+					(styles.infoWrapper)
+					: ({display: 'none'})
+				}>
+				<View style={styles.iconFB}>
+					{renderIcon("facebook", 25, Colors.royalBlue)}
+				</View>
+				<Text style={styles.infoHeaderFB}>Facebook:</Text>
+				<Text style={styles.instagramLink}
+					onPress={async () => {
+						const supported = await Linking.canOpenURL(facebookLink);
+						if (supported) {
+							Linking.openURL(facebookLink);
+						}
+						else {
+							console.log("Facebook Link doesn't exist");
+						}
+					}}
+				>
+					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/facebook")}
+				</Text>
+			</View>
+
+			{/* LinkedIn Link */}
+			<View style={
+				getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/linkedIn") ?
+					(styles.infoWrapper)
+					: ({display: 'none'})
+				}>
+				<View style={styles.iconLI}>
+					{renderIcon("linkedin", 25, Colors.royalBlue)}
+				</View>
+				<Text style={styles.infoHeaderLI}>LinkedIn:</Text>
+				<Text style={styles.instagramLink}
+					onPress={async () => {
+						const supported = await Linking.canOpenURL(linkedInLink);
+						if (supported) {
+							Linking.openURL(linkedInLink);
+						}
+						else {
+							console.log("LinkedIn Link doesn't exist");
+						}
+					}}
+				>
+					{getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/linkedIn")}
+				</Text>
+			</View>
+
 
 			{/* Bio: <bio> */}
 			<View style={
@@ -336,7 +388,7 @@ const styles = StyleSheet.create({
 	imageName: {
 		textAlign: 'center',
 		fontSize: 25,
-		fontWeight: 'bold',
+		fontWeight: '500',
 		marginTop: 10,
 	},
 	
@@ -349,6 +401,16 @@ const styles = StyleSheet.create({
 
 	icon: {
 		paddingRight: 5,
+	},
+
+	iconFB: {
+		paddingRight: 2,
+		paddingLeft: 3,
+	},
+
+	iconLI: {
+		paddingRight: 2,
+		paddingLeft: 3,
 	},
 
 	iconGender: {
@@ -375,77 +437,104 @@ const styles = StyleSheet.create({
 	infoHeader: {
 		fontSize: 20,
 		marginRight: 8,
-		fontWeight: 'bold',
+		fontWeight: '500',
+		fontStyle: 'italic',
 	},
 
 	infoHeaderBio: {
 		fontSize: 20,
 		marginLeft: 4,
 		marginRight: 8,
-		fontWeight: 'bold',
+		fontWeight: '500',
+		fontStyle: 'italic',
 	},
 
 	infoHeaderEmail: {
 		fontSize: 20,
 		marginLeft: 7,
 		marginRight: 8,
-		fontWeight: 'bold',
+		fontWeight: '500',
+		fontStyle: 'italic',
 	},
 
 	infoHeaderGender: {
 		fontSize: 20,
 		marginLeft: 17,
 		marginRight: 8,
-		fontWeight: 'bold',
+		fontWeight: '500',
+		fontStyle: 'italic',
 	},
 
 	infoHeaderIG: {
 		fontSize: 20,
 		marginLeft: 12,
 		marginRight: 8,
-		fontWeight: 'bold',
+		fontWeight: '500',
+		fontStyle: 'italic',
+	},
+
+	infoHeaderFB: {
+		fontSize: 20,
+		marginLeft: 18,
+		marginRight: 8,
+		fontWeight: '500',
+		fontStyle: 'italic',
+	},
+
+	infoHeaderLI: {
+		fontSize: 20,
+		marginLeft: 10,
+		marginRight: 8,
+		fontWeight: '500',
+		fontStyle: 'italic',
 	},
 
 	infoHeaderLocation: {
 		fontSize: 20,
 		marginLeft: 20,
 		marginRight: 8,
-		fontWeight: 'bold',
+		fontWeight: '500',
+		fontStyle: 'italic',
 	},
 
 	infoHeaderMajor: {
 		fontSize: 20,
 		marginLeft: 10,
 		marginRight: 8,
-		fontWeight: 'bold',
+		fontWeight: '500',
+		fontStyle: 'italic',
 	},
 
 	infoHeaderPhone: {
 		fontSize: 20,
 		marginLeft: 11,
 		marginRight: 8,
-		fontWeight: 'bold',
+		fontWeight: '500',
+		fontStyle: 'italic',
 	},
 
 	infoHeaderPrefHouse: {
 		fontSize: 20,
 		marginLeft: 12,
 		marginRight: 8,
-		fontWeight: 'bold',
+		fontWeight: '500',
+		fontStyle: 'italic',
 	},
 
 	infoHeaderRoommates: {
 		fontSize: 20,
 		marginLeft: 8,
 		marginRight: 8,
-		fontWeight: 'bold',
+		fontWeight: '500',
+		fontStyle: 'italic',
 	},
 
 	infoHeaderVax: {
 		fontSize: 20,
-		marginLeft: 10,
+		marginLeft: 8,
 		marginRight: 8,
-		fontWeight: 'bold',
+		fontWeight: '500',
+		fontStyle: 'italic',
 	},
 
 	infoContent: {

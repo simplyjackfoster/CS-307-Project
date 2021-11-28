@@ -36,6 +36,8 @@ import {
   writePreferredNumRoommates,
   writePreferredLivingLocation,
   writeInstagram,
+  writeFacebook,
+  writeLinkedIn,
   writeAgeMin,
   writeAgeMax,
 } from '../database/writeData';
@@ -49,6 +51,8 @@ import {
   isValidSecurity,
   isValidCheckbox,
   isValidInstagram,
+  isValidFacebook,
+  isValidLinkedIn,
   isValidGraduationYear,
   isValidMajor,
   isValidNumberOfRoommates,
@@ -88,6 +92,10 @@ export default ( {navigation} ) => {
   const [livingLocation, setLivingLocation] = React.useState(0);
   const [instagram, onChangeInstagram] = React.useState(null);
   const [instagramChanged, setInstagramChanged] = React.useState(false);
+  const [facebook, onChangeFacebook] = React.useState(null);
+  const [facebookChanged, setFacebookChanged] = React.useState(false);
+  const [linkedIn, onChangeLinkedIn] = React.useState(null);
+  const [linkedInChanged, setLinkedInChanged] = React.useState(false);
   const [gender, setGender] = React.useState(1);
   const [vaccinated, setVaccinated] = React.useState(1);
 
@@ -379,6 +387,27 @@ export default ( {navigation} ) => {
   } // instagramInputHandler()
 
 
+  /*
+   * This function is called when the text in the facebook 
+   * input is changed. It changes the value of the name hook
+   * and also changes the boolean that tells us if the user has
+   * changed the value.
+   */
+  const facebookInputHandler = (input) => {
+    onChangeFacebook(input);
+    setFacebookChanged(true);
+  }
+
+  /*
+   * This function is called when the text in the linkedIn 
+   * input is changed. It changes the value of the name hook
+   * and also changes the boolean that tells us if the user has
+   * changed the value.
+   */
+  const linkedInInputHandler = (input) => {
+    onChangeLinkedIn(input);
+    setLinkedInChanged(true);
+  }
 
   /*
    * This function is called when the user clicks "Save".
@@ -428,7 +457,15 @@ export default ( {navigation} ) => {
       writeInstagram(auth.currentUser.email, instagram);
     }
 
-    if(ageMinChanged) {
+    if (facebookChanged) {
+      writeFacebook(auth.currentUser.email, facebook);
+    }
+
+    if (linkedInChanged) {
+      writeLinkedIn(auth.currentUser.email, linkedIn);
+    }
+
+    if (ageMinChanged) {
       writeAgeMin(auth.currentUser.email, ageMin);
     }
 
@@ -473,6 +510,16 @@ export default ( {navigation} ) => {
     // Check if instagram is valid 
     if (instagramChanged != false) {
       if(!isValidInstagram(instagram)) {return}
+    }
+
+    // Check if facebook is valid
+    if(facebookChanged != false) {
+      if(!isValidFacebook(facebook)) {return}
+    }
+
+    // Check if linkedIn is valid
+    if(linkedIn != false) {
+      if(!isValidLinkedIn(linkedIn)) {return}
     }
 
     // Check if the preferred # of roommates is valid
@@ -766,7 +813,40 @@ export default ( {navigation} ) => {
               maxLength={32}
               onChangeText={instagramInputHandler}
               defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram")}
-              placeholder={"Instagram username"}
+              placeholder={"Instagram Username"}
+            />
+          </SafeAreaView>
+
+          {/* Facebook Link (field) */}
+          <Text style={styles.prompt}>Facebook</Text>
+          <SafeAreaView>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              maxLength={50}
+              onChangeText={facebookInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/facebook")}
+              placeholder={"Facebook User ID"}
+            />
+          </SafeAreaView>
+
+          {/* LinkedIn Link (field) */}
+          <Text style={styles.prompt}>LinkedIn</Text>
+          <SafeAreaView>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              maxLength={70} // == first_name (20 chars) - (1 char) last_name (40 chars) - (1 char) 8_digit_code (8 char)
+                             // Note the 8_digit_code is only for profiles with a name that already exists
+              onChangeText={linkedInInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/linkedIn")}
+              placeholder={"LinkedIn Profile"}
             />
           </SafeAreaView>
 

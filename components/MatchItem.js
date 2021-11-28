@@ -13,6 +13,8 @@ import { getDataFromPath, getInstagramLink } from "../database/readData";
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
 import { MatchInteractContext } from '../context';
+import { reportUser } from '../database/writeData';
+
 
 const MatchItem = (props) => {
     //const { userToken, setUserToken }  = React.useContext();
@@ -21,6 +23,7 @@ const MatchItem = (props) => {
     
     const uid = props.id;
     const profile_picture = getDataFromPath("users/" + uid + "/Profile/Images/profile_picture");
+    const reports = getDataFromPath("reported/" + uid + "/num_reports");
     const name = getDataFromPath("users/" + uid + "/Profile/profile_name");
     const location = getDataFromPath("users/" + uid + "/Profile/location");
     const major = getDataFromPath("users/" + uid + "/Profile/major");
@@ -114,6 +117,7 @@ const MatchItem = (props) => {
                 >
                     <Text style={styles.buttonText}>Remove Match</Text>
                 </TouchableOpacity>
+            
 
                 {/* Send message button */}
                 <TouchableOpacity
@@ -134,6 +138,22 @@ const MatchItem = (props) => {
                     )}
                 >
                     <Text style={styles.buttonText}>Message</Text>
+                </TouchableOpacity>
+
+                {/* Report Match button */}
+                <TouchableOpacity
+                    style={styles.reportUserWrapper}
+                    onPress={() =>
+                        Alert.alert("Report User", "Are you sure you want to report " + name + "?",
+                            [{ 
+                                text: "No" 
+                            }, {
+                                text: "Yes",
+                                onPress: () => reportUser(uid, reports)
+                            }])
+                    }
+                >
+                    <Text style={styles.reportUserText}>Report Match</Text>
                 </TouchableOpacity>
                 
             </View>
@@ -183,7 +203,7 @@ const styles = StyleSheet.create({
     },
 
     button: {
-        marginRight: 30,
+        marginRight: 20,
         marginTop: 15,
     },
 
@@ -191,7 +211,19 @@ const styles = StyleSheet.create({
         fontSize: 17,
         color: Colors.lightBlue,
 
-    }
+    },
 
+    /* Report User */
+    reportUserWrapper: {
+        flexDirection: 'row',
+        marginTop: 15,
+        marginRight: 20
+    },
+
+    reportUserText: {
+        flexDirection: 'row',
+        fontSize: 17,
+        color: Colors.lightRed,
+    }
 
 });
