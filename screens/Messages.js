@@ -8,6 +8,18 @@ import {
 } from 'react-native';
 import Message from '../components/Message';
 import styles from '../assets/index';
+import firestore from '@react-native-firebase/firestore';
+
+function createMessageCollection() {
+  if (roomName.length > 0) {
+      firestore()
+          .collection('messages')
+          .add({
+                  name: roomName
+              });
+  });
+}
+
 
 export default ({ navigation }) =>{
   const listOfUsers = [

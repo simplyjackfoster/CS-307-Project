@@ -12,7 +12,7 @@ const Message = (props) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
-    onPress={() => navigation.push("ChatScreen")}
+    onPress={() => navigation.navigate('ChatScreen')}
     >
       <View style={styles.containerMessage}>
         <Image source={{uri: profile_picture}} style={styles.avatar} />
