@@ -63,6 +63,7 @@ import {
 import { set } from 'react-native-reanimated';
 import Interests from './Interests';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import CardItem from '../components/CardItem';
 
 
 
@@ -609,6 +610,11 @@ export default ( {navigation} ) => {
     navigation.pop();
   } // validateInputs()
 
+  // View Profile Function
+  const viewProfile = () => {
+    navigation.push("viewProfile");
+  } //viewProfile
+
 
 
 
@@ -648,6 +654,16 @@ export default ( {navigation} ) => {
               <Text style={styles.textChangePicture}>Change Picture</Text>
             </TouchableOpacity>
           </SafeAreaView>
+
+          {/* Preview Profile Button*/}
+          <SafeAreaView>
+            <TouchableOpacity
+              onPress={() => viewProfile()}
+              style={styles.buttonChangePicture}>
+              <Text style={styles.textChangePicture}>Preview Profile</Text>
+            </TouchableOpacity>
+          </SafeAreaView>
+          
 
           {/* Name (text), name (field) */}
           <Text style={styles.prompt}>Name*</Text>
