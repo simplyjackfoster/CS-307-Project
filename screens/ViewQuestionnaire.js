@@ -16,18 +16,31 @@ import { getInterests, getDataFromPath } from '../database/readData';
 import { ref, child, get, set } from 'firebase/database';
 
 
-export default ( {navigation} ) => {
-  const { userToken, setUserToken }  = React.useContext(AuthContext);
+
+export const ViewQuestionnaire = (props) => {
+  const { profile } = props;
 
 
-    return(
-      <ScrollView style={styles.container}>
-          <Text>
-            This is the other user's questionnaire.
-          </Text>
-      </ScrollView>
-    );
+  return(
+    <View>
+      
+    </View>
+  );
 }
+
+
+// export default ( {navigation} ) => {
+//   const { userToken, setUserToken }  = React.useContext(AuthContext);
+
+
+//     return(
+//       <ScrollView style={styles.container}>
+//           <Text>
+//             This is the other user's questionnaire.
+//           </Text>
+//       </ScrollView>
+//     );
+// }
 
 
 // styles

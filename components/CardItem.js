@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
     StyleSheet,
     Text, 
@@ -17,15 +17,30 @@ import { renderIcon } from "../images/Icons";
 import { reportUser } from '../database/writeData';
 import { auth } from '../database/RTDB';
 import { getID } from '../database/ID';
+import { ViewQuestionnaire } from '../screens/ViewQuestionnaire';
 
 
 
-export const CardItem = (props, {navigation}) => {
-    const { profile, viewQuest, likeOpacity, nopeOpacity } = props;
+export const CardItem = (props) => {
+    const { profile, likeOpacity, nopeOpacity } = props;
 
     const getBorderColor = () => {
         return Math.floor(profile.compatibility_score / 34);
     }
+
+    // hook for questionnaire
+    const [viewQuestionnaire, setViewQuestionnaire] = useState(false);
+
+
+    if (viewQuestionnaire) {
+        return (
+            <ViewQuestionnaire>
+                
+            </ViewQuestionnaire>
+        );
+    }
+
+
 
     // this does not work, but it's an idea
     // const getReports = () => {
@@ -240,7 +255,7 @@ export const CardItem = (props, {navigation}) => {
                     onPress={() => {
                         console.log("Viewing Questionnaire from card item");
                         // viewQuest();
-                        navigation.push("ViewQuestionnaire")
+                        setViewQuestionnaire(!viewQuestionnaire);
                     }}
                 >
                     <Text style={styles.viewQuestionnaireText}>View Questionnaire</Text>
