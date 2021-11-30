@@ -49,6 +49,8 @@ export const writeNewUser = (email, name, phone,
 		preferred_number_of_roommates: "",
 		preferred_living_location: "",
 		instagram: "",
+		facebook: "",
+		linkedIn: "",
 		age_min: "18",
 		age_max: "100",
 	});
@@ -321,7 +323,35 @@ export const writeInstagram = (email_or_id, instagram) => {
 } // writeInstagram()
 
 
+/*
+ * writeFacebook()
+ *
+ * Writes the facebook of the specified user in the RTDB.
+ * @param email_or_id -> the email or id of the user.
+ * @param facebook -> the facebook username of the user.
+ */
+export const writeFacebook = (email_or_id, facebook) => {
+	const id = getID(email_or_id);
 
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		facebook: facebook
+	});
+} // writeFacebook()
+
+/*
+ * writeLinkedIn()
+ *
+ * Writes the linkedIn of the specified user in the RTDB.
+ * @param email_or_id -> the email or id of the user.
+ * @param linkedIn -> the linkedIn username of the user.
+ */
+export const writeLinkedIn = (email_or_id, linkedIn) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		linkedIn: linkedIn
+	});
+} // writeLinkedIn()
 
 
 /*

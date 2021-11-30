@@ -7,11 +7,13 @@ import {
   useState,
   useEffect,
   ScrollView,
+  TouchableOpacity,
   Button 
 } from 'react-native';
 import Colors from "../constants/Colors";
 import MatchItem from '../components/MatchItem';
 import Messages from './Messages';
+import { MatchInteractContext } from '../context';
 
 
 
@@ -21,6 +23,21 @@ import Messages from './Messages';
 //const [showProfile] = React.useState(true)
 var matched = true;
 export default ( {navigation} ) => {
+  const { matchToken, setMatchToken } = React.useContext(MatchInteractContext);
+
+  React.useEffect(() => {
+    const list = navigation.addListener('focus', () => {
+      setMatchToken(null);
+    });
+    return list;
+  });
+
+  /*
+   *  Open view profile page
+   */
+  const viewProfile = () => {
+    navigation.push("ViewProfile");
+  } //viewProfile
 
   if (!matched) {
     return (
@@ -32,9 +49,9 @@ export default ( {navigation} ) => {
   return (
     <ScrollView style={styles.container}>
       <View>
-        <MatchItem id={"foste205"} />
-        <MatchItem id={"thylan"} />
-        <MatchItem id={"mfinder"} />
+        <MatchItem id={"foste205"} func={viewProfile}/>
+        <MatchItem id={"thylan"} func={viewProfile}/>
+        <MatchItem id={"mfinder"} func={viewProfile}/>
       </View>
     </ScrollView>
 
