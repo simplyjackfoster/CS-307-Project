@@ -23,7 +23,7 @@ export const ViewQuestionnaire = (props) => {
 
   return(
     <View>
-      
+      <Text>This is the first question</Text>
     </View>
   );
 }
@@ -42,6 +42,7 @@ export const ViewQuestionnaire = (props) => {
 //     );
 // }
 
+export default ViewQuestionnaire;
 
 // styles
 const styles = StyleSheet.create({

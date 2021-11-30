@@ -317,7 +317,11 @@ export const getUserData = async (ids) => {
 	// get the profile ids from the database (USE ALGORITHM)
 	//var ids = ["mfinder", "thylan", "francik"]; // using fixed value
 
-	// STEP 1: GET THE PROFILE INFORMATION
+	// GET MY QUESTIONNAIRE ANSWERS
+	let myAnswers = await getQuestionnaireAsync(getID(auth.currentUser.email));	
+
+
+	// STEP 1: GET THE PROFILE INFORMATION FOR OTHER SPECIFIED PROFILES
 
 	// get the profile picture paths for each of the users
 	var profile_picture_list = [];
@@ -339,6 +343,20 @@ export const getUserData = async (ids) => {
 	var facebook_list = [];
 	var linkedIn_list = [];
 	var compatibility_score_list = [];
+	var questionnaire1_answer_list = [];
+	var questionnaire2_answer_list = [];
+	var questionnaire3_answer_list = [];
+	var questionnaire4_answer_list = [];
+	var questionnaire5_answer_list = [];
+	var questionnaire6_answer_list = [];
+	var questionnaire7_answer_list = [];
+	var questionnaire8_answer_list = [];
+	var questionnaire9_answer_list = [];
+	var questionnaire10_answer_list = [];
+	var questionnaire11_answer_list = [];
+	var questionnaire12_answer_list = [];
+	var questionnaire13_answer_list = [];
+
 
 	for (const id of ids) {
 		// read all the data in parallel
@@ -363,6 +381,19 @@ export const getUserData = async (ids) => {
 			facebook, // 17
 			linkedIn, // 18
 			compatibility_score, // 19
+			questionnaire1, // 20
+			questionnaire2, // 21
+			questionnaire3, // 22
+			questionnaire4, // 23
+			questionnaire5, // 24
+			questionnaire6, // 25
+			questionnaire7, // 26
+			questionnaire8, // 27
+			questionnaire9, // 28
+			questionnaire10, // 29
+			questionnaire11, // 30
+			questionnaire12, // 31
+			questionnaire13, // 32
 		] = await Promise.all(
 		[
 			getDataFromPathAsync("users/" + id + "/Profile/Images/profile_picture"), // 1
@@ -384,6 +415,19 @@ export const getUserData = async (ids) => {
 			getDataFromPathAsync("users/" + id + "/Profile/facebook"), // 17
 			getDataFromPathAsync("users/" + id + "/Profile/linkedIn"), // 18
 			getCompatibilityScoreAsync(id), // 19
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_people_over"), // 20
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/is_clean"), // 21
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/week_bedtime"), // 22
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/weekend_bedtime"), // 23
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/drinks_alcohol"), // 24
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/smokes"), // 25
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/handle_chores"), // 26
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_car"), // 27
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/wants_pets"), // 28
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/introverted_or_extraverted"), // 29
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/check_before_having_people_over"), // 30
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/joint_grocery_shopping"), // 31
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_significant_other"), // 32
 		]);
 	
 
@@ -407,8 +451,35 @@ export const getUserData = async (ids) => {
 		facebook_list.push(facebook);
 		linkedIn_list.push(linkedIn);
 		compatibility_score_list.push(compatibility_score);
+		questionnaire1_answer_list.push(questionnaire1);
+		questionnaire2_answer_list.push(questionnaire2);
+		questionnaire3_answer_list.push(questionnaire3);
+		questionnaire4_answer_list.push(questionnaire4);
+		questionnaire5_answer_list.push(questionnaire5);
+		questionnaire6_answer_list.push(questionnaire6);
+		questionnaire7_answer_list.push(questionnaire7);
+		questionnaire8_answer_list.push(questionnaire8);
+		questionnaire9_answer_list.push(questionnaire9);
+		questionnaire10_answer_list.push(questionnaire10);
+		questionnaire11_answer_list.push(questionnaire11);
+		questionnaire12_answer_list.push(questionnaire12);
+		questionnaire13_answer_list.push(questionnaire13);
+		
 	} // for-loop
 
+
+	// CALCULATE MOST SIMILAR/DIFFERENT RESPONSES
+
+	for (let i = 1; i < ids.length; i++) { // for each user in ids
+		var mostSimilar = 0;
+		var leastSimilar = 0;
+		var maxDiff = Math.abs(myAnswers[0] - questionnaire1_answer_list[i][0]);
+		var minDiff = Math.abs(myAnswers[0] - questionnaire1_answer_list[i][0]);
+
+		/*for (let j = 1; j < 13; j++) { // go through each question to find mostSimilar/leastSimilar
+
+		}*/
+	}
 
 
 	// STEP 2: ASSEMBLE THE PROFILES
@@ -435,6 +506,21 @@ export const getUserData = async (ids) => {
 			facebook: facebook_list[i],
 			linkedIn: linkedIn_list[i],
 			compatibility_score: compatibility_score_list[i],
+			questionnaire1: questionnaire1_answer_list[i],
+			questionnaire2: questionnaire2_answer_list[i],
+			questionnaire3: questionnaire3_answer_list[i],
+			questionnaire4: questionnaire4_answer_list[i],
+			questionnaire5: questionnaire5_answer_list[i],
+			questionnaire6: questionnaire6_answer_list[i],
+			questionnaire7: questionnaire7_answer_list[i],
+			questionnaire8: questionnaire8_answer_list[i],
+			questionnaire9: questionnaire9_answer_list[i],
+			questionnaire10: questionnaire10_answer_list[i],
+			questionnaire11: questionnaire11_answer_list[i],
+			questionnaire12: questionnaire12_answer_list[i],
+			questionnaire13: questionnaire13_answer_list[i],
+			most_similar_response: "has_people_over",
+			least_similar_response: "smokes",
 		};
 
 		// add profile to array

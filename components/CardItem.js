@@ -29,34 +29,23 @@ import { ViewQuestionnaire } from '../screens/ViewQuestionnaire';
 export const CardItem = (props) => {
     const { profile, likeOpacity, nopeOpacity } = props;
 
+    // hook for displaying questionnaire
+    const [viewingQuestionnaire, setViewingQuestionnaire] = React.useState(false);
+
     const getBorderColor = () => {
         return Math.floor(profile.compatibility_score / 34);
     }
 
-    // hook for questionnaire
-    const [viewQuestionnaire, setViewQuestionnaire] = useState(false);
 
-
-    if (viewQuestionnaire) {
+    // display questionnaire?
+    if (viewingQuestionnaire) {
         return (
-            <ViewQuestionnaire>
-                
-            </ViewQuestionnaire>
+            <View style={styles.container}>
+                <Text>Questionnaire Answers</Text>
+            </View>
         );
     }
-
-
-
-    // this does not work, but it's an idea
-    // const getReports = () => {
-    //     var reportedUser = getDataFromPath("reported/" + profile.id);
-    //     var reports = 0;
-    //     if (typeof reportedUser == Object) {
-    //         console.log("user was reported");
-    //         reports = getDataFromPath("reported/" + profile.id + "/num_reports");
-    //     }
-    // }
-    // getReports();
+    else {
 
 
     return (
@@ -78,15 +67,17 @@ export const CardItem = (props) => {
 
 
                 {/* Compatibility Score (if in feed) */}
-                <View style=
+                <TouchableOpacity style=
                     {getID(auth.currentUser.email) != profile.id ? (
                         styles.compatibilityScoreWrapper
                     ) : (
                         {display: 'none'}
                     )}
+
+                    onPress={() => setViewingQuestionnaire(!viewingQuestionnaire)}
                 >
-                    <Text style=
-                        {[styles.compatibilityScoreContent,
+                    <Text 
+                        style={[styles.compatibilityScoreText,
                         getBorderColor() == 0 ? (
                             {borderColor: Colors.red}
                         ) : (
@@ -95,7 +86,7 @@ export const CardItem = (props) => {
                     >
                         {profile.compatibility_score}%
                     </Text>
-                </View>
+                </TouchableOpacity>
 
 
                 {/* Bio (optional) */}
@@ -259,12 +250,13 @@ export const CardItem = (props) => {
                     style={styles.viewQuestionnaireButton}
                     onPress={() => {
                         console.log("Viewing Questionnaire from card item");
-                        // viewQuest();
                         setViewQuestionnaire(!viewQuestionnaire);
                     }}
                 >
                     <Text style={styles.viewQuestionnaireText}>View Questionnaire</Text>
                 </TouchableOpacity>
+
+
 
                 <View style={{paddingTop: 20}}>
 
@@ -384,6 +376,8 @@ export const CardItem = (props) => {
     );
 }
 
+}
+
 export default CardItem;
 
 
@@ -426,6 +420,22 @@ const styles = StyleSheet.create({
     nameText: {
         fontSize: 30,
         alignSelf: 'flex-start',
+    },
+
+
+    /* Compatibility Score */
+    compatibilityScoreWrapper: {
+        paddingTop: 20,
+        flexDirection: 'row',
+    },
+    
+
+    compatibilityScoreText: {
+        alignContent: 'flex-end',
+        fontSize: 20,
+        borderWidth: 2.5,
+        borderRadius: 20,
+        padding: 5,
     },
 
 
@@ -529,28 +539,6 @@ const styles = StyleSheet.create({
         fontSize: 20, 
     },
     
-
-    /* Compatibility Score */
-    compatibilityScoreWrapper: {
-        paddingTop: 20,
-        flexDirection: 'row',
-    },
-    
-    compatibilityScoreText: {
-        flexDirection: 'row',
-        fontSize: 20,
-        paddingTop: 5,
-        paddingRight: 10,
-    },
-
-    compatibilityScoreContent: {
-        alignContent: 'flex-end',
-        fontSize: 20,
-        borderWidth: 2.5,
-        borderRadius: 20,
-        padding: 5,
-    },
-
 
     /* Social Media */
     mediaWrapper: {
