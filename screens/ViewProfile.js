@@ -164,6 +164,7 @@ export default ({ navigation }) => {
     // set the data and set the ready hook to true
     await setProfiles(profile_list);
     setReady(true);
+    console.log(profile_list);
   } // initializeFeedProfiles()
 
   if (!ready) {
@@ -182,7 +183,7 @@ export default ({ navigation }) => {
     <View style={styles.container}>
 
       {/* Stack of Cards */}
-      <CardItem profile={profiles}></CardItem>
+      <CardItem profile={profiles[0]}></CardItem>
     </View>
   );
 
