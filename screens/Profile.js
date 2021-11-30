@@ -368,6 +368,8 @@ export default ( {navigation} ) => {
 	); //return()
 } // default export ()
 
+
+
 // styles
 const styles = StyleSheet.create({
 

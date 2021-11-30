@@ -28,9 +28,23 @@ import { getID } from '../database/ID';
 export const CardItem = (props) => {
     const { profile, likeOpacity, nopeOpacity } = props;
 
+    // hook for displaying questionnaire
+    const [viewingQuestionnaire, setViewingQuestionnaire] = React.useState(false);
+
     const getBorderColor = () => {
         return Math.floor(profile.compatibility_score / 34);
     }
+
+
+    // display questionnaire?
+    if (viewingQuestionnaire) {
+        return (
+            <View style={styles.container}>
+                <Text>Questionnaire Answers</Text>
+            </View>
+        );
+    }
+
 
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -51,27 +65,27 @@ export const CardItem = (props) => {
 
 
                 {/* Compatibility Score (if in feed) */}
-                <View style=
+                <TouchableOpacity style=
                     {getID(auth.currentUser.email) != profile.id ? (
                         styles.compatibilityScoreWrapper
                     ) : (
                         {display: 'none'}
                     )}
-                >
-                    {/* <View> */}
 
-                        <Text style=
-                            {[styles.compatibilityScoreContent,
-                            getBorderColor() == 0 ? (
-                                {borderColor: Colors.red}
-                            ) : (
-                                {borderColor: getBorderColor() == 1 ? Colors.yellow : Colors.green}
-                            )]}
-                        >
-                            {profile.compatibility_score}%
-                        </Text>
-                    {/* </View> */}
-                </View>
+                    onPress={() => setViewingQuestionnaire(!viewingQuestionnaire)}
+                >
+                    <Text style=
+                        {[styles.compatibilityScoreText,
+                        getBorderColor() == 0 ? (
+                            { borderColor: Colors.red, color: Colors.red }
+                        ) : (
+                            { borderColor: getBorderColor() == 1 ? Colors.yellow : Colors.green,
+                              color: getBorderColor() == 1 ? Colors.yellow : Colors.green }
+                        )]}
+                    >
+                        {profile.compatibility_score}%
+                    </Text>
+                </TouchableOpacity>
 
 
                 {/* Bio (optional) */}
@@ -395,6 +409,22 @@ const styles = StyleSheet.create({
     },
 
 
+    /* Compatibility Score */
+    compatibilityScoreWrapper: {
+        paddingTop: 20,
+        flexDirection: 'row',
+    },
+    
+
+    compatibilityScoreText: {
+        alignContent: 'flex-end',
+        fontSize: 20,
+        borderWidth: 2.5,
+        borderRadius: 20,
+        padding: 5,
+    },
+
+
     /* Bio */
     bioWrapper: {
         paddingTop: 20,
@@ -495,28 +525,6 @@ const styles = StyleSheet.create({
         fontSize: 20, 
     },
     
-
-    /* Compatibility Score */
-    compatibilityScoreWrapper: {
-        paddingTop: 20,
-        flexDirection: 'row',
-    },
-    
-    compatibilityScoreText: {
-        flexDirection: 'row',
-        fontSize: 20,
-        paddingTop: 5,
-        paddingRight: 10,
-    },
-
-    compatibilityScoreContent: {
-        alignContent: 'flex-end',
-        fontSize: 20,
-        borderWidth: 2.5,
-        borderRadius: 20,
-        padding: 5,
-    },
-
 
     /* Social Media */
     mediaWrapper: {
