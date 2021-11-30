@@ -23,6 +23,7 @@ import { reportUser } from '../database/writeData';
 import { auth } from '../database/RTDB';
 import { getID } from '../database/ID';
 import { ViewQuestionnaire } from '../screens/ViewQuestionnaire';
+import Questionnaire, { questions, responses } from '../screens/Questionnaire';
 
 
 
@@ -40,12 +41,67 @@ export const CardItem = (props) => {
     // display questionnaire?
     if (viewingQuestionnaire) {
         return (
-            <View style={styles.container}>
-                <Text>Questionnaire Answers</Text>
-            </View>
+            <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+                <View style={styles.contentContainer}>
+                    <TouchableOpacity 
+                        style={styles.viewQuestionnaireButton}
+                        onPress={() => {
+                            console.log("Returning to Feed");
+                            setViewingQuestionnaire(!viewingQuestionnaire);
+                        }}
+                    >
+                        <View>
+                            <Text style={styles.viewQuestionnaireText}>Return to Feed</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <Text style={styles.questionaireHeader}>{profile.name}'s Questionnaire Answers</Text>
+
+                    {/* Questions and responses for the other user */}
+                    <View>
+                        <Text style={styles.question}>{questions[1]}</Text>
+                        <Text style={styles.response}>{responses[1][profile.questionnaire1]}</Text>
+
+                        <Text style={styles.question}>{questions[2]}</Text>
+                        <Text style={styles.response}>{responses[2][profile.questionnaire2]}</Text>
+
+                        <Text style={styles.question}>{questions[3]}</Text>
+                        <Text style={styles.response}>{responses[3][profile.questionnaire3]}</Text>
+
+                        <Text style={styles.question}>{questions[4]}</Text>
+                        <Text style={styles.response}>{responses[4][profile.questionnaire4]}</Text>
+
+                        <Text style={styles.question}>{questions[5]}</Text>
+                        <Text style={styles.response}>{responses[5][profile.questionnaire5]}</Text>
+
+                        <Text style={styles.question}>{questions[6]}</Text>
+                        <Text style={styles.response}>{responses[6][profile.questionnaire6]}</Text>
+
+                        <Text style={styles.question}>{questions[7]}</Text>
+                        <Text style={styles.response}>{responses[7][profile.questionnaire7]}</Text>
+
+                        <Text style={styles.question}>{questions[8]}</Text>
+                        <Text style={styles.response}>{responses[8][profile.questionnaire8]}</Text>
+
+                        <Text style={styles.question}>{questions[9]}</Text>
+                        <Text style={styles.response}>{responses[9][profile.questionnaire9]}</Text>
+
+                        <Text style={styles.question}>{questions[10]}</Text>
+                        <Text style={styles.response}>{responses[10][profile.questionnaire10]}</Text>
+
+                        <Text style={styles.question}>{questions[11]}</Text>
+                        <Text style={styles.response}>{responses[11][profile.questionnaire11]}</Text>
+
+                        <Text style={styles.question}>{questions[12]}</Text>
+                        <Text style={styles.response}>{responses[12][profile.questionnaire12]}</Text>
+
+                        <Text style={styles.question}>{questions[13]}</Text>
+                        <Text style={styles.response}>{responses[13][profile.questionnaire13]}</Text>
+
+                    </View>
+                </View>
+            </ScrollView>
         );
     }
-    else {
 
 
     return (
@@ -376,8 +432,6 @@ export const CardItem = (props) => {
     );
 }
 
-}
-
 export default CardItem;
 
 
@@ -618,7 +672,30 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: Colors.lightRed,
         fontSize: 14,
-    }
+    },
 
+
+    /* styles for the questionnaire screen */
+    questionaireHeader: {
+        fontSize: 25,
+        textAlign: 'center',
+        fontWeight: '600',
+        margin: 10,
+    },
+
+    question: {
+        fontSize: 20,
+        fontWeight: '600',
+        marginTop: 10,
+        textAlign: 'center',
+    },
+
+    response: {
+        fontSize: 18,
+        marginTop: 5,
+        marginBottom: 10,
+        textAlign: 'center',
+
+    },
 
 });
