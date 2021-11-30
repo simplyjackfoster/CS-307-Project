@@ -9,7 +9,7 @@ import {
     TouchableOpacity,
     Alert
 } from 'react-native';
-import Animated, { round } from 'react-native-reanimated';
+import Animated, { color, round } from 'react-native-reanimated';
 
 import {
     getDataFromPath,
@@ -59,10 +59,24 @@ export const CardItem = (props) => {
                     {/* Questions and responses for the other user */}
                     <View>
                         <Text style={styles.question}>{questions[1]}</Text>
-                        <Text style={styles.response}>{responses[1][profile.questionnaire1]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 1 ? ({color: Colors.green}) : ({}),
+                                profile.most_different_response == 1 ? ({color: Colors.red}) : ({})
+                            ]}
+                        >
+                            {responses[1][profile.questionnaire1]}
+                        </Text>
 
                         <Text style={styles.question}>{questions[2]}</Text>
-                        <Text style={styles.response}>{responses[2][profile.questionnaire2]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 2 ? ({color: Colors.green}) : ({}),
+                                profile.most_different_response == 2 ? ({color: Colors.red}) : ({})
+                            ]}
+                        >
+                            {responses[2][profile.questionnaire2]}
+                        </Text>
 
                         <Text style={styles.question}>{questions[3]}</Text>
                         <Text style={styles.response}>{responses[3][profile.questionnaire3]}</Text>

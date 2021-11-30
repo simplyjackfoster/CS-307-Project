@@ -60,7 +60,6 @@ export const questions = [
   /* 13 */"Do you have a significant other?",
 ];
 
-// export const questions;
 
 export const responses = [
   [],
@@ -79,7 +78,24 @@ export const responses = [
   /* 13 */[ "", "No", "Yes, not on campus", "Yes, on campus" ],
 ];
 
-// export const responses;
+// array of values based on how important each quesiton is to roommate compatibility
+export const values = [
+  -1,
+  /* 1 */3,
+  /* 2 */3,
+  /* 3 */4,
+  /* 4 */4,
+  /* 5 */2,
+  /* 6 */2,
+  /* 7 */3,
+  /* 8 */1,
+  /* 9 */3,
+  /* 10 */2,
+  /* 11 */2,
+  /* 12 */1,
+  /* 13 */1,
+];
+
 
 
 /*
