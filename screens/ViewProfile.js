@@ -19,9 +19,10 @@ import { CardItem } from '../components/CardItem';
 import Card from '../components/Card';
 import CardList from '../components/CardList';
 import { MatchInteractContext } from '../context';
-import { HeaderBackButton } from 'react-navigation';
 import { getDataFromPath, getDataFromPathAsync, getAgeAsync } from '../database/readData';
 import { getCompatibilityScoreAsync } from '../database/readData';
+import { getUserData } from '../database/readData';
+
 
 /*
  * This is the screen where the user can view their matches.
@@ -180,19 +181,8 @@ export default ({ navigation }) => {
   return (
     <View style={styles.container}>
 
-      {/* Cards Stack */}
-      <View style={{flex: 1}}>
-          <View style={styles.contentContainer}>
-            <View style={styles.cards}>
-            {
-              profiles.reverse().map((profile) => (
-                <Card key={profile.id} profile={profile}></Card>
-              ))
-            }
-            </View>
-          </View>
-        </View>
-
+      {/* Stack of Cards */}
+      <CardItem profile={profiles}></CardItem>
     </View>
   );
 

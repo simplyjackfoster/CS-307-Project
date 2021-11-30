@@ -45,7 +45,6 @@ export const CardItem = (props) => {
         );
     }
 
-
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             <View style={styles.contentContainer}>
