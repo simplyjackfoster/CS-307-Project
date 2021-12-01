@@ -45,17 +45,19 @@ export const CardItem = (props) => {
         return (
             <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
                 <View style={styles.contentContainer}>
+                    {/* return to feed button */}
                     <TouchableOpacity 
-                        style={styles.viewQuestionnaireButton}
+                        style={styles.returnButton}
                         onPress={() => {
                             console.log("Returning to Feed");
                             setViewingQuestionnaire(!viewingQuestionnaire);
                         }}
                     >
                         <View>
-                            <Text style={styles.viewQuestionnaireText}>Return to Feed</Text>
+                            <Text style={styles.returnText}>Return to Feed</Text>
                         </View>
                     </TouchableOpacity>
+
                     <Text style={styles.questionaireHeader}>{profile.name}'s Questionnaire Answers</Text>
 
                     {/* Questions and responses for the other user */}
@@ -203,35 +205,18 @@ export const CardItem = (props) => {
                             {responses[13][profile.questionnaire13]}
                         </Text>
 
-
-
-                        {/* <Text style={styles.question}>{questions[5]}</Text>
-                        <Text style={styles.response}>{responses[5][profile.questionnaire5]}</Text>
-
-                        <Text style={styles.question}>{questions[6]}</Text>
-                        <Text style={styles.response}>{responses[6][profile.questionnaire6]}</Text>
-
-                        <Text style={styles.question}>{questions[7]}</Text>
-                        <Text style={styles.response}>{responses[7][profile.questionnaire7]}</Text>
-
-                        <Text style={styles.question}>{questions[8]}</Text>
-                        <Text style={styles.response}>{responses[8][profile.questionnaire8]}</Text>
-
-                        <Text style={styles.question}>{questions[9]}</Text>
-                        <Text style={styles.response}>{responses[9][profile.questionnaire9]}</Text>
-
-                        <Text style={styles.question}>{questions[10]}</Text>
-                        <Text style={styles.response}>{responses[10][profile.questionnaire10]}</Text>
-
-                        <Text style={styles.question}>{questions[11]}</Text>
-                        <Text style={styles.response}>{responses[11][profile.questionnaire11]}</Text>
-
-                        <Text style={styles.question}>{questions[12]}</Text>
-                        <Text style={styles.response}>{responses[12][profile.questionnaire12]}</Text>
-
-                        <Text style={styles.question}>{questions[13]}</Text>
-                        <Text style={styles.response}>{responses[13][profile.questionnaire13]}</Text> */}
-
+                        {/* return to feed button */}
+                        <TouchableOpacity 
+                            style={styles.returnButton}
+                            onPress={() => {
+                                console.log("Returning to Feed");
+                                setViewingQuestionnaire(!viewingQuestionnaire);
+                            }}
+                        >
+                            <View>
+                                <Text style={styles.returnText}>Return to Feed</Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </ScrollView>
@@ -258,15 +243,19 @@ export const CardItem = (props) => {
 
 
                 {/* Compatibility Score (if in feed) */}
-                <TouchableOpacity style=
-                    {getID(auth.currentUser.email) != profile.id ? (
+                <View 
+                    style={getID(auth.currentUser.email) != profile.id ? (
                         styles.compatibilityScoreWrapper
                     ) : (
                         {display: 'none'}
                     )}
-
-                    onPress={() => setViewingQuestionnaire(!viewingQuestionnaire)}
                 >
+                    <TouchableOpacity
+                        style={styles.viewQuestionnaireButton}
+                        onPress={() => setViewingQuestionnaire(!viewingQuestionnaire)}
+                    >
+                        <Text style={styles.viewQuestionnaireText}>View Questionnaire</Text>
+                    </TouchableOpacity>
                     <Text 
                         style={[styles.compatibilityScoreText,
                         getBorderColor() == 0 ? (
@@ -275,9 +264,12 @@ export const CardItem = (props) => {
                             {borderColor: getBorderColor() == 1 ? Colors.yellow : Colors.green}
                         )]}
                     >
-                        {profile.compatibility_score}%
+                        {profile.compatibility_score}% Match
                     </Text>
-                </TouchableOpacity>
+
+                </View>
+
+                
 
 
                 {/* Bio (optional) */}
@@ -434,19 +426,6 @@ export const CardItem = (props) => {
                         )}
                     </Text>
                 </View>
-
-
-                {/* View Questionnaire (button) */}
-                <TouchableOpacity
-                    style={styles.viewQuestionnaireButton}
-                    onPress={() => {
-                        console.log("Viewing Questionnaire from card item");
-                        setViewQuestionnaire(!viewQuestionnaire);
-                    }}
-                >
-                    <Text style={styles.viewQuestionnaireText}>View Questionnaire</Text>
-                </TouchableOpacity>
-
 
 
                 <View style={{paddingTop: 20}}>
@@ -616,6 +595,7 @@ const styles = StyleSheet.create({
     compatibilityScoreWrapper: {
         paddingTop: 20,
         flexDirection: 'row',
+        justifyContent: 'space-evenly',
     },
     
 
@@ -784,13 +764,12 @@ const styles = StyleSheet.create({
     /* View Questionnaire */
     viewQuestionnaireText: {
 		fontSize: 18, 
+        fontWeight: '500',
 		color: Colors.royalBlue,
 		textDecorationLine: 'none',
     },
 
     viewQuestionnaireButton: {
-		margin: 15,
-        marginTop: 20, 
 		alignSelf: 'center',
     },
     
@@ -834,4 +813,18 @@ const styles = StyleSheet.create({
 
     },
 
+
+    /* styles for return button */
+    returnButton: {
+        alignSelf: 'center',
+        padding: 5,
+        margin: 5,
+    },
+
+    returnText: {
+        fontSize: 18, 
+        fontWeight: '500',
+		color: Colors.royalBlue,
+		textDecorationLine: 'none',
+    },
 });
