@@ -108,14 +108,14 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
 			<View style={styles.container}>
 
         {/* Cards Stack */}
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <View style={styles.contentContainer}>
             <View style={styles.cards}>
-            {
-              profiles.reverse().map((profile) => (
-                <Card key={profile.id} profile={profile}></Card>
-              ))
-            }
+              {
+                profiles.reverse().map((profile) => (
+                  <Card key={profile.id} profile={profile}></Card>
+                ))
+              }
             </View>
           </View>
         </View>
