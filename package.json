@@ -9,17 +9,19 @@
   },
   "dependencies": {
     "@react-native-community/masked-view": "0.1.10",
+    "@react-native-firebase/firestore": "^13.0.1",
     "@react-native-picker/picker": "^2.1.0",
     "@react-navigation/bottom-tabs": "^6.0.7",
     "@react-navigation/drawer": "^6.1.6",
     "@react-navigation/native": "^6.0.4",
     "@react-navigation/stack": "^6.0.9",
     "expo": "~42.0.1",
+    "expo-asset": "~8.3.3",
     "expo-image-picker": "~10.2.2",
     "expo-status-bar": "~1.0.4",
     "firebase": "^9.2.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "react-event-observer": "^0.5.11",
     "react-icon": "^1.0.0",
     "react-icons": "^4.3.1",
@@ -37,8 +39,7 @@
     "react-native-web": "^0.17.5",
     "react-navigation": "^2.0.4",
     "uuid": "^8.3.2",
-    "uuid4": "^2.0.2",
-    "expo-asset": "~8.3.3"
+    "uuid4": "^2.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"
