@@ -37,10 +37,8 @@ export const CardItem = (props) => {
         return Math.floor(profile.compatibility_score / 34);
     }
 
-    console.log(profile.id + ": most similar -> " + profile.most_similar_response
-                + " most different -> " + profile.most_different_response);
 
-    // display questionnaire?
+    // display questionnaire when applicable
     if (viewingQuestionnaire) {
         return (
             <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -223,7 +221,7 @@ export const CardItem = (props) => {
         );
     }
 
-
+    /* Display the card item when applicable */
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             <View style={styles.contentContainer}>
@@ -240,36 +238,6 @@ export const CardItem = (props) => {
                 <View style={styles.nameWrapper}>
                     <Text style={styles.nameText}>{profile.name}, {profile.age}</Text>
                 </View>
-
-
-                {/* Compatibility Score (if in feed) */}
-                <View 
-                    style={getID(auth.currentUser.email) != profile.id ? (
-                        styles.compatibilityScoreWrapper
-                    ) : (
-                        {display: 'none'}
-                    )}
-                >
-                    <TouchableOpacity
-                        style={styles.viewQuestionnaireButton}
-                        onPress={() => setViewingQuestionnaire(!viewingQuestionnaire)}
-                    >
-                        <Text style={styles.viewQuestionnaireText}>View Questionnaire</Text>
-                    </TouchableOpacity>
-                    <Text 
-                        style={[styles.compatibilityScoreText,
-                        getBorderColor() == 0 ? (
-                            {borderColor: Colors.red}
-                        ) : (
-                            {borderColor: getBorderColor() == 1 ? Colors.yellow : Colors.green}
-                        )]}
-                    >
-                        {profile.compatibility_score}% Match
-                    </Text>
-
-                </View>
-
-                
 
 
                 {/* Bio (optional) */}
@@ -331,6 +299,35 @@ export const CardItem = (props) => {
                     >
                         <Text style={styles.interestText}>{profile.interest5}</Text>
                     </View>
+                </View>
+
+
+
+                {/* Compatibility Score (if in feed) */}
+                <View 
+                    style={getID(auth.currentUser.email) != profile.id ? (
+                        styles.compatibilityScoreWrapper
+                    ) : (
+                        {display: 'none'}
+                    )}
+                >
+                    <Text 
+                        style={[styles.compatibilityScoreText,
+                        getBorderColor() == 0 ? (
+                            {borderColor: Colors.red}
+                        ) : (
+                            {borderColor: getBorderColor() == 1 ? Colors.yellow : Colors.green}
+                        )]}
+                    >
+                        {profile.compatibility_score}%
+                    </Text>
+
+                    <TouchableOpacity
+                        style={styles.viewQuestionnaireButton}
+                        onPress={() => setViewingQuestionnaire(!viewingQuestionnaire)}
+                    >
+                        <Text style={styles.viewQuestionnaireText}>View Questionnaire</Text>
+                    </TouchableOpacity>
                 </View>
 
 
