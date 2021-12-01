@@ -26,6 +26,7 @@ export const getDataFromPath = (path) => {
 		}
 		else {
 			console.log("This data is unavailable: " + path);
+			return null;
 		}
 	}).catch((error) => {
 		console.error(error);
@@ -169,7 +170,7 @@ export const getInterests = (email_or_id) => {
 
 
 /*
- * 
+ * get the Questionnaire data in an array of response values asynchronously
  */
 export const getQuestionnaireAsync = async (email_or_id) => {
 	const id = getID(email_or_id);
@@ -226,43 +227,96 @@ export const getCompatibilityScoreAsync = async (uid) => {
     const myQuestionnaire = await getQuestionnaireAsync(myUid);
     const questionnaire = await getQuestionnaireAsync(uid);
 
-    // array of values based on how important each quesiton is to roommate compatibility
-    const values = [
-        -1,
-        /* 1 */3,
-        /* 2 */3,
-        /* 3 */4,
-        /* 4 */4,
-        /* 5 */2,
-        /* 6 */2,
-        /* 7 */3,
-        /* 8 */1,
-        /* 9 */3,
-        /* 10 */2,
-        /* 11 */2,
-        /* 12 */1,
-        /* 13 */1,
-    ];
-
     // keep track of difference adjusted for value and the sum of those differences
     let diff = 0;
     let sumOfDiff = 0;
 
     // sum up the differences
     for (let i = 1; i <= 13; i++) {
-        diff = values[i] * (questionnaire[i] - myQuestionnaire[i]);
-        if (diff < 0) diff = -diff;
-        //console.log("Diff " + i + " = " + diff);
+        diff = Math.abs(values[i] * (questionnaire[i] - myQuestionnaire[i]));
         sumOfDiff += diff;
     }
 
     // turn the sum of differences (1-110) into a scale from 0 to 100
     const compatibilityScore = Math.round(100 - ((sumOfDiff / 108) * 100));
-    //console.log("Compatibility score between " + myUid + " and " + uid + ": " + compatibilityScore);
 
     return compatibilityScore;
 } // getCompatibilityScoreAsync()
 
+
+// values for each question in the questionnaire
+const values = [
+	-1,
+	/* 1 */3,
+	/* 2 */3,
+	/* 3 */4,
+	/* 4 */4,
+	/* 5 */2,
+	/* 6 */2,
+	/* 7 */3,
+	/* 8 */1,
+	/* 9 */3,
+	/* 10 */2,
+	/* 11 */2,
+	/* 12 */1,
+	/* 13 */1,
+];
+
+/*
+ * Function that takes in the id of a user as well as an array of the current user's questionnaire responses
+ * and returns the question number that have the most similar responses
+ */
+export const getMostSimilarResponseAsync = async (id, myQuestionnaire) => {
+	const questionnaire = await getQuestionnaireAsync(id);
+
+	// loop through responses and minimize the difference in response, if there are multiple 0 differences, prioritize higher values
+	var diff;
+	var minDiff = 100; // arbitrary number larger than the largest difference for one question
+	var minQuestion = -1;
+
+	for (let i = 1; i <= 13; i++) {
+		if (i == 8 || i == 13) continue;	// not relevant to point out
+
+		diff = Math.abs(myQuestionnaire[i] - questionnaire[i]);
+
+		if (diff < minDiff || (diff == minDiff && values[i] > values[minQuestion])) {
+			minDiff = diff;
+			minQuestion = i;
+		}
+	}
+
+	return minQuestion;
+
+} // getMostSimilarResponseAsync()
+
+
+
+/*
+ * Function that takes in the id of a user as well as an array of the current user's questionnaire responses
+ * and returns the question number that have the most different responses
+ */
+export const getMostDifferentResponseAsync = async (id, myQuestionnaire) => {
+	const questionnaire = await getQuestionnaireAsync(id);
+
+	// loop through responses and maximize the difference in response, if there are any ties prioritize higher values
+	var diff;
+	var maxDiff = -1; // arbitrary number smaller than the smallest difference for one question
+	var maxQuestion = -1;
+
+	for (let i = 1; i <= 13; i++) {
+		if (i == 8 || i == 13) continue;	// not relevant to point out
+
+		diff = Math.abs(myQuestionnaire[i] - questionnaire[i]);
+
+		if (diff > maxDiff || (diff == maxDiff && values[i] > values[maxQuestion])) {
+			maxDiff = diff;
+			maxQuestion = i;
+		}
+	}
+
+	return maxQuestion;
+
+} // getMostDifferentResponseAsync()
 
 
 
@@ -317,7 +371,7 @@ export const getUserData = async (ids) => {
 	//var ids = ["mfinder", "thylan", "francik"]; // using fixed value
 
 	// GET MY QUESTIONNAIRE ANSWERS
-	let myAnswers = await getQuestionnaireAsync(getID(auth.currentUser.email));	
+	const myQuestionnaire = await getQuestionnaireAsync(getID(auth.currentUser.email));	
 
 
 	// STEP 1: GET THE PROFILE INFORMATION FOR OTHER SPECIFIED PROFILES
@@ -355,6 +409,8 @@ export const getUserData = async (ids) => {
 	var questionnaire11_answer_list = [];
 	var questionnaire12_answer_list = [];
 	var questionnaire13_answer_list = [];
+	var most_similar_response_list = [];
+	var most_different_response_list = [];
 
 
 	for (const id of ids) {
@@ -393,6 +449,8 @@ export const getUserData = async (ids) => {
 			questionnaire11, // 30
 			questionnaire12, // 31
 			questionnaire13, // 32
+			most_similar_response, // 33
+			most_different_response, // 34
 		] = await Promise.all(
 		[
 			getDataFromPathAsync("users/" + id + "/Profile/Images/profile_picture"), // 1
@@ -427,6 +485,8 @@ export const getUserData = async (ids) => {
 			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/check_before_having_people_over"), // 30
 			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/joint_grocery_shopping"), // 31
 			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_significant_other"), // 32
+			getMostSimilarResponseAsync(id, myQuestionnaire), // 33
+			getMostDifferentResponseAsync(id, myQuestionnaire), // 34
 		]);
 	
 
@@ -463,22 +523,10 @@ export const getUserData = async (ids) => {
 		questionnaire11_answer_list.push(questionnaire11);
 		questionnaire12_answer_list.push(questionnaire12);
 		questionnaire13_answer_list.push(questionnaire13);
-		
+		most_similar_response_list.push(most_similar_response);
+		most_different_response_list.push(most_different_response);
 	} // for-loop
 
-
-	// CALCULATE MOST SIMILAR/DIFFERENT RESPONSES
-
-	for (let i = 1; i < ids.length; i++) { // for each user in ids
-		var mostSimilar = 0;
-		var leastSimilar = 0;
-		var maxDiff = Math.abs(myAnswers[0] - questionnaire1_answer_list[i][0]);
-		var minDiff = Math.abs(myAnswers[0] - questionnaire1_answer_list[i][0]);
-
-		/*for (let j = 1; j < 13; j++) { // go through each question to find mostSimilar/leastSimilar
-
-		}*/
-	}
 
 
 	// STEP 2: ASSEMBLE THE PROFILES
@@ -518,8 +566,8 @@ export const getUserData = async (ids) => {
 			questionnaire11: questionnaire11_answer_list[i],
 			questionnaire12: questionnaire12_answer_list[i],
 			questionnaire13: questionnaire13_answer_list[i],
-			most_similar_response: "has_people_over",
-			least_similar_response: "smokes",
+			most_similar_response: most_similar_response_list[i],
+			most_different_response: most_different_response_list[i],
 		};
 
 		// add profile to array

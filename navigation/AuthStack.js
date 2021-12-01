@@ -15,8 +15,8 @@ const Stack = createStackNavigator();
 const AuthStack = () => {
 	return (
 		<Stack.Navigator>
-			<Stack.Screen name="Login"
-			component={Login} options={{ title: "UniRoom" }}/>
+			<Stack.Screen name="Login" component={Login} 
+			options={{ title: "UniRoom" }}/>
 
 			<Stack.Screen name="Signup" component={Signup}
 			options={{ title: "Create Account", headerBackTitle: "Log In" }}/>
