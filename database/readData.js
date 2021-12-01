@@ -4,7 +4,6 @@ import {ref, set, exists, val, child, get, remove, onValue } from "firebase/data
 import { getID } from './ID';
 import { Value } from 'react-native-reanimated';
 import { Asset } from 'expo-asset';
-import Questionnaire, { questions, values } from '../screens/Questionnaire';
 
 
 /*
@@ -245,6 +244,23 @@ export const getCompatibilityScoreAsync = async (uid) => {
 } // getCompatibilityScoreAsync()
 
 
+// values for each question in the questionnaire
+const values = [
+	-1,
+	/* 1 */3,
+	/* 2 */3,
+	/* 3 */4,
+	/* 4 */4,
+	/* 5 */2,
+	/* 6 */2,
+	/* 7 */3,
+	/* 8 */1,
+	/* 9 */3,
+	/* 10 */2,
+	/* 11 */2,
+	/* 12 */1,
+	/* 13 */1,
+];
 
 /*
  * Function that takes in the id of a user as well as an array of the current user's questionnaire responses
@@ -259,6 +275,8 @@ export const getMostSimilarResponseAsync = async (id, myQuestionnaire) => {
 	var minQuestion = -1;
 
 	for (let i = 1; i <= 13; i++) {
+		if (i == 8 || i == 13) continue;	// not relevant to point out
+
 		diff = Math.abs(myQuestionnaire[i] - questionnaire[i]);
 
 		if (diff < minDiff || (diff == minDiff && values[i] > values[minQuestion])) {
@@ -266,6 +284,8 @@ export const getMostSimilarResponseAsync = async (id, myQuestionnaire) => {
 			minQuestion = i;
 		}
 	}
+
+	console.log("Most similar question between myself and " + id + ": " + minQuestion);
 
 	return minQuestion;
 
@@ -277,7 +297,7 @@ export const getMostSimilarResponseAsync = async (id, myQuestionnaire) => {
  * Function that takes in the id of a user as well as an array of the current user's questionnaire responses
  * and returns the question number that have the most different responses
  */
-export const getMostDifferentResponseAsync = async () => {
+export const getMostDifferentResponseAsync = async (id, myQuestionnaire) => {
 	const questionnaire = await getQuestionnaireAsync(id);
 
 	// loop through responses and maximize the difference in response, if there are any ties prioritize higher values
@@ -286,13 +306,17 @@ export const getMostDifferentResponseAsync = async () => {
 	var maxQuestion = -1;
 
 	for (let i = 1; i <= 13; i++) {
+		if (i == 8 || i == 13) continue;	// not relevant to point out
+
 		diff = Math.abs(myQuestionnaire[i] - questionnaire[i]);
 
-		if (diff > maxDiff || (diff == maxDiff && values[i] > values[minQuestion])) {
+		if (diff > maxDiff || (diff == maxDiff && values[i] > values[maxQuestion])) {
 			maxDiff = diff;
 			maxQuestion = i;
 		}
 	}
+
+	console.log("Most different question between myself and " + id + ": " + maxQuestion);
 
 	return maxQuestion;
 
@@ -508,19 +532,6 @@ export const getUserData = async (ids) => {
 	} // for-loop
 
 
-	// CALCULATE MOST SIMILAR/DIFFERENT RESPONSES
-
-	// for (let i = 1; i < ids.length; i++) { // for each user in ids
-	// 	var mostSimilar = 0;
-	// 	var leastSimilar = 0;
-	// 	var maxDiff = Math.abs(myAnswers[0] - questionnaire1_answer_list[i][0]);
-	// 	var minDiff = Math.abs(myAnswers[0] - questionnaire1_answer_list[i][0]);
-
-	// 	for (let j = 1; j < 13; j++) { // go through each question to find mostSimilar/leastSimilar
-
-	// 	}
-	// }
-
 
 	// STEP 2: ASSEMBLE THE PROFILES
 	var profile_list = [];
@@ -560,7 +571,7 @@ export const getUserData = async (ids) => {
 			questionnaire12: questionnaire12_answer_list[i],
 			questionnaire13: questionnaire13_answer_list[i],
 			most_similar_response: most_similar_response_list[i],
-			least_similar_response: most_different_response_list[i],
+			most_different_response: most_different_response_list[i],
 		};
 
 		// add profile to array

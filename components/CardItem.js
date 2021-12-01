@@ -37,6 +37,8 @@ export const CardItem = (props) => {
         return Math.floor(profile.compatibility_score / 34);
     }
 
+    console.log(profile.id + ": most similar -> " + profile.most_similar_response
+                + " most different -> " + profile.most_different_response);
 
     // display questionnaire?
     if (viewingQuestionnaire) {
@@ -58,33 +60,152 @@ export const CardItem = (props) => {
 
                     {/* Questions and responses for the other user */}
                     <View>
+                        {/* 1 */}
                         <Text style={styles.question}>{questions[1]}</Text>
                         <Text 
                             style={[styles.response,
-                                profile.most_similar_response == 1 ? ({color: Colors.green}) : ({}),
-                                profile.most_different_response == 1 ? ({color: Colors.red}) : ({})
+                                profile.most_similar_response == 1 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 1 ? ({color: Colors.darkRed}) : ({})
                             ]}
                         >
                             {responses[1][profile.questionnaire1]}
                         </Text>
 
+                        {/* 2 */}
                         <Text style={styles.question}>{questions[2]}</Text>
                         <Text 
                             style={[styles.response,
-                                profile.most_similar_response == 2 ? ({color: Colors.green}) : ({}),
-                                profile.most_different_response == 2 ? ({color: Colors.red}) : ({})
+                                profile.most_similar_response == 2 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 2 ? ({color: Colors.darkRed}) : ({})
                             ]}
                         >
                             {responses[2][profile.questionnaire2]}
                         </Text>
 
+                        {/* 3 */}
                         <Text style={styles.question}>{questions[3]}</Text>
-                        <Text style={styles.response}>{responses[3][profile.questionnaire3]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 3 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 3 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[3][profile.questionnaire3]}
+                        </Text>
 
+                        {/* 4 */}
                         <Text style={styles.question}>{questions[4]}</Text>
-                        <Text style={styles.response}>{responses[4][profile.questionnaire4]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 4 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 4 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[4][profile.questionnaire4]}
+                        </Text>
 
+                        {/* 5 */}
                         <Text style={styles.question}>{questions[5]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 5 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 5 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[5][profile.questionnaire5]}
+                        </Text>
+
+                        {/* 6 */}
+                        <Text style={styles.question}>{questions[6]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 6 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 6 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[6][profile.questionnaire6]}
+                        </Text>
+
+                        {/* 7 */}
+                        <Text style={styles.question}>{questions[7]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 7 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 7 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[7][profile.questionnaire7]}
+                        </Text>
+
+                        {/* 8 */}
+                        <Text style={styles.question}>{questions[8]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 8 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 8 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[8][profile.questionnaire8]}
+                        </Text>
+
+                        {/* 9 */}
+                        <Text style={styles.question}>{questions[9]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 9 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 9 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[9][profile.questionnaire9]}
+                        </Text>
+
+                        {/* 10 */}
+                        <Text style={styles.question}>{questions[10]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 10 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 10 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[10][profile.questionnaire10]}
+                        </Text>
+
+                        {/* 11 */}
+                        <Text style={styles.question}>{questions[11]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 11 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 11 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[11][profile.questionnaire11]}
+                        </Text>
+
+                        {/* 12 */}
+                        <Text style={styles.question}>{questions[12]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 12 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 12 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[12][profile.questionnaire12]}
+                        </Text>
+
+                        {/* 13 */}
+                        <Text style={styles.question}>{questions[13]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 13 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 13 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[13][profile.questionnaire13]}
+                        </Text>
+
+
+
+                        {/* <Text style={styles.question}>{questions[5]}</Text>
                         <Text style={styles.response}>{responses[5][profile.questionnaire5]}</Text>
 
                         <Text style={styles.question}>{questions[6]}</Text>
@@ -109,7 +230,7 @@ export const CardItem = (props) => {
                         <Text style={styles.response}>{responses[12][profile.questionnaire12]}</Text>
 
                         <Text style={styles.question}>{questions[13]}</Text>
-                        <Text style={styles.response}>{responses[13][profile.questionnaire13]}</Text>
+                        <Text style={styles.response}>{responses[13][profile.questionnaire13]}</Text> */}
 
                     </View>
                 </View>
@@ -706,6 +827,7 @@ const styles = StyleSheet.create({
 
     response: {
         fontSize: 18,
+        fontWeight: '400',
         marginTop: 5,
         marginBottom: 10,
         textAlign: 'center',
