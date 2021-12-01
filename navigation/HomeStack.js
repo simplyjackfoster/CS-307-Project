@@ -55,7 +55,7 @@ const HomeStack = () => {
 				}}
 			/>
 
-			<Stack.Screen name="Chat" component={ChatScreen}
+			<Stack.Screen name="ChatScreen" component={ChatScreen}
 				options={{
 					headerBackTitle: "Back"
 				}}

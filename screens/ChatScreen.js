@@ -13,6 +13,11 @@ import styles from '../assets/index';
  */
 export default ({ navigation }) =>{
   const [messages, setMessages] = useState([]);
+  const { thread } = route.params;
+  const { user } = useContext(AuthContext);
+  const currentUser = user.toJSON();
+  
+  const [messages, setMessages] = useState([]);
   const profile_picture = getDataFromPath("users/" + "foste205" + "/Profile/Images/profile_picture");
 
 

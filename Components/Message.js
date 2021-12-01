@@ -11,9 +11,6 @@ const Message = (props) => {
   const lastMessage = "Hey do you want to be roommates?"
   const navigation = useNavigation();
   return (
-    <TouchableOpacity
-    onPress={() => navigation.navigate('ChatScreen')}
-    >
       <View style={styles.containerMessage}>
         <Image source={{uri: profile_picture}} style={styles.avatar} />
         <View>
@@ -21,7 +18,6 @@ const Message = (props) => {
           <Text style={styles.message}>{lastMessage}</Text>
         </View>
       </View>
-    </TouchableOpacity>
   );
 };
 
