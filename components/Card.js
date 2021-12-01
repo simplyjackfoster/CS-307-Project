@@ -27,13 +27,13 @@ export default class Card extends Component {
 
 
 	render() {
-		const { profile, likeOpacity, nopeOpacity } = this.props;
+		const { profile, viewQuest, likeOpacity, nopeOpacity } = this.props;
 
 
         return (
             <View style={styles.container}>
                 {/* The Card */}
-                <CardItem profile={profile} style={styles.cardWrapper}></CardItem>
+                <CardItem profile={profile} viewQuest={viewQuest} style={styles.cardWrapper}></CardItem>
 
                 {/* Like and Nope Text */}
                 <View style={styles.swipeTextWrapper}>

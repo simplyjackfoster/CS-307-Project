@@ -29,7 +29,7 @@ export default () => {
    */
   const initializeFeedProfiles = async () => {
     // get the profile ids from the database (USE ALGORITHM)
-    var ids = ["mfinder", "thylan", "francik"]; // using fixed value
+    var ids = ["mfinder", "test", "francik"]; // using fixed value
 
     // get the data for the profiles
     const profile_list = await getUserData(ids);

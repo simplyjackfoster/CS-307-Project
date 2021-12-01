@@ -41,6 +41,63 @@ import { getID } from '../database/ID';
 // used so that the hooks don't get set rapidly in edit questionnaire
 var updatedTheSelected = false;
 
+// constants for all the questions and responses
+// string arrays for all the questions and responses, ignoring the 0th index of each array
+export const questions = [
+  "",
+  /* 1 */"I have people over frequently.",
+  /* 2 */"I am a clean person.",
+  /* 3 */"What time do you go to bed during the week?",
+  /* 4 */"What time do you go to bed on the weekends?",
+  /* 5 */"How many days of the week do you drink alcohol?",
+  /* 6 */"How many days of the week do you smoke?",
+  /* 7 */"How would you like to handle chores?",
+  /* 8 */"Do you have a car?",
+  /* 9 */"Do you want pets in the room?",
+  /* 10 */"Are you introverted or extraverted?",
+  /* 11 */"Do we need to check before having someone over?",
+  /* 12 */"Do you want to do joint grocery shopping?",
+  /* 13 */"Do you have a significant other?",
+];
+
+
+export const responses = [
+  [],
+  /* 1 */[ "", "Strongly Disagree", "Somewhat Disagree", "Neither Agree or Disagree", "Somewhat Agree", "Strongly Agree", ],
+  /* 2 */[ "", "Strongly Disagree", "Somewhat Disagree", "Neither Agree or Disagree", "Somewhat Agree", "Strongly Agree", ],
+  /* 3 */[ "", "Before 10pm", "10pm-12am", "12-2am", "2-4am", "After 4am", ],
+  /* 4 */[ "", "Before 10pm", "10pm-12am", "12-2am", "2-4am", "After 4am", ],
+  /* 5 */[ "", "Never", "1 day", "2-3 days", "4-5 days", "6-7 days", ],
+  /* 6 */[ "", "Never", "1 day", "2-3 days", "4-5 days", "6-7 days", ],
+  /* 7 */[ "", "Do all the chores", "Divide chores evenly", "Do chores when needed", "I don't do chores", ],
+  /* 8 */[ "", "No", "Yes", ],
+  /* 9 */[ "", "No", "Yes, dog(s)", "Yes, cat(s)", "Yes, other", ],
+  /* 10 */[ "", "Definitely Introverted", "Somewhat Introverted", "Neither", "Somewhat Extraverted", "Definitely Extraverted", ],
+  /* 11 */[ "", "No", "Sometimes, yes", "Most of the time, yes", "Always, yes", ],
+  /* 12 */[ "", "No", "Yes", ],
+  /* 13 */[ "", "No", "Yes, not on campus", "Yes, on campus" ],
+];
+
+// array of values based on how important each quesiton is to roommate compatibility
+export const values = [
+  -1,
+  /* 1 */3,
+  /* 2 */3,
+  /* 3 */4,
+  /* 4 */4,
+  /* 5 */2,
+  /* 6 */2,
+  /* 7 */3,
+  /* 8 */1,
+  /* 9 */3,
+  /* 10 */2,
+  /* 11 */2,
+  /* 12 */1,
+  /* 13 */1,
+];
+
+
+
 /*
  * This is the screen where the user fills out the questionnaire
  * about themselves.
@@ -64,41 +121,6 @@ export default ( {navigation} ) => {
   const [selectedTwelve, setSelectedTwelve] = React.useState(1); // joint_grocery_shopping
   const [selectedThirteen, setSelectedThirteen] = React.useState(1); // has_significant_other
 
-
-  // string arrays for all the questions and responses, ignoring the 0th index of each array
-  const questions = [
-    "",
-    /* 1 */"I have people over frequently.",
-    /* 2 */"I am a clean person.",
-    /* 3 */"What time do you go to bed during the week?",
-    /* 4 */"What time do you go to bed on the weekends?",
-    /* 5 */"How many days of the week do you drink alcohol?",
-    /* 6 */"How many days of the week do you smoke?",
-    /* 7 */"How would you like to handle chores?",
-    /* 8 */"Do you have a car?",
-    /* 9 */"Do you want pets in the room?",
-    /* 10 */"Are you introverted or extraverted?",
-    /* 11 */"Do we need to check before having someone over?",
-    /* 12 */"Do you want to do joint grocery shopping?",
-    /* 13 */"Do you have a significant other?",
-  ];
-
-  const responses = [
-    [],
-    /* 1 */[ "", "Strongly Disagree", "Somewhat Disagree", "Neither Agree or Disagree", "Somewhat Agree", "Strongly Agree", ],
-    /* 2 */[ "", "Strongly Disagree", "Somewhat Disagree", "Neither Agree or Disagree", "Somewhat Agree", "Strongly Agree", ],
-    /* 3 */[ "", "Before 10pm", "10pm-12am", "12-2am", "2-4am", "After 4am", ],
-    /* 4 */[ "", "Before 10pm", "10pm-12am", "12-2am", "2-4am", "After 4am", ],
-    /* 5 */[ "", "Never", "1 day", "2-3 days", "4-5 days", "6-7 days", ],
-    /* 6 */[ "", "Never", "1 day", "2-3 days", "4-5 days", "6-7 days", ],
-    /* 7 */[ "", "Do all the chores", "Divide chores evenly", "Do chores when needed", "I don't do chores", ],
-    /* 8 */[ "", "No", "Yes", ],
-    /* 9 */[ "", "No", "Yes, dog(s)", "Yes, cat(s)", "Yes, other", ],
-    /* 10 */[ "", "Definitely Introverted", "Somewhat Introverted", "Neither", "Somewhat Extraverted", "Definitely Extraverted", ],
-    /* 11 */[ "", "No", "Sometimes, yes", "Most of the time, yes", "Always, yes", ],
-    /* 12 */[ "", "No", "Yes", ],
-    /* 13 */[ "", "No", "Yes, not on campus", "Yes, on campus" ],
-  ];
 
 
 

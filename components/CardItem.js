@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
     StyleSheet,
     Text, 
@@ -9,7 +9,7 @@ import {
     TouchableOpacity,
     Alert
 } from 'react-native';
-import Animated, { round } from 'react-native-reanimated';
+import Animated, { color, round } from 'react-native-reanimated';
 
 import {
     getDataFromPath,
@@ -22,6 +22,8 @@ import { renderIcon } from "../images/Icons";
 import { reportUser } from '../database/writeData';
 import { auth } from '../database/RTDB';
 import { getID } from '../database/ID';
+import { ViewQuestionnaire } from '../screens/ViewQuestionnaire';
+import Questionnaire, { questions, responses } from '../screens/Questionnaire';
 
 
 
@@ -36,15 +38,190 @@ export const CardItem = (props) => {
     }
 
 
-    // display questionnaire?
+    // display questionnaire when applicable
     if (viewingQuestionnaire) {
         return (
-            <View style={styles.container}>
-                <Text>Questionnaire Answers</Text>
-            </View>
+            <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+                <View style={styles.contentContainer}>
+                    {/* return to feed button */}
+                    <TouchableOpacity 
+                        style={styles.returnButton}
+                        onPress={() => {
+                            console.log("Returning to Feed");
+                            setViewingQuestionnaire(!viewingQuestionnaire);
+                        }}
+                    >
+                        <View>
+                            <Text style={styles.returnText}>Return to Feed</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <Text style={styles.questionaireHeader}>{profile.name}'s Questionnaire Answers</Text>
+
+                    {/* Questions and responses for the other user */}
+                    <View>
+                        {/* 1 */}
+                        <Text style={styles.question}>{questions[1]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 1 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 1 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[1][profile.questionnaire1]}
+                        </Text>
+
+                        {/* 2 */}
+                        <Text style={styles.question}>{questions[2]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 2 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 2 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[2][profile.questionnaire2]}
+                        </Text>
+
+                        {/* 3 */}
+                        <Text style={styles.question}>{questions[3]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 3 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 3 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[3][profile.questionnaire3]}
+                        </Text>
+
+                        {/* 4 */}
+                        <Text style={styles.question}>{questions[4]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 4 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 4 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[4][profile.questionnaire4]}
+                        </Text>
+
+                        {/* 5 */}
+                        <Text style={styles.question}>{questions[5]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 5 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 5 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[5][profile.questionnaire5]}
+                        </Text>
+
+                        {/* 6 */}
+                        <Text style={styles.question}>{questions[6]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 6 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 6 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[6][profile.questionnaire6]}
+                        </Text>
+
+                        {/* 7 */}
+                        <Text style={styles.question}>{questions[7]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 7 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 7 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[7][profile.questionnaire7]}
+                        </Text>
+
+                        {/* 8 */}
+                        <Text style={styles.question}>{questions[8]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 8 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 8 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[8][profile.questionnaire8]}
+                        </Text>
+
+                        {/* 9 */}
+                        <Text style={styles.question}>{questions[9]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 9 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 9 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[9][profile.questionnaire9]}
+                        </Text>
+
+                        {/* 10 */}
+                        <Text style={styles.question}>{questions[10]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 10 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 10 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[10][profile.questionnaire10]}
+                        </Text>
+
+                        {/* 11 */}
+                        <Text style={styles.question}>{questions[11]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 11 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 11 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[11][profile.questionnaire11]}
+                        </Text>
+
+                        {/* 12 */}
+                        <Text style={styles.question}>{questions[12]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 12 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 12 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[12][profile.questionnaire12]}
+                        </Text>
+
+                        {/* 13 */}
+                        <Text style={styles.question}>{questions[13]}</Text>
+                        <Text 
+                            style={[styles.response,
+                                profile.most_similar_response == 13 ? ({color: Colors.darkGreen}) : ({}),
+                                profile.most_different_response == 13 ? ({color: Colors.darkRed}) : ({})
+                            ]}
+                        >
+                            {responses[13][profile.questionnaire13]}
+                        </Text>
+
+                        {/* return to feed button */}
+                        <TouchableOpacity 
+                            style={styles.returnButton}
+                            onPress={() => {
+                                console.log("Returning to Feed");
+                                setViewingQuestionnaire(!viewingQuestionnaire);
+                            }}
+                        >
+                            <View>
+                                <Text style={styles.returnText}>Return to Feed</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </ScrollView>
         );
     }
 
+    /* Display the card item when applicable */
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             <View style={styles.contentContainer}>
@@ -61,30 +238,6 @@ export const CardItem = (props) => {
                 <View style={styles.nameWrapper}>
                     <Text style={styles.nameText}>{profile.name}, {profile.age}</Text>
                 </View>
-
-
-                {/* Compatibility Score (if in feed) */}
-                <TouchableOpacity style=
-                    {getID(auth.currentUser.email) != profile.id ? (
-                        styles.compatibilityScoreWrapper
-                    ) : (
-                        {display: 'none'}
-                    )}
-
-                    onPress={() => setViewingQuestionnaire(!viewingQuestionnaire)}
-                >
-                    <Text style=
-                        {[styles.compatibilityScoreText,
-                        getBorderColor() == 0 ? (
-                            { borderColor: Colors.red, color: Colors.red }
-                        ) : (
-                            { borderColor: getBorderColor() == 1 ? Colors.yellow : Colors.green,
-                              color: getBorderColor() == 1 ? Colors.yellow : Colors.green }
-                        )]}
-                    >
-                        {profile.compatibility_score}%
-                    </Text>
-                </TouchableOpacity>
 
 
                 {/* Bio (optional) */}
@@ -146,6 +299,35 @@ export const CardItem = (props) => {
                     >
                         <Text style={styles.interestText}>{profile.interest5}</Text>
                     </View>
+                </View>
+
+
+
+                {/* Compatibility Score (if in feed) */}
+                <View 
+                    style={getID(auth.currentUser.email) != profile.id ? (
+                        styles.compatibilityScoreWrapper
+                    ) : (
+                        {display: 'none'}
+                    )}
+                >
+                    <Text 
+                        style={[styles.compatibilityScoreText,
+                        getBorderColor() == 0 ? (
+                            {borderColor: Colors.red}
+                        ) : (
+                            {borderColor: getBorderColor() == 1 ? Colors.yellow : Colors.green}
+                        )]}
+                    >
+                        {profile.compatibility_score}%
+                    </Text>
+
+                    <TouchableOpacity
+                        style={styles.viewQuestionnaireButton}
+                        onPress={() => setViewingQuestionnaire(!viewingQuestionnaire)}
+                    >
+                        <Text style={styles.viewQuestionnaireText}>View Questionnaire</Text>
+                    </TouchableOpacity>
                 </View>
 
 
@@ -242,8 +424,6 @@ export const CardItem = (props) => {
                     </Text>
                 </View>
 
-
-                
 
                 <View style={{paddingTop: 20}}>
 
@@ -412,6 +592,7 @@ const styles = StyleSheet.create({
     compatibilityScoreWrapper: {
         paddingTop: 20,
         flexDirection: 'row',
+        justifyContent: 'space-evenly',
     },
     
 
@@ -576,6 +757,18 @@ const styles = StyleSheet.create({
         paddingTop: 3,
         alignSelf: 'center',
     },
+
+    /* View Questionnaire */
+    viewQuestionnaireText: {
+		fontSize: 18, 
+        fontWeight: '500',
+		color: Colors.royalBlue,
+		textDecorationLine: 'none',
+    },
+
+    viewQuestionnaireButton: {
+		alignSelf: 'center',
+    },
     
 
     /* Report User */
@@ -590,7 +783,45 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: Colors.lightRed,
         fontSize: 14,
-    }
+    },
 
 
+    /* styles for the questionnaire screen */
+    questionaireHeader: {
+        fontSize: 25,
+        textAlign: 'center',
+        fontWeight: '600',
+        margin: 10,
+    },
+
+    question: {
+        fontSize: 20,
+        fontWeight: '600',
+        marginTop: 10,
+        textAlign: 'center',
+    },
+
+    response: {
+        fontSize: 18,
+        fontWeight: '400',
+        marginTop: 5,
+        marginBottom: 10,
+        textAlign: 'center',
+
+    },
+
+
+    /* styles for return button */
+    returnButton: {
+        alignSelf: 'center',
+        padding: 5,
+        margin: 5,
+    },
+
+    returnText: {
+        fontSize: 18, 
+        fontWeight: '500',
+		color: Colors.royalBlue,
+		textDecorationLine: 'none',
+    },
 });
