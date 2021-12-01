@@ -5,7 +5,6 @@ import {
     View, 
     ScrollView,
     Image,
-    Linking,
     TouchableOpacity,
     Alert
 } from 'react-native';
@@ -28,25 +27,25 @@ export default class Card extends Component {
 
 
 	render() {
-		const uid = this.props.id;
-		const { likeOpacity, nopeOpacity } = this.props;
+		const { profile, viewQuest, likeOpacity, nopeOpacity } = this.props;
 
-    return (
-			<View style={styles.container}>
-				{/* The Card */}
-				<CardItem id={uid} style={styles.cardWrapper}></CardItem>
 
-				{/* Like and Nope Text */}
-				<View style={styles.swipeTextWrapper}>
-					<Animated.View style={[styles.likeWrapper, {opacity: likeOpacity}]}>
-							<Text style={styles.likeText}>LIKE</Text>
-					</Animated.View>
-					<Animated.View style={[styles.nopeWrapper, {opacity: nopeOpacity}]}>
-							<Text style={styles.nopeText}>NOPE</Text>
-					</Animated.View>
-    		</View>
-			</View>
-    );
+        return (
+            <View style={styles.container}>
+                {/* The Card */}
+                <CardItem profile={profile} viewQuest={viewQuest} style={styles.cardWrapper}></CardItem>
+
+                {/* Like and Nope Text */}
+                <View style={styles.swipeTextWrapper}>
+                    <Animated.View style={[styles.likeWrapper, {opacity: likeOpacity}]}>
+                        <Text style={styles.likeText}>LIKE</Text>
+                    </Animated.View>
+                    <Animated.View style={[styles.nopeWrapper, {opacity: nopeOpacity}]}>
+                        <Text style={styles.nopeText}>NOPE</Text>
+                    </Animated.View>
+                </View>
+            </View>
+        );
 	} // render()
 
 } // export default
@@ -61,14 +60,14 @@ const styles = StyleSheet.create({
 
     /* Container styles */
     container: {
-        flex: 1,
+        ...StyleSheet.absoluteFillObject,
     },
 
 
     /* Like and Nope wrapper */
     swipeTextWrapper: {
-				position: 'absolute',
-				marginTop: 35,
+		position: 'absolute',
+		marginTop: 35,
         flexDirection: 'row',
         alignSelf: 'center',
     },

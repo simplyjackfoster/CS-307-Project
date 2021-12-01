@@ -12,24 +12,53 @@ import {
 import { getDataFromPath, getInstagramLink } from "../database/readData";
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
+import { MatchInteractContext } from '../context';
+import { reportUser } from '../database/writeData';
 
-
+//export var displays;
 
 const MatchItem = (props) => {
+    //const { userToken, setUserToken }  = React.useContext();
+    const { matchToken, setMatchToken } = React.useContext(MatchInteractContext);
     const [displayMatch, setDisplayMatch] = React.useState(true);
-
+    
     const uid = props.id;
     const profile_picture = getDataFromPath("users/" + uid + "/Profile/Images/profile_picture");
+    const reports = getDataFromPath("reported/" + uid + "/num_reports");
     const name = getDataFromPath("users/" + uid + "/Profile/profile_name");
     const location = getDataFromPath("users/" + uid + "/Profile/location");
     const major = getDataFromPath("users/" + uid + "/Profile/major");
+    displays = true;
+    // const bday = getDataFromPath("users/" + uid + "/Critical Information/birthday");
+
+    /* Used for age calculation */
+    // var age;
+    // if(bday != null) { // Seems redundant, but during loading page, bday is briefly null
+    //     const bday_day = bday.substring(0, 2)
+    //     const bday_month = bday.substring(3, 5)
+    //     const bday_year = bday.substring(6)
+
+    //     const date = new Date();
+    //     const curr_day = date.getDate();
+    //     const curr_month = date.getMonth() + 1;
+    //     const curr_year = date.getFullYear();
+    //     age = curr_year - bday_year;
+
+    //     // Giga brain math to calculate true age
+    //     if(bday_month >= curr_month) {
+    //         if(bday_day > curr_day) {
+    //             age -= 1
+    //         }
+    //     }
+    // }
+
 
     const removeMatch = () => {
         // remove the uid from the match list in the database
         console.log("Removing match: " + uid);
         
         setDisplayMatch(false);
-
+        //displays = false;
 
         // implement after adding the matches to the database
     }
@@ -42,6 +71,13 @@ const MatchItem = (props) => {
         // figure out navigation to the messages screen from a component
     }
 
+    const updateMatch = () => {
+        //set match token to display by calling viewProfile's viewProfile function
+        setMatchToken(String(uid));
+        //console.log("match: " + matchToken);
+        props.func();
+    }
+
 
     return (
         
@@ -52,7 +88,14 @@ const MatchItem = (props) => {
                 {display: 'none'}
             )}
         >
-            <Image style = {styles.profileImage}source={{uri: profile_picture}}/>
+            {/* Update current match to view, and show them */}
+            <TouchableOpacity
+                onPress={() =>
+                    updateMatch()
+                }
+            >
+                <Image style = {styles.profileImage}source={{uri: profile_picture}}/>
+            </TouchableOpacity>
             <Text style={styles.name}>{name}</Text>
             <Text style={styles.description}>Location: {location}</Text>
             <Text style={styles.description}>Major: {major}</Text>
@@ -76,6 +119,7 @@ const MatchItem = (props) => {
                 >
                     <Text style={styles.buttonText}>Remove Match</Text>
                 </TouchableOpacity>
+            
 
                 {/* Send message button */}
                 <TouchableOpacity
@@ -96,6 +140,22 @@ const MatchItem = (props) => {
                     )}
                 >
                     <Text style={styles.buttonText}>Message</Text>
+                </TouchableOpacity>
+
+                {/* Report Match button */}
+                <TouchableOpacity
+                    style={styles.reportUserWrapper}
+                    onPress={() =>
+                        Alert.alert("Report User", "Are you sure you want to report " + name + "?",
+                            [{ 
+                                text: "No" 
+                            }, {
+                                text: "Yes",
+                                onPress: () => reportUser(uid, reports)
+                            }])
+                    }
+                >
+                    <Text style={styles.reportUserText}>Report Match</Text>
                 </TouchableOpacity>
                 
             </View>
@@ -145,7 +205,7 @@ const styles = StyleSheet.create({
     },
 
     button: {
-        marginRight: 30,
+        marginRight: 20,
         marginTop: 15,
     },
 
@@ -153,7 +213,19 @@ const styles = StyleSheet.create({
         fontSize: 17,
         color: Colors.lightBlue,
 
-    }
+    },
 
+    /* Report User */
+    reportUserWrapper: {
+        flexDirection: 'row',
+        marginTop: 15,
+        marginRight: 20
+    },
+
+    reportUserText: {
+        flexDirection: 'row',
+        fontSize: 17,
+        color: Colors.lightRed,
+    }
 
 });

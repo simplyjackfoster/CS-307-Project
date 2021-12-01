@@ -37,10 +37,66 @@ import {
 import { writeNewUser, writeQuestionnaire } from '../database/writeData';
 import { getDataFromPath } from '../database/readData';
 import { getID } from '../database/ID';
-import { FirebaseError } from '@firebase/util';
 
 // used so that the hooks don't get set rapidly in edit questionnaire
 var updatedTheSelected = false;
+
+// constants for all the questions and responses
+// string arrays for all the questions and responses, ignoring the 0th index of each array
+export const questions = [
+  "",
+  /* 1 */"I have people over frequently.",
+  /* 2 */"I am a clean person.",
+  /* 3 */"What time do you go to bed during the week?",
+  /* 4 */"What time do you go to bed on the weekends?",
+  /* 5 */"How many days of the week do you drink alcohol?",
+  /* 6 */"How many days of the week do you smoke?",
+  /* 7 */"How would you like to handle chores?",
+  /* 8 */"Do you have a car?",
+  /* 9 */"Do you want pets in the room?",
+  /* 10 */"Are you introverted or extraverted?",
+  /* 11 */"Do we need to check before having someone over?",
+  /* 12 */"Do you want to do joint grocery shopping?",
+  /* 13 */"Do you have a significant other?",
+];
+
+
+export const responses = [
+  [],
+  /* 1 */[ "", "Strongly Disagree", "Somewhat Disagree", "Neither Agree or Disagree", "Somewhat Agree", "Strongly Agree", ],
+  /* 2 */[ "", "Strongly Disagree", "Somewhat Disagree", "Neither Agree or Disagree", "Somewhat Agree", "Strongly Agree", ],
+  /* 3 */[ "", "Before 10pm", "10pm-12am", "12-2am", "2-4am", "After 4am", ],
+  /* 4 */[ "", "Before 10pm", "10pm-12am", "12-2am", "2-4am", "After 4am", ],
+  /* 5 */[ "", "Never", "1 day", "2-3 days", "4-5 days", "6-7 days", ],
+  /* 6 */[ "", "Never", "1 day", "2-3 days", "4-5 days", "6-7 days", ],
+  /* 7 */[ "", "Do all the chores", "Divide chores evenly", "Do chores when needed", "I don't do chores", ],
+  /* 8 */[ "", "No", "Yes", ],
+  /* 9 */[ "", "No", "Yes, dog(s)", "Yes, cat(s)", "Yes, other", ],
+  /* 10 */[ "", "Definitely Introverted", "Somewhat Introverted", "Neither", "Somewhat Extraverted", "Definitely Extraverted", ],
+  /* 11 */[ "", "No", "Sometimes, yes", "Most of the time, yes", "Always, yes", ],
+  /* 12 */[ "", "No", "Yes", ],
+  /* 13 */[ "", "No", "Yes, not on campus", "Yes, on campus" ],
+];
+
+// array of values based on how important each quesiton is to roommate compatibility
+export const values = [
+  -1,
+  /* 1 */3,
+  /* 2 */3,
+  /* 3 */4,
+  /* 4 */4,
+  /* 5 */2,
+  /* 6 */2,
+  /* 7 */3,
+  /* 8 */1,
+  /* 9 */3,
+  /* 10 */2,
+  /* 11 */2,
+  /* 12 */1,
+  /* 13 */1,
+];
+
+
 
 /*
  * This is the screen where the user fills out the questionnaire
@@ -64,6 +120,9 @@ export default ( {navigation} ) => {
   const [selectedEleven, setSelectedEleven] = React.useState(1); // check_before_having_people_over
   const [selectedTwelve, setSelectedTwelve] = React.useState(1); // joint_grocery_shopping
   const [selectedThirteen, setSelectedThirteen] = React.useState(1); // has_significant_other
+
+
+
 
   // function for setting the selection boxes to the correct value
   const setSelection = (question_num, field) => {
@@ -230,7 +289,7 @@ export default ( {navigation} ) => {
           
 
           {/* Question 1 */}
-          <Text style={styles.question}>I have people over frequently.</Text>
+          <Text style={styles.question}>{questions[1]}</Text>
           <Picker
             style={styles.picker}
             selectedValue={
@@ -240,16 +299,16 @@ export default ( {navigation} ) => {
               setSelectedOne(itemValue)
             }
           >
-            <Picker.Item label="Strongly Disagree" value={1} />
-            <Picker.Item label="Somewhat Disagree" value={2} />
-            <Picker.Item label="Neither Agree or Disagree" value={3} />
-            <Picker.Item label="Somewhat Agree" value={4} />
-            <Picker.Item label="Strongly Agree" value={5} />
+            <Picker.Item label={responses[1][1]} value={1} />
+            <Picker.Item label={responses[1][2]} value={2} />
+            <Picker.Item label={responses[1][3]} value={3} />
+            <Picker.Item label={responses[1][4]} value={4} />
+            <Picker.Item label={responses[1][5]} value={5} />
           </Picker>
 
 
           {/* Question 2 */}
-          <Text style={styles.question}>I am a clean person.</Text>
+          <Text style={styles.question}>{questions[2]}</Text>
           <Picker
             style={styles.picker}
             selectedValue={selectedTwo}
@@ -257,16 +316,16 @@ export default ( {navigation} ) => {
               setSelectedTwo(itemValue)
             }
           >
-            <Picker.Item label="Strongly Disagree" value={1} />
-            <Picker.Item label="Somewhat Disagree" value={2} />
-            <Picker.Item label="Neither Agree or Disagree" value={3} />
-            <Picker.Item label="Somewhat Agree" value={4} />
-            <Picker.Item label="Strongly Agree" value={5} />
+            <Picker.Item label={responses[2][1]} value={1} />
+            <Picker.Item label={responses[2][2]} value={2} />
+            <Picker.Item label={responses[2][3]} value={3} />
+            <Picker.Item label={responses[2][4]} value={4} />
+            <Picker.Item label={responses[2][5]} value={5} />
           </Picker>
 
 
           {/* Question 3 */}
-          <Text style={styles.question}>What time do you go to bed during the week?</Text>
+          <Text style={styles.question}>{questions[3]}</Text>
           <Picker
             style={styles.picker}
             selectedValue={selectedThree}
@@ -274,16 +333,16 @@ export default ( {navigation} ) => {
               setSelectedThree(itemValue)
             }
           >
-            <Picker.Item label="Before 10pm" value={1} />
-            <Picker.Item label="10pm-12am" value={2} />
-            <Picker.Item label="12-2am" value={3} />
-            <Picker.Item label="2-4am" value={4} />
-            <Picker.Item label="After 4am" value={5} />
+            <Picker.Item label={responses[3][1]} value={1} />
+            <Picker.Item label={responses[3][2]} value={2} />
+            <Picker.Item label={responses[3][3]} value={3} />
+            <Picker.Item label={responses[3][4]} value={4} />
+            <Picker.Item label={responses[3][5]} value={5} />
           </Picker>
 
 
           {/* Question 4 */}
-          <Text style={styles.question}>What time do you go to bed on the weekends?</Text>
+          <Text style={styles.question}>{questions[4]}</Text>
           <Picker
             style={styles.picker}
             selectedValue={selectedFour}
@@ -291,16 +350,16 @@ export default ( {navigation} ) => {
               setSelectedFour(itemValue)
             }
           >
-            <Picker.Item label="Before 10pm" value={1} />
-            <Picker.Item label="10pm-12am" value={2} />
-            <Picker.Item label="12-2am" value={3} />
-            <Picker.Item label="2-4am" value={4} />
-            <Picker.Item label="After 4am" value={5} />
+            <Picker.Item label={responses[4][1]} value={1} />
+            <Picker.Item label={responses[4][2]} value={2} />
+            <Picker.Item label={responses[4][3]} value={3} />
+            <Picker.Item label={responses[4][4]} value={4} />
+            <Picker.Item label={responses[4][5]} value={5} />
           </Picker>
           
           
           {/* Question 5 */}
-          <Text style={styles.question}>How many days of the week do you drink alcohol?</Text>
+          <Text style={styles.question}>{questions[5]}</Text>
           <Picker
             style={styles.picker}
             selectedValue={selectedFive}
@@ -308,16 +367,16 @@ export default ( {navigation} ) => {
               setSelectedFive(itemValue)
             }
           >
-            <Picker.Item label="Never" value={1} />
-            <Picker.Item label="1 day" value={2} />
-            <Picker.Item label="2-3 days" value={3} />
-            <Picker.Item label="4-5 days" value={4} />
-            <Picker.Item label="6-7 days" value={5} />
+            <Picker.Item label={responses[5][1]} value={1} />
+            <Picker.Item label={responses[5][2]} value={2} />
+            <Picker.Item label={responses[5][3]} value={3} />
+            <Picker.Item label={responses[5][4]} value={4} />
+            <Picker.Item label={responses[5][5]} value={5} />
           </Picker>
 
 
           {/* Question 6 */}
-          <Text style={styles.question}>How many days of the week do you smoke?</Text>
+          <Text style={styles.question}>{questions[6]}</Text>
           <Picker
             style={styles.picker}
             selectedValue={selectedSix}
@@ -325,16 +384,16 @@ export default ( {navigation} ) => {
               setSelectedSix(itemValue)
             }
           >
-            <Picker.Item label="Never" value={1} />
-            <Picker.Item label="1 day" value={2} />
-            <Picker.Item label="2-3 days" value={3} />
-            <Picker.Item label="4-5 days" value={4} />
-            <Picker.Item label="6-7 days" value={5} />
+            <Picker.Item label={responses[6][1]} value={1} />
+            <Picker.Item label={responses[6][2]} value={2} />
+            <Picker.Item label={responses[6][3]} value={3} />
+            <Picker.Item label={responses[6][4]} value={4} />
+            <Picker.Item label={responses[6][5]} value={5} />
           </Picker>
 
 
           {/* Question 7 */}
-          <Text style={styles.question}>How would you like to handle chores?</Text>
+          <Text style={styles.question}>{questions[7]}</Text>
           <Picker
             style={styles.picker}
             selectedValue={selectedSeven}
@@ -342,14 +401,15 @@ export default ( {navigation} ) => {
               setSelectedSeven(itemValue)
             }
           >
-            <Picker.Item label="Assign tasks to each person" value={1} />
-            <Picker.Item label="Do them when needed" value={2} />
-            <Picker.Item label="I don't want to do any chores" value={3} />
+            <Picker.Item label={responses[7][1]} value={1} />
+            <Picker.Item label={responses[7][2]} value={2} />
+            <Picker.Item label={responses[7][3]} value={3} />
+            <Picker.Item label={responses[7][4]} value={4} />
           </Picker>
 
 
           {/* Question 8 */}
-          <Text style={styles.question}>Do you have a car?</Text>
+          <Text style={styles.question}>{questions[8]}</Text>
           <Picker
             style={styles.picker}
             selectedValue={selectedEight}
@@ -357,13 +417,13 @@ export default ( {navigation} ) => {
               setSelectedEight(itemValue)
             }
           >
-            <Picker.Item label="No" value={1} />
-            <Picker.Item label="Yes" value={2} />
+            <Picker.Item label={responses[8][1]} value={1} />
+            <Picker.Item label={responses[8][2]} value={2} />
           </Picker>
 
 
           {/* Question 9 */}
-          <Text style={styles.question}>Do you want pets in the room?</Text>
+          <Text style={styles.question}>{questions[9]}</Text>
           <Picker
             style={styles.picker}
             selectedValue={selectedNine}
@@ -371,15 +431,15 @@ export default ( {navigation} ) => {
               setSelectedNine(itemValue)
             }
           >
-            <Picker.Item label="No" value={1} />
-            <Picker.Item label="Yes, dog(s)" value={2} />
-            <Picker.Item label="Yes, cat(s)" value={3} />
-            <Picker.Item label="Yes, (other)" value={4} />
+            <Picker.Item label={responses[9][1]} value={1} />
+            <Picker.Item label={responses[9][2]} value={2} />
+            <Picker.Item label={responses[9][3]} value={3} />
+            <Picker.Item label={responses[9][4]} value={4} />
           </Picker>
 
 
           {/* Question 10 */}
-          <Text style={styles.question}>Are you introverted or extraverted?</Text>
+          <Text style={styles.question}>{questions[10]}</Text>
           <Picker
             style={styles.picker}
             selectedValue={selectedTen}
@@ -387,16 +447,16 @@ export default ( {navigation} ) => {
               setSelectedTen(itemValue)
             }
           >
-            <Picker.Item label="Definitely introverted" value={1} />
-            <Picker.Item label="Somewhat introverted" value={2} />
-            <Picker.Item label="Neither" value={3} />
-            <Picker.Item label="Somewhat extraverted" value={4} />
-            <Picker.Item label="Definitely extraverted" value={5} />
+            <Picker.Item label={responses[10][1]} value={1} />
+            <Picker.Item label={responses[10][2]} value={2} />
+            <Picker.Item label={responses[10][3]} value={3} />
+            <Picker.Item label={responses[10][4]} value={4} />
+            <Picker.Item label={responses[10][5]} value={5} />
           </Picker>
 
 
           {/* Question 11 */}
-          <Text style={styles.question}>Do we need to check before having someone over?</Text>
+          <Text style={styles.question}>{questions[11]}</Text>
           <Picker
             style={styles.picker}
             selectedValue={selectedEleven}
@@ -404,15 +464,15 @@ export default ( {navigation} ) => {
               setSelectedEleven(itemValue)
             }
           >
-            <Picker.Item label="Never, no" value={1} />
-            <Picker.Item label="Sometimes, yes" value={2} />
-            <Picker.Item label="Most of the time, yes" value={3} />
-            <Picker.Item label="Always, yes" value={4} />
+            <Picker.Item label={responses[11][1]} value={1} />
+            <Picker.Item label={responses[11][2]} value={2} />
+            <Picker.Item label={responses[11][3]} value={3} />
+            <Picker.Item label={responses[11][4]} value={4} />
           </Picker>
 
 
           {/* Question 12 */}
-          <Text style={styles.question}>Do you want to do joint grocery shopping?</Text>
+          <Text style={styles.question}>{questions[12]}</Text>
           <Picker
             style={styles.picker}
             selectedValue={selectedTwelve}
@@ -420,13 +480,13 @@ export default ( {navigation} ) => {
               setSelectedTwelve(itemValue)
             }
           >
-            <Picker.Item label="No" value={1} />
-            <Picker.Item label="Yes" value={2} />
+            <Picker.Item label={responses[12][1]} value={1} />
+            <Picker.Item label={responses[12][2]} value={2} />
           </Picker>
 
 
           {/* Question 13 */}
-          <Text style={styles.question}>Do you have a significant other?</Text>
+          <Text style={styles.question}>{questions[13]}</Text>
           <Picker
             style={styles.picker}
             selectedValue={selectedThirteen}
@@ -434,9 +494,9 @@ export default ( {navigation} ) => {
               setSelectedThirteen(itemValue)
             }
           >
-            <Picker.Item label="No" value={1} />
-            <Picker.Item label="Yes, on campus" value={2} />
-            <Picker.Item label="Yes, not on campus" value={3} />
+            <Picker.Item label={responses[13][1]} value={1} />
+            <Picker.Item label={responses[13][2]} value={2} />
+            <Picker.Item label={responses[13][3]} value={3} />
           </Picker>
 
           <Divider color={Colors.white} height={50}></Divider>

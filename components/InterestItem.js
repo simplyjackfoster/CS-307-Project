@@ -26,17 +26,11 @@ export default class InterestItem extends Component {
 	}
 
 
-
 	/*
 	 * Returns true if the value of this component is in the database, and
 	 * returns false if it is not in the database.
 	 */
 	interestSelected() {
-		/*console.log("interest1: " + this.props.interest1);
-		console.log("interest2: " + this.props.interest2);
-		console.log("interest3: " + this.props.interest3);
-		console.log("interest4: " + this.props.interest4);
-		console.log("interest5: " + this.props.interest5);*/
 		if (this.props.interest1 == this.props.value ||
 				this.props.interest2 == this.props.value ||
 				this.props.interest3 == this.props.value ||

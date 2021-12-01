@@ -29,6 +29,7 @@ export default {
 	teal: '#1abc9c',
 	olive: '#badc58',
 	green: '#2ecc71',
+	darkGreen: '#00aa00',
 
 	// purple
 	purple: '#9b59b6',
@@ -40,6 +41,7 @@ export default {
 	// red
 	lightRed: '#f08080',
 	red: '#ff0700',
+	darkRed: '#dd0000',
 
 	// pink
 	pink: '#fd79a8',

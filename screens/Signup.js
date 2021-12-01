@@ -107,6 +107,9 @@ export default ( {navigation} ) => {
     Gvaccinated = vaccinated;
     GsecurityQuestion = selectedQuestion;
     GsecurityAnswer = securityAnswer;
+    
+    console.log(Gvaccinated);
+    console.log(Ggender);
     navigation.push("Questionnaire");
   } // validateInputs()
 
@@ -199,7 +202,6 @@ export default ( {navigation} ) => {
               </Picker>
             </View>
 
-
             {/* Vaccination status */}
             <View>
               <Text style={styles.label}>Are You Vaccinated for Covid-19?</Text>
@@ -214,8 +216,6 @@ export default ( {navigation} ) => {
               </Picker>
             </View>
 
-
-            
             {/* Password (text), password (field, with black dots) */}
             <Text style={styles.label}>Password (8-28 characters, 1 uppercase, 
               1 number, 1 special character)</Text>
@@ -315,7 +315,7 @@ export default ( {navigation} ) => {
             {/* Continue to Questionnaire (button) */}
             <TouchableOpacity
               style={styles.continueButton}
-              onPress={validateInputs}
+              onPress={() => validateInputs()}
             >
               <Text style={styles.continueText}>Continue</Text>
             </TouchableOpacity>

@@ -18,8 +18,8 @@
     "expo-image-picker": "~10.2.2",
     "expo-status-bar": "~1.0.4",
     "firebase": "^9.2.0",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-event-observer": "^0.5.11",
     "react-icon": "^1.0.0",
     "react-icons": "^4.3.1",
@@ -37,7 +37,8 @@
     "react-native-web": "^0.17.5",
     "react-navigation": "^2.0.4",
     "uuid": "^8.3.2",
-    "uuid4": "^2.0.2"
+    "uuid4": "^2.0.2",
+    "expo-asset": "~8.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"

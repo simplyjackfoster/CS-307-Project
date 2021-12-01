@@ -10,6 +10,7 @@ import {
   Button,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
@@ -34,7 +35,11 @@ import {
   writeVaccinated,
   writePreferredNumRoommates,
   writePreferredLivingLocation,
-  writeInstagram
+  writeInstagram,
+  writeFacebook,
+  writeLinkedIn,
+  writeAgeMin,
+  writeAgeMax,
 } from '../database/writeData';
 
 import {
@@ -46,15 +51,20 @@ import {
   isValidSecurity,
   isValidCheckbox,
   isValidInstagram,
+  isValidFacebook,
+  isValidLinkedIn,
   isValidGraduationYear,
   isValidMajor,
   isValidNumberOfRoommates,
-  isValidLivingLocation
+  isValidLivingLocation,
+  isValidAgeMax,
+  isValidAgeMin,
 } from '../checkInputs';
 import { set } from 'react-native-reanimated';
 import Interests from './Interests';
-
 import Icon from 'react-native-vector-icons/FontAwesome';
+
+
 
 // used so that the hooks don't get set rapidly in edit questionnaire
 var updatedTheSelected = false;
@@ -79,17 +89,24 @@ export default ( {navigation} ) => {
   const [locationChanged, setLocationChanged] = React.useState(false);
   const [numRoommates, setNumRoommates] = React.useState(null);
   const [numRoommatesChanged, setNumRoommatesChanged] = React.useState(false);
-
   const [livingLocation, setLivingLocation] = React.useState(0);
-
   const [instagram, onChangeInstagram] = React.useState(null);
   const [instagramChanged, setInstagramChanged] = React.useState(false);
-
+  const [facebook, onChangeFacebook] = React.useState(null);
+  const [facebookChanged, setFacebookChanged] = React.useState(false);
+  const [linkedIn, onChangeLinkedIn] = React.useState(null);
+  const [linkedInChanged, setLinkedInChanged] = React.useState(false);
   const [gender, setGender] = React.useState(1);
   const [vaccinated, setVaccinated] = React.useState(1);
 
-  // DELETE
-  const [interest, setInterest] = React.useState("Football");
+  const [min, setMin] = React.useState(false);
+  const [max, setMax] = React.useState(false);
+  const [fMin, setFMin] = React.useState(null);
+  const [fMax, setFMax] = React.useState(null);
+  const [ageMin, setAgeMin] = React.useState(null);
+  const [ageMinChanged, setAgeMinChanged] = React.useState(false);
+  const [ageMax, setAgeMax] = React.useState(null);
+  const [ageMaxChanged, setAgeMaxChanged] = React.useState(false);
 
 
   // function for setting the selection boxes to the correct value
@@ -146,6 +163,44 @@ export default ( {navigation} ) => {
     }).catch((error) => {
       console.error(error);
     });
+
+
+
+
+    get(child(dbRef, "users/" + getID(auth.currentUser.email) +
+              "/Profile/age_min")).then((snapshot) => {
+      if (snapshot.exists()) {
+        const min = snapshot.val();
+        setFMin(min);
+        if(min == "") {
+          setMin(false);
+        }
+        else {
+          setMin(true);
+        }
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+
+    get(child(dbRef, "users/" + getID(auth.currentUser.email) +
+              "/Profile/age_max")).then((snapshot) => {
+      if (snapshot.exists()) {
+        const max = snapshot.val();
+        setFMax(max);
+
+        if(max == "") {
+          setMax(false);
+        }
+        else {
+          setMax(true);
+        }
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+
+
 
     // set vaccination status to the correct value
     get(child(dbRef, "users/" + getID(auth.currentUser.email) +
@@ -263,7 +318,39 @@ export default ( {navigation} ) => {
     setMajorChanged(true);
   } // majorInputHandler()
 
+  
+  /*
+   * This function is called when the ageMin input is changed. It changes
+   * the value of the ageMin hook and also changes the boolean that tells
+   * us if the user has changed the value.
+   */
+  const ageMinInputHandler = (input) => {
+    setAgeMin(input);
+    setAgeMinChanged(true);
+    if(input == "") {
+      setMin(false);
+    }
+    else {
+      setMin(true);
+    }
+  }
 
+  /*
+   * This function is called when the ageMax input is changed. It changes
+   * the value of the ageMax hook and also changes the boolean that tells
+   * us if the user has changed the value.
+   */
+  const ageMaxInputHandler = (input) => {
+    setAgeMax(input);
+    setAgeMaxChanged(true);
+    setMax(input);
+    if(input == "") {
+      setMax(false);
+    }
+    else {
+      setMax(true);
+    }
+  }
 
   /*
     * This function is called when the location input is changed. It changes
@@ -300,6 +387,27 @@ export default ( {navigation} ) => {
   } // instagramInputHandler()
 
 
+  /*
+   * This function is called when the text in the facebook 
+   * input is changed. It changes the value of the name hook
+   * and also changes the boolean that tells us if the user has
+   * changed the value.
+   */
+  const facebookInputHandler = (input) => {
+    onChangeFacebook(input);
+    setFacebookChanged(true);
+  }
+
+  /*
+   * This function is called when the text in the linkedIn 
+   * input is changed. It changes the value of the name hook
+   * and also changes the boolean that tells us if the user has
+   * changed the value.
+   */
+  const linkedInInputHandler = (input) => {
+    onChangeLinkedIn(input);
+    setLinkedInChanged(true);
+  }
 
   /*
    * This function is called when the user clicks "Save".
@@ -349,11 +457,26 @@ export default ( {navigation} ) => {
       writeInstagram(auth.currentUser.email, instagram);
     }
 
+    if (facebookChanged) {
+      writeFacebook(auth.currentUser.email, facebook);
+    }
+
+    if (linkedInChanged) {
+      writeLinkedIn(auth.currentUser.email, linkedIn);
+    }
+
+    if (ageMinChanged) {
+      writeAgeMin(auth.currentUser.email, ageMin);
+    }
+
+    if (ageMaxChanged) {
+      writeAgeMax(auth.currentUser.email, ageMax);
+    }
+
     // write the gender and vaccination status data
     writeGender(auth.currentUser.email, gender);
     writePreferredLivingLocation(auth.currentUser.email, livingLocation);
     writeVaccinated(auth.currentUser.email, vaccinated);
-
 
   } // updateProfileData()
 
@@ -389,6 +512,16 @@ export default ( {navigation} ) => {
       if(!isValidInstagram(instagram)) {return}
     }
 
+    // Check if facebook is valid
+    if(facebookChanged != false) {
+      if(!isValidFacebook(facebook)) {return}
+    }
+
+    // Check if linkedIn is valid
+    if(linkedIn != false) {
+      if(!isValidLinkedIn(linkedIn)) {return}
+    }
+
     // Check if the preferred # of roommates is valid
     if (numRoommatesChanged != false) {
       if (!isValidNumberOfRoommates(numRoommates)) {return}
@@ -397,7 +530,79 @@ export default ( {navigation} ) => {
     // Check if the preferred living location is valid
     if (!isValidLivingLocation(livingLocation, gender)) {return}
 
+    if(ageMinChanged != false) {
+      if(!isValidAgeMin(ageMin)) {return}
+    }
 
+    if(ageMaxChanged != false) {
+      if(!isValidAgeMax(ageMax)) {return}
+    }
+
+    // Very confusing and redundant logic to ensure entered age range min and max are acceptable values
+    if(min && max) {
+    let fMinInt = parseInt(fMin)
+    let fMaxInt = parseInt(fMax)
+      if(ageMin != null && ageMax != null) { // Both are not null, use their values to compare
+        let ageMinInt = parseInt(ageMin)
+        let ageMaxInt = parseInt(ageMax)
+
+        if(ageMinInt == ageMaxInt) {
+          Alert.alert("Error", "Age minimum range and age maximum range must not be the same number.", 
+          [{ text: "Ok" }]);
+          return;
+        }
+        else if(ageMinInt > ageMaxInt) {
+          Alert.alert("Error", "Age minimum range must be less than age maximum range.", 
+          [{ text: "Ok" }]);
+          return;
+        }
+      }
+      else if (ageMin != null) { // Min is null, use last max (fMax) to compare
+        console.log("Age min is not null!")
+        let ageMinInt = parseInt(ageMin)
+        if(ageMinInt == fMaxInt) {
+          Alert.alert("Error", "Age minimum range and age maximum range must not be the same number.", 
+          [{ text: "Ok" }]);
+          return;
+        }
+        else if(ageMinInt > fMaxInt) {
+          Alert.alert("Error", "Age minimum range must be less than age maximum range.", 
+          [{ text: "Ok" }]);
+          return;
+        }
+      }
+      else if(ageMax != null) { // Max is null, use last min (fMin) to compare
+        console.log("Age max is not null!")
+        let ageMaxInt = parseInt(ageMax)
+        if(ageMaxInt == fMinInt) {
+          Alert.alert("Error", "Age minimum range and age maximum range must not be the same number.", 
+          [{ text: "Ok" }]);
+          return;
+        }
+        else if(fMinInt > ageMaxInt) {
+          Alert.alert("Error", "Age minimum range must be less than age maximum range.", 
+          [{ text: "Ok" }]);
+          return;
+        }
+      }
+      else { // Max and min are null, use last min (fMin) and last max (fMax) to compare
+        if(fMaxInt == fMinInt) {
+          Alert.alert("Error", "Age minimum range and age maximum range must not be the same number.", 
+          [{ text: "Ok" }]);
+          return;
+        }
+        else if(fMinInt > fMaxInt) {
+          Alert.alert("Error", "Age minimum range must be less than age maximum range.", 
+          [{ text: "Ok" }]);
+          return;
+        }
+      }
+    }
+    else if(min || max) {
+      Alert.alert("Error", "If you are setting an age range minimum or maximum, you must set both.", 
+			[{ text: "Ok" }]);
+      return;
+    }
 
     // update the information and navigate to Profile
     updateProfileData();
@@ -510,6 +715,8 @@ export default ( {navigation} ) => {
             />
           </SafeAreaView>
 
+          
+
 
          {/* Major (text), major (field) */}
          <SafeAreaView>
@@ -525,7 +732,39 @@ export default ( {navigation} ) => {
               defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/major")}
               placeholder={"Enter your major"}
             />
-          </SafeAreaView> 
+          </SafeAreaView>
+
+          {/* Age range minimum field */}
+          <SafeAreaView>
+            <Text style={styles.prompt}>Age Range Minimum</Text>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              maxLength={3}
+              onChangeText={ageMinInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/age_min")}
+              placeholder={"18"}
+            />
+          </SafeAreaView>
+
+          {/* Age range maximum field */}
+          <SafeAreaView>
+            <Text style={styles.prompt}>Age Range Maximum</Text>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              maxLength={3}
+              onChangeText={ageMaxInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/age_max")}
+              placeholder={"100"}
+            />
+          </SafeAreaView>
 
 
           {/* Location (text), location (field) */}
@@ -574,7 +813,40 @@ export default ( {navigation} ) => {
               maxLength={32}
               onChangeText={instagramInputHandler}
               defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/instagram")}
-              placeholder={"Instagram username"}
+              placeholder={"Instagram Username"}
+            />
+          </SafeAreaView>
+
+          {/* Facebook Link (field) */}
+          <Text style={styles.prompt}>Facebook</Text>
+          <SafeAreaView>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              maxLength={50}
+              onChangeText={facebookInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/facebook")}
+              placeholder={"Facebook User ID"}
+            />
+          </SafeAreaView>
+
+          {/* LinkedIn Link (field) */}
+          <Text style={styles.prompt}>LinkedIn</Text>
+          <SafeAreaView>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              autoComplete='off'
+              autoCorrect={false}
+              spellCheck={false}
+              maxLength={70} // == first_name (20 chars) - (1 char) last_name (40 chars) - (1 char) 8_digit_code (8 char)
+                             // Note the 8_digit_code is only for profiles with a name that already exists
+              onChangeText={linkedInInputHandler}
+              defaultValue={getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/linkedIn")}
+              placeholder={"LinkedIn Profile"}
             />
           </SafeAreaView>
 

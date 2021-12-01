@@ -49,6 +49,10 @@ export const writeNewUser = (email, name, phone,
 		preferred_number_of_roommates: "",
 		preferred_living_location: "",
 		instagram: "",
+		facebook: "",
+		linkedIn: "",
+		age_min: "18",
+		age_max: "100",
 	});
 	writeGender(auth.currentUser.email, gender);
 	writeVaccinated(auth.currentUser.email, vaccinated);
@@ -89,6 +93,7 @@ export const writeNewUser = (email, name, phone,
 	set(ref(rtdb, "users/" + id + "/Feed/Swipe Left List"), {
 		user_count: 0
 	});
+
 	set(ref(rtdb, "users/" + id + "/Feed/Swipe Right List"), {
 		user_count: 0
 	});
@@ -135,6 +140,40 @@ export const writeProfileName = (email_or_id, name) => {
 	});
 } // writeName()
 
+
+/*
+ * writeAgeMin()
+ *
+ * Writes an age min to the specified user in the RTDB
+ * @param email_or_id -> the email or id specifying the user.
+ * @param ageMin -> the ageMin that we will write to the database.
+ */
+export const writeAgeMin = (email_or_id, ageMin) => {
+	const id = getID(email_or_id);
+	const ageMinStr = ageMin.toString();
+
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		age_min: ageMinStr
+	});
+} // writeAgeMin()
+
+
+/*
+ * writeAgeMax()
+ *
+ * Writes an age max to the specified user in the RTDB
+ * @param email_or_id -> the email or id specifying the user.
+ * @param ageMax -> the ageMax that we will write to the database.
+ */
+export const writeAgeMax = (email_or_id, ageMax) => {
+	const id = getID(email_or_id);
+	const ageMaxStr = ageMax.toString();
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		age_max: ageMaxStr
+	});
+} // writeAgeMax()
 
 
 
@@ -284,7 +323,35 @@ export const writeInstagram = (email_or_id, instagram) => {
 } // writeInstagram()
 
 
+/*
+ * writeFacebook()
+ *
+ * Writes the facebook of the specified user in the RTDB.
+ * @param email_or_id -> the email or id of the user.
+ * @param facebook -> the facebook username of the user.
+ */
+export const writeFacebook = (email_or_id, facebook) => {
+	const id = getID(email_or_id);
 
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		facebook: facebook
+	});
+} // writeFacebook()
+
+/*
+ * writeLinkedIn()
+ *
+ * Writes the linkedIn of the specified user in the RTDB.
+ * @param email_or_id -> the email or id of the user.
+ * @param linkedIn -> the linkedIn username of the user.
+ */
+export const writeLinkedIn = (email_or_id, linkedIn) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Profile"), {
+		linkedIn: linkedIn
+	});
+} // writeLinkedIn()
 
 
 /*
@@ -416,6 +483,10 @@ export const writeQuestionnaire = (email_or_id, a1, a2, a3, a4, a5, a6, a7, a8,
  */
 export const reportUser = (email_or_id, currentReports) => {
 	const id = getID(email_or_id);
+	// let currentReports = /* getDataFromPath("reported/" + id + "/num_reports") */0;
+	// if (currentReports == null) {
+	// 	currentReports = 0;
+	// }
 	console.log("Current reports: " + currentReports);
 	currentReports = currentReports + 1;
 	console.log("Updated reports: " + currentReports);
