@@ -285,8 +285,6 @@ export const getMostSimilarResponseAsync = async (id, myQuestionnaire) => {
 		}
 	}
 
-	console.log("Most similar question between myself and " + id + ": " + minQuestion);
-
 	return minQuestion;
 
 } // getMostSimilarResponseAsync()
@@ -315,8 +313,6 @@ export const getMostDifferentResponseAsync = async (id, myQuestionnaire) => {
 			maxQuestion = i;
 		}
 	}
-
-	console.log("Most different question between myself and " + id + ": " + maxQuestion);
 
 	return maxQuestion;
 
