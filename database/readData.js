@@ -359,6 +359,35 @@ export const getAgeAsync = async (email_or_id) => {
 
 
 /*
+ *
+ */
+export const getNextUsers = aysnc () => {
+
+	// STEP 1: GET THE USER IDS FROM THE DATABASE	
+	const dbRef = ref(rtdb);
+
+	get(child(dbRef, "users/")).then((snapshot) => {
+		if (snapshot.exists()) {
+			const data_val = snapshot.val();
+			console.log("DATA_VAL: " + )
+		}
+		else {
+			console.log("This data is unavailable: " + path);
+			return null;
+		}
+	}).catch((error) => {
+		console.error(error);
+	});
+
+} // getNextUsers()
+
+
+
+
+
+
+
+/*
  * Gets the user data for the users contained in the "ids" array.
  * The data is assembled into profile objects and returned as an array of
  * these obejects.
