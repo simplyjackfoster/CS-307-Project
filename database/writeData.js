@@ -97,6 +97,7 @@ export const writeNewUser = (email, name, phone,
 	set(ref(rtdb, "users/" + id + "/Feed/Swipe Right List"), {
 		user_count: 0
 	});
+
 } // writeNewUser()
 
 
@@ -483,10 +484,8 @@ export const writeQuestionnaire = (email_or_id, a1, a2, a3, a4, a5, a6, a7, a8,
  */
 export const reportUser = (email_or_id, currentReports) => {
 	const id = getID(email_or_id);
-	// let currentReports = /* getDataFromPath("reported/" + id + "/num_reports") */0;
-	// if (currentReports == null) {
-	// 	currentReports = 0;
-	// }
+	console.log("ID = " + id);
+
 	console.log("Current reports: " + currentReports);
 	currentReports = currentReports + 1;
 	console.log("Updated reports: " + currentReports);

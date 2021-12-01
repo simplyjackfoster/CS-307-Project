@@ -37,7 +37,7 @@ export const getDataFromPath = (path) => {
 
 
 /*
- * getDataFromPath()
+ * getDataFromPathAsync()
  *
  * This function can be used to grab data from the Firebase RTDB aysnchronously.
  * @param path -> a path to the data that we want to retrieve.
@@ -54,7 +54,7 @@ export const getDataFromPathAsync = async (path) => {
 			return data_val;
 		}
 		else {
-			console.log("This data is unavailable: " + path);
+			//console.log("This data is unavailable: " + path);
 		}
 	}).catch((error) => {
 		console.error(error);
@@ -411,6 +411,7 @@ export const getUserData = async (ids) => {
 	var questionnaire13_answer_list = [];
 	var most_similar_response_list = [];
 	var most_different_response_list = [];
+	var num_reports_list = [];
 
 
 	for (const id of ids) {
@@ -451,6 +452,7 @@ export const getUserData = async (ids) => {
 			questionnaire13, // 32
 			most_similar_response, // 33
 			most_different_response, // 34
+			num_reports, // 35
 		] = await Promise.all(
 		[
 			getDataFromPathAsync("users/" + id + "/Profile/Images/profile_picture"), // 1
@@ -487,6 +489,7 @@ export const getUserData = async (ids) => {
 			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_significant_other"), // 32
 			getMostSimilarResponseAsync(id, myQuestionnaire), // 33
 			getMostDifferentResponseAsync(id, myQuestionnaire), // 34
+			getDataFromPathAsync("reported/" + id + "/num_reports"), // 35
 		]);
 	
 
@@ -525,6 +528,13 @@ export const getUserData = async (ids) => {
 		questionnaire13_answer_list.push(questionnaire13);
 		most_similar_response_list.push(most_similar_response);
 		most_different_response_list.push(most_different_response);
+
+		if (num_reports) {
+			num_reports_list.push(num_reports);
+		}
+		else {
+			num_reports_list.push(0);
+		}
 	} // for-loop
 
 
@@ -568,6 +578,7 @@ export const getUserData = async (ids) => {
 			questionnaire13: questionnaire13_answer_list[i],
 			most_similar_response: most_similar_response_list[i],
 			most_different_response: most_different_response_list[i],
+			num_reports: num_reports_list[i],
 		};
 
 		// add profile to array
