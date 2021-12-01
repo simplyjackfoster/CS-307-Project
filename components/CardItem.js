@@ -522,14 +522,14 @@ export const CardItem = (props) => {
 
                 <View style={
                     matchToken ? (
-                        {/* nothing */}
+                        styles.matchButtonWrapper
                     ) : (
                         { display: 'none' }
                     )
                 }>
                     {/* Remove match button */}
                     <TouchableOpacity
-                        style={styles.button}
+                        style={styles.matchButton}
                         onPress={() =>
                             Alert.alert("Confirm",
                                 "Are you sure you want to remove your match with " + matchToken,
@@ -543,11 +543,11 @@ export const CardItem = (props) => {
                                 ])
                         }
                     >
-                        <Text style={styles.buttonText}>Remove Match</Text>
+                        <Text style={styles.matchButtonText}>Remove Match</Text>
                     </TouchableOpacity>
                     {/* Send message button */}
                     <TouchableOpacity
-                        style={styles.button}
+                        style={styles.matchButton}
                         onPress={() =>
                             Alert.prompt("Message", "Send a message to " + matchToken,
                                 [
@@ -563,7 +563,7 @@ export const CardItem = (props) => {
                                 ],
                             )}
                     >
-                        <Text style={styles.buttonText}>Message</Text>
+                        <Text style={styles.matchButtonText}>Message</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -819,16 +819,19 @@ const styles = StyleSheet.create({
 		alignSelf: 'center',
     },
     
-    buttonWrapper: {
+    /* Match Buttons */
+    matchButtonWrapper: {
+        marginTop: 30,
         flexDirection: 'row',
+        alignSelf: 'center',
     },
 
-    button: {
+    matchButton: {
         marginRight: 20,
         marginTop: 15,
     },
 
-    buttonText: {
+    matchButtonText: {
         fontSize: 17,
         color: Colors.lightBlue,
 
