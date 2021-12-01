@@ -354,8 +354,19 @@ export const getAgeAsync = async (email_or_id) => {
 } // getAgeAsync()
 
 
-
-
+export const getMatches = async (email_or_id, numMatches) => {
+	const id = getID(email_or_id);
+	console.log("my id: " + id);
+	// get the number of matches
+	var match_list = [];
+	var iter = 0;
+	while (iter < numMatches) {
+		let [match,] = await Promise.all([getDataFromPathAsync("users/" + id + "/Match List/match" + iter)]);
+		match_list.push(match);
+		iter++;
+	}
+	return match_list;
+} // getMatches()
 
 
 /*
@@ -371,7 +382,9 @@ export const getUserData = async (ids) => {
 	//var ids = ["mfinder", "thylan", "francik"]; // using fixed value
 
 	// GET MY QUESTIONNAIRE ANSWERS
-	const myQuestionnaire = await getQuestionnaireAsync(getID(auth.currentUser.email));	
+	const myQuestionnaire = await getQuestionnaireAsync(getID(auth.currentUser.email));
+	
+	//const myMatchCount = await getMatchesCount(getID(auth.currentUser.email));
 
 
 	// STEP 1: GET THE PROFILE INFORMATION FOR OTHER SPECIFIED PROFILES
@@ -411,6 +424,7 @@ export const getUserData = async (ids) => {
 	var questionnaire13_answer_list = [];
 	var most_similar_response_list = [];
 	var most_different_response_list = [];
+	var numMatches_list = [];
 
 
 	for (const id of ids) {
@@ -451,6 +465,7 @@ export const getUserData = async (ids) => {
 			questionnaire13, // 32
 			most_similar_response, // 33
 			most_different_response, // 34
+			numMatches,
 		] = await Promise.all(
 		[
 			getDataFromPathAsync("users/" + id + "/Profile/Images/profile_picture"), // 1
@@ -487,6 +502,7 @@ export const getUserData = async (ids) => {
 			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_significant_other"), // 32
 			getMostSimilarResponseAsync(id, myQuestionnaire), // 33
 			getMostDifferentResponseAsync(id, myQuestionnaire), // 34
+			getDataFromPathAsync("users/" + id + "/Match List/user_count"), //35
 		]);
 	
 
@@ -525,6 +541,7 @@ export const getUserData = async (ids) => {
 		questionnaire13_answer_list.push(questionnaire13);
 		most_similar_response_list.push(most_similar_response);
 		most_different_response_list.push(most_different_response);
+		numMatches_list.push(numMatches);
 	} // for-loop
 
 
@@ -568,6 +585,7 @@ export const getUserData = async (ids) => {
 			questionnaire13: questionnaire13_answer_list[i],
 			most_similar_response: most_similar_response_list[i],
 			most_different_response: most_different_response_list[i],
+			numMatches: numMatches_list[i],
 		};
 
 		// add profile to array
