@@ -22,11 +22,11 @@ import { renderIcon } from "../images/Icons";
 import { reportUser } from '../database/writeData';
 import { auth } from '../database/RTDB';
 import { getID } from '../database/ID';
-
-
+import { MatchInteractContext } from '../context';
 
 export const CardItem = (props) => {
     const { profile, likeOpacity, nopeOpacity } = props;
+    const { matchToken, setMatchToken } = React.useContext(MatchInteractContext);
 
     // hook for displaying questionnaire
     const [viewingQuestionnaire, setViewingQuestionnaire] = React.useState(false);
@@ -338,6 +338,53 @@ export const CardItem = (props) => {
 
                 </View>
 
+                <View style={
+                    matchToken ? (
+                        {/* nothing */}
+                    ) : (
+                        { display: 'none' }
+                    )
+                }>
+                    {/* Remove match button */}
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() =>
+                            Alert.alert("Confirm",
+                                "Are you sure you want to remove your match with " + matchToken,
+                                [{
+                                    text: "No"
+                                },
+                                {
+                                    text: "Yes",
+                                    //onPress: () => removeMatch(),
+                                }
+                                ])
+                        }
+                    >
+                        <Text style={styles.buttonText}>Remove Match</Text>
+                    </TouchableOpacity>
+                    {/* Send message button */}
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() =>
+                            Alert.prompt("Message", "Send a message to " + matchToken,
+                                [
+                                    {
+                                        text: "Cancel",
+                                        onPress: () => console.log("Cancel Message Pressed"),
+                                        style: "cancel",
+                                    },
+                                    {
+                                        text: "Send",
+                                        //onPress: message => sendMessage(message),
+                                    }
+                                ],
+                            )}
+                    >
+                        <Text style={styles.buttonText}>Message</Text>
+                    </TouchableOpacity>
+                </View>
+
 
 
                 {/* Report User */}
@@ -577,6 +624,20 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     
+    buttonWrapper: {
+        flexDirection: 'row',
+    },
+
+    button: {
+        marginRight: 20,
+        marginTop: 15,
+    },
+
+    buttonText: {
+        fontSize: 17,
+        color: Colors.lightBlue,
+
+    },
 
     /* Report User */
     reportUserWrapper: {

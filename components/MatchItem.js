@@ -15,6 +15,7 @@ import { renderIcon } from "../images/Icons";
 import { MatchInteractContext } from '../context';
 import { reportUser } from '../database/writeData';
 
+//export var displays;
 
 const MatchItem = (props) => {
     //const { userToken, setUserToken }  = React.useContext();
@@ -27,6 +28,7 @@ const MatchItem = (props) => {
     const name = getDataFromPath("users/" + uid + "/Profile/profile_name");
     const location = getDataFromPath("users/" + uid + "/Profile/location");
     const major = getDataFromPath("users/" + uid + "/Profile/major");
+    displays = true;
     // const bday = getDataFromPath("users/" + uid + "/Critical Information/birthday");
 
     /* Used for age calculation */
@@ -56,7 +58,7 @@ const MatchItem = (props) => {
         console.log("Removing match: " + uid);
         
         setDisplayMatch(false);
-
+        //displays = false;
 
         // implement after adding the matches to the database
     }
