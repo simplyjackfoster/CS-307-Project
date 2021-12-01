@@ -578,7 +578,7 @@ export const CardItem = (props) => {
                                 text: "No" 
                             }, {
                                 text: "Yes",
-                                onPress: () => reportUser(profile.id, reports)
+                                onPress: () => reportUser(profile.id, profile.num_reports)
                             }]); 
                         }}
                     >
