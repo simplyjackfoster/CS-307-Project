@@ -22,6 +22,7 @@ import { renderIcon } from "../images/Icons";
 import { reportUser } from '../database/writeData';
 import { auth } from '../database/RTDB';
 import { getID } from '../database/ID';
+import { MatchInteractContext } from '../context';
 import { ViewQuestionnaire } from '../screens/ViewQuestionnaire';
 import Questionnaire, { questions, responses } from '../screens/Questionnaire';
 
@@ -29,6 +30,7 @@ import Questionnaire, { questions, responses } from '../screens/Questionnaire';
 
 export const CardItem = (props) => {
     const { profile, likeOpacity, nopeOpacity } = props;
+    const { matchToken, setMatchToken } = React.useContext(MatchInteractContext);
 
     // hook for displaying questionnaire
     const [viewingQuestionnaire, setViewingQuestionnaire] = React.useState(false);
@@ -518,6 +520,53 @@ export const CardItem = (props) => {
 
                 </View>
 
+                <View style={
+                    matchToken ? (
+                        styles.matchButtonWrapper
+                    ) : (
+                        { display: 'none' }
+                    )
+                }>
+                    {/* Remove match button */}
+                    <TouchableOpacity
+                        style={styles.matchButton}
+                        onPress={() =>
+                            Alert.alert("Confirm",
+                                "Are you sure you want to remove your match with " + matchToken,
+                                [{
+                                    text: "No"
+                                },
+                                {
+                                    text: "Yes",
+                                    //onPress: () => removeMatch(),
+                                }
+                                ])
+                        }
+                    >
+                        <Text style={styles.matchButtonText}>Remove Match</Text>
+                    </TouchableOpacity>
+                    {/* Send message button */}
+                    <TouchableOpacity
+                        style={styles.matchButton}
+                        onPress={() =>
+                            Alert.prompt("Message", "Send a message to " + matchToken,
+                                [
+                                    {
+                                        text: "Cancel",
+                                        onPress: () => console.log("Cancel Message Pressed"),
+                                        style: "cancel",
+                                    },
+                                    {
+                                        text: "Send",
+                                        //onPress: message => sendMessage(message),
+                                    }
+                                ],
+                            )}
+                    >
+                        <Text style={styles.matchButtonText}>Message</Text>
+                    </TouchableOpacity>
+                </View>
+
 
 
                 {/* Report User */}
@@ -770,6 +819,23 @@ const styles = StyleSheet.create({
 		alignSelf: 'center',
     },
     
+    /* Match Buttons */
+    matchButtonWrapper: {
+        marginTop: 30,
+        flexDirection: 'row',
+        alignSelf: 'center',
+    },
+
+    matchButton: {
+        marginRight: 20,
+        marginTop: 15,
+    },
+
+    matchButtonText: {
+        fontSize: 17,
+        color: Colors.lightBlue,
+
+    },
 
     /* Report User */
     reportUserWrapper: {
