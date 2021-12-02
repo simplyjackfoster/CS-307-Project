@@ -13,15 +13,16 @@ import Card from './Card';
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
 import { getUserData, getNextUsersAsync} from '../database/readData';
-
-
+import { writeToSwipedRightListAsync, writeToSwipedLeftListAsync } from '../database/writeData';
+import { auth } from '../database/RTDB';
+import { getID } from '../database/ID';
 
 var noProfiles = false;
 
 
-export default class Profiles extends React.Component<ProfilesProps, ProfilesState> {
+export default class Profiles extends React.Component {
 
-  constructor(props: ProfilesProps) {
+  constructor(props) {
     super(props);
 		const { profiles } = props;
     this.state = { profiles };
@@ -61,12 +62,16 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
   // Function that is called when the user likes or dislikes
   onSwiped = (isLiked) => {
     if (isLiked) {
+      writeToSwipedRightListAsync(getID(auth.currentUser.email), this.state.profiles[0].id);
+
       console.log("Profile Liked!");
 
       // check their swiped right list for your name
 
     }
     else {
+      writeToSwipedLeftListAsync(getID(auth.currentUser.email), this.state.profiles[0].id);
+
       console.log("Profile Disliked!");
     }
 
