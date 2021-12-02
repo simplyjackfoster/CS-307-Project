@@ -1,7 +1,8 @@
 import React from 'react';
 import { rtdb, auth } from './RTDB';
-import {ref, set, exists, val, child, get, remove} from "firebase/database";
+import {ref, set, exists, val, child, get, remove, update} from "firebase/database";
 import { getID } from './ID';
+import { getUserData } from'./readData';
 
 
 /*
@@ -15,3 +16,13 @@ export const removeUser = (email_or_id) => {
 	const id = getID(email_or_id);	
 	remove(ref(rtdb, "users/" + id));
 } // removeUser()
+
+export const deleteMatch = (email_or_id, index, userCount) => {
+	// get the id
+	const id = getID(email_or_id);	
+	var newCount = userCount - 1;
+	remove(ref(rtdb, "users/" + id + "/Match List/match" + index));
+	update(ref(rtdb, "users/" + id + "/Match List"), {
+		user_count: newCount,
+	});
+} // deleteMatch()

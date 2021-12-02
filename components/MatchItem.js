@@ -14,54 +14,58 @@ import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
 import { MatchInteractContext } from '../context';
 import { reportUser } from '../database/writeData';
+import { deleteMatch } from '../database/removeData';
+import { getID } from '../database/ID';
 
-//export var displays;
+// firebase imports
+import { auth } from '../database/RTDB';
 
+import { matchName, removeCurrentMatch } from '../components/CardItem';
 const MatchItem = (props) => {
     //const { userToken, setUserToken }  = React.useContext();
     const { matchToken, setMatchToken } = React.useContext(MatchInteractContext);
     const [displayMatch, setDisplayMatch] = React.useState(true);
     
     const uid = props.id;
+
+    if (uid == null) {
+        return (
+            <View style={false ? (
+                {/* Will always display none, nothing here */}
+            ) : (
+                { display: 'none' }
+            )}
+            >
+            </View >
+        );
+    }
+    const removeMatch = () => {
+        // remove the uid from the match list in the database
+        console.log("Removing match: " + uid);
+        //props = null;
+        deleteMatch(getID(auth.currentUser.email), props.idx, props.count);
+        setDisplayMatch(false);
+        //displays = false;
+        // implement after adding the matches to the database
+    }
+    
+    if ((removeCurrentMatch == true) && (uid == matchName)) {
+        return (
+            <View style={displayMatch ? (
+                removeMatch()
+            ) : (
+                { display: 'none' }
+            )}
+            >
+            </View >
+        );
+    }
+
     const profile_picture = getDataFromPath("users/" + uid + "/Profile/Images/profile_picture");
     const reports = getDataFromPath("reported/" + uid + "/num_reports");
     const name = getDataFromPath("users/" + uid + "/Profile/profile_name");
     const location = getDataFromPath("users/" + uid + "/Profile/location");
     const major = getDataFromPath("users/" + uid + "/Profile/major");
-    displays = true;
-    // const bday = getDataFromPath("users/" + uid + "/Critical Information/birthday");
-
-    /* Used for age calculation */
-    // var age;
-    // if(bday != null) { // Seems redundant, but during loading page, bday is briefly null
-    //     const bday_day = bday.substring(0, 2)
-    //     const bday_month = bday.substring(3, 5)
-    //     const bday_year = bday.substring(6)
-
-    //     const date = new Date();
-    //     const curr_day = date.getDate();
-    //     const curr_month = date.getMonth() + 1;
-    //     const curr_year = date.getFullYear();
-    //     age = curr_year - bday_year;
-
-    //     // Giga brain math to calculate true age
-    //     if(bday_month >= curr_month) {
-    //         if(bday_day > curr_day) {
-    //             age -= 1
-    //         }
-    //     }
-    // }
-
-
-    const removeMatch = () => {
-        // remove the uid from the match list in the database
-        console.log("Removing match: " + uid);
-        
-        setDisplayMatch(false);
-        //displays = false;
-
-        // implement after adding the matches to the database
-    }
 
 
     const sendMessage = (message) => {
