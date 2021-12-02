@@ -11,7 +11,7 @@ import Message from '../components/Message';
 import styles from '../assets/index';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { getDataFromPath } from "../database/readData";
-import firestore from '@react-native-firebase/firestore';
+//import firestore from '@react-native-firebase/firestore';
 
 //const getName=(props)=>
 
@@ -27,13 +27,6 @@ export default ({  navigation}) =>{
       id: "mfinder"
     }
   ]
-  function loadToDB() {
-    firestore()
-      .collection('THREADS')
-      .add({
-        name: item.id
-      })
-  }
   return (
     <ImageBackground
       style={styles.bg}
