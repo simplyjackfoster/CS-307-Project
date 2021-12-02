@@ -29,7 +29,6 @@ const MatchItem = (props) => {
     const uid = props.id;
 
     if (uid == null) {
-        console.log("null id");
         return (
             <View style={false ? (
                 {/* Will always display none, nothing here */}

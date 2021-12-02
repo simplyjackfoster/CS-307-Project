@@ -81,7 +81,6 @@ export default ( {navigation} ) => {
     
     // set the data and set the ready hook to true
     await setMatches(match_list);
-    console.log(matches);
     setMatchReady(true);
   } // initializeFeedProfiles()
 
