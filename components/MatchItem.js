@@ -14,6 +14,11 @@ import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
 import { MatchInteractContext } from '../context';
 import { reportUser } from '../database/writeData';
+import { deleteMatch } from '../database/removeData';
+import { getID } from '../database/ID';
+
+// firebase imports
+import { auth } from '../database/RTDB';
 
 //export var displays;
 
@@ -23,12 +28,26 @@ const MatchItem = (props) => {
     const [displayMatch, setDisplayMatch] = React.useState(true);
     
     const uid = props.id;
+
+    if (uid == null) {
+        console.log("null id");
+        return (
+            <View style={false ? (
+                {/* Will always display none, nothing here */}
+            ) : (
+                { display: 'none' }
+            )}
+            >
+            </View >
+        );
+    }
+
     const profile_picture = getDataFromPath("users/" + uid + "/Profile/Images/profile_picture");
     const reports = getDataFromPath("reported/" + uid + "/num_reports");
     const name = getDataFromPath("users/" + uid + "/Profile/profile_name");
     const location = getDataFromPath("users/" + uid + "/Profile/location");
     const major = getDataFromPath("users/" + uid + "/Profile/major");
-    displays = true;
+    //displays = true;
     // const bday = getDataFromPath("users/" + uid + "/Critical Information/birthday");
 
     /* Used for age calculation */
@@ -56,7 +75,8 @@ const MatchItem = (props) => {
     const removeMatch = () => {
         // remove the uid from the match list in the database
         console.log("Removing match: " + uid);
-        
+        //props = null;
+        deleteMatch(getID(auth.currentUser.email), props.idx, props.count);
         setDisplayMatch(false);
         //displays = false;
 

@@ -356,7 +356,7 @@ export const getAgeAsync = async (email_or_id) => {
 
 export const getMatches = async (email_or_id, numMatches) => {
 	const id = getID(email_or_id);
-	console.log("my id: " + id);
+	//console.log("my id: " + id);
 	// get the number of matches
 	var match_list = [];
 	var iter = 0;

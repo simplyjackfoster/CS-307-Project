@@ -34,6 +34,7 @@ export default ( {navigation} ) => {
   const [matches, setMatches] = React.useState(null);
   const [ready, setReady] = React.useState(false);
   const [matchReady, setMatchReady] = React.useState(false);
+  const [numMatch, setNumMatch] = React.useState(null);
 
   React.useEffect(() => {
     const list = navigation.addListener('focus', () => {
@@ -62,7 +63,10 @@ export default ( {navigation} ) => {
     
     // set the data and set the ready hook to true
     await setProfiles(profile_list);
-    console.log(profile_list[0].numMatches);
+    setNumMatch(profile_list[0].numMatches);
+    if (profile_list[0].numMatches == 0) {
+      matched = false;
+    }
     setReady(true);
   } // initializeFeedProfiles()
 
@@ -89,7 +93,7 @@ export default ( {navigation} ) => {
       </View>
     );
   } 
-  if (ready && !matchReady) {
+  if (ready && !matchReady && matched) {
     initializeMatches();
     return (
       <View style={styles.splashContainer}>
@@ -98,20 +102,28 @@ export default ( {navigation} ) => {
     );
   }
 
-  if (!matched) {
+  if (ready && !matched) {
     return (
       <View style={styles.noMatchContainer}>
         <Text>You have no matches</Text>
       </View>
     );
   }
+  
+
   return (
     <ScrollView style={styles.container}>
       <View>
-        <MatchItem id={matches[0]} func={viewProfile}/>
+        <MatchItem id={matches[0]} func={viewProfile} idx={0} count={numMatch}/>
+        <MatchItem id={matches[1]} func={viewProfile} idx={1} count={numMatch}/>
+        <MatchItem id={matches[2]} func={viewProfile} idx={2} count={numMatch}/>
+        <MatchItem id={matches[3]} func={viewProfile} idx={3} count={numMatch}/>
+        <MatchItem id={matches[4]} func={viewProfile} idx={4} count={numMatch}/>
+        <MatchItem id={matches[5]} func={viewProfile} idx={5} count={numMatch}/>
+        <MatchItem id={matches[6]} func={viewProfile} idx={6} count={numMatch}/>
+        <MatchItem id={matches[7]} func={viewProfile} idx={7} count={numMatch}/>
       </View>
     </ScrollView>
-
   );
   
 }
