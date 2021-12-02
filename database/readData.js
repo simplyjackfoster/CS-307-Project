@@ -381,11 +381,18 @@ export const getNextUsersAsync = async (queue) => {
 
 	// STEP 2: For each user id, calculate compatibility score
 	const scores = await Promise.all(users.map(id => getCompatibilityScoreAsync(id)));
+	const ages = await Promise.all(users.map(id => getAgeAsync(id)));
+	const living_locations = await Promise.all(users.map(id => getDataFromPathAsync("users/"
+																						 + id + "/Profile/preferred_living_location")));
+
+	// assemble object of user data
 	var map = [];
 	for (let i = 0; i < users.length; i++) {
 		let pair = {
 			user: users[i],
 			score: scores[i],
+			age: ages[i],
+			living_location: living_locations[i],
 		}
 		map.push(pair);
 	}
@@ -399,32 +406,72 @@ export const getNextUsersAsync = async (queue) => {
 	const sorted = map.sort(function(a, b) {
 		const scoreA = a.score;
 		const scoreB = b.score;
-		return scoreA - scoreB;
+		return scoreB - scoreA;
 	});
-	console.log(sorted);
+	//console.log(sorted);
 
 
 	// STEP 4: Get the data for filtering
+	// sorted ids, ages, and living locations
+	var sorted_ids = [];
+	var sorted_ages = [];
+	var sorted_living_locations = [];
+	for (let i = 0; i < map.length; i++) {
+		sorted_ids.push(map[i].user);
+		sorted_ages.push(map[i].age);
+		sorted_living_locations.push(map[i].living_location);
+	}
+
+
 	// queue ids
 	var queue_ids = [];
 	for (let i = 0; i < queue.length; i++) {
 		queue_ids.push(queue[i].id);
 	}
-	console.log("QUEUE: " + queue_ids);
+	//console.log("QUEUE: " + queue_ids);
 
-	//  
+	// get swiped-left/right lists, age-min/age-max, and preferred living location.
+	const id = getID(auth.currentUser.email);
+	let [
+		swiped_left,
+		swiped_right,
+		age_min,
+		age_max,
+		my_preferred_living_location,
+	] = await Promise.all(
+	[
+		getSwipeLeftListAsync(id),
+		getSwipeRightListAsync(id),
+		getDataFromPathAsync("users/" + id + "/Profile/age_min"),
+		getDataFromPathAsync("users/" + id + "/Profile/age_max"),
+		getDataFromPathAsync("users/" + id + "/Profile/preferred_living_location"),
+	]);
 
 
 	// STEP 5: Search for next 5 users starting at beginning of sorted list
 	// (don't add if filters don't align with profile)
 	// (don't add if they are in your swiped right/left list, or in the queue currently)
+	var ids_to_add = [];
+	var count = 0;
 
+	for (let i = 0; i < sorted_ids.length; i++) {
+		if (await passesFilterAsync(sorted_ids[i], sorted_ages[i], queue_ids, swiped_left,
+																 swiped_right, age_min, age_max, sorted_living_locations[i],
+																 my_preferred_living_location)) {
+			ids_to_add.push(sorted_ids[i]);
+			count++;
+			if (count == 5) {
+				break;
+			}
+		}
+	}
 
 
 	// STEP 6: return the list of user ids to add to queue
-	
-
+	return ids_to_add;	
 } // getNextUsersAsync()
+
+
 
 
 
@@ -433,12 +480,106 @@ export const getNextUsersAsync = async (queue) => {
 /*
  *
  */
-export const passesFilter = async (queue, swiped_left, swiped_right,
-																	 age_min, age_max, living_location, map) => {
+export const passesFilterAsync = async (user, age, queue, swiped_left, swiped_right,
+																	 age_min, age_max, user_living_location,
+																	 my_living_location) => {
 
 	  // check if the user is in the queue already
+		if (queue.includes(user)) {
+			console.log("FILTERED (" + user + ") - is already in queue");
+			return false;
+		}
 
+		// check if user has been swiped on
+		if (swiped_left.includes(user) || swiped_right.includes(user)) {
+			console.log("FILTERED (" + user + ") - already swiped on");
+			return false;
+		}
+
+		// check if the user is in the age range
+		if (age < age_min || age > age_max) {
+			console.log("FILTERED (" + user + ") - not in age range");
+			return false;
+		}
+
+		// check if living location is girls only
+		if (my_living_location == "Meredith (female only)"
+			  || my_living_location == "Meredith South (female only)"
+				|| my_living_location == "Windsor (female only)") {
+			if (user_living_location == "Cary Quad (male only)"
+					|| user_living_location == "McCutcheon (male only)"
+					|| user_living_location == "Tarkington (male only)"
+					|| user_living_location == "Wiley (male only)") {
+				console.log("FILTERED (" + user + ") - genders don't align for living");
+				return false;
+			}
+		}
+
+		// check if living location is boys only
+		if (my_living_location == "Cary Quad (male only)"
+				|| my_living_location == "McCutcheon (male only)"
+				|| my_living_location == "Tarkington (male only)"
+				|| my_living_location == "Wiley (male only)") {
+			if (user_living_location == "Meredith (female only)"
+					|| user_living_location == "Meredith South (female only)"
+					|| user_living_location == "Windsor (female only)") {
+				console.log("FILTERED (" + user + ") - genders don't align for living");
+				return false;
+			}
+		}
+
+		return true;
 } // passesFilter()
+
+
+
+
+
+/*
+ * Gets the swipe right list and returns it as an array of ids.
+ */
+export const getSwipeRightListAsync = async (email_or_id) => {
+	const id = getID(email_or_id);
+
+	// get user ids from swiped right list and store them in array "users"
+	const dbRef = ref(rtdb);
+	const users = await get(child(dbRef, "users/" + id + "/Feed/Swipe Right List")).then((snapshot) => {
+		var ids = [];
+		snapshot.forEach(function(data) {
+			let id = data.key;
+			ids.push(id);
+		})
+		return ids;
+	}).catch((error) => {
+		console.error(error);
+	});
+
+	return users;
+} // getSwipeRightListAsync()
+
+
+
+/*
+ * Gets the swipe left list and returns it as an array of ids.
+ */
+export const getSwipeLeftListAsync = async (email_or_id) => {
+	const id = getID(email_or_id);
+
+	// get user ids from swiped left list and store them in array "users"
+	const dbRef = ref(rtdb);
+	const users = await get(child(dbRef, "users/" + id + "/Feed/Swipe Left List")).then((snapshot) => {
+		var ids = [];
+		snapshot.forEach(function(data) {
+			let id = data.key;
+			ids.push(id);
+		})
+		return ids;
+	}).catch((error) => {
+		console.error(error);
+	});
+
+	return users;
+} // getSwipeLeftListAsync()
 
 
 
