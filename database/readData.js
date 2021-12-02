@@ -4,7 +4,6 @@ import {ref, set, exists, val, child, get, remove, onValue } from "firebase/data
 import { getID } from './ID';
 import { Value } from 'react-native-reanimated';
 import { Asset } from 'expo-asset';
-import Profiles from '../components/CardList';
 
 
 /*
@@ -403,13 +402,17 @@ export const getNextUsersAsync = async (queue) => {
 		return scoreA - scoreB;
 	});
 	console.log(sorted);
-	console.log("----------------------\nQUEUE: \n");
-	for (let i = 0; i < queue.length; i++) {
-		console.log(queue[i].id);
-	}
 
 
 	// STEP 4: Get the data for filtering
+	// queue ids
+	var queue_ids = [];
+	for (let i = 0; i < queue.length; i++) {
+		queue_ids.push(queue[i].id);
+	}
+	console.log("QUEUE: " + queue_ids);
+
+	//  
 
 
 	// STEP 5: Search for next 5 users starting at beginning of sorted list
