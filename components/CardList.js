@@ -63,7 +63,6 @@ export default class Profiles extends React.Component {
   onSwiped = (isLiked) => {
     if (isLiked) {
       writeToSwipedRightListAsync(getID(auth.currentUser.email), this.state.profiles[0].id);
-
       console.log("Profile Liked!");
 
       // check their swiped right list for your name
@@ -71,7 +70,6 @@ export default class Profiles extends React.Component {
     }
     else {
       writeToSwipedLeftListAsync(getID(auth.currentUser.email), this.state.profiles[0].id);
-
       console.log("Profile Disliked!");
     }
 

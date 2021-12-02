@@ -89,16 +89,9 @@ export const writeNewUser = (email, name, phone,
 		user_count: 0
 	});
 
-	// // write the "Feed", "Swipe Left List", and "Swipe Right List"
-	// set(ref(rtdb, "users/" + id + "/Feed/Swipe Left List"), {
-	// 	user_coun
-	// });
-
-	// set(ref(rtdb, "users/" + id + "/Feed/Swipe Right List"), {
-	// 	user_count: 0,
-	// });
-
 } // writeNewUser()
+
+
 
 /*
 * This function adds a user ID to the swipe right list
@@ -115,6 +108,8 @@ export const writeToSwipedRightListAsync = async (myID, userID) => {
 }
 
 
+
+
 /*
 * This function adds a user ID to the swipe left list
 * @param myID -> uid of user adding another profile to their
@@ -128,6 +123,7 @@ export const writeToSwipedLeftListAsync = async (myID, userID) => {
         uid: userID,
     });
 }
+
 
 
 /*

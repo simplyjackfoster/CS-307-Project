@@ -541,6 +541,7 @@ export const passesFilterAsync = async (user, age, queue, swiped_left, swiped_ri
 export const getSwipeRightListAsync = async (email_or_id) => {
 	const id = getID(email_or_id);
 
+
 	// get user ids from swiped right list and store them in array "users"
 	const dbRef = ref(rtdb);
 	const users = await get(child(dbRef, "users/" + id + "/Feed/Swipe Right List")).then((snapshot) => {
@@ -553,6 +554,8 @@ export const getSwipeRightListAsync = async (email_or_id) => {
 	}).catch((error) => {
 		console.error(error);
 	});
+
+	console.log("SWIPED RIGHT LIST = " + users);
 
 	return users;
 } // getSwipeRightListAsync()
@@ -577,6 +580,8 @@ export const getSwipeLeftListAsync = async (email_or_id) => {
 	}).catch((error) => {
 		console.error(error);
 	});
+
+	console.log("SWIPED LEFT LIST = " + users);
 
 	return users;
 } // getSwipeLeftListAsync()
