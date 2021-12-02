@@ -13,7 +13,7 @@ import { renderIcon } from "../images/Icons";
 import CardList from '../components/CardList';
 
 import { Asset } from 'expo-asset';
-import { getUserData } from '../database/readData';
+import { getNextUsersAsync, getUserData } from '../database/readData';
 
 
 
@@ -29,7 +29,9 @@ export default () => {
    */
   const initializeFeedProfiles = async () => {
     // get the profile ids from the database (USE ALGORITHM)
-    var ids = ["mfinder", "test", "francik"]; // using fixed value
+    var ids = await getNextUsersAsync([]);
+    console.log("INITIALIZING WITH = " + ids);
+    //var ids = ["mfinder", "test", "francik"]; // using fixed value
 
     // get the data for the profiles
     const profile_list = await getUserData(ids);
@@ -58,9 +60,6 @@ export default () => {
   return (
     <View style={styles.container}>
       
-      
-
-
       {/* Stack of Cards */}
       <View style={styles.contentContainer}>
         <CardList {...{profiles}} ></CardList>

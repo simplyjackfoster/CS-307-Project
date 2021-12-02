@@ -17,15 +17,14 @@ import { writeToSwipedRightListAsync, writeToSwipedLeftListAsync } from '../data
 import { auth } from '../database/RTDB';
 import { getID } from '../database/ID';
 
-var noProfiles = false;
-
+var addingProfiles = false;
 
 export default class Profiles extends React.Component {
 
   constructor(props) {
     super(props);
 		const { profiles } = props;
-    this.state = { profiles };
+    this.state = { profiles, addingProfiles };
   }
 
 
@@ -51,6 +50,7 @@ export default class Profiles extends React.Component {
     for (let i = 0; i < ids.length; i++) {
       updatedProfiles.push(newProfiles[i]);
     }
+    addingProfiles = false;
     this.setState({ profiles: updatedProfiles});
   } // addFeedProfiles()
 
@@ -75,13 +75,10 @@ export default class Profiles extends React.Component {
 
     // remove profile from the state
     const { profiles: [lastProfile, ...profiles] } = this.state;
-    if (profiles.length == 0) {
-      console.log("NO PROFILES");
-      noProfiles = true;
-    }
-    else if (profiles.length < 3) {
+    if (profiles.length < 5 && addingProfiles != true) {
       console.log("ADDING USERS\n");
       // add users
+      addingProfiles = true;
       this.addFeedProfiles();
     }
     this.setState({ profiles });
@@ -94,10 +91,10 @@ export default class Profiles extends React.Component {
     const { profiles: [...profiles] } = this.state;
 
 
-    if (noProfiles) {
+    if (profiles.length == 0) {
       return (
-        <View style={styles.noProfilesContainer}>
-            <Text style={styles.noProfilesText}>No More Profiles</Text>
+        <View style={styles.splashContainer}>
+            <Text style={styles.splashText}>Searching for Potential Roommates...</Text>
         </View>
       );
     }
@@ -106,8 +103,6 @@ export default class Profiles extends React.Component {
 
 		return (
 			<View style={styles.container}>
-
-        
 
         {/* Cards Stack */}
         <View style={{ flex: 1 }}>
@@ -134,17 +129,6 @@ export default class Profiles extends React.Component {
           </TouchableOpacity>
 
 
-          {/* Test next user algorithm */}
-          {/*<View>
-            <TouchableOpacity
-              onPress={() => 
-                getNextUsersAsync(profiles)
-              }>
-              <Text>NEXT USERS</Text>
-            </TouchableOpacity>
-            </View>*/}
-
-
           <TouchableOpacity onPress={() => {
             // add swipe right function
             this.onSwiped(true);
@@ -167,14 +151,15 @@ export default class Profiles extends React.Component {
 // styles
 const styles = StyleSheet.create({
 
-  /* No More Profiles */
-  noProfilesContainer: {
+  /* Splash Screen */
+  splashContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
 
-  noProfilesText: {
+  splashText: {
+    textAlign: 'center',
     alignSelf: 'center',
     fontSize: 25,
   },
