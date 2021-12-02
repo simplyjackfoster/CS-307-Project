@@ -50,12 +50,11 @@ export const CardItem = (props) => {
                     <TouchableOpacity 
                         style={styles.returnButton}
                         onPress={() => {
-                            console.log("Returning to Feed");
                             setViewingQuestionnaire(!viewingQuestionnaire);
                         }}
                     >
                         <View>
-                            <Text style={styles.returnText}>Return to Feed</Text>
+                            <Text style={styles.returnText}>View Profile</Text>
                         </View>
                     </TouchableOpacity>
 
@@ -210,12 +209,11 @@ export const CardItem = (props) => {
                         <TouchableOpacity 
                             style={styles.returnButton}
                             onPress={() => {
-                                console.log("Returning to Feed");
                                 setViewingQuestionnaire(!viewingQuestionnaire);
                             }}
                         >
                             <View>
-                                <Text style={styles.returnText}>Return to Feed</Text>
+                                <Text style={styles.returnText}>View Profile</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -583,7 +581,7 @@ export const CardItem = (props) => {
                                 text: "No" 
                             }, {
                                 text: "Yes",
-                                onPress: () => reportUser(profile.id, reports)
+                                onPress: () => reportUser(profile.id, profile.num_reports)
                             }]); 
                         }}
                     >

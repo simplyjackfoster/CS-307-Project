@@ -57,6 +57,9 @@ export default () => {
 
   return (
     <View style={styles.container}>
+      
+      
+
 
       {/* Stack of Cards */}
       <View style={styles.contentContainer}>

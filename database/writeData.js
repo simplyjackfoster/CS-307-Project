@@ -84,23 +84,58 @@ export const writeNewUser = (email, name, phone,
 		has_significant_other: selectedThirteen 
 	});
 
-	// write the "Match List" 
-	set(ref(rtdb, "users/" + id + "/Match List"), {
-		user_count: 0
-	});
+	// // write the "Match List" 
+	// set(ref(rtdb, "users/" + id + "/Match List"), {
+	// 	user_count: 0
+	// });
 
-	// write the "Feed", "Swipe Left List", and "Swipe Right List"
-	set(ref(rtdb, "users/" + id + "/Feed/Swipe Left List"), {
-		user_count: 0
-	});
-
-	set(ref(rtdb, "users/" + id + "/Feed/Swipe Right List"), {
-		user_count: 0
-	});
 } // writeNewUser()
 
 
 
+/*
+* This function adds a user ID to the swipe right list
+* @param myID -> uid of user adding another profile to their
+*					list of likes.
+* @param userID -> uid of user being added to list of users
+* 					in myID's list of dislikes.
+*/
+export const writeToSwipedRightListAsync = async (myID, userID) => {
+    // update my swiped right list
+    update(ref(rtdb, "users/" + myID + "/Feed/Swipe Right List/" + userID), {
+        uid: userID,
+    });
+}
+
+
+/*
+* This function adds a user ID to the swipe right list
+* @param myID -> uid of user adding another profile to their
+*					list of likes.
+* @param userID -> uid of user being added to list of users
+* 					in myID's list of dislikes.
+*/
+export const writeToMatchedListAsync = async (myID, userID) => {
+    // update my swiped right list
+    update(ref(rtdb, "users/" + myID + "/Feed/Match List/" + userID), {
+        uid: userID,
+    });
+}
+
+
+/*
+* This function adds a user ID to the swipe left list
+* @param myID -> uid of user adding another profile to their
+*					list of dislikes.
+* @param userID -> uid of user being added to list of users
+* 					in myID's list of dislikes.
+*/
+export const writeToSwipedLeftListAsync = async (myID, userID) => {
+    // update my swiped left list
+    update(ref(rtdb, "users/" + myID + "/Feed/Swipe Left List/" + userID), {
+        uid: userID,
+    });
+}
 
 
 
@@ -483,10 +518,8 @@ export const writeQuestionnaire = (email_or_id, a1, a2, a3, a4, a5, a6, a7, a8,
  */
 export const reportUser = (email_or_id, currentReports) => {
 	const id = getID(email_or_id);
-	// let currentReports = /* getDataFromPath("reported/" + id + "/num_reports") */0;
-	// if (currentReports == null) {
-	// 	currentReports = 0;
-	// }
+	console.log("ID = " + id);
+
 	console.log("Current reports: " + currentReports);
 	currentReports = currentReports + 1;
 	console.log("Updated reports: " + currentReports);
