@@ -16,7 +16,7 @@ import { getDataFromPath } from "../database/readData";
 //const getName=(props)=>
 
 
-export default ({  navigation}) =>{
+export default ({ navigation}) =>{
   //const uid = props.id;
   //const name = getDataFromPath("users/" + uid + "/Profile/profile_name");
   const listOfUsers = [
