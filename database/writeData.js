@@ -84,10 +84,10 @@ export const writeNewUser = (email, name, phone,
 		has_significant_other: selectedThirteen 
 	});
 
-	// write the "Match List" 
-	set(ref(rtdb, "users/" + id + "/Match List"), {
-		user_count: 0
-	});
+	// // write the "Match List" 
+	// set(ref(rtdb, "users/" + id + "/Match List"), {
+	// 	user_count: 0
+	// });
 
 } // writeNewUser()
 
@@ -108,6 +108,19 @@ export const writeToSwipedRightListAsync = async (myID, userID) => {
 }
 
 
+/*
+* This function adds a user ID to the swipe right list
+* @param myID -> uid of user adding another profile to their
+*					list of likes.
+* @param userID -> uid of user being added to list of users
+* 					in myID's list of dislikes.
+*/
+export const writeToMatchedListAsync = async (myID, userID) => {
+    // update my swiped right list
+    update(ref(rtdb, "users/" + myID + "/Feed/Match List/" + userID), {
+        uid: userID,
+    });
+}
 
 
 /*
