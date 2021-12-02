@@ -12,12 +12,12 @@ import {
 import Card from './Card';
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
-import { getUserData } from '../database/readData';
+import { getUserData, getNextUsersAsync} from '../database/readData';
 
 
 
 var noProfiles = false;
-var testProfiles = false; // used to toggle between sets of users loaded in the feed
+
 
 export default class Profiles extends React.Component<ProfilesProps, ProfilesState> {
 
@@ -38,15 +38,9 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
      
     // get ids to add from database (USE ALGORITHM), make sure to not add
     // profiles that are currently in the stack    
-    var ids;
-    if (testProfiles) {
-      ids = ["mfinder", "thylan", "francik"]; // use fixed values for now
-      testProfiles = false;
-    } 
-    else {
-      ids = ["buckle14", "munshi", "werner51"]; // use fixed values for now
-      testProfiles = true;
-    }
+    var ids = await getNextUsersAsync(this.state.profiles);
+    console.log("IDS = " + ids);
+
 
     // get array of profile objects for the ids
     const newProfiles = await getUserData(ids);
@@ -68,6 +62,9 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
   onSwiped = (isLiked) => {
     if (isLiked) {
       console.log("Profile Liked!");
+
+      // check their swiped right list for your name
+
     }
     else {
       console.log("Profile Disliked!");
@@ -132,6 +129,18 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
           }}>
             {renderIcon("times", 55, Colors.red)}
           </TouchableOpacity>
+
+
+          {/* Test next user algorithm */}
+          {/*<View>
+            <TouchableOpacity
+              onPress={() => 
+                getNextUsersAsync(profiles)
+              }>
+              <Text>NEXT USERS</Text>
+            </TouchableOpacity>
+            </View>*/}
+
 
           <TouchableOpacity onPress={() => {
             // add swipe right function
