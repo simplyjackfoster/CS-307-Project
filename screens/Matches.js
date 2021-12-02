@@ -8,6 +8,7 @@ import {
   useEffect,
   ScrollView,
   TouchableOpacity,
+  RefreshControl,
   Button 
 } from 'react-native';
 import Colors from "../constants/Colors";
@@ -20,7 +21,6 @@ import { getMatches } from '../database/readData';
 
 // firebase imports
 import { auth } from '../database/RTDB';
-
 
 
 /*
@@ -39,6 +39,8 @@ export default ( {navigation} ) => {
   React.useEffect(() => {
     const list = navigation.addListener('focus', () => {
       setMatchToken(null);
+      setReady(null);
+      setMatchReady(null);
     });
     return list;
   });

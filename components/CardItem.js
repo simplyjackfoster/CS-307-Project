@@ -27,7 +27,8 @@ import { ViewQuestionnaire } from '../screens/ViewQuestionnaire';
 import Questionnaire, { questions, responses } from '../screens/Questionnaire';
 
 
-
+export var removeCurrentMatch = false;
+export var matchName = "";
 export const CardItem = (props) => {
     const { profile, likeOpacity, nopeOpacity } = props;
     const { matchToken, setMatchToken } = React.useContext(MatchInteractContext);
@@ -538,6 +539,10 @@ export const CardItem = (props) => {
                                 },
                                 {
                                     text: "Yes",
+                                    onPress: () => {
+                                        removeCurrentMatch = true;
+                                        matchName =  JSON.parse(JSON.stringify(matchToken));
+                                    },
                                     //onPress: () => removeMatch(),
                                 }
                                 ])
