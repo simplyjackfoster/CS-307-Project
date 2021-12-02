@@ -12,8 +12,8 @@ import {
 import Card from './Card';
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
-import { getUserData, getNextUsersAsync} from '../database/readData';
-import { writeToSwipedRightListAsync, writeToSwipedLeftListAsync } from '../database/writeData';
+import { getUserData, getNextUsersAsync, getSwipeLeftListAsync, getSwipeRightListAsync} from '../database/readData';
+import { writeToSwipedRightListAsync, writeToSwipedLeftListAsync, writeToMatchedListAsync } from '../database/writeData';
 import { auth } from '../database/RTDB';
 import { getID } from '../database/ID';
 
@@ -54,15 +54,26 @@ export default class Profiles extends React.Component {
     this.setState({ profiles: updatedProfiles});
   } // addFeedProfiles()
 
-
-
-
-
 	
   // Function that is called when the user likes or dislikes
-  onSwiped = (isLiked) => {
+  onSwiped = async (isLiked) => {
     if (isLiked) {
+      console.log("SWIPED RIGHT");
+
+      // Adding uid to swiped right list
       writeToSwipedRightListAsync(getID(auth.currentUser.email), this.state.profiles[0].id);
+
+      // Getting list of swiped right users
+      var theirSwipedRightList = await getSwipeRightListAsync(this.state.profiles[0].id);
+      
+      // Verifying if users swiped right on each other
+      // If they did. They both add the other into their list of matches
+      if(theirSwipedRightList.includes(getID(auth.currentUser.email))) {
+        writeToMatchedListAsync(getID(auth.currentUser.email), this.state.profiles[0].id);
+        writeToMatchedListAsync(this.state.profiles[0].id, getID(auth.currentUser.email));
+        console.log("USERS MATCHED!");
+      }
+
       console.log("Profile Liked!");
 
       // check their swiped right list for your name
@@ -70,6 +81,7 @@ export default class Profiles extends React.Component {
     }
     else {
       writeToSwipedLeftListAsync(getID(auth.currentUser.email), this.state.profiles[0].id);
+
       console.log("Profile Disliked!");
     }
 
