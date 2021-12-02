@@ -4,6 +4,7 @@ import {ref, set, exists, val, child, get, remove, onValue } from "firebase/data
 import { getID } from './ID';
 import { Value } from 'react-native-reanimated';
 import { Asset } from 'expo-asset';
+import Profiles from '../components/CardList';
 
 
 /*
@@ -361,26 +362,80 @@ export const getAgeAsync = async (email_or_id) => {
 /*
  *
  */
-export const getNextUsers = aysnc () => {
+export const getNextUsersAsync = async (queue) => {
 
-	// STEP 1: GET THE USER IDS FROM THE DATABASE	
+	// STEP 1: GET THE USER IDS FROM THE DATABASE (in no particular order)
 	const dbRef = ref(rtdb);
-
-	get(child(dbRef, "users/")).then((snapshot) => {
-		if (snapshot.exists()) {
-			const data_val = snapshot.val();
-			console.log("DATA_VAL: " + )
-		}
-		else {
-			console.log("This data is unavailable: " + path);
-			return null;
-		}
+	const users = await get(child(dbRef, "users/")).then((snapshot) => {
+		var ids = [];
+		snapshot.forEach(function(data) {
+			let id = data.key;
+			ids.push(id);
+		})
+		return ids;
 	}).catch((error) => {
 		console.error(error);
 	});
+	//console.log(users);
 
-} // getNextUsers()
 
+
+	// STEP 2: For each user id, calculate compatibility score
+	const scores = await Promise.all(users.map(id => getCompatibilityScoreAsync(id)));
+	var map = [];
+	for (let i = 0; i < users.length; i++) {
+		let pair = {
+			user: users[i],
+			score: scores[i],
+		}
+		map.push(pair);
+	}
+	//console.log(map);
+
+
+	// STEP 3: Sort the users based on compatibility
+	// (use a map <id, score> to sort the ids)
+	//             ^
+	//        array of ids
+	const sorted = map.sort(function(a, b) {
+		const scoreA = a.score;
+		const scoreB = b.score;
+		return scoreA - scoreB;
+	});
+	console.log(sorted);
+	console.log("----------------------\nQUEUE: \n");
+	for (let i = 0; i < queue.length; i++) {
+		console.log(queue[i].id);
+	}
+
+
+	// STEP 4: Get the data for filtering
+
+
+	// STEP 5: Search for next 5 users starting at beginning of sorted list
+	// (don't add if filters don't align with profile)
+	// (don't add if they are in your swiped right/left list, or in the queue currently)
+
+
+
+	// STEP 6: return the list of user ids to add to queue
+	
+
+} // getNextUsersAsync()
+
+
+
+
+
+/*
+ *
+ */
+export const passesFilter = async (queue, swiped_left, swiped_right,
+																	 age_min, age_max, living_location, map) => {
+
+	  // check if the user is in the queue already
+
+} // passesFilter()
 
 
 

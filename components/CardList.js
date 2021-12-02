@@ -12,7 +12,7 @@ import {
 import Card from './Card';
 import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
-import { getUserData } from '../database/readData';
+import { getUserData, getNextUsersAsync} from '../database/readData';
 
 
 
@@ -68,6 +68,9 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
   onSwiped = (isLiked) => {
     if (isLiked) {
       console.log("Profile Liked!");
+
+      // check their swiped right list for your name
+
     }
     else {
       console.log("Profile Disliked!");
@@ -132,6 +135,18 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
           }}>
             {renderIcon("times", 55, Colors.red)}
           </TouchableOpacity>
+
+
+          {/* Test next user algorithm */}
+          <View>
+            <TouchableOpacity
+              onPress={() => 
+                getNextUsersAsync(profiles)
+              }>
+              <Text>NEXT USERS</Text>
+            </TouchableOpacity>
+          </View>
+
 
           <TouchableOpacity onPress={() => {
             // add swipe right function
