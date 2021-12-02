@@ -89,19 +89,40 @@ export const writeNewUser = (email, name, phone,
 		user_count: 0
 	});
 
-	// write the "Feed", "Swipe Left List", and "Swipe Right List"
-	set(ref(rtdb, "users/" + id + "/Feed/Swipe Left List"), {
-		user_count: 0
-	});
-
-	set(ref(rtdb, "users/" + id + "/Feed/Swipe Right List"), {
-		user_count: 0
-	});
-
 } // writeNewUser()
 
 
 
+/*
+* This function adds a user ID to the swipe right list
+* @param myID -> uid of user adding another profile to their
+*					list of likes.
+* @param userID -> uid of user being added to list of users
+* 					in myID's list of dislikes.
+*/
+export const writeToSwipedRightListAsync = async (myID, userID) => {
+    // update my swiped right list
+    update(ref(rtdb, "users/" + myID + "/Feed/Swipe Right List/" + userID), {
+        uid: userID,
+    });
+}
+
+
+
+
+/*
+* This function adds a user ID to the swipe left list
+* @param myID -> uid of user adding another profile to their
+*					list of dislikes.
+* @param userID -> uid of user being added to list of users
+* 					in myID's list of dislikes.
+*/
+export const writeToSwipedLeftListAsync = async (myID, userID) => {
+    // update my swiped left list
+    update(ref(rtdb, "users/" + myID + "/Feed/Swipe Left List/" + userID), {
+        uid: userID,
+    });
+}
 
 
 
