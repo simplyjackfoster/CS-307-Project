@@ -542,7 +542,15 @@ export const passesFilterAsync = async (user, age, user_gender, my_gender, queue
 		}
 
 		// check if the user is in the age range
-		if (age < age_min || age > age_max) {
+		if (age_min && age_max && (age < age_min || age > age_max)) {
+			console.log("FILTERED (" + user + ") - not in age range");
+			return false;
+		}
+		else if (age_min && age < age_min) {
+			console.log("FILTERED (" + user + ") - not in age range");
+			return false;
+		}
+		else if (age_max && age > age_max) {
 			console.log("FILTERED (" + user + ") - not in age range");
 			return false;
 		}
