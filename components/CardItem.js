@@ -654,8 +654,11 @@ const styles = StyleSheet.create({
 
     /* Profile Picture */
     profilePic: {
-        width: 340,
-        height: 340, 
+        /*width: 340,
+        height: 340,*/
+        width: '105%',
+        height: 0, 
+        paddingBottom: '105%',
         borderRadius: 25,
         marginTop: 20,
         marginBottom: 10,
