@@ -86,12 +86,13 @@ export default ( {navigation} ) => {
 
 			{/* Preview Profile Button*/}
 			<View>
-            	<TouchableOpacity
-              		onPress={() => navigation.push("ViewProfile")}
-              		style={styles.buttonPreview}>
-              	<Text style={styles.textPreview}>Preview Profile</Text>
-            	</TouchableOpacity>
-          	</View>
+        <TouchableOpacity
+         	onPress={() => navigation.push("ViewProfile")}
+       		style={styles.buttonPreview}
+				>
+         	<Text style={styles.textPreview}>Preview Profile</Text>
+       	</TouchableOpacity>
+      </View>
 
 			  {/* Edit Profile Button */}
 			<TouchableOpacity
@@ -622,7 +623,7 @@ const styles = StyleSheet.create({
 		marginBottom: 5,
 		marginTop: 0,
 		padding: 10,
-		backgroundColor: Colors.lightBlue,
+		backgroundColor: Colors.offWhite,
 		
 	  },
 

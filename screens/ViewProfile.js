@@ -62,8 +62,15 @@ export default ({ navigation }) => {
   return (
     <View style={styles.container}>
 
+      {/* Preview Text */}
+      <View style={styles.previewContainer}>
+        <Text style={styles.previewText}>PREVIEW</Text>
+      </View>
+
       {/* Card */}
-      <CardItem profile={profile}></CardItem>
+      <View style={styles.contentContainer}>
+        <CardItem profile={profile}></CardItem>
+      </View>
 
     </View>
   );
@@ -97,17 +104,24 @@ const styles = StyleSheet.create({
 
   contentContainer: {
     flex: 1,
-    marginHorizontal: '3%',
-    marginTop: '2%',
-    marginBottom: '1%',
+    marginHorizontal: '6%',
+    marginTop: '4%',
+    marginBottom: '10%',
   },
 
-  footer: {
-    flex: .10,
-    justifyContent: 'space-evenly',
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
+  previewContainer: {
+		flex: 0.10,
+	},
+
+	previewText: {
+		fontSize: 40,
+		color: Colors.lightBlue,
+		fontWeight: '700',
+		textShadowColor: Colors.black,
+		textShadowOffset: {width: 0.25, height: 0.25},
+		textShadowRadius: 1,
+		alignSelf: 'center',
+		marginTop: "4%",
+	},
 
 });
