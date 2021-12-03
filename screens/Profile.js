@@ -15,13 +15,10 @@ import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
 import { NavigationAction } from '@react-navigation/routers';
 import { renderIcon } from "../images/Icons";
-
-// firebase imports
 import { auth } from '../database/RTDB';
-
-// database read/write/remove imports
 import { getDataFromPath, getInstagramLink, getInterestListProfile, getFacebookLink, getLinkedInLink } from '../database/readData';
 import { getID } from '../database/ID';
+
 
 
 /*
