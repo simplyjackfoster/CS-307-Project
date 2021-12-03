@@ -354,8 +354,19 @@ export const getAgeAsync = async (email_or_id) => {
 } // getAgeAsync()
 
 
-
-
+export const getMatches = async (email_or_id, numMatches) => {
+	const id = getID(email_or_id);
+	//console.log("my id: " + id);
+	// get the number of matches
+	var match_list = [];
+	var iter = 0;
+	while (iter < numMatches) {
+		let [match,] = await Promise.all([getDataFromPathAsync("users/" + id + "/Match List/match" + iter)]);
+		match_list.push(match);
+		iter++;
+	}
+	return match_list;
+} // getMatches()
 
 
 /*
@@ -375,8 +386,6 @@ export const getNextUsersAsync = async (queue) => {
 	}).catch((error) => {
 		console.error(error);
 	});
-	//console.log(users);
-
 
 
 	// STEP 2: For each user id, calculate compatibility score
@@ -400,9 +409,6 @@ export const getNextUsersAsync = async (queue) => {
 
 
 	// STEP 3: Sort the users based on compatibility
-	// (use a map <id, score> to sort the ids)
-	//             ^
-	//        array of ids
 	const sorted = map.sort(function(a, b) {
 		const scoreA = a.score;
 		const scoreB = b.score;
@@ -428,7 +434,7 @@ export const getNextUsersAsync = async (queue) => {
 	for (let i = 0; i < queue.length; i++) {
 		queue_ids.push(queue[i].id);
 	}
-	//console.log("QUEUE: " + queue_ids);
+
 
 	// get swiped-left/right lists, age-min/age-max, and preferred living location.
 	const id = getID(auth.currentUser.email);
@@ -453,6 +459,15 @@ export const getNextUsersAsync = async (queue) => {
 	// (don't add if they are in your swiped right/left list, or in the queue currently)
 	var ids_to_add = [];
 	var count = 0;
+	/*var queue_length;
+	if (queue) {
+		console.log("here1");
+		queue_length = queue.length;
+	}
+	else {
+		console.log("here2");
+		queue_length = 0;
+	}*/
 
 	for (let i = 0; i < sorted_ids.length; i++) {
 		if (await passesFilterAsync(sorted_ids[i], sorted_ages[i], queue_ids, swiped_left,
@@ -460,7 +475,7 @@ export const getNextUsersAsync = async (queue) => {
 																 my_preferred_living_location)) {
 			ids_to_add.push(sorted_ids[i]);
 			count++;
-			if (count == 5) {
+			if (count + queue.length == 10) {
 				break;
 			}
 		}
@@ -555,8 +570,6 @@ export const getSwipeRightListAsync = async (email_or_id) => {
 		console.error(error);
 	});
 
-	console.log("SWIPED RIGHT LIST = " + users);
-
 	return users;
 } // getSwipeRightListAsync()
 
@@ -581,8 +594,6 @@ export const getSwipeLeftListAsync = async (email_or_id) => {
 		console.error(error);
 	});
 
-	console.log("SWIPED LEFT LIST = " + users);
-
 	return users;
 } // getSwipeLeftListAsync()
 
@@ -604,7 +615,9 @@ export const getUserData = async (ids) => {
 	//var ids = ["mfinder", "thylan", "francik"]; // using fixed value
 
 	// GET MY QUESTIONNAIRE ANSWERS
-	const myQuestionnaire = await getQuestionnaireAsync(getID(auth.currentUser.email));	
+	const myQuestionnaire = await getQuestionnaireAsync(getID(auth.currentUser.email));
+	
+	//const myMatchCount = await getMatchesCount(getID(auth.currentUser.email));
 
 
 	// STEP 1: GET THE PROFILE INFORMATION FOR OTHER SPECIFIED PROFILES
@@ -644,6 +657,7 @@ export const getUserData = async (ids) => {
 	var questionnaire13_answer_list = [];
 	var most_similar_response_list = [];
 	var most_different_response_list = [];
+	var numMatches_list = [];
 	var num_reports_list = [];
 
 
@@ -685,7 +699,8 @@ export const getUserData = async (ids) => {
 			questionnaire13, // 32
 			most_similar_response, // 33
 			most_different_response, // 34
-			num_reports, // 35
+			numMatches, // 35
+			num_reports, // 36
 		] = await Promise.all(
 		[
 			getDataFromPathAsync("users/" + id + "/Profile/Images/profile_picture"), // 1
@@ -722,7 +737,8 @@ export const getUserData = async (ids) => {
 			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_significant_other"), // 32
 			getMostSimilarResponseAsync(id, myQuestionnaire), // 33
 			getMostDifferentResponseAsync(id, myQuestionnaire), // 34
-			getDataFromPathAsync("reported/" + id + "/num_reports"), // 35
+			getDataFromPathAsync("users/" + id + "/Match List/user_count"), //35
+			getDataFromPathAsync("reported/" + id + "/num_reports"), // 36
 		]);
 	
 
@@ -761,6 +777,7 @@ export const getUserData = async (ids) => {
 		questionnaire13_answer_list.push(questionnaire13);
 		most_similar_response_list.push(most_similar_response);
 		most_different_response_list.push(most_different_response);
+		numMatches_list.push(numMatches);
 
 		if (num_reports) {
 			num_reports_list.push(num_reports);
@@ -811,6 +828,7 @@ export const getUserData = async (ids) => {
 			questionnaire13: questionnaire13_answer_list[i],
 			most_similar_response: most_similar_response_list[i],
 			most_different_response: most_different_response_list[i],
+			numMatches: numMatches_list[i],
 			num_reports: num_reports_list[i],
 		};
 

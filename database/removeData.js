@@ -2,6 +2,7 @@ import React from 'react';
 import { rtdb } from './RTDB';
 import {ref, remove} from "firebase/database";
 import { getID } from './ID';
+import { getUserData } from'./readData';
 
 
 /*
@@ -15,6 +16,7 @@ export const removeUser = (email_or_id) => {
 	const id = getID(email_or_id);	
 	remove(ref(rtdb, "users/" + id));
 } // removeUser()
+
 
 
 /*
@@ -71,3 +73,15 @@ export const removeAllLists = (email_or_id) => {
 	remove(ref(rtdb, "users/" + id + "/Feed/Swipe Left List/"));
 	remove(ref(rtdb, "users/" + id + "/Match List/"));
 }
+
+
+
+export const deleteMatch = (email_or_id, index, userCount) => {
+	// get the id
+	const id = getID(email_or_id);	
+	var newCount = userCount - 1;
+	remove(ref(rtdb, "users/" + id + "/Match List/match" + index));
+	update(ref(rtdb, "users/" + id + "/Match List"), {
+		user_count: newCount,
+	});
+} // deleteMatch()

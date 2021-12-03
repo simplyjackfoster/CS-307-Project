@@ -72,6 +72,14 @@ export default ({ navigation }) => {
     );
   }
 
+  if (profiles[0] == null) {
+    return (
+      <View style={styles.splashContainer}>
+        <Text style={styles.splashText}>Loading...</Text>
+      </View>
+    );
+  }
+
 
   return (
     <View style={styles.container}>
