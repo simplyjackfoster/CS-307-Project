@@ -14,6 +14,14 @@ import Colors from "../constants/Colors";
 import { renderIcon } from "../images/Icons";
 import { MatchInteractContext } from '../context';
 import { reportUser } from '../database/writeData';
+import { collection, doc, setDoc, addDoc} from'firebase/firestore';
+import { auth, firestoreDB} from  '../database/RTDB';
+import { getID } from '../database/ID';
+import { GiftedChat } from 'react-native-gifted-chat';
+
+const messagesRef = collection(firestoreDB,'chatroom','KU6bnqXVnKtuNsuVhFOX','messages');
+
+
 
 //export var displays;
 
@@ -29,29 +37,6 @@ const MatchItem = (props) => {
     const location = getDataFromPath("users/" + uid + "/Profile/location");
     const major = getDataFromPath("users/" + uid + "/Profile/major");
     displays = true;
-    // const bday = getDataFromPath("users/" + uid + "/Critical Information/birthday");
-
-    /* Used for age calculation */
-    // var age;
-    // if(bday != null) { // Seems redundant, but during loading page, bday is briefly null
-    //     const bday_day = bday.substring(0, 2)
-    //     const bday_month = bday.substring(3, 5)
-    //     const bday_year = bday.substring(6)
-
-    //     const date = new Date();
-    //     const curr_day = date.getDate();
-    //     const curr_month = date.getMonth() + 1;
-    //     const curr_year = date.getFullYear();
-    //     age = curr_year - bday_year;
-
-    //     // Giga brain math to calculate true age
-    //     if(bday_month >= curr_month) {
-    //         if(bday_day > curr_day) {
-    //             age -= 1
-    //         }
-    //     }
-    // }
-
 
     const removeMatch = () => {
         // remove the uid from the match list in the database
@@ -63,10 +48,26 @@ const MatchItem = (props) => {
         // implement after adding the matches to the database
     }
 
+    const [messages, setMessages] = useState([]);
 
     const sendMessage = (message) => {
         // send the specified message from the current user to the uid of the match displayed
         console.log("Sent message to '" + uid + "': " + message);
+        const msg = message[0]
+        const mymsg = {
+            ...msg,
+            sentBy: getID(auth.currentUser.email),
+            sentTo: uid,
+            createdAt: new Date()
+        }
+        console.log(message)
+        setMessages(previousMessages => GiftedChat.append(previousMessages,mymsg))
+
+        const createDocuments = async () =>{
+        await addDoc(messagesRef, {...mymsg});
+        };
+        createDocuments();
+
 
         // figure out navigation to the messages screen from a component
     }

@@ -66,9 +66,12 @@ const HomeStack = () => {
 			/>
 
 			<Stack.Screen name="ChatScreen" component={ChatScreen}
-				options={{
-					headerBackTitle: "Back",
-				}}
+				options={
+					({route}) => ({ 
+						headerTitle: route.params.name,
+						headerBackTitle: "Back"
+					})
+				}
 			/>
 			<Stack.Screen name="ViewProfile" component={ViewProfile}
 				options={{

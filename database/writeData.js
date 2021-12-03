@@ -493,4 +493,8 @@ export const reportUser = (email_or_id, currentReports) => {
 		num_reports: currentReports
 	});
 }
-
+/*
+export const sendMessage = async(e) => {
+	e.preventDefault();
+}
+*/
