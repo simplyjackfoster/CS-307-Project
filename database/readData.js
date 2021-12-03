@@ -386,8 +386,6 @@ export const getNextUsersAsync = async (queue) => {
 	}).catch((error) => {
 		console.error(error);
 	});
-	//console.log(users);
-
 
 
 	// STEP 2: For each user id, calculate compatibility score
@@ -411,9 +409,6 @@ export const getNextUsersAsync = async (queue) => {
 
 
 	// STEP 3: Sort the users based on compatibility
-	// (use a map <id, score> to sort the ids)
-	//             ^
-	//        array of ids
 	const sorted = map.sort(function(a, b) {
 		const scoreA = a.score;
 		const scoreB = b.score;
@@ -439,7 +434,7 @@ export const getNextUsersAsync = async (queue) => {
 	for (let i = 0; i < queue.length; i++) {
 		queue_ids.push(queue[i].id);
 	}
-	//console.log("QUEUE: " + queue_ids);
+
 
 	// get swiped-left/right lists, age-min/age-max, and preferred living location.
 	const id = getID(auth.currentUser.email);
@@ -464,6 +459,15 @@ export const getNextUsersAsync = async (queue) => {
 	// (don't add if they are in your swiped right/left list, or in the queue currently)
 	var ids_to_add = [];
 	var count = 0;
+	/*var queue_length;
+	if (queue) {
+		console.log("here1");
+		queue_length = queue.length;
+	}
+	else {
+		console.log("here2");
+		queue_length = 0;
+	}*/
 
 	for (let i = 0; i < sorted_ids.length; i++) {
 		if (await passesFilterAsync(sorted_ids[i], sorted_ages[i], queue_ids, swiped_left,
@@ -471,7 +475,7 @@ export const getNextUsersAsync = async (queue) => {
 																 my_preferred_living_location)) {
 			ids_to_add.push(sorted_ids[i]);
 			count++;
-			if (count == 5) {
+			if (count + queue.length == 10) {
 				break;
 			}
 		}
@@ -566,8 +570,6 @@ export const getSwipeRightListAsync = async (email_or_id) => {
 		console.error(error);
 	});
 
-	console.log("SWIPED RIGHT LIST = " + users);
-
 	return users;
 } // getSwipeRightListAsync()
 
@@ -591,8 +593,6 @@ export const getSwipeLeftListAsync = async (email_or_id) => {
 	}).catch((error) => {
 		console.error(error);
 	});
-
-	console.log("SWIPED LEFT LIST = " + users);
 
 	return users;
 } // getSwipeLeftListAsync()
