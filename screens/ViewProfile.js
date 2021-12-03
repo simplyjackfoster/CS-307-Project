@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import Colors from "../constants/Colors";
 import { CardItem } from '../components/CardItem';
-import { MatchInteractContext } from '../context';
 import { getUserData } from '../database/readData';
 import { getID } from '../database/ID';
 
@@ -24,46 +23,33 @@ import { auth } from '../database/RTDB';
 /*
  * This is the screen where the user can view their matches.
  */
-var user;
-var loaded = false;
 export default ({ navigation }) => {
-  const { matchToken, setMatchToken } = React.useContext(MatchInteractContext);
-  const [ready, setReady] = React.useState(false);
-  const [profiles, setProfiles] = React.useState(null);
 
-  //Prevents null errors from displaying upon back navigation
-  if (matchToken != null) {
-    //makes a copy of the user string
-    user = JSON.parse(JSON.stringify(matchToken));
-  }
-  console.log("Viewing user: " + matchToken);
+	// get data from props
+	const[profile, setProfile] = React.useState(null);
 
-  /*
-   * Gets all of the profile data from users when the feed is rendered,
-   * and puts the Profile objects in "profiles" hook
-   */
-  const initializeFeedProfiles = async () => {
-    // get the profile ids from the database (USE ALGORITHM)
-    var ids = [null];
-    // If there is not a match being viewed then we are previewing the user's profile
-    if (matchToken == null) {
-      ids = [getID(auth.currentUser.email)];
-    } else {
-      ids = [matchToken];
-    }
+
+
+	/*
+	 *
+	 */
+  const getViewUserProfile = async () => {
+		const ids = [getID(auth.currentUser.email)];
 
     // get the data for the profiles
     const profile_list = await getUserData(ids);
     
     // set the data and set the ready hook to true
-    await setProfiles(profile_list);
+    await setProfile(profile_list[0]);
     setReady(true);
-    //console.log(profile_list);
-  } // initializeFeedProfiles()
+  } // getViewUserProfile()
+
+
+
 
   if (!ready) {
     // load the users
-    initializeFeedProfiles();
+    getViewUserProfile();
 
     return (
       <View style={styles.splashContainer}>
@@ -75,12 +61,16 @@ export default ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* Stack of Cards */}
-      <CardItem profile={profiles[0]}></CardItem>
+
+      {/* Card */}
+      <CardItem profile={profile}></CardItem>
+
     </View>
   );
 
-}
+} // export default()
+
+
 
 
 

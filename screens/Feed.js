@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Component } from 'react';
 import {
   StyleSheet,
@@ -13,7 +13,7 @@ import { renderIcon } from "../images/Icons";
 import CardList from '../components/CardList';
 
 import { Asset } from 'expo-asset';
-import { getUserData } from '../database/readData';
+import { getNextUsersAsync, getUserData } from '../database/readData';
 
 
 
@@ -29,7 +29,8 @@ export default () => {
    */
   const initializeFeedProfiles = async () => {
     // get the profile ids from the database (USE ALGORITHM)
-    var ids = ["mfinder", "test", "francik"]; // using fixed value
+    var ids = await getNextUsersAsync([]);
+    console.log("INITIALIZING WITH = " + ids);
 
     // get the data for the profiles
     const profile_list = await getUserData(ids);
@@ -40,12 +41,22 @@ export default () => {
   } // initializeFeedProfiles()
 
 
+  const mounted = useRef(false);
+  useEffect(() => {
+      mounted.current = true;
 
+      return () => {
+          mounted.current = false;
+      };
+  }, []);
 
 
   if (!ready) {
-    // load the users
-    initializeFeedProfiles();
+
+    if (!profiles) {
+      // load the users
+      initializeFeedProfiles();
+    }
 
     return (
       <View style={styles.splashContainer}>
@@ -57,7 +68,7 @@ export default () => {
 
   return (
     <View style={styles.container}>
-
+      
       {/* Stack of Cards */}
       <View style={styles.contentContainer}>
         <CardList {...{profiles}} ></CardList>
