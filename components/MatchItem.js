@@ -57,7 +57,7 @@ const MatchItem = (props) => {
 
     const sendMessage = (message) => {
         // send the specified message from the current user to the uid of the match displayed
-        console.log("Sent message to '" + uid + "': " + message);
+        console.log("Sent message to '" + profile.name + "': " + message);
 
         // figure out navigation to the messages screen from a component
     }
