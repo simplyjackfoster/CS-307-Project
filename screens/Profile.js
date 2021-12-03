@@ -70,16 +70,6 @@ export default ( {navigation} ) => {
 			}	
 		>
 
-			{/* Edit Profile Button */}
-			<TouchableOpacity
-					style={styles.editProfile}
-					onPress={() => {
-						navigation.push("EditProfile");
-					}}	
-			>
-				<Text style={styles.textEditProfile}>Edit Profile...</Text>
-			</TouchableOpacity>
-
 			{/* Profile Picture */}
 			<View>
 				<Image style={styles.profilePic}
@@ -93,6 +83,25 @@ export default ( {navigation} ) => {
 				</Text>
 			</View>
 			<View style={{marginTop: 40}}/>
+
+			{/* Preview Profile Button*/}
+			<View>
+            	<TouchableOpacity
+              		onPress={() => navigation.push("ViewProfile")}
+              		style={styles.buttonPreview}>
+              	<Text style={styles.textPreview}>Preview Profile</Text>
+            	</TouchableOpacity>
+          	</View>
+
+			  {/* Edit Profile Button */}
+			<TouchableOpacity
+					style={styles.editProfile}
+					onPress={() => {
+						navigation.push("EditProfile");
+					}}	
+			>
+				<Text style={styles.textEditProfile}>Edit Profile...</Text>
+			</TouchableOpacity>
 
 
 			{/* Email: <email> */}
@@ -375,13 +384,19 @@ const styles = StyleSheet.create({
 	},
 
 	editProfile: {
-		alignSelf: 'flex-end',
+		alignSelf: 'center',
+		borderWidth: 1,
+		borderRadius: 25,
+		margin: 5,
+		marginBottom: 15,
+		marginTop: 5,
+		padding: 10,
+		backgroundColor: Colors.royalBlue,
 	},
 
 	textEditProfile: {
-		margin: 20,
-		fontSize: 18,
-		color: Colors.lightBlue,
+		fontSize: 16,
+		alignSelf: 'center',
 	},
 
 	imageName: {
@@ -597,5 +612,23 @@ const styles = StyleSheet.create({
 		color: Colors.blue,
 		textDecorationLine: 'underline',
 	},
+
+	/* Preview CSS */
+	buttonPreview: {
+		borderWidth: 1,
+		borderRadius: 25,
+		margin: 5,
+		alignSelf: 'center',
+		marginBottom: 5,
+		marginTop: 0,
+		padding: 10,
+		backgroundColor: Colors.royalBlue,
+		
+	  },
+
+	  textPreview: {
+		fontSize: 16,
+		alignSelf: 'center',
+	  },
 
 });

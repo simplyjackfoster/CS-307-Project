@@ -27,7 +27,7 @@ export default ({ navigation }) => {
 
 	// get data from props
 	const[profile, setProfile] = React.useState(null);
-
+  const[ready, setReady] = React.useState(false);
 
 
 	/*
