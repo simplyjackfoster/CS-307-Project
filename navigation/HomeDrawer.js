@@ -3,7 +3,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 
 import HomeTabs from './HomeTabs';
 import Account from '../screens/Account';
-import Settings from '../screens/Settings';
 import CodeOfConduct from '../screens/CodeOfConduct';
 import PrivacyPolicy from '../screens/PrivacyPolicy';
 import FAQ from '../screens/FAQ';
@@ -25,8 +24,6 @@ const HomeDrawer = () => {
 			/>
 
 			<Drawer.Screen name="Account" component={Account}/>
-
-			<Drawer.Screen name="Settings" component={Settings}/>
 
 			<Drawer.Screen name="CodeOfConduct" component={CodeOfConduct}
 				options={{
