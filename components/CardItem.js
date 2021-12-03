@@ -605,7 +605,11 @@ export const CardItem = (props) => {
 
                 {/* Report User */}
                 <View style={styles.reportUserWrapper}>
-                    <Text style={styles.reportUserText}
+                    <Text style={getID(auth.currentUser.email) != profile.id ? (
+                        styles.reportUserText
+                    ) : (
+                        {display: 'none'}
+                    )}
                         onPress={() => {
                             Alert.alert("Report User", "Are you sure you want to report " + profile.name + "?",
                             [{ 
