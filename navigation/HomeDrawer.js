@@ -8,6 +8,7 @@ import CodeOfConduct from '../screens/CodeOfConduct';
 import PrivacyPolicy from '../screens/PrivacyPolicy';
 import FAQ from '../screens/FAQ';
 import Help from '../screens/Help';
+import Testing from '../screens/Testing'
 
 import Colors from '../constants/Colors';
 
@@ -42,6 +43,8 @@ const HomeDrawer = () => {
 			<Drawer.Screen name="FAQ" component={FAQ}/>
 
 			<Drawer.Screen name="Help" component={Help}/>
+
+			<Drawer.Screen name="Testing" component={Testing}/>
 		</Drawer.Navigator>
 	);
 }

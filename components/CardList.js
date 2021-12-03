@@ -75,9 +75,6 @@ export default class Profiles extends React.Component {
       }
 
       console.log("Profile Liked!");
-
-      // check their swiped right list for your name
-
     }
     else {
       writeToSwipedLeftListAsync(getID(auth.currentUser.email), this.state.profiles[0].id);
