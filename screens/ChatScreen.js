@@ -35,6 +35,8 @@ export default ({ navigation, route}) =>{
       ...msg,
       sentBy: getID(auth.currentUser.email),
       sentTo: id,
+      sent: true,
+      received: false, //update to true once read (use as read reciept bool)
       createdAt: new Date()
     }
     console.log(messageArray)
@@ -59,6 +61,7 @@ export default ({ navigation, route}) =>{
     };
     createDocuments();
     console.log("Message Request Recived");
+    console.log("Read reciept status: " + mymsg.received +"Recived");
     endTime = DateTime.now();
     endMin = endTime.toString();
     endMin = endMin.substring(14, 16);
