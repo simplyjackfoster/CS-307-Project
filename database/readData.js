@@ -547,31 +547,12 @@ export const passesFilterAsync = async (user, age, user_gender, my_gender, queue
 			return false;
 		}
 
-		// check if living location is girls only
-		if (my_living_location == "Meredith (female only)"
-			  || my_living_location == "Meredith South (female only)"
-				|| my_living_location == "Windsor (female only)") {
-			if (user_living_location == "Cary Quad (male only)"
-					|| user_living_location == "McCutcheon (male only)"
-					|| user_living_location == "Tarkington (male only)"
-					|| user_living_location == "Wiley (male only)") {
-				console.log("FILTERED (" + user + ") - genders don't align for living");
-				return false;
-			}
+		// check if living location is compatible
+		if (my_living_location && my_living_location != user_living_location) {
+			console.log("FILTERED (" + user + ") - living location not compatible");
+			return false;
 		}
-
-		// check if living location is boys only
-		if (my_living_location == "Cary Quad (male only)"
-				|| my_living_location == "McCutcheon (male only)"
-				|| my_living_location == "Tarkington (male only)"
-				|| my_living_location == "Wiley (male only)") {
-			if (user_living_location == "Meredith (female only)"
-					|| user_living_location == "Meredith South (female only)"
-					|| user_living_location == "Windsor (female only)") {
-				console.log("FILTERED (" + user + ") - genders don't align for living");
-				return false;
-			}
-		}
+		
 
 		return true;
 } // passesFilter()
