@@ -459,15 +459,6 @@ export const getNextUsersAsync = async (queue) => {
 	// (don't add if they are in your swiped right/left list, or in the queue currently)
 	var ids_to_add = [];
 	var count = 0;
-	/*var queue_length;
-	if (queue) {
-		console.log("here1");
-		queue_length = queue.length;
-	}
-	else {
-		console.log("here2");
-		queue_length = 0;
-	}*/
 
 	for (let i = 0; i < sorted_ids.length; i++) {
 		if (await passesFilterAsync(sorted_ids[i], sorted_ages[i], queue_ids, swiped_left,
@@ -498,6 +489,12 @@ export const getNextUsersAsync = async (queue) => {
 export const passesFilterAsync = async (user, age, queue, swiped_left, swiped_right,
 																	 age_min, age_max, user_living_location,
 																	 my_living_location) => {
+
+		// check if user is self
+		if (user == getID(auth.currentUser.email)) {
+			console.log("FILTERED (" + user + ") - is self");
+			return false;
+		}
 
 	  // check if the user is in the queue already
 		if (queue.includes(user)) {
