@@ -117,7 +117,7 @@ export const writeToSwipedRightListAsync = async (myID, userID) => {
 */
 export const writeToMatchedListAsync = async (myID, userID) => {
     // update my swiped right list
-    update(ref(rtdb, "users/" + myID + "/Feed/Match List/" + userID), {
+    update(ref(rtdb, "users/" + myID + "/Match List/" + userID), {
         uid: userID,
     });
 }

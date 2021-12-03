@@ -73,10 +73,6 @@ export default class Profiles extends React.Component {
         writeToMatchedListAsync(this.state.profiles[0].id, getID(auth.currentUser.email));
         console.log("USERS MATCHED!");
       }
-
-
-      // check their swiped right list for your name
-
     }
     else {
       writeToSwipedLeftListAsync(getID(auth.currentUser.email), this.state.profiles[0].id);
