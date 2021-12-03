@@ -18,6 +18,7 @@ import { renderIcon } from "../images/Icons";
 import { auth } from '../database/RTDB';
 import { getDataFromPath, getInstagramLink, getInterestListProfile, getFacebookLink, getLinkedInLink } from '../database/readData';
 import { getID } from '../database/ID';
+import { writeGhostModeAsync } from '../database/writeData';
 
 
 
@@ -37,7 +38,6 @@ const wait = (timeout) => {
 export default ( {navigation} ) => {
 
 	const { userToken, setUserToken } = React.useContext(AuthContext);
-	const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 	const [isEnabled, setIsEnabled] = useState(false);
 	const [refreshing, setRefreshing] = React.useState(false);
 	const [profilePicture, setProfilePicture] = React.useState(null);
@@ -45,6 +45,18 @@ export default ( {navigation} ) => {
 	const instagramLink = getInstagramLink(auth.currentUser.email);
 	const facebookLink = getFacebookLink(auth.currentUser.email);
 	const linkedInLink = getLinkedInLink(auth.currentUser.email);
+
+
+	// fuction for toggling ghost mode
+	const toggleSwitch = () => {
+		setIsEnabled(previousState => !previousState);
+
+		// write isEnabled to the database for ghost_mode
+		writeGhostModeAsync(auth.currentUser.email, isEnabled);
+	} // toggleSwitch()
+
+
+	// write function to initialize ghost mode
 
 
 	// Function that refreshes

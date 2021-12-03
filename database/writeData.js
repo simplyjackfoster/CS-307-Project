@@ -526,5 +526,19 @@ export const reportUser = (email_or_id, currentReports) => {
 	update(ref(rtdb, "reported/" + id), {
 		num_reports: currentReports
 	});
-}
+} // reportUser()
+
+
+
+
+/*
+ * Writes ghost mode to the database.
+ */
+export const writeGhostModeAsync = async (email_or_id, isEnabled) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Critical Information"), {
+		ghost_mode: isEnabled
+	});
+} // writeGhostModeAsync()
 
