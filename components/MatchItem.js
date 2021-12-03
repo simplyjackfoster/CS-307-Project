@@ -20,53 +20,40 @@ import { getID } from '../database/ID';
 // firebase imports
 import { auth } from '../database/RTDB';
 
-import { matchName, removeCurrentMatch } from '../components/CardItem';
+
+
 const MatchItem = (props) => {
-    //const { userToken, setUserToken }  = React.useContext();
-    const { matchToken, setMatchToken } = React.useContext(MatchInteractContext);
-    const [displayMatch, setDisplayMatch] = React.useState(true);
-    
-    const uid = props.id;
 
-    if (uid == null) {
-        return (
-            <View style={false ? (
-                {/* Will always display none, nothing here */}
-            ) : (
-                { display: 'none' }
-            )}
-            >
-            </View >
-        );
-    }
-    const removeMatch = () => {
-        // remove the uid from the match list in the database
-        console.log("Removing match: " + uid);
-        //props = null;
-        deleteMatch(getID(auth.currentUser.email), props.idx, props.count);
-        setDisplayMatch(false);
-        //displays = false;
-        // implement after adding the matches to the database
-    }
-    
-    if ((removeCurrentMatch == true) && (uid == matchName)) {
-        return (
-            <View style={displayMatch ? (
-                removeMatch()
-            ) : (
-                { display: 'none' }
-            )}
-            >
-            </View >
-        );
-    }
+    // get the profile from props
+    const { profile, profiles, updateProfiles,
+            showProfile } = props;
 
-    const profile_picture = getDataFromPath("users/" + uid + "/Profile/Images/profile_picture");
-    const reports = getDataFromPath("reported/" + uid + "/num_reports");
-    const name = getDataFromPath("users/" + uid + "/Profile/profile_name");
-    const location = getDataFromPath("users/" + uid + "/Profile/location");
-    const major = getDataFromPath("users/" + uid + "/Profile/major");
 
+    /*
+     * Removes match from database
+     */
+    const removeMatchAsync = async () => {
+        deleteMatch(profile.id);
+       
+        // find the index in profiles for the user        
+        var index;
+        for (let i = 0; i < profiles.length; i++) {
+            if (profiles[i].id == profile.id) {
+                index = i;
+                break;
+            }
+        }
+
+        // remove profile at that index
+        var newProfiles = profiles;
+        newProfiles.splice(index, 1);   
+
+        // reset the state of profiles
+        updateProfiles(newProfiles);
+    } // removeMatchAsync()
+
+
+  
 
     const sendMessage = (message) => {
         // send the specified message from the current user to the uid of the match displayed
@@ -75,34 +62,34 @@ const MatchItem = (props) => {
         // figure out navigation to the messages screen from a component
     }
 
-    const updateMatch = () => {
-        //set match token to display by calling viewProfile's viewProfile function
-        setMatchToken(String(uid));
-        //console.log("match: " + matchToken);
-        props.func();
+
+    /*
+     * Shows the profile on the matches screen
+     */ 
+    const viewProfile = () => {
+        showProfile(profile);
     }
 
 
+
     return (
-        
-        <View style=
-            {displayMatch ? (
-                styles.container
-            ) : (
-                {display: 'none'}
-            )}
-        >
+        <View style={styles.container}>
+
             {/* Update current match to view, and show them */}
             <TouchableOpacity
                 onPress={() =>
-                    updateMatch()
+                    viewProfile()
                 }
             >
-                <Image style = {styles.profileImage}source={{uri: profile_picture}}/>
+                <Image style={styles.profileImage}
+                       source={profile.profile_picture}/>
             </TouchableOpacity>
-            <Text style={styles.name}>{name}</Text>
-            <Text style={styles.description}>Location: {location}</Text>
-            <Text style={styles.description}>Major: {major}</Text>
+            <Text style={styles.name}>{profile.name}</Text>
+            <Text style={styles.description}>Location: {profile.location}</Text>
+            <Text style={styles.description}>Major: {profile.major}</Text>
+
+
+            {/* Buttons */}
             <View style={styles.buttonWrapper}>
 
                 {/* Remove match button */}
@@ -110,13 +97,13 @@ const MatchItem = (props) => {
                     style={styles.button}
                     onPress={() => 
                         Alert.alert("Confirm",
-                        "Are you sure you want to remove your match with " + name,
+                        "Are you sure you want to remove your match with " + profile.id,
                         [{
                             text: "No"
                         },
                         {
                             text: "Yes",
-                            onPress: () => removeMatch(),
+                            onPress: () => removeMatchAsync(),
                         }
                     ])
                     }
@@ -129,7 +116,7 @@ const MatchItem = (props) => {
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => 
-                        Alert.prompt("Message", "Send a message to " + name,
+                        Alert.prompt("Message", "Send a message to " + profile.id,
                         [
                         {
                             text: "Cancel",
@@ -146,16 +133,19 @@ const MatchItem = (props) => {
                     <Text style={styles.buttonText}>Message</Text>
                 </TouchableOpacity>
 
+
+
                 {/* Report Match button */}
                 <TouchableOpacity
                     style={styles.reportUserWrapper}
                     onPress={() =>
-                        Alert.alert("Report User", "Are you sure you want to report " + name + "?",
+                        Alert.alert("Report User", "Are you sure you want to report " + profile.id + "?",
                             [{ 
                                 text: "No" 
                             }, {
                                 text: "Yes",
-                                onPress: () => reportUser(uid, reports)
+                                onPress: () => reportUser(profile.id,
+                                                          profile.num_reports)
                             }])
                     }
                 >

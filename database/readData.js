@@ -320,6 +320,7 @@ export const getMostDifferentResponseAsync = async (id, myQuestionnaire) => {
 
 
 
+
 /*
  * Reads the birthday of the user and calculates and returns their age.
  * @param email_or_id -> the email or id to the specified user.
@@ -354,19 +355,33 @@ export const getAgeAsync = async (email_or_id) => {
 } // getAgeAsync()
 
 
-export const getMatches = async (email_or_id, numMatches) => {
+
+
+
+/*
+ *
+ */
+export const getMatchesAsync = async (email_or_id) => {
 	const id = getID(email_or_id);
-	//console.log("my id: " + id);
-	// get the number of matches
-	var match_list = [];
-	var iter = 0;
-	while (iter < numMatches) {
-		let [match,] = await Promise.all([getDataFromPathAsync("users/" + id + "/Match List/match" + iter)]);
-		match_list.push(match);
-		iter++;
-	}
-	return match_list;
-} // getMatches()
+
+	// get user ids from swiped right list and store them in array "users"
+	const dbRef = ref(rtdb);
+	const users = await get(child(dbRef, "users/" + id + "/Match List")).then((snapshot) => {
+		var ids = [];
+		snapshot.forEach(function(data) {
+			let id = data.key;
+			ids.push(id);
+		})
+		return ids;
+	}).catch((error) => {
+		console.error(error);
+	});
+
+	return users;
+} // getMatchesAsync()
+
+
+
 
 
 /*

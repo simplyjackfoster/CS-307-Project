@@ -7,11 +7,10 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
-  Dimensions,
 } from 'react-native';
 import Card from './Card';
-import Colors from "../constants/Colors";
-import { renderIcon } from "../images/Icons";
+import Colors from '../constants/Colors';
+import { renderIcon } from '../images/Icons';
 import { getUserData, getNextUsersAsync, getSwipeLeftListAsync, getSwipeRightListAsync} from '../database/readData';
 import { writeToSwipedRightListAsync, writeToSwipedLeftListAsync, writeToMatchedListAsync } from '../database/writeData';
 import { auth } from '../database/RTDB';
@@ -24,7 +23,7 @@ export default class Profiles extends React.Component {
   constructor(props) {
     super(props);
 		const { profiles } = props;
-    this.state = { profiles, addingProfiles };
+    this.state = { profiles };
   }
 
 
@@ -53,6 +52,8 @@ export default class Profiles extends React.Component {
     addingProfiles = false;
     this.setState({ profiles: updatedProfiles});
   } // addFeedProfiles()
+
+
 
 	
   // Function that is called when the user likes or dislikes

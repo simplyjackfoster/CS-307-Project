@@ -31,7 +31,6 @@ export default () => {
     // get the profile ids from the database (USE ALGORITHM)
     var ids = await getNextUsersAsync([]);
     console.log("INITIALIZING WITH = " + ids);
-    //var ids = ["mfinder", "test", "francik"]; // using fixed value
 
     // get the data for the profiles
     const profile_list = await getUserData(ids);

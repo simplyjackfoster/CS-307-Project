@@ -22,16 +22,17 @@ import { renderIcon } from "../images/Icons";
 import { reportUser } from '../database/writeData';
 import { auth } from '../database/RTDB';
 import { getID } from '../database/ID';
-import { MatchInteractContext } from '../context';
+import { deleteMatch } from '../database/removeData';
 import { ViewQuestionnaire } from '../screens/ViewQuestionnaire';
 import Questionnaire, { questions, responses } from '../screens/Questionnaire';
 
 
 export var removeCurrentMatch = false;
 export var matchName = "";
+
+
 export const CardItem = (props) => {
-    const { profile, likeOpacity, nopeOpacity } = props;
-    const { matchToken, setMatchToken } = React.useContext(MatchInteractContext);
+    const { profile, viewingMatch, updateProfiles, matches, showProfile } = props;
 
     // hook for displaying questionnaire
     const [viewingQuestionnaire, setViewingQuestionnaire] = React.useState(false);
@@ -39,6 +40,34 @@ export const CardItem = (props) => {
     const getBorderColor = () => {
         return Math.floor(profile.compatibility_score / 34);
     }
+
+
+
+    /*
+     * Removes match from database and from match list
+     */
+    const removeMatchAsync = async () => {
+        deleteMatch(profile.id);
+    
+        // find the index in profiles for the user        
+        var index;
+        for (let i = 0; i < matches.length; i++) {
+            if (matches[i].id == profile.id) {
+                index = i;
+                break;
+            }
+        }
+
+        // remove profile at that index
+        var newProfiles = matches;
+        newProfiles.splice(index, 1);   
+
+        // reset the state of profiles
+        updateProfiles(newProfiles);
+    } // removeMatchAsync()
+
+
+
 
 
     // display questionnaire when applicable
@@ -519,8 +548,11 @@ export const CardItem = (props) => {
 
                 </View>
 
+
+
+
                 <View style={
-                    matchToken ? (
+                    viewingMatch ? (
                         styles.matchButtonWrapper
                     ) : (
                         { display: 'none' }
@@ -531,17 +563,16 @@ export const CardItem = (props) => {
                         style={styles.matchButton}
                         onPress={() =>
                             Alert.alert("Confirm",
-                                "Are you sure you want to remove your match with " + matchToken,
+                                "Are you sure you want to remove your match with " + profile.name,
                                 [{
                                     text: "No"
                                 },
                                 {
                                     text: "Yes",
                                     onPress: () => {
-                                        removeCurrentMatch = true;
-                                        matchName =  JSON.parse(JSON.stringify(matchToken));
+                                        removeMatchAsync() // remove match
+                                        showProfile(null) // view matches
                                     },
-                                    //onPress: () => removeMatch(),
                                 }
                                 ])
                         }
@@ -552,7 +583,7 @@ export const CardItem = (props) => {
                     <TouchableOpacity
                         style={styles.matchButton}
                         onPress={() =>
-                            Alert.prompt("Message", "Send a message to " + matchToken,
+                            Alert.prompt("Message", "Send a message to " + profile.name,
                                 [
                                     {
                                         text: "Cancel",

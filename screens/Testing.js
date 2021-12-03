@@ -159,9 +159,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderWidth: 1,
     borderRadius: 25,
-    margin: 5,
     padding: 10,
-    backgroundColor: Colors.red,
+    backgroundColor: Colors.lightRed,
   },
 
 })

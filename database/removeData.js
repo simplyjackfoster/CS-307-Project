@@ -3,6 +3,8 @@ import { rtdb } from './RTDB';
 import {ref, remove} from "firebase/database";
 import { getID } from './ID';
 import { getUserData } from'./readData';
+import { auth } from './RTDB';
+
 
 
 /*
@@ -76,12 +78,21 @@ export const removeAllLists = (email_or_id) => {
 
 
 
-export const deleteMatch = (email_or_id, index, userCount) => {
+
+/*
+ * 
+ */
+export const deleteMatch = (email_or_id) => {
 	// get the id
 	const id = getID(email_or_id);	
-	var newCount = userCount - 1;
-	remove(ref(rtdb, "users/" + id + "/Match List/match" + index));
-	update(ref(rtdb, "users/" + id + "/Match List"), {
-		user_count: newCount,
-	});
+	const myID = getID(auth.currentUser.email);
+
+	// remove them from our match list/swiped right
+	remove(ref(rtdb, "users/" + myID + "/Match List/" + id));
+	remove(ref(rtdb, "users/" + myID + "/Feed/Swipe Right List/" + id));
+
+
+	// remove us from their match list/swiped right
+	remove(ref(rtdb, "users/" + id + "/Match List/" + myID));
+	remove(ref(rtdb, "users/" + id + "/Feed/Swipe Right List/" + myID));
 } // deleteMatch()
