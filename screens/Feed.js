@@ -18,9 +18,20 @@ import { getNextUsersAsync, getUserData } from '../database/readData';
 
 
 
-export default () => {
+export default ({ navigation }) => {
   const [ready, setReady] = React.useState(false);
   const [profiles, setProfiles] = React.useState(null);
+
+
+  // Effect that forces screen to reload when we navigate to it
+  useEffect(() => {
+		const unsubscribe = navigation.addListener("focus", () => {
+      setProfiles(null);
+      setReady(false);
+		});
+		return unsubscribe;
+	}, [navigation]);
+
 
 
   /*

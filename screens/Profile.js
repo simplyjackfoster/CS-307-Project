@@ -424,6 +424,7 @@ const styles = StyleSheet.create({
 		height: 300,
 		borderRadius: 200, // makes image circular
 		alignSelf: 'center',
+		marginTop: '5%',
 	},
 
 	icon: {
