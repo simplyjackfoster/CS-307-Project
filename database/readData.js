@@ -567,10 +567,10 @@ export const passesFilterAsync = async (user, age, user_gender, my_gender, queue
 		}
 
 		// check if living location is compatible
-		/*if (my_living_location && my_living_location != user_living_location) {
+		if (my_living_location && my_living_location != user_living_location) {
 			console.log("FILTERED (" + user + ") - living location not compatible");
 			return false;
-		}*/
+		}
 		
 
 		return true;
