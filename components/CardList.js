@@ -15,9 +15,11 @@ import { getUserData, getNextUsersAsync, getSwipeLeftListAsync, getSwipeRightLis
 import { writeToSwipedRightListAsync, writeToSwipedLeftListAsync, writeToMatchedListAsync } from '../database/writeData';
 import { auth } from '../database/RTDB';
 import { getID } from '../database/ID';
+import { DateTime } from 'luxon';
 
 var addingProfiles = false;
-
+var startTime = DateTime.now();
+var endTime = DateTime.now();
 export default class Profiles extends React.Component {
 
   constructor(props) {
@@ -58,6 +60,7 @@ export default class Profiles extends React.Component {
 	
   // Function that is called when the user likes or dislikes
   onSwiped = async (isLiked) => {
+    startTime = DateTime.now();
     if (isLiked) {
       console.log("Profile Liked!");
       
@@ -89,6 +92,21 @@ export default class Profiles extends React.Component {
       this.addFeedProfiles();
     }
     this.setState({ profiles });
+    endTime = DateTime.now();
+    var startMin = startTime.toString();
+    startMin = startMin.substring(14, 16);
+    var startSec = startTime.toString();
+    startSec = startSec.substring(17, 19);
+    var endMin = endTime.toString();
+    endMin = endMin.substring(14, 16);
+    var endSec = endTime.toString();
+    endSec = endSec.substring(17, 19);
+    var diff = (eval(endMin - startMin) * 60) + (eval(endSec - startSec));
+    if (diff <= 1) {
+      console.log("Passed Swipe Timer (card load time), total time: " + diff);
+    } else {
+      console.log("Failed Swipe Timer (tcard load time), total time: " + diff);
+    }
   } // onSwiped()
 
 
