@@ -408,6 +408,8 @@ export const getNextUsersAsync = async (queue) => {
 	const ages = await Promise.all(users.map(id => getAgeAsync(id)));
 	const living_locations = await Promise.all(users.map(id => getDataFromPathAsync("users/"
 																						 + id + "/Profile/preferred_living_location")));
+	const genders = await Promise.all(users.map(id => getDataFromPathAsync("users/" +
+																		id + "/Profile/gender")));
 
 	// assemble object of user data
 	var map = [];
@@ -416,6 +418,7 @@ export const getNextUsersAsync = async (queue) => {
 			user: users[i],
 			score: scores[i],
 			age: ages[i],
+			gender: genders[i],
 			living_location: living_locations[i],
 		}
 		map.push(pair);
@@ -429,20 +432,21 @@ export const getNextUsersAsync = async (queue) => {
 		const scoreB = b.score;
 		return scoreB - scoreA;
 	});
-	//console.log(sorted);
+
 
 
 	// STEP 4: Get the data for filtering
 	// sorted ids, ages, and living locations
 	var sorted_ids = [];
 	var sorted_ages = [];
+	var sorted_genders = [];
 	var sorted_living_locations = [];
 	for (let i = 0; i < map.length; i++) {
 		sorted_ids.push(map[i].user);
 		sorted_ages.push(map[i].age);
+		sorted_genders.push(map[i].gender);
 		sorted_living_locations.push(map[i].living_location);
 	}
-
 
 	// queue ids
 	var queue_ids = [];
@@ -450,23 +454,25 @@ export const getNextUsersAsync = async (queue) => {
 		queue_ids.push(queue[i].id);
 	}
 
-
-	// get swiped-left/right lists, age-min/age-max, and preferred living location.
+	// get MY swiped-left/right lists, age-min/age-max, gender, and preferred living location.
 	const id = getID(auth.currentUser.email);
 	let [
-		swiped_left,
-		swiped_right,
-		age_min,
-		age_max,
-		my_preferred_living_location,
+		swiped_left, // 1
+		swiped_right, // 2
+		age_min, // 3
+		age_max, // 4
+		my_gender, // 5
+		my_preferred_living_location, // 6
 	] = await Promise.all(
 	[
-		getSwipeLeftListAsync(id),
-		getSwipeRightListAsync(id),
-		getDataFromPathAsync("users/" + id + "/Profile/age_min"),
-		getDataFromPathAsync("users/" + id + "/Profile/age_max"),
-		getDataFromPathAsync("users/" + id + "/Profile/preferred_living_location"),
+		getSwipeLeftListAsync(id), // 1
+		getSwipeRightListAsync(id), // 2
+		getDataFromPathAsync("users/" + id + "/Profile/age_min"), // 3
+		getDataFromPathAsync("users/" + id + "/Profile/age_max"), // 4
+		getDataFromPathAsync("users/" + id + "/Profile/gender"), // 5
+		getDataFromPathAsync("users/" + id + "/Profile/preferred_living_location"), // 6
 	]);
+
 
 
 	// STEP 5: Search for next 5 users starting at beginning of sorted list
@@ -476,9 +482,10 @@ export const getNextUsersAsync = async (queue) => {
 	var count = 0;
 
 	for (let i = 0; i < sorted_ids.length; i++) {
-		if (await passesFilterAsync(sorted_ids[i], sorted_ages[i], queue_ids, swiped_left,
-																 swiped_right, age_min, age_max, sorted_living_locations[i],
-																 my_preferred_living_location)) {
+		if (await passesFilterAsync(sorted_ids[i], sorted_ages[i], sorted_genders[i], my_gender,
+																queue_ids, swiped_left, swiped_right, age_min,
+																age_max, sorted_living_locations[i],
+																my_preferred_living_location)) {
 			ids_to_add.push(sorted_ids[i]);
 			count++;
 			if (count + queue.length == 10) {
@@ -501,7 +508,7 @@ export const getNextUsersAsync = async (queue) => {
 /*
  *
  */
-export const passesFilterAsync = async (user, age, queue, swiped_left, swiped_right,
+export const passesFilterAsync = async (user, age, user_gender, my_gender, queue, swiped_left, swiped_right,
 																	 age_min, age_max, user_living_location,
 																	 my_living_location) => {
 
@@ -510,6 +517,17 @@ export const passesFilterAsync = async (user, age, queue, swiped_left, swiped_ri
 			console.log("FILTERED (" + user + ") - is self");
 			return false;
 		}
+
+		// check if user is compatible gender
+		if (user_gender == "Male" && my_gender == "Female") {
+			console.log("FILTERED (" + user + ") - gender is Male");
+			return false;
+		}
+		else if (user_gender == "Female" && my_gender == "Male") {
+			console.log("FILTERED (" + user + ") - gender is Female");
+			return false;
+		}
+
 
 	  // check if the user is in the queue already
 		if (queue.includes(user)) {
@@ -653,6 +671,7 @@ export const getUserData = async (ids) => {
 	var instagram_list = [];
 	var facebook_list = [];
 	var linkedIn_list = [];
+	var gender_list = [];
 	var compatibility_score_list = [];
 	var questionnaire1_answer_list = [];
 	var questionnaire2_answer_list = [];
@@ -695,24 +714,25 @@ export const getUserData = async (ids) => {
 			instagram, // 16
 			facebook, // 17
 			linkedIn, // 18
-			compatibility_score, // 19
-			questionnaire1, // 20
-			questionnaire2, // 21
-			questionnaire3, // 22
-			questionnaire4, // 23
-			questionnaire5, // 24
-			questionnaire6, // 25
-			questionnaire7, // 26
-			questionnaire8, // 27
-			questionnaire9, // 28
-			questionnaire10, // 29
-			questionnaire11, // 30
-			questionnaire12, // 31
-			questionnaire13, // 32
-			most_similar_response, // 33
-			most_different_response, // 34
-			numMatches, // 35
-			num_reports, // 36
+			gender, // 19
+			compatibility_score, // 20 
+			questionnaire1, // 21
+			questionnaire2, // 22
+			questionnaire3, // 23
+			questionnaire4, // 24
+			questionnaire5, // 25
+			questionnaire6, // 26
+			questionnaire7, // 27
+			questionnaire8, // 28
+			questionnaire9, // 29
+			questionnaire10, // 30
+			questionnaire11, // 31
+			questionnaire12, // 32
+			questionnaire13, // 33
+			most_similar_response, // 34
+			most_different_response, // 35
+			numMatches, // 36
+			num_reports, // 37
 		] = await Promise.all(
 		[
 			getDataFromPathAsync("users/" + id + "/Profile/Images/profile_picture"), // 1
@@ -733,24 +753,25 @@ export const getUserData = async (ids) => {
 			getDataFromPathAsync("users/" + id + "/Profile/instagram"), // 16
 			getDataFromPathAsync("users/" + id + "/Profile/facebook"), // 17
 			getDataFromPathAsync("users/" + id + "/Profile/linkedIn"), // 18
-			getCompatibilityScoreAsync(id), // 19
-			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_people_over"), // 20
-			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/is_clean"), // 21
-			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/week_bedtime"), // 22
-			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/weekend_bedtime"), // 23
-			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/drinks_alcohol"), // 24
-			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/smokes"), // 25
-			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/handle_chores"), // 26
-			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_car"), // 27
-			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/wants_pets"), // 28
-			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/introverted_or_extraverted"), // 29
-			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/check_before_having_people_over"), // 30
-			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/joint_grocery_shopping"), // 31
-			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_significant_other"), // 32
-			getMostSimilarResponseAsync(id, myQuestionnaire), // 33
-			getMostDifferentResponseAsync(id, myQuestionnaire), // 34
-			getDataFromPathAsync("users/" + id + "/Match List/user_count"), //35
-			getDataFromPathAsync("reported/" + id + "/num_reports"), // 36
+			getDataFromPathAsync("users/" + id + "/Profile/gender"), // 19
+			getCompatibilityScoreAsync(id), // 20
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_people_over"), // 21
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/is_clean"), // 22
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/week_bedtime"), // 23
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/weekend_bedtime"), // 24
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/drinks_alcohol"), // 25
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/smokes"), // 26
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/handle_chores"), // 27
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_car"), // 28
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/wants_pets"), // 29
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/introverted_or_extraverted"), // 30
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/check_before_having_people_over"), // 31
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/joint_grocery_shopping"), // 32
+			getDataFromPathAsync("users/" + id + "/Roommate Compatibility/has_significant_other"), // 33
+			getMostSimilarResponseAsync(id, myQuestionnaire), // 34
+			getMostDifferentResponseAsync(id, myQuestionnaire), // 35
+			getDataFromPathAsync("users/" + id + "/Match List/user_count"), //36
+			getDataFromPathAsync("reported/" + id + "/num_reports"), // 37
 		]);
 	
 
@@ -773,6 +794,7 @@ export const getUserData = async (ids) => {
 		instagram_list.push(instagram);
 		facebook_list.push(facebook);
 		linkedIn_list.push(linkedIn);
+		gender_list.push(gender);
 		compatibility_score_list.push(compatibility_score);
 		questionnaire1_answer_list.push(questionnaire1);
 		questionnaire2_answer_list.push(questionnaire2);
@@ -824,6 +846,7 @@ export const getUserData = async (ids) => {
 			instagram: instagram_list[i],
 			facebook: facebook_list[i],
 			linkedIn: linkedIn_list[i],
+			gender: gender_list[i],
 			compatibility_score: compatibility_score_list[i],
 			questionnaire1: questionnaire1_answer_list[i],
 			questionnaire2: questionnaire2_answer_list[i],
