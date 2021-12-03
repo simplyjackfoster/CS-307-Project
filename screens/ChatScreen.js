@@ -33,7 +33,8 @@ export default ({ navigation, route}) =>{
       ...msg,
       sentBy: getID(auth.currentUser.email),
       sentTo: id,
-      createdAt: new Date()
+      createdAt: new Date(),
+      sent: true,
     }
     console.log(messageArray)
     setMessages(previousMessages => GiftedChat.append(previousMessages,mymsg))
@@ -56,21 +57,6 @@ export default ({ navigation, route}) =>{
 
   useEffect(() => {
     getAllMessages()
-    /*
-    setMessages([
-      
-      {
-        _id: 1,
-        text: 'Hey do you want to be roommates?',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: profile_picture,
-        },
-      },
-    ])
-    */
   }, [])
 
     

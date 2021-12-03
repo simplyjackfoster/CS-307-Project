@@ -23,7 +23,7 @@ const messagesRef = collection(firestoreDB,'chatroom','KU6bnqXVnKtuNsuVhFOX','me
 
 
 
-//export var displays;
+export var displays;
 
 const MatchItem = (props) => {
     //const { userToken, setUserToken }  = React.useContext();
@@ -53,18 +53,21 @@ const MatchItem = (props) => {
     const sendMessage = (message) => {
         // send the specified message from the current user to the uid of the match displayed
         console.log("Sent message to '" + uid + "': " + message);
-        const msg = message[0]
+        const msg = message
         const mymsg = {
-            ...msg,
+            _id: "sdfhjk1",
+            text: message,
             sentBy: getID(auth.currentUser.email),
             sentTo: uid,
-            createdAt: new Date()
+            createdAt: new Date(),
+            sent: true,
+            user:{_id: getID(auth.currentUser.email)}
         }
         console.log(message)
         setMessages(previousMessages => GiftedChat.append(previousMessages,mymsg))
 
         const createDocuments = async () =>{
-        await addDoc(messagesRef, {...mymsg});
+            await addDoc(messagesRef, {...mymsg});
         };
         createDocuments();
 
@@ -121,7 +124,6 @@ const MatchItem = (props) => {
                     <Text style={styles.buttonText}>Remove Match</Text>
                 </TouchableOpacity>
             
-
                 {/* Send message button */}
                 <TouchableOpacity
                     style={styles.button}
