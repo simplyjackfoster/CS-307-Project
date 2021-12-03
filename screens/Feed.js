@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Component } from 'react';
 import {
   StyleSheet,
@@ -42,12 +42,22 @@ export default () => {
   } // initializeFeedProfiles()
 
 
+  const mounted = useRef(false);
+  useEffect(() => {
+      mounted.current = true;
 
+      return () => {
+          mounted.current = false;
+      };
+  }, []);
 
 
   if (!ready) {
-    // load the users
-    initializeFeedProfiles();
+
+    if (!profiles) {
+      // load the users
+      initializeFeedProfiles();
+    }
 
     return (
       <View style={styles.splashContainer}>

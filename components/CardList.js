@@ -39,7 +39,7 @@ export default class Profiles extends React.Component {
     // get ids to add from database (USE ALGORITHM), make sure to not add
     // profiles that are currently in the stack    
     var ids = await getNextUsersAsync(this.state.profiles);
-    console.log("IDS = " + ids);
+    console.log("Adding IDS = " + ids);
 
 
     // get array of profile objects for the ids
@@ -58,8 +58,8 @@ export default class Profiles extends React.Component {
   // Function that is called when the user likes or dislikes
   onSwiped = async (isLiked) => {
     if (isLiked) {
-      console.log("SWIPED RIGHT");
-
+      console.log("Profile Liked!");
+      
       // Adding uid to swiped right list
       writeToSwipedRightListAsync(getID(auth.currentUser.email), this.state.profiles[0].id);
 
@@ -74,14 +74,12 @@ export default class Profiles extends React.Component {
         console.log("USERS MATCHED!");
       }
 
-      console.log("Profile Liked!");
 
       // check their swiped right list for your name
 
     }
     else {
       writeToSwipedLeftListAsync(getID(auth.currentUser.email), this.state.profiles[0].id);
-
       console.log("Profile Disliked!");
     }
 
