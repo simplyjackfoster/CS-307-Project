@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
 		marginBottom: 15,
 		marginTop: 5,
 		padding: 10,
-		backgroundColor: Colors.royalBlue,
+		backgroundColor: Colors.lightBlue,
 	},
 
 	textEditProfile: {
@@ -622,7 +622,7 @@ const styles = StyleSheet.create({
 		marginBottom: 5,
 		marginTop: 0,
 		padding: 10,
-		backgroundColor: Colors.royalBlue,
+		backgroundColor: Colors.lightBlue,
 		
 	  },
 
