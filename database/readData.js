@@ -411,6 +411,9 @@ export const getNextUsersAsync = async (queue) => {
 	const genders = await Promise.all(users.map(id => getDataFromPathAsync("users/" +
 																		id + "/Profile/gender")));
 
+	const ghost_modes = await Promise.all(users.map(id => getDataFromPathAsync("users/" +
+																				id + "/Critical Information/ghost_mode")));
+
 	// assemble object of user data
 	var map = [];
 	for (let i = 0; i < users.length; i++) {
@@ -420,10 +423,10 @@ export const getNextUsersAsync = async (queue) => {
 			age: ages[i],
 			gender: genders[i],
 			living_location: living_locations[i],
+			ghost_mode: ghost_modes[i],
 		}
 		map.push(pair);
 	}
-	//console.log(map);
 
 
 	// STEP 3: Sort the users based on compatibility
@@ -441,11 +444,13 @@ export const getNextUsersAsync = async (queue) => {
 	var sorted_ages = [];
 	var sorted_genders = [];
 	var sorted_living_locations = [];
+	var sorted_ghost_modes = [];
 	for (let i = 0; i < map.length; i++) {
 		sorted_ids.push(map[i].user);
 		sorted_ages.push(map[i].age);
 		sorted_genders.push(map[i].gender);
 		sorted_living_locations.push(map[i].living_location);
+		sorted_ghost_modes.push(map[i].ghost_mode);
 	}
 
 	// queue ids
@@ -485,7 +490,7 @@ export const getNextUsersAsync = async (queue) => {
 		if (await passesFilterAsync(sorted_ids[i], sorted_ages[i], sorted_genders[i], my_gender,
 																queue_ids, swiped_left, swiped_right, age_min,
 																age_max, sorted_living_locations[i],
-																my_preferred_living_location)) {
+																my_preferred_living_location, sorted_ghost_modes[i])) {
 			ids_to_add.push(sorted_ids[i]);
 			count++;
 			if (count + queue.length == 10) {
@@ -510,11 +515,17 @@ export const getNextUsersAsync = async (queue) => {
  */
 export const passesFilterAsync = async (user, age, user_gender, my_gender, queue, swiped_left, swiped_right,
 																	 age_min, age_max, user_living_location,
-																	 my_living_location) => {
+																	 my_living_location, user_ghost_mode) => {
 
 		// check if user is self
 		if (user == getID(auth.currentUser.email)) {
 			console.log("FILTERED (" + user + ") - is self");
+			return false;
+		}
+
+		// check if user is in ghost mode
+		if (user_ghost_mode) {
+			console.log("FILTERED (" + user + ") - user is in ghost mode");
 			return false;
 		}
 
@@ -556,10 +567,10 @@ export const passesFilterAsync = async (user, age, user_gender, my_gender, queue
 		}
 
 		// check if living location is compatible
-		if (my_living_location && my_living_location != user_living_location) {
+		/*if (my_living_location && my_living_location != user_living_location) {
 			console.log("FILTERED (" + user + ") - living location not compatible");
 			return false;
-		}
+		}*/
 		
 
 		return true;
