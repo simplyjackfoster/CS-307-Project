@@ -12,12 +12,13 @@ import { collection, doc, setDoc, addDoc, getDocs}  from'firebase/firestore';
 import { rtdb, auth, app, firestore, firestoreDB} from  '../database/RTDB';
 import { getID } from '../database/ID';
 import { MessageUserContext } from '../context';
-
+import {DateTime} from 'luxon';
 
 /*
  * This is the screen where the user messages other users.
  */
-
+var startTime = DateTime.now();
+var endTime = DateTime.now();
 export default ({ navigation, route}) =>{
 
   const {id} = route.params;
@@ -28,6 +29,7 @@ export default ({ navigation, route}) =>{
   const profile_picture = getDataFromPath("users/" + "foste205" + "/Profile/Images/profile_picture");
 
   const onSend = (messageArray) => {
+    startTime = DateTime.now();
     const msg = messageArray[0]
     const mymsg = {
       ...msg,
@@ -37,11 +39,37 @@ export default ({ navigation, route}) =>{
     }
     console.log(messageArray)
     setMessages(previousMessages => GiftedChat.append(previousMessages,mymsg))
+    endTime = DateTime.now();
+    var startMin = startTime.toString();
+    startMin = startMin.substring(14, 16);
+    var startSec = startTime.toString();
+    startSec = startSec.substring(17, 19);
+    var endMin = endTime.toString();
+    endMin = endMin.substring(14, 16);
+    var endSec = endTime.toString();
+    endSec = endSec.substring(17, 19);
+    var diff = (eval(endMin - startMin) * 60) + (eval(endSec - startSec));
+    // if (diff < 10) {
+    //   console.log("Passed Checkpoint 1 (time to request), total time: " + diff);
+    // } else {
+    //   console.log("Failed Checkpoint 1 (time to request), total time: " + diff);
+    // }
     const createDocuments = async () =>{
       await addDoc(messagesRef, {...mymsg});
     };
     createDocuments();
-
+    console.log("Message Request Recived");
+    endTime = DateTime.now();
+    endMin = endTime.toString();
+    endMin = endMin.substring(14, 16);
+    endSec = endTime.toString();
+    endSec = endSec.substring(17, 19);
+    diff = (eval(endMin - startMin) * 60) + (eval(endSec - startSec));
+    // if (diff < 10) {
+    //   console.log("Passed Checkpoint 2 (time to send), total time: " + diff);
+    // } else {
+    //   console.log("Failed Checkpoint 2 (time to send), total time: " + diff);
+    // }
   }
   const getAllMessages = async () =>{
     const dataM = await getDocs(messagesRef);
