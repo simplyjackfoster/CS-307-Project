@@ -519,56 +519,56 @@ export const passesFilterAsync = async (user, age, user_gender, my_gender, queue
 
 		// check if user is self
 		if (user == getID(auth.currentUser.email)) {
-			console.log("FILTERED (" + user + ") - is self");
+			//console.log("FILTERED (" + user + ") - is self");
 			return false;
 		}
 
 		// check if user is in ghost mode
 		if (user_ghost_mode) {
-			console.log("FILTERED (" + user + ") - user is in ghost mode");
+			//console.log("FILTERED (" + user + ") - user is in ghost mode");
 			return false;
 		}
 
 		// check if user is compatible gender
 		if (user_gender == "Male" && my_gender == "Female") {
-			console.log("FILTERED (" + user + ") - gender is Male");
+			//console.log("FILTERED (" + user + ") - gender is Male");
 			return false;
 		}
 		else if (user_gender == "Female" && my_gender == "Male") {
-			console.log("FILTERED (" + user + ") - gender is Female");
+			//console.log("FILTERED (" + user + ") - gender is Female");
 			return false;
 		}
 
 
 	  // check if the user is in the queue already
 		if (queue.includes(user)) {
-			console.log("FILTERED (" + user + ") - is already in queue");
+			//console.log("FILTERED (" + user + ") - is already in queue");
 			return false;
 		}
 
 		// check if user has been swiped on
 		if (swiped_left.includes(user) || swiped_right.includes(user)) {
-			console.log("FILTERED (" + user + ") - already swiped on");
+			//console.log("FILTERED (" + user + ") - already swiped on");
 			return false;
 		}
 
 		// check if the user is in the age range
 		if (age_min && age_max && (age < age_min || age > age_max)) {
-			console.log("FILTERED (" + user + ") - not in age range");
+			//console.log("FILTERED (" + user + ") - not in age range");
 			return false;
 		}
 		else if (age_min && age < age_min) {
-			console.log("FILTERED (" + user + ") - not in age range");
+			//console.log("FILTERED (" + user + ") - not in age range");
 			return false;
 		}
 		else if (age_max && age > age_max) {
-			console.log("FILTERED (" + user + ") - not in age range");
+			//console.log("FILTERED (" + user + ") - not in age range");
 			return false;
 		}
 
 		// check if living location is compatible
 		if (my_living_location && my_living_location != user_living_location) {
-			console.log("FILTERED (" + user + ") - living location not compatible");
+			//console.log("FILTERED (" + user + ") - living location not compatible");
 			return false;
 		}
 		

@@ -5,6 +5,18 @@ import { getID } from './ID';
 import { getUserData } from'./readData';
 import { auth } from './RTDB';
 
+// variables used to add and remove dummy data to the database
+let dummyIDS = ["JaclynRowe", "SanviWaller", "JordanMcghee", "JosephineRichter", "LluviaYang",
+								"JeremiahSanford", "JanelyMitchell", "BlaizeFrey", "RilynnKruse",
+								"BrantleyDonovan", "AveryGallo", "HalleDriver", "SylviaValdez", "IzabellePreston",
+								"RayleeHelton", "HernanDriscoll", "MarkelPeoples", "MaiyaPryor", "SallyClifton",
+								"BrooklynnKessler", "TaylaDriscoll", "RashawnSchwartz", "DysonVilla", "RhyleeFarr",
+								"BowenNegron", "KlaraRamsey", "SkylahBrock", "KeenanSchwartz", "PhoebeCallahan",
+								"AndreasConnor", "NathanNava", "DeklanMccabe", "KaelynHolder", "TristonHensley", 
+								"TariqIbarra", "KarlyMacias", "HanselShultz", "SienaTodd", "JudithSands", "GavynLockett",
+								"HassanHowell", "DeonteNixon", "CaelynMoses", "MilliePryor", "GreysonLujan",
+								"LatrellAbel", "JailynAndersen", "AriyannaMeredith", "NilaCassidy", "BrockHarrington"];
+
 
 
 /*
@@ -96,3 +108,18 @@ export const deleteMatch = (email_or_id) => {
 	remove(ref(rtdb, "users/" + id + "/Match List/" + myID));
 	remove(ref(rtdb, "users/" + id + "/Feed/Swipe Right List/" + myID));
 } // deleteMatch()
+
+
+
+
+/*
+ * Removes the 50 dummy users from the database.
+ */
+export const deleteDummyUsersAsync = async () => {
+	console.log("Deleting dummy users...");
+
+	// delete the users
+	for (let i = 0; i < dummyIDS.length; i++) {
+		remove(ref(rtdb, "users/" + dummyIDS[i]));
+	}
+} // deleteDummyUsersAsync(
