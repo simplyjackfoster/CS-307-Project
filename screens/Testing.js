@@ -6,7 +6,6 @@ import Colors from "../constants/Colors";
 import { removeSwipedRight, removeSwipedLeft, removeMatches, removeAllLists } from '../database/removeData';
 import { auth } from '../database/RTDB';
 import { getID } from '../database/ID';
-import { AuthContext } from '../context';
 
 
 
@@ -15,7 +14,6 @@ import { AuthContext } from '../context';
  * This is the screen where help/hotlines are provided.
  */
 export default () => {
-    const { userToken, setUserToken } = React.useContext(AuthContext);
 
     /*
     * Purges RTDB of users swiped right contents
@@ -29,8 +27,6 @@ export default () => {
                 text: "Yes",
                 onPress: () => {
                     removeSwipedRight(getID(auth.currentUser.email))
-                    setUserToken(null)
-                    auth.signOut()
                 }
             }]
         );
@@ -49,8 +45,6 @@ export default () => {
                 text: "Yes",
                 onPress: () => {
                     removeSwipedLeft(getID(auth.currentUser.email))
-                    setUserToken(null)
-                    auth.signOut()
                 }
             }]
         );
@@ -69,8 +63,6 @@ export default () => {
                 text: "Yes",
                 onPress: () => {
                     removeMatches(getID(auth.currentUser.email))
-                    setUserToken(null)
-                    auth.signOut()
                 }
             }]
         );
@@ -89,8 +81,6 @@ export default () => {
                 text: "Yes",
                 onPress: () => {
                     removeAllLists(getID(auth.currentUser.email))
-                    setUserToken(null)
-                    auth.signOut()
                 }
             }]
         );
