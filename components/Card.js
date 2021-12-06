@@ -20,30 +20,15 @@ import { CardItem } from './CardItem';
 
 export default class Card extends Component {
 
-	static defaultProps = {
-		likeOpacity: 0,
-		nopeOpacity: 0,
-	}
-
 
 	render() {
-		const { profile, viewQuest, likeOpacity, nopeOpacity } = this.props;
+		const { profile } = this.props;
 
 
         return (
             <View style={styles.container}>
                 {/* The Card */}
-                <CardItem profile={profile} viewQuest={viewQuest} style={styles.cardWrapper}></CardItem>
-
-                {/* Like and Nope Text */}
-                <View style={styles.swipeTextWrapper}>
-                    <Animated.View style={[styles.likeWrapper, {opacity: likeOpacity}]}>
-                        <Text style={styles.likeText}>LIKE</Text>
-                    </Animated.View>
-                    <Animated.View style={[styles.nopeWrapper, {opacity: nopeOpacity}]}>
-                        <Text style={styles.nopeText}>NOPE</Text>
-                    </Animated.View>
-                </View>
+                <CardItem profile={profile} viewingMatch={false}></CardItem>
             </View>
         );
 	} // render()
@@ -62,47 +47,5 @@ const styles = StyleSheet.create({
     container: {
         ...StyleSheet.absoluteFillObject,
     },
-
-
-    /* Like and Nope wrapper */
-    swipeTextWrapper: {
-		position: 'absolute',
-		marginTop: 35,
-        flexDirection: 'row',
-        alignSelf: 'center',
-    },
-
-
-    /* Like */
-    likeWrapper: {
-        borderWidth: 4,
-        padding: 8,
-        borderColor: Colors.green,
-        borderRadius: 10,
-        marginRight: 35,
-    },
-
-    likeText: {
-        fontSize: 40,
-        fontWeight: '800',
-        color: Colors.green,
-    },
-
-
-    /* Nope */
-    nopeWrapper: {
-        borderWidth: 4,
-        padding: 8,
-        borderColor: Colors.red,
-        borderRadius: 10,
-        marginLeft: 35,
-    },
-
-    nopeText: {
-        fontSize: 40,
-        fontWeight: '800',
-        color: Colors.red,
-    },
-
 
 });

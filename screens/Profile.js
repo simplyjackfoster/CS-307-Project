@@ -15,13 +15,11 @@ import { AuthContext } from "../context";
 import Colors from "../constants/Colors";
 import { NavigationAction } from '@react-navigation/routers';
 import { renderIcon } from "../images/Icons";
-
-// firebase imports
 import { auth } from '../database/RTDB';
-
-// database read/write/remove imports
 import { getDataFromPath, getInstagramLink, getInterestListProfile, getFacebookLink, getLinkedInLink } from '../database/readData';
 import { getID } from '../database/ID';
+import { writeGhostModeAsync } from '../database/writeData';
+
 
 
 /*
@@ -40,7 +38,6 @@ const wait = (timeout) => {
 export default ( {navigation} ) => {
 
 	const { userToken, setUserToken } = React.useContext(AuthContext);
-	const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 	const [isEnabled, setIsEnabled] = useState(false);
 	const [refreshing, setRefreshing] = React.useState(false);
 	const [profilePicture, setProfilePicture] = React.useState(null);
@@ -48,6 +45,18 @@ export default ( {navigation} ) => {
 	const instagramLink = getInstagramLink(auth.currentUser.email);
 	const facebookLink = getFacebookLink(auth.currentUser.email);
 	const linkedInLink = getLinkedInLink(auth.currentUser.email);
+
+
+	// fuction for toggling ghost mode
+	const toggleSwitch = () => {
+		setIsEnabled(previousState => !previousState);
+
+		// write isEnabled to the database for ghost_mode
+		writeGhostModeAsync(auth.currentUser.email, isEnabled);
+	} // toggleSwitch()
+
+
+	// write function to initialize ghost mode
 
 
 	// Function that refreshes
@@ -73,16 +82,6 @@ export default ( {navigation} ) => {
 			}	
 		>
 
-			{/* Edit Profile Button */}
-			<TouchableOpacity
-					style={styles.editProfile}
-					onPress={() => {
-						navigation.push("EditProfile");
-					}}	
-			>
-				<Text style={styles.textEditProfile}>Edit Profile...</Text>
-			</TouchableOpacity>
-
 			{/* Profile Picture */}
 			<View>
 				<Image style={styles.profilePic}
@@ -96,6 +95,26 @@ export default ( {navigation} ) => {
 				</Text>
 			</View>
 			<View style={{marginTop: 40}}/>
+
+			{/* Preview Profile Button*/}
+			<View>
+        <TouchableOpacity
+         	onPress={() => navigation.push("ViewProfile")}
+       		style={styles.buttonPreview}
+				>
+         	<Text style={styles.textPreview}>Preview Profile</Text>
+       	</TouchableOpacity>
+      </View>
+
+			  {/* Edit Profile Button */}
+			<TouchableOpacity
+					style={styles.editProfile}
+					onPress={() => {
+						navigation.push("EditProfile");
+					}}	
+			>
+				<Text style={styles.textEditProfile}>Edit Profile...</Text>
+			</TouchableOpacity>
 
 
 			{/* Email: <email> */}
@@ -378,13 +397,19 @@ const styles = StyleSheet.create({
 	},
 
 	editProfile: {
-		alignSelf: 'flex-end',
+		alignSelf: 'center',
+		borderWidth: 1,
+		borderRadius: 25,
+		margin: 5,
+		marginBottom: 15,
+		marginTop: 5,
+		padding: 10,
+		backgroundColor: Colors.lightBlue,
 	},
 
 	textEditProfile: {
-		margin: 20,
-		fontSize: 18,
-		color: Colors.lightBlue,
+		fontSize: 16,
+		alignSelf: 'center',
 	},
 
 	imageName: {
@@ -399,6 +424,7 @@ const styles = StyleSheet.create({
 		height: 300,
 		borderRadius: 200, // makes image circular
 		alignSelf: 'center',
+		marginTop: '5%',
 	},
 
 	icon: {
@@ -600,5 +626,23 @@ const styles = StyleSheet.create({
 		color: Colors.blue,
 		textDecorationLine: 'underline',
 	},
+
+	/* Preview CSS */
+	buttonPreview: {
+		borderWidth: 1,
+		borderRadius: 25,
+		margin: 5,
+		alignSelf: 'center',
+		marginBottom: 5,
+		marginTop: 0,
+		padding: 10,
+		backgroundColor: Colors.offWhite,
+		
+	  },
+
+	  textPreview: {
+		fontSize: 16,
+		alignSelf: 'center',
+	  },
 
 });

@@ -27,8 +27,6 @@
 
 ## How To Use
 
-Note: This only works on Android devices
-
 Download the Expo Go app and follow the link
 https://expo.dev/@jackfoster246/CS-307-Project
 

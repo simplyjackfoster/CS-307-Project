@@ -7,21 +7,20 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
-  Dimensions,
 } from 'react-native';
 import Card from './Card';
-import Colors from "../constants/Colors";
-import { renderIcon } from "../images/Icons";
-import { getUserData } from '../database/readData';
+import Colors from '../constants/Colors';
+import { renderIcon } from '../images/Icons';
+import { getUserData, getNextUsersAsync, getSwipeLeftListAsync, getSwipeRightListAsync} from '../database/readData';
+import { writeToSwipedRightListAsync, writeToSwipedLeftListAsync, writeToMatchedListAsync } from '../database/writeData';
+import { auth } from '../database/RTDB';
+import { getID } from '../database/ID';
 
+var addingProfiles = false;
 
+export default class Profiles extends React.Component {
 
-var noProfiles = false;
-var testProfiles = false; // used to toggle between sets of users loaded in the feed
-
-export default class Profiles extends React.Component<ProfilesProps, ProfilesState> {
-
-  constructor(props: ProfilesProps) {
+  constructor(props) {
     super(props);
 		const { profiles } = props;
     this.state = { profiles };
@@ -38,15 +37,9 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
      
     // get ids to add from database (USE ALGORITHM), make sure to not add
     // profiles that are currently in the stack    
-    var ids;
-    if (testProfiles) {
-      ids = ["mfinder", "thylan", "francik"]; // use fixed values for now
-      testProfiles = false;
-    } 
-    else {
-      ids = ["buckle14", "munshi", "werner51"]; // use fixed values for now
-      testProfiles = true;
-    }
+    var ids = await getNextUsersAsync(this.state.profiles);
+    console.log("Adding IDS = " + ids);
+
 
     // get array of profile objects for the ids
     const newProfiles = await getUserData(ids);
@@ -56,32 +49,43 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
     for (let i = 0; i < ids.length; i++) {
       updatedProfiles.push(newProfiles[i]);
     }
+    addingProfiles = false;
     this.setState({ profiles: updatedProfiles});
   } // addFeedProfiles()
 
 
 
-
-
 	
   // Function that is called when the user likes or dislikes
-  onSwiped = (isLiked) => {
+  onSwiped = async (isLiked) => {
     if (isLiked) {
       console.log("Profile Liked!");
+      
+      // Adding uid to swiped right list
+      writeToSwipedRightListAsync(getID(auth.currentUser.email), this.state.profiles[0].id);
+
+      // Getting list of swiped right users
+      var theirSwipedRightList = await getSwipeRightListAsync(this.state.profiles[0].id);
+      
+      // Verifying if users swiped right on each other
+      // If they did. They both add the other into their list of matches
+      if(theirSwipedRightList.includes(getID(auth.currentUser.email))) {
+        writeToMatchedListAsync(getID(auth.currentUser.email), this.state.profiles[0].id);
+        writeToMatchedListAsync(this.state.profiles[0].id, getID(auth.currentUser.email));
+        console.log("USERS MATCHED!");
+      }
     }
     else {
+      writeToSwipedLeftListAsync(getID(auth.currentUser.email), this.state.profiles[0].id);
       console.log("Profile Disliked!");
     }
 
     // remove profile from the state
     const { profiles: [lastProfile, ...profiles] } = this.state;
-    if (profiles.length == 0) {
-      console.log("NO PROFILES");
-      noProfiles = true;
-    }
-    else if (profiles.length < 3) {
+    if (profiles.length < 5 && addingProfiles != true) {
       console.log("ADDING USERS\n");
       // add users
+      addingProfiles = true;
       this.addFeedProfiles();
     }
     this.setState({ profiles });
@@ -94,10 +98,10 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
     const { profiles: [...profiles] } = this.state;
 
 
-    if (noProfiles) {
+    if (profiles.length == 0) {
       return (
-        <View style={styles.noProfilesContainer}>
-            <Text style={styles.noProfilesText}>No More Profiles</Text>
+        <View style={styles.splashContainer}>
+            <Text style={styles.splashText}>Searching for Potential Roommates...</Text>
         </View>
       );
     }
@@ -106,8 +110,6 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
 
 		return (
 			<View style={styles.container}>
-
-        
 
         {/* Cards Stack */}
         <View style={{ flex: 1 }}>
@@ -133,6 +135,7 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
             {renderIcon("times", 55, Colors.red)}
           </TouchableOpacity>
 
+
           <TouchableOpacity onPress={() => {
             // add swipe right function
             this.onSwiped(true);
@@ -155,14 +158,15 @@ export default class Profiles extends React.Component<ProfilesProps, ProfilesSta
 // styles
 const styles = StyleSheet.create({
 
-  /* No More Profiles */
-  noProfilesContainer: {
+  /* Splash Screen */
+  splashContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
 
-  noProfilesText: {
+  splashText: {
+    textAlign: 'center',
     alignSelf: 'center',
     fontSize: 25,
   },
