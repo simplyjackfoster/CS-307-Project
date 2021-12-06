@@ -21,6 +21,16 @@ import { GiftedChat } from 'react-native-gifted-chat';
 
 const messagesRef = collection(firestoreDB,'chatroom','KU6bnqXVnKtuNsuVhFOX','messages');
 
+function makeid(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * 
+ charactersLength));
+   }
+   return result;
+}
 
 
 export var displays;
@@ -55,7 +65,7 @@ const MatchItem = (props) => {
         console.log("Sent message to '" + uid + "': " + message);
         const msg = message
         const mymsg = {
-            _id: "sdfhjk1",
+            _id: makeid(36),
             text: message,
             sentBy: getID(auth.currentUser.email),
             sentTo: uid,
