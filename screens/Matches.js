@@ -1,85 +1,101 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { 
   StyleSheet,
   Text,
   View,
   Alert,
   useState,
-  useEffect,
   ScrollView,
   TouchableOpacity,
+  RefreshControl,
   Button 
 } from 'react-native';
 import Colors from "../constants/Colors";
 import MatchItem from '../components/MatchItem';
 import Messages from './Messages';
-import { MatchInteractContext } from '../context';
+import { getID } from '../database/ID';
+import { getUserData, getMatchesAsync } from '../database/readData';
+import MatchList from '../components/MatchList';
+import { auth } from '../database/RTDB';
 
 
 
 /*
  * This is the screen where the user can view their matches.
  */
-//const [showProfile] = React.useState(true)
-var matched = true;
 export default ( {navigation} ) => {
-  const { matchToken, setMatchToken } = React.useContext(MatchInteractContext);
 
-  React.useEffect(() => {
-    const list = navigation.addListener('focus', () => {
-      setMatchToken(null);
-    });
-    return list;
-  });
+  const [ready, setReady] = React.useState(false);
+  const [profiles, setProfiles] = React.useState(null);
+
+
+	// Effect that forces screen to reload when we navigate to it
+	useEffect(() => {
+		const unsubscribe = navigation.addListener("focus", () => {
+      setProfiles(null);
+      setReady(false);
+		});
+		return unsubscribe;
+	}, [navigation]);
+
+
 
   /*
-   *  Open view profile page
+   * Initialized profiles on the matches screen
    */
-  const viewProfile = () => {
-    navigation.push("ViewProfile");
-  } //viewProfile
+  const initializeMatchesAsync = async () => {
+    // get the matches profile objects
+    const ids = await getMatchesAsync(auth.currentUser.email);
 
-  if (!matched) {
+    // get the data for those matches
+    const matches_list = await getUserData(ids);
+
+    // set the profiles to the matches_list and ready state to true
+    await setProfiles(matches_list);
+    setReady(true);
+  } // initializeMatchesAsync()
+
+
+
+
+  if (!ready) {
+    // load the users
+    initializeMatchesAsync(); // create that function loads the matches
+
     return (
-      <View style={styles.noMatchContainer}>
-        <Text>You have no matches</Text>
+      <View style={styles.splashContainer}>
+        <Text style={styles.splashText}>Loading...</Text>
       </View>
     );
-  }
-  return (
-    <ScrollView style={styles.container}>
-      <View>
-        <MatchItem id={"foste205"} func={viewProfile}/>
-        <MatchItem id={"thylan"} func={viewProfile}/>
-        <MatchItem id={"mfinder"} func={viewProfile}/>
-      </View>
-    </ScrollView>
+  } 
 
+
+  return (
+    <View style={{flex: 1}}>
+      <MatchList {...{profiles}} navigation={navigation} ></MatchList>
+    </View>
   );
-  
-}
+
+} // export default()
+
+
 
 
 
 // styles
 const styles = StyleSheet.create({
 
-  container: {
+  /* Splash Screen */
+  splashContainer: {
     flex: 1,
-    backgroundColor: Colors.white,
-    paddingHorizontal: 30,
-    paddingTop: 20,
-    paddingBottom: 100,
-  },
-
-  noMatchContainer: {
-    flex: 1,
-    fontSize: 50,
-    backgroundColor: Colors.white,
     alignItems: 'center',
     justifyContent: 'center',
   },
 
-  
+  splashText: {
+    alignSelf: 'center',
+    fontSize: 25,
+  },
+
 
 });

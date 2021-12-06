@@ -5,6 +5,36 @@ import { getID } from './ID';
 import { getDataFromPath } from './readData';
 
 
+
+// variables used to add and remove dummy data to the database
+let dummyIDS = ["JaclynRowe", "SanviWaller", "JordanMcghee", "JosephineRichter", "LluviaYang",
+								"JeremiahSanford", "JanelyMitchell", "BlaizeFrey", "RilynnKruse",
+								"BrantleyDonovan", "AveryGallo", "HalleDriver", "SylviaValdez", "IzabellePreston",
+								"RayleeHelton", "HernanDriscoll", "MarkelPeoples", "MaiyaPryor", "SallyClifton",
+								"BrooklynnKessler", "TaylaDriscoll", "RashawnSchwartz", "DysonVilla", "RhyleeFarr",
+								"BowenNegron", "KlaraRamsey", "SkylahBrock", "KeenanSchwartz", "PhoebeCallahan",
+								"AndreasConnor", "NathanNava", "DeklanMccabe", "KaelynHolder", "TristonHensley", 
+								"TariqIbarra", "KarlyMacias", "HanselShultz", "SienaTodd", "JudithSands", "GavynLockett",
+								"HassanHowell", "DeonteNixon", "CaelynMoses", "MilliePryor", "GreysonLujan",
+								"LatrellAbel", "JailynAndersen", "AriyannaMeredith", "NilaCassidy", "BrockHarrington"];
+
+
+let dummyNames = ["Jaclyn Rowe", "Sanvi Waller", "Jordan Mcghee", "Josephine Richter",
+									"Lluvia Yang", "Jeremiah Sanford", "Janely Mitchell", "Blaize Frey",
+									"Rilynn Kruse", "Brantley Donovan", "Avery Gallo", "Halle Driver",
+									"Sylvia Valdez", "Izabelle Preston", "Raylee Helton", "Hernan Driscoll",
+									"Markel Peoples", "Maiya Pryor", "Sally Clifton", "Brooklynn Kessler",
+									"Tayla Driscoll", "Rashawn Schwartz", "Dyson Villa", "Rhylee Farr",
+									"Bowen Negron", "Klara Ramsey", "Skylah Brock", "Keenan Schwartz",
+									"Phoebe Callahan", "Andreas Connor", "Nathan Nava", "Deklan Mccabe",
+									"Kaelyn Holder", "Triston Hensley", "Tariq Ibarra", "Karly Macias",
+									"Hansel Shultz", "Siena Todd", "Judith Sands", "Gavyn Lockett",
+									"Hassan Howell", "Deonte Nixon", "Caelyn Moses", "Millie Pryor",
+									"Greyson Lujan", "Latrell Abel", "Jailyn Andersen", "Ariyanna Meredith",
+									"Nila Cassidy", "Brock Harrington"];
+
+
+
 /* 
  * writeNewUser()
  *
@@ -84,24 +114,58 @@ export const writeNewUser = (email, name, phone,
 		has_significant_other: selectedThirteen 
 	});
 
-	// write the "Match List" 
-	set(ref(rtdb, "users/" + id + "/Match List"), {
-		user_count: 0
-	});
-
-	// write the "Feed", "Swipe Left List", and "Swipe Right List"
-	set(ref(rtdb, "users/" + id + "/Feed/Swipe Left List"), {
-		user_count: 0
-	});
-
-	set(ref(rtdb, "users/" + id + "/Feed/Swipe Right List"), {
-		user_count: 0
-	});
+	// // write the "Match List" 
+	// set(ref(rtdb, "users/" + id + "/Match List"), {
+	// 	user_count: 0
+	// });
 
 } // writeNewUser()
 
 
 
+/*
+* This function adds a user ID to the swipe right list
+* @param myID -> uid of user adding another profile to their
+*					list of likes.
+* @param userID -> uid of user being added to list of users
+* 					in myID's list of dislikes.
+*/
+export const writeToSwipedRightListAsync = async (myID, userID) => {
+    // update my swiped right list
+    update(ref(rtdb, "users/" + myID + "/Feed/Swipe Right List/" + userID), {
+        uid: userID,
+    });
+}
+
+
+/*
+* This function adds a user ID to the swipe right list
+* @param myID -> uid of user adding another profile to their
+*					list of likes.
+* @param userID -> uid of user being added to list of users
+* 					in myID's list of dislikes.
+*/
+export const writeToMatchedListAsync = async (myID, userID) => {
+    // update my swiped right list
+    update(ref(rtdb, "users/" + myID + "/Match List/" + userID), {
+        uid: userID,
+    });
+}
+
+
+/*
+* This function adds a user ID to the swipe left list
+* @param myID -> uid of user adding another profile to their
+*					list of dislikes.
+* @param userID -> uid of user being added to list of users
+* 					in myID's list of dislikes.
+*/
+export const writeToSwipedLeftListAsync = async (myID, userID) => {
+    // update my swiped left list
+    update(ref(rtdb, "users/" + myID + "/Feed/Swipe Left List/" + userID), {
+        uid: userID,
+    });
+}
 
 
 
@@ -492,5 +556,96 @@ export const reportUser = (email_or_id, currentReports) => {
 	update(ref(rtdb, "reported/" + id), {
 		num_reports: currentReports
 	});
-}
+} // reportUser()
+
+
+
+
+/*
+ * Writes ghost mode to the database.
+ */
+export const writeGhostModeAsync = async (email_or_id, isEnabled) => {
+	const id = getID(email_or_id);
+
+	update(ref(rtdb, "users/" + id + "/Critical Information"), {
+		ghost_mode: isEnabled
+	});
+} // writeGhostModeAsync()
+
+
+
+
+/*
+ * Generate a random integer in between min and max (inclusive)
+ */
+const getRandomInt = (min, max) => {
+  return Math.floor((Math.random() * (max - min + 1)) + min);
+} // getRandomInt()
+
+
+
+
+/*
+ * Adds 50 dummy users to the database.
+ */
+export const createDummyUsersAsync = async () => {
+	console.log("Adding dummy users...");
+
+			
+	// generate the emails to pass into writeNewUser()
+	let email_list = [];
+	for (let i = 0; i < dummyIDS.length; i++) {
+		email_list.push(dummyIDS[i] + "@purdue.edu");
+	}
+
+	// set fixed values (phone, birthday, vaccinated, securityQuestion, securityAnswer)
+	let phone = "0123456789";
+	let birthday = "05/12/2001";
+	let vaccinated = 2;
+	let securityQuestion = 1;
+	let securityAnswer = "United States";
+
+
+	// for each user, write them to the database
+	for (let i = 0; i < dummyIDS.length; i++) {
+
+		// generate random gender
+		var gender = getRandomInt(1, 4);
+		if (gender == 1) {
+			gender = "Male";	
+		}
+		else if (gender == 2) {
+			gender = "Female";
+		}
+		else if (gender == 3) {
+			gender = "Other";
+		}
+		else {
+			gender = "Prefer not to say";
+		}
+
+		// randomly generate questionnaire answers
+		let selectedOne = getRandomInt(1, 5);
+		let selectedTwo = getRandomInt(1, 5);
+		let selectedThree = getRandomInt(1, 5);
+		let selectedFour = getRandomInt(1, 5);
+		let selectedFive = getRandomInt(1, 5);
+		let selectedSix = getRandomInt(1, 5);
+		let selectedSeven = getRandomInt(1, 4);
+		let selectedEight = getRandomInt(1, 2);
+		let selectedNine = getRandomInt(1, 4);
+		let selectedTen = getRandomInt(1, 5);
+		let selectedEleven = getRandomInt(1, 4);
+		let selectedTwelve = getRandomInt(1, 2);
+		let selectedThirteen = getRandomInt(1, 3);
+
+		writeNewUser(email_list[i], dummyNames[i], phone, birthday, gender, vaccinated,
+								 securityQuestion, securityAnswer, selectedOne, selectedTwo,
+								 selectedThree, selectedFour, selectedFive, selectedSix, selectedSeven,
+								 selectedEight, selectedNine, selectedTen, selectedEleven, selectedTwelve,
+								 selectedThirteen);
+	} // for-loop
+
+} // createDummyUsers()
+
 

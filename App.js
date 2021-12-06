@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer'
 
 import Colors from "./constants/Colors";
-import { AuthContext, MatchInteractContext } from "./context"
+import { AuthContext } from "./context"
 import RootStack from './navigation/RootStack';
 
 
@@ -16,16 +16,13 @@ import RootStack from './navigation/RootStack';
 export default function App() {
   // Set up a state variable to tell whether we are signed in or not
   const [userToken, setUserToken] = React.useState(null);
-  const [matchToken, setMatchToken] = React.useState(null);
   
   return (
-    <MatchInteractContext.Provider value={{matchToken, setMatchToken}}>
     <AuthContext.Provider value={ {userToken, setUserToken} }>
       <NavigationContainer>
         <RootStack userToken={userToken}/>
       </NavigationContainer>
     </AuthContext.Provider>
-    </MatchInteractContext.Provider>
   );
 }
 
