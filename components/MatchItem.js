@@ -40,7 +40,7 @@ const MatchItem = (props) => {
     const uid = props.id;
     // get the profile from props
     const { profile, profiles, updateProfiles,
-            showProfile } = props;
+            showProfile, navigation } = props;
 
 
     /*
@@ -90,8 +90,14 @@ const MatchItem = (props) => {
         createDocuments();
 
 
-        // figure out navigation to the messages screen from a component
-    }
+        // navigate to the messages screen
+        navigation.navigate("Messages");
+        navigation.push("ChatScreen",
+            { profile:profile, id:profile.id, name:profile.name});
+
+    } // sendMessage()
+
+
 
 
     /*

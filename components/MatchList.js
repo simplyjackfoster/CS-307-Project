@@ -93,7 +93,7 @@ export default class MatchList extends React.Component {
 						profiles.reverse().map((profile) => (
 							<MatchItem key={profile.id} profile={profile} viewProfile={this.viewProfile}
 												profiles={profiles} updateProfiles={this.updateProfiles}
-												showProfile={this.showProfile}></MatchItem>
+												showProfile={this.showProfile} navigation={this.state.navigation}></MatchItem>
 						))
 					}
 				</View>
