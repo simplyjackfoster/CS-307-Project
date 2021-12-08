@@ -19,31 +19,24 @@ import { auth, firestoreDB} from  '../database/RTDB';
 import { getID } from '../database/ID';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { deleteMatch } from '../database/removeData';
+import { writeQuickMessage, createNewConversation } from '../database/writeFirestore';
+import { convoExists } from '../database/readFirestore';
+import { deleteConversation } from '../database/removeFirestore';
 
 var Sentiment = require('sentiment');
 var sentiment = new Sentiment();
 
 const messagesRef = collection(firestoreDB,'chatroom','KU6bnqXVnKtuNsuVhFOX','messages');
 
-function makeid(length) {
-    var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-      result += characters.charAt(Math.floor(Math.random() * 
- charactersLength));
-   }
-   return result;
-}
 
 
-export var displays;
+
 
 const MatchItem = (props) => {
     const uid = props.id;
     // get the profile from props
     const { profile, profiles, updateProfiles,
-            showProfile } = props;
+            showProfile, navigation } = props;
 
 
     /*
@@ -65,40 +58,72 @@ const MatchItem = (props) => {
         var newProfiles = profiles;
         newProfiles.splice(index, 1);   
 
+        // remove conversation with this user if it exists
+        deleteConversation(profile.id);
+
+
         // reset the state of profiles
         updateProfiles(newProfiles);
+
     } // removeMatchAsync()
 
-    const [messages, setMessages] = useState([]);
-    
-    const sendMessage = (message) => {
+
+
+
+
+    // Function that runs when quick message is sent
+    //Includes a sentiment analysis on quick message sent
+    const sendMessage = async (message) => {
         var result = sentiment.analyze(message);
         console.log("")
         console.log(message + " sentiment score is " + result.score)
         console.log("")
-        // send the specified message from the current user to the uid of the match displayed
-        console.log("Sent message to '" + profile.id + "': " + message);
-        const msg = message
-        const mymsg = {
-            _id: makeid(36),
-            text: message,
-            sentBy: getID(auth.currentUser.email),
-            sentTo: profile.id,
-            createdAt: new Date(),
-            sent: true,
-            user:{_id: getID(auth.currentUser.email)}
+        // if message is empty
+        if (!message) {
+            Alert.alert("Warning",
+            "Can't send empty message",
+            [{
+                text: "Ok"
+            }])
+
+            return;
         }
-        console.log(message)
-        setMessages(previousMessages => GiftedChat.append(previousMessages,mymsg))
-
-        const createDocuments = async () =>{
-            await addDoc(messagesRef, {...mymsg});
-        };
-        createDocuments();
 
 
-        // figure out navigation to the messages screen from a component
-    }
+        // check if the conversation with the user already exists
+        const exists = await convoExists(profile.id);
+        if (exists) {
+            console.log("Convo exists... " + exists);
+            // send a quick message
+            writeQuickMessage(message, exists, getID(auth.currentUser.email), profile.id);
+
+            // navigate to the messages screen
+            navigation.navigate("Messages");
+            navigation.push("ChatScreen",
+                { profile:profile, id:profile.id,
+                    name:profile.name, newChat:false});
+        }
+        else {
+            console.log("Convo doesn't exist");
+            const my_id = getID(auth.currentUser.email);
+            const user_id = profile.id;
+
+            // create a conversation
+            const chatroom = await createNewConversation(my_id, user_id);
+
+            // send a quick message
+            writeQuickMessage(message, chatroom, my_id, user_id);
+
+            // navigate to the messages screen
+            navigation.navigate("Messages", { newChat:true } );
+            navigation.push("ChatScreen",
+                { profile:profile, id:profile.id,
+                    name:profile.name, newChat:true});
+        }
+
+    } // sendMessage()
+
+
 
 
     /*

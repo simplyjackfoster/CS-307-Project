@@ -114,10 +114,6 @@ export const writeNewUser = (email, name, phone,
 		has_significant_other: selectedThirteen 
 	});
 
-	// // write the "Match List" 
-	// set(ref(rtdb, "users/" + id + "/Match List"), {
-	// 	user_count: 0
-	// });
 
 } // writeNewUser()
 
