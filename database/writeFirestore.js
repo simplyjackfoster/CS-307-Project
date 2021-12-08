@@ -8,7 +8,7 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { collection, doc, setDoc, addDoc, getDocs, query, orderBy, QuerySnapshot } from 'firebase/firestore';
 import { rtdb, auth, app, firestore, firestoreDB} from  '../database/RTDB';
 import { getID } from '../database/ID';
-
+import { convoExists } from './readFirestore';
 
 
 /*

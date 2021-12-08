@@ -21,6 +21,7 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import { deleteMatch } from '../database/removeData';
 import { makeid, writeQuickMessage, createNewConversation } from '../database/writeFirestore';
 import { convoExists } from '../database/readFirestore';
+import { deleteConversation } from '../database/removeFirestore';
 
 
 
@@ -50,9 +51,15 @@ const MatchItem = (props) => {
         var newProfiles = profiles;
         newProfiles.splice(index, 1);   
 
+        // remove conversation with this user if it exists
+        deleteConversation(profile.id);
+
+
         // reset the state of profiles
         updateProfiles(newProfiles);
+
     } // removeMatchAsync()
+
 
 
 

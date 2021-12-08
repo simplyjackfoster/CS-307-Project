@@ -22,20 +22,18 @@ export default ({ navigation }) => {
 
   const [users, setUsers] = React.useState([]);
   const [ready, setReady] = React.useState(false);
-  var refresh = true;
 
 
-  if (refresh) { 
-    // Effect that forces screen to reload when we navigate to it
-    useEffect(() => {
-      //const unsubscribe = navigation.addListener("tabPress", () => {
-      const unsubscribe = navigation.addListener("focus", () => {
-        setUsers([]);
-        setReady(false);
-      });
-      return unsubscribe;
-    }, [navigation]);
-  }
+  // Effect that forces screen to reload when we navigate to it
+  useEffect(() => {
+    //const unsubscribe = navigation.addListener("tabPress", () => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      setUsers([]);
+      setReady(false);
+    });
+    return unsubscribe;
+  }, [navigation]);
+
 
   // get the conversation from database
   const initializeConversations = async () => {

@@ -84,12 +84,10 @@ export const getMessagesIDSAsync = async () => {
 	const ref = collection(firestoreDB, "users",
 							getID(auth.currentUser.email), "conversations");
 
-	//const q = query(ref, where("name", "==", user));
 	const snapshot = await getDocs(ref);	
 
 	var ids = [];
 	snapshot.forEach((doc) => {
-		//console.log("message: " + doc.data().name);
 		ids.push(doc.data().name);
 	});
 
