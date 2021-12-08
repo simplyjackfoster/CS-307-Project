@@ -127,8 +127,20 @@ export default () => {
         );
     }
 
-	return (
-		<View style={styles.container}>
+
+    // check if user should be able to access testing functionalities
+    const id = getID(auth.currentUser.email);
+    console.log("User: " + id + " attempting to access testing")
+    if (!(id == "thylan" || id == "mfinder" || id == "buckle14" || id == "francik" || id == "foste205" || id == "werner51")) {
+        return(
+            <View style={styles.container}>
+                <Text>Admin Access Only</Text>
+            </View>
+        )
+    }
+    else {
+        return (
+            <View style={styles.container}>
 
 
             <SafeAreaView>
@@ -136,7 +148,7 @@ export default () => {
                 <TouchableOpacity
                     style={styles.dummyButton}
                     onPress={ addDummyUsers }
-                >
+                    >
                     <Text style={styles.text}>Add Dummy Users</Text>
                 </TouchableOpacity>
 
@@ -144,7 +156,7 @@ export default () => {
                 <TouchableOpacity
                     style={styles.dummyButton}
                     onPress={ deleteDummyUsers }
-                >
+                    >
                     <Text style={styles.text}>Delete Dummy Users</Text>
                 </TouchableOpacity>
 
@@ -152,23 +164,23 @@ export default () => {
                 <TouchableOpacity
                     style={styles.button}
                     onPress={ clearRightList }
-                >
-                    <Text style={styles.text}>Clear My Swipped Right List</Text>
+                    >
+                    <Text style={styles.text}>Clear My Swiped Right List</Text>
                 </TouchableOpacity>
 
 
                 <TouchableOpacity
                     style={styles.button}
                     onPress={ clearLeftList }
-                >
-                    <Text style={styles.text}>Clear My Swipped Left List</Text>
+                    >
+                    <Text style={styles.text}>Clear My Swiped Left List</Text>
                 </TouchableOpacity>
 
 
                 <TouchableOpacity
                     style={styles.button}
                     onPress={ clearMatchList }
-                >
+                    >
                     <Text style={styles.text}>Clear My Match List</Text>
                 </TouchableOpacity>
 
@@ -176,20 +188,21 @@ export default () => {
                 <TouchableOpacity
                     style={styles.button}
                     onPress={ clearAllLists }
-                >
+                    >
                     <Text style={styles.text}>Clear all of My Lists</Text>
                 </TouchableOpacity>
             </SafeAreaView>
-		</View>
-	);
+		    </View>
+	    );
+    }   
 }
 
 
 
 // styles
 const styles = StyleSheet.create({
-
-  container: {
+    
+    container: {
     flex: 1,
     backgroundColor: Colors.white,
     alignItems: 'center',
