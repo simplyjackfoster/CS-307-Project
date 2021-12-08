@@ -48,8 +48,50 @@ export const convoExists = async (user) => {
 /*
  * Gets a list of the messages that the current user has
  */
-export const getMessagesAsync = async () => {
+export const getMessagesAsync = async (id) => {
 
-} // 
+	// get the conversation number
+	const chatroom = await convoExists(id);
+	console.log("getting messages from: " + chatroom);
+
+	// get the messages ref
+  const messagesRef = collection(firestoreDB, 'chatroom',
+											chatroom, 'messages');
+	
+	// get the messages
+	const q = query(messagesRef, orderBy('createdAt', 'desc'))
+	const dataM = await getDocs(q);
+	
+	const allmsg = dataM.docs.map(docSanp=>{
+		return {
+			...docSanp.data(),
+			createdAt:docSanp.data().createdAt.toDate()
+		}
+	})
+
+	return allmsg;
+
+} // getMessagesAsync()
 
 
+
+
+
+/*
+ * Function that finds the ids of the users that the current user has messages with.
+ */
+export const getMessagesIDSAsync = async () => {
+	const ref = collection(firestoreDB, "users",
+							getID(auth.currentUser.email), "conversations");
+
+	//const q = query(ref, where("name", "==", user));
+	const snapshot = await getDocs(ref);	
+
+	var ids = [];
+	snapshot.forEach((doc) => {
+		//console.log("message: " + doc.data().name);
+		ids.push(doc.data().name);
+	});
+
+	return ids;
+} // getMessagesIDS()

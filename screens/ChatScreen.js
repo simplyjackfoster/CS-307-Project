@@ -11,6 +11,7 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { collection, doc, setDoc, addDoc, getDocs, query, orderBy, QuerySnapshot } from 'firebase/firestore';
 import { rtdb, auth, app, firestore, firestoreDB} from  '../database/RTDB';
 import { getID } from '../database/ID';
+import { getMessagesAsync } from '../database/readFirestore';
 
 
 /*
@@ -19,11 +20,9 @@ import { getID } from '../database/ID';
 
 export default ({ navigation, route, props }) =>{
 
-  const {id, profile } = route.params;
-  const messagesRef = collection(firestoreDB,'chatroom','KU6bnqXVnKtuNsuVhFOX','messages');
+  const {id, profile} = route.params;
   const [messages, setMessages] = useState([]);
   const profile_picture = getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/Images/profile_picture");
-
 
 
 
@@ -51,21 +50,11 @@ export default ({ navigation, route, props }) =>{
 
 
 
-
-
   /*
    * Sorts the messages in the database and sets the hook to the messages.
    */
   const getAllMessages = async () =>{
-    const q = query(messagesRef, orderBy('createdAt','desc'))
-    const dataM = await getDocs(q);
-    
-    const allmsg = dataM.docs.map(docSanp=>{
-      return {
-        ...docSanp.data(),
-        createdAt:docSanp.data().createdAt.toDate()
-      }
-    })
+    const allmsg = await getMessagesAsync(id);
     setMessages(allmsg)
   } // getAllMessages()
 

@@ -78,6 +78,12 @@ const MatchItem = (props) => {
             console.log("Convo exists... " + exists);
             // send a quick message
             writeQuickMessage(message, exists, getID(auth.currentUser.email), profile.id);
+
+            // navigate to the messages screen
+            navigation.navigate("Messages");
+            navigation.push("ChatScreen",
+                { profile:profile, id:profile.id,
+                    name:profile.name, newChat:false});
         }
         else {
             console.log("Convo doesn't exist");
@@ -89,19 +95,16 @@ const MatchItem = (props) => {
 
             // send a quick message
             writeQuickMessage(message, chatroom, my_id, user_id);
+
+            // navigate to the messages screen
+            navigation.navigate("Messages", { newChat:true } );
+            navigation.push("ChatScreen",
+                { profile:profile, id:profile.id,
+                    name:profile.name, newChat:true});
         }
 
 
-        // get chatroom from database
-
         
-        // send the specified message 
-        //writeQuickMessage(message, "KU6bnqXVnKtuNsuVhFOX", getID(auth.currentUser.email), profile.id);
-
-        // navigate to the messages screen
-        navigation.navigate("Messages");
-        navigation.push("ChatScreen",
-            { profile:profile, id:profile.id, name:profile.name});
     } // sendMessage()
 
 

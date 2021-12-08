@@ -14,28 +14,37 @@ import { getDataFromPath, getMatchesAsync, getUserData } from "../database/readD
 import { rtdb, auth, app, firestore, firestoreDB } from  '../database/RTDB';
 import firebase from 'firebase/app';
 import { collection, doc, setDoc, getDocs } from 'firebase/firestore';
+import { ref } from 'firebase/database';
+import { getMessagesIDSAsync } from '../database/readFirestore';
 
 
 export default ({ navigation }) => {
- 
+
   const [users, setUsers] = React.useState([]);
   const [ready, setReady] = React.useState(false);
+  var refresh = true;
 
 
-  // Effect that forces screen to reload when we navigate to it
-  useEffect(() => {
-		const unsubscribe = navigation.addListener("tabPress", () => {
-      setUsers([]);
-      setReady(false);
-		});
-		return unsubscribe;
-	}, [navigation]);
+  if (refresh) { 
+    // Effect that forces screen to reload when we navigate to it
+    useEffect(() => {
+      //const unsubscribe = navigation.addListener("tabPress", () => {
+      const unsubscribe = navigation.addListener("focus", () => {
+        setUsers([]);
+        setReady(false);
+      });
+      return unsubscribe;
+    }, [navigation]);
+  }
 
-
-  // get the conversation from matches list
+  // get the conversation from database
   const initializeConversations = async () => {
-    const ids = await getMatchesAsync(auth.currentUser.email);
+
+    // get users that we have conversations with from the database
+    const ids = await getMessagesIDSAsync();
     const profiles = await getUserData(ids);
+
+    console.log("ids: " + ids);
     setUsers(profiles);
     setReady(true);
   } // initializeConversations()
@@ -65,7 +74,8 @@ export default ({ navigation }) => {
         <FlatList
           data={users}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => navigation.navigate("ChatScreen", { profile:item, id:item.id, name:item.name})
+            <TouchableOpacity onPress={() =>
+              navigation.navigate("ChatScreen", { profile:item, id:item.id, name:item.name })
             }>
               <Message profile={item} />
             </TouchableOpacity>
