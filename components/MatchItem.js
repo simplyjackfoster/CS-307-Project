@@ -128,7 +128,7 @@ const MatchItem = (props) => {
                     style={styles.button}
                     onPress={() => 
                         Alert.alert("Confirm",
-                        "Are you sure you want to remove your match with " + profile.id,
+                        "Are you sure you want to remove your match with " + profile.name,
                         [{
                             text: "No"
                         },
@@ -146,7 +146,7 @@ const MatchItem = (props) => {
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => 
-                        Alert.prompt("Message", "Send a message to " + profile.id,
+                        Alert.prompt("Message", "Send a message to " + profile.name,
                         [
                         {
                             text: "Cancel",
@@ -169,7 +169,7 @@ const MatchItem = (props) => {
                 <TouchableOpacity
                     style={styles.reportUserWrapper}
                     onPress={() =>
-                        Alert.alert("Report User", "Are you sure you want to report " + profile.id + "?",
+                        Alert.alert("Report User", "Are you sure you want to report " + profile.name + "?",
                             [{ 
                                 text: "No" 
                             }, {
