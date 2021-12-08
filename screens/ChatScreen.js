@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, Dimensions } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { getDataFromPath, getInstagramLink } from "../database/readData";
 import styles from '../assets/index';
@@ -8,7 +8,7 @@ import 'firebase/firestore';
 import 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
-import { collection, doc, setDoc, addDoc, getDocs}  from'firebase/firestore';
+import { collection, doc, setDoc, addDoc, getDocs, query, orderBy, QuerySnapshot } from 'firebase/firestore';
 import { rtdb, auth, app, firestore, firestoreDB} from  '../database/RTDB';
 import { getID } from '../database/ID';
 import { MessageUserContext } from '../context';
@@ -18,15 +18,17 @@ import { MessageUserContext } from '../context';
  * This is the screen where the user messages other users.
  */
 
-export default ({ navigation, route}) =>{
+export default ({ navigation, route, props }) =>{
 
-  const {id} = route.params;
+  const {id, profile } = route.params;
   const messagesRef = collection(firestoreDB,'chatroom','KU6bnqXVnKtuNsuVhFOX','messages');
-  //const query = messagesRef.orderBy('createdAt');
-  //const [messages] = useCollectionData(query,{idField: 'id'});
   const [messages, setMessages] = useState([]);
-  const profile_picture = getDataFromPath("users/" + "foste205" + "/Profile/Images/profile_picture");
+  const profile_picture = getDataFromPath("users/" + id + "/Profile/Images/profile_picture");
 
+
+  /*
+   * Function that runs when a message is sent.
+   */
   const onSend = (messageArray) => {
     const msg = messageArray[0]
     const mymsg = {
@@ -35,17 +37,27 @@ export default ({ navigation, route}) =>{
       sentTo: id,
       createdAt: new Date(),
       sent: true,
+      avatar: profile_picture
     }
     console.log(messageArray)
     setMessages(previousMessages => GiftedChat.append(previousMessages,mymsg))
+
     const createDocuments = async () =>{
       await addDoc(messagesRef, {...mymsg});
     };
-    createDocuments();
 
-  }
+    createDocuments();
+  } // onSend()
+
+
+
+  /*
+   * Sorts the messages in the database and sets the hook to the messages.
+   */
   const getAllMessages = async () =>{
-    const dataM = await getDocs(messagesRef);
+    const q = query(messagesRef, orderBy('createdAt','desc'))
+    const dataM = await getDocs(q);
+    
     const allmsg = dataM.docs.map(docSanp=>{
       return {
         ...docSanp.data(),
@@ -53,11 +65,14 @@ export default ({ navigation, route}) =>{
       }
     })
     setMessages(allmsg)
-  }
+  } // getAllMessages()
 
+
+
+  // Get the messages
   useEffect(() => {
     getAllMessages()
-  }, [])
+  }, []) // getAllMessages())
 
     
   return (
@@ -66,8 +81,11 @@ export default ({ navigation, route}) =>{
       onSend={text => onSend(text)}
       user={{
         _id: getID(auth.currentUser.email),
+        avatar: profile_picture,
       }}
-    />
 
-  )
+      alignTop={true}
+    />
+  );
+
 }

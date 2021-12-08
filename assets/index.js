@@ -45,4 +45,16 @@ export default StyleSheet.create({
 		flex: 1,
 		paddingHorizontal: 10
 	},
+
+	/* Splash Screen */
+  splashContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  splashText: {
+    alignSelf: 'center',
+    fontSize: 25,
+  },
 });

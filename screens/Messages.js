@@ -1,75 +1,87 @@
-import React,{useState,useEffect, useContext} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
+  StyleSheet,
   ScrollView,
   Text,
   ImageBackground,
   View,
   FlatList,
-  Touchable
+  TouchableOpacity,
 } from 'react-native';
 import Message from '../components/Message';
 import styles from '../assets/index';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { getDataFromPath } from "../database/readData";
-import { rtdb, auth, app, firestore, firestoreDB} from  '../database/RTDB';
+import { getDataFromPath, getMatchesAsync, getUserData } from "../database/readData";
+import { rtdb, auth, app, firestore, firestoreDB } from  '../database/RTDB';
 import firebase from 'firebase/app';
-import { collection, doc, setDoc, getDocs} from'firebase/firestore';
-//import firestore from '@react-native-firebase/firestore';
-import { MessageUserContext } from '../context';
-//const getName=(props)=>
+import { collection, doc, setDoc, getDocs } from 'firebase/firestore';
 
-export default ({ navigation}) =>{
-  
-  // const {messageUserToken, setMessageUserToken}= React.useContext(MessageUserContext);
-  // const navigateToChat = (uid) => {
-  //   console.log("hjgsdjkfgsjkdhfg");
-  //   setMessageUserToken(String(uid));
-  //   console.log("hjgsdjkfgsjkdhfg");
-  //   console.log(messageUserToken);
-  //   console.log("hjgsdjkfgsjkdhfg");
-  //   navigation.navigate("ChatScreen");
-  // }
-  
-  /*
-  const[users,setUsers]=useState(null)
-  const getUsers = async ()=>{
-    const querySanp = await firebfirestore().collection('users').get()
-    const allusers = querySanp.docs.map(docSnap=>docSnap.data())
-    setUsers(allusers)
-  }
-  */
 
- const[users,setUsers] = useState([]);
-  useEffect(()=>{
-    const accessDocuments = async () =>{
-      const querySnapshot = await getDocs(collection(firestoreDB,'users'));
-      const allusers = querySnapshot.docs.map(docSnap=>docSnap.data())
-      setUsers(querySnapshot.docs.map((doc) => ({ ...doc.data(),id: doc.id})));
-      console.log(allusers);
-    };
-    accessDocuments();
-  },[])
-  
-  
-  return (
-    <ImageBackground
-      style={styles.bg}
-    >
-      <View style={styles.containerMessages}>
-          <View style={styles.top}>
-            <Text style={styles.title}>Messages</Text>
-          </View>
-          <FlatList
-            data={users}
-            renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => navigation.navigate("ChatScreen", {id:item.username, name: item.name})
-              }>
-                <Message id={item.username} />
-              </TouchableOpacity>
-            )}
-            keyExtractor={(item, index) => index.toString()}
-          />
+export default ({ navigation }) => {
+ 
+  const [users, setUsers] = React.useState([]);
+  const [ready, setReady] = React.useState(false);
+
+
+  // Effect that forces screen to reload when we navigate to it
+  useEffect(() => {
+		const unsubscribe = navigation.addListener("tabPress", () => {
+      setUsers([]);
+      setReady(false);
+		});
+		return unsubscribe;
+	}, [navigation]);
+
+
+  // get the conversation from matches list
+  const initializeConversations = async () => {
+    const ids = await getMatchesAsync(auth.currentUser.email);
+    const profiles = await getUserData(ids);
+    setUsers(profiles);
+    setReady(true);
+  } // initializeConversations()
+
+
+
+  if (!ready) {
+    // load the conversations from the matches list
+    initializeConversations();
+
+    return (
+      <View style={styles.splashContainer}>
+        <Text style={styles.splashText}>Loading...</Text>
       </View>
-    </ImageBackground>
+    );
+  }
+  
+  
+
+  return (
+    <View style={styles.containerMessages}>
+        <View style={styles.top}>
+          <Text style={styles.title}>Messages</Text>
+        </View>
+
+
+        <FlatList
+          data={users}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => navigation.navigate("ChatScreen", { profile:item, id:item.id, name:item.name})
+            }>
+              <Message profile={item} />
+            </TouchableOpacity>
+          )}
+          keyExtractor={(item, index) => index.toString()}
+          />
+    </View>
   );
-}
+
+} // export default()
+
+
+
+
+
+
+
+
+
