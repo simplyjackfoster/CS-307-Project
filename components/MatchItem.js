@@ -76,7 +76,7 @@ const MatchItem = (props) => {
     const sendMessage = async (message) => {
         var result = sentiment.analyze(message);
         console.log("")
-        console.log(message + " sentiment score is " + result.score)
+        console.log(message + " has a sentiment score of " + result.score)
         console.log("")
         // if message is empty
         if (!message) {
