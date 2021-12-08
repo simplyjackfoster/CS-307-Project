@@ -9,9 +9,9 @@ import 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { collection, doc, setDoc, addDoc, getDocs, query, orderBy, QuerySnapshot, onSnapshot } from 'firebase/firestore';
-import { rtdb, auth, app, firestore, firestoreDB} from  '../database/RTDB';
+import { rtdb, auth, app, firestore, firestoreDB } from  '../database/RTDB';
 import { getID } from '../database/ID';
-
+import { getMessagesAsync, convoExists } from '../database/readFirestore';
 
 /*
  * This is the screen where the user messages other users.
@@ -19,16 +19,21 @@ import { getID } from '../database/ID';
 
 export default ({ navigation, route, props }) =>{
 
-  const {id, profile } = route.params;
-  const messagesRef = collection(firestoreDB,'chatroom','KU6bnqXVnKtuNsuVhFOX','messages');
+  const {id, profile} = route.params;
   const [messages, setMessages] = useState([]);
-  const profile_picture = getDataFromPath("users/" + id + "/Profile/Images/profile_picture");
+  const profile_picture = getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/Images/profile_picture");
+
 
 
   /*
    * Function that runs when a message is sent.
    */
-  const onSend = (messageArray) => {
+  const onSend = async (messageArray) => {
+
+    // get message ref
+    const chatroom = await convoExists(id);
+    const messagesRef = collection(firestoreDB, "chatroom", chatroom, "messages");
+
     const msg = messageArray[0]
     const mymsg = {
       ...msg,
@@ -36,9 +41,7 @@ export default ({ navigation, route, props }) =>{
       sentTo: id,
       createdAt: new Date(),
       sent: true,
-      avatar: profile_picture
     }
-    console.log(messageArray)
     setMessages(previousMessages => GiftedChat.append(previousMessages,mymsg))
 
     const createDocuments = async () =>{
@@ -49,33 +52,42 @@ export default ({ navigation, route, props }) =>{
   } // onSend()
 
 
+
+
   // Get the messages
   useEffect(() => {
-    //getAllMessages()
-    const q = query(messagesRef, orderBy('createdAt','desc'));
-    const unsubscribe = onSnapshot(q,(querySnap)=>{
-      const allmsg = querySnap.docs.map(docSanp=>{
-        const data = docSanp.data()
-      if(data.createdAt){
-        return {
-          ...docSanp.data(),
-          createdAt:docSanp.data().createdAt.toDate()
+    const func = async () => {
+      const chatroom = await convoExists(profile.id);
+      const messagesRef = collection(firestoreDB, "chatroom", chatroom, "messages");
+      //getAllMessages()
+      const q = query(messagesRef, orderBy('createdAt','desc'));
+      const unsubscribe = onSnapshot(q,(querySnap)=>{
+        const allmsg = querySnap.docs.map(docSanp=>{
+          const data = docSanp.data()
+        if(data.createdAt){
+          return {
+            ...docSanp.data(),
+            createdAt:docSanp.data().createdAt.toDate()
+          }
+        }else{
+          return{
+            ...docSanp.data(),
+            createdAt:new Date()
+          }
         }
-      }else{
-        return{
-          ...docSanp.data(),
-          createdAt:new Date()
-        }
-      }
 
+        })
+        setMessages(allmsg)
       })
-      setMessages(allmsg)
-    })
 
-    return()=>{
-      unsubscribe()
+      return()=>{
+        unsubscribe()
+      }
     }
-  }, []) // getAllMessages())
+    func();
+  }, []) // useEffect())
+
+
 
     
   return (
