@@ -42,7 +42,6 @@ export default ({ navigation }) => {
     const ids = await getMessagesIDSAsync();
     const profiles = await getUserData(ids);
 
-    console.log("ids: " + ids);
     setUsers(profiles);
     setReady(true);
   } // initializeConversations()

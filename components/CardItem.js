@@ -25,7 +25,9 @@ import { getID } from '../database/ID';
 import { deleteMatch } from '../database/removeData';
 import { ViewQuestionnaire } from '../screens/ViewQuestionnaire';
 import Questionnaire, { questions, responses } from '../screens/Questionnaire';
-
+import { writeQuickMessage, createNewConversation } from '../database/writeFirestore';
+import { convoExists } from '../database/readFirestore';
+import { deleteConversation } from '../database/removeFirestore';
 
 export var removeCurrentMatch = false;
 export var matchName = "";
@@ -48,6 +50,8 @@ export const CardItem = (props) => {
      */
     const removeMatchAsync = async () => {
         deleteMatch(profile.id);
+        deleteConversation(profile.id);
+
     
         // find the index in profiles for the user        
         var index;
@@ -69,9 +73,46 @@ export const CardItem = (props) => {
 
 
 
-    // 
 
+    // Function that runs when quick message is sent
+    const sendMessage = async (message) => {
+        // if message is empty
+        if (!message) {
+            Alert.alert("Warning",
+            "Can't send empty message",
+            [{
+                text: "Ok"
+            }])
 
+            return;
+        }
+
+        // check if the conversation with the user already exists
+        const exists = await convoExists(profile.id);
+        if (exists) {
+            console.log("Convo exists... " + exists);
+            // send a quick message
+            writeQuickMessage(message, exists, getID(auth.currentUser.email), profile.id);
+
+            // TODO: navigate to the messages screen
+
+        }
+        else {
+            console.log("Convo doesn't exist");
+            const my_id = getID(auth.currentUser.email);
+            const user_id = profile.id;
+
+            // create a conversation
+            const chatroom = await createNewConversation(my_id, user_id);
+
+            // send a quick message
+            writeQuickMessage(message, chatroom, my_id, user_id);
+
+            // TODO: navigate to the messages screen
+
+        }
+
+    } // sendMessage()
 
 
 
@@ -600,7 +641,15 @@ export const CardItem = (props) => {
                                     },
                                     {
                                         text: "Send",
-                                        //onPress: message => sendMessage(message),
+                                        onPress: message => {
+                                            Alert.alert("Message", "Message sent!",
+                                            [
+                                                {
+                                                    text: "Ok",
+                                                },
+                                            ]),
+                                            
+                                            sendMessage(message)},
                                     }
                                 ],
                             )}

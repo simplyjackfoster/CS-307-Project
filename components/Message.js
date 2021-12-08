@@ -6,9 +6,6 @@ import { useNavigation } from '@react-navigation/native';
 
 const Message = (props) => {
   const profile = props.profile;
-  /*const profile_picture = getDataFromPath("users/" + uid + "/Profile/Images/profile_picture");
-  const name = getDataFromPath("users/" + uid + "/Profile/profile_name");
-  */
   const lastMessage = "Hey do you want to be roommates?"
   const navigation = useNavigation();
   return (

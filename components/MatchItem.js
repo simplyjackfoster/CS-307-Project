@@ -19,7 +19,7 @@ import { auth, firestoreDB} from  '../database/RTDB';
 import { getID } from '../database/ID';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { deleteMatch } from '../database/removeData';
-import { makeid, writeQuickMessage, createNewConversation } from '../database/writeFirestore';
+import { writeQuickMessage, createNewConversation } from '../database/writeFirestore';
 import { convoExists } from '../database/readFirestore';
 import { deleteConversation } from '../database/removeFirestore';
 
@@ -110,8 +110,6 @@ const MatchItem = (props) => {
                     name:profile.name, newChat:true});
         }
 
-
-        
     } // sendMessage()
 
 
