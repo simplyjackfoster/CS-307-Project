@@ -51,7 +51,6 @@ export const CardItem = (props) => {
     const removeMatchAsync = async () => {
         deleteMatch(profile.id);
         deleteConversation(profile.id);
-
     
         // find the index in profiles for the user        
         var index;

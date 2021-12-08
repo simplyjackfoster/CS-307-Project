@@ -52,7 +52,6 @@ export const getMessagesAsync = async (id) => {
 
 	// get the conversation number
 	const chatroom = await convoExists(id);
-	console.log("getting messages from: " + chatroom);
 
 	// get the messages ref
   const messagesRef = collection(firestoreDB, 'chatroom',
@@ -93,3 +92,30 @@ export const getMessagesIDSAsync = async () => {
 
 	return ids;
 } // getMessagesIDS()
+
+
+
+
+/*
+ * Gets the last message in a conversation with a user.
+ */
+export const getLastMessage = async (id) => {
+	// get the conversation number
+	const chatroom = await convoExists(id);
+
+	// get the messages ref
+	const messagesRef = collection(firestoreDB, 'chatroom',
+											chatroom, 'messages');
+
+	// get the messages
+	const q = query(messagesRef, orderBy('createdAt', 'desc'))
+	const dataM = await getDocs(q);
+
+	var data = [];
+	dataM.forEach((doc) => {
+		data.push(doc.data().text);
+	})
+	const last = data[0];
+
+	return last;
+} // getLastMessage()

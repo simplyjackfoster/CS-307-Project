@@ -11,7 +11,7 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { collection, doc, setDoc, addDoc, getDocs, query, orderBy, QuerySnapshot } from 'firebase/firestore';
 import { rtdb, auth, app, firestore, firestoreDB} from  '../database/RTDB';
 import { getID } from '../database/ID';
-import { getMessagesAsync } from '../database/readFirestore';
+import { getMessagesAsync, convoExists } from '../database/readFirestore';
 
 
 /*
@@ -29,7 +29,12 @@ export default ({ navigation, route, props }) =>{
   /*
    * Function that runs when a message is sent.
    */
-  const onSend = (messageArray) => {
+  const onSend = async (messageArray) => {
+
+    // get message ref
+    const chatroom = await convoExists(id);
+    const messagesRef = collection(firestoreDB, "chatroom", chatroom, "messages");
+
     const msg = messageArray[0]
     const mymsg = {
       ...msg,
@@ -38,7 +43,6 @@ export default ({ navigation, route, props }) =>{
       createdAt: new Date(),
       sent: true,
     }
-    console.log(messageArray)
     setMessages(previousMessages => GiftedChat.append(previousMessages,mymsg))
 
     const createDocuments = async () =>{
