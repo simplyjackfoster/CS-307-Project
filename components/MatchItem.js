@@ -20,6 +20,9 @@ import { getID } from '../database/ID';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { deleteMatch } from '../database/removeData';
 
+var Sentiment = require('sentiment');
+var sentiment = new Sentiment();
+
 const messagesRef = collection(firestoreDB,'chatroom','KU6bnqXVnKtuNsuVhFOX','messages');
 
 function makeid(length) {
@@ -67,8 +70,12 @@ const MatchItem = (props) => {
     } // removeMatchAsync()
 
     const [messages, setMessages] = useState([]);
-
+    
     const sendMessage = (message) => {
+        var result = sentiment.analyze(message);
+        console.log("")
+        console.log(message + " sentiment score is " + result.score)
+        console.log("")
         // send the specified message from the current user to the uid of the match displayed
         console.log("Sent message to '" + profile.id + "': " + message);
         const msg = message
