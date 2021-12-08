@@ -69,6 +69,14 @@ export const CardItem = (props) => {
 
 
 
+    // 
+
+
+
+
+
+
+
 
     // display questionnaire when applicable
     if (viewingQuestionnaire) {

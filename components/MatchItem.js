@@ -19,22 +19,10 @@ import { auth, firestoreDB} from  '../database/RTDB';
 import { getID } from '../database/ID';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { deleteMatch } from '../database/removeData';
-
-const messagesRef = collection(firestoreDB,'chatroom','KU6bnqXVnKtuNsuVhFOX','messages');
-
-function makeid(length) {
-    var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-      result += characters.charAt(Math.floor(Math.random() * 
- charactersLength));
-   }
-   return result;
-}
+import { makeid, writeQuickMessage, createNewConversation } from '../database/writeFirestore';
+import { convoExists } from '../database/readFirestore';
 
 
-export var displays;
 
 const MatchItem = (props) => {
     const uid = props.id;
@@ -66,35 +54,54 @@ const MatchItem = (props) => {
         updateProfiles(newProfiles);
     } // removeMatchAsync()
 
-    const [messages, setMessages] = useState([]);
 
-    const sendMessage = (message) => {
-        // send the specified message from the current user to the uid of the match displayed
-        console.log("Sent message to '" + profile.id + "': " + message);
-        const msg = message
-        const mymsg = {
-            _id: makeid(36),
-            text: message,
-            sentBy: getID(auth.currentUser.email),
-            sentTo: profile.id,
-            createdAt: new Date(),
-            sent: true,
-            user:{_id: getID(auth.currentUser.email)}
+
+
+    // Function that runs when quick message is sent
+    const sendMessage = async (message) => {
+
+        // if message is empty
+        if (!message) {
+            Alert.alert("Warning",
+            "Can't send empty message",
+            [{
+                text: "Ok"
+            }])
+
+            return;
         }
-        console.log(message)
-        setMessages(previousMessages => GiftedChat.append(previousMessages,mymsg))
 
-        const createDocuments = async () =>{
-            await addDoc(messagesRef, {...mymsg});
-        };
-        createDocuments();
 
+        // check if the conversation with the user already exists
+        const exists = await convoExists(profile.id);
+        if (exists) {
+            console.log("Convo exists... " + exists);
+            // send a quick message
+            writeQuickMessage(message, exists, getID(auth.currentUser.email), profile.id);
+        }
+        else {
+            console.log("Convo doesn't exist");
+            const my_id = getID(auth.currentUser.email);
+            const user_id = profile.id;
+
+            // create a conversation
+            const chatroom = await createNewConversation(my_id, user_id);
+
+            // send a quick message
+            writeQuickMessage(message, chatroom, my_id, user_id);
+        }
+
+
+        // get chatroom from database
+
+        
+        // send the specified message 
+        //writeQuickMessage(message, "KU6bnqXVnKtuNsuVhFOX", getID(auth.currentUser.email), profile.id);
 
         // navigate to the messages screen
         navigation.navigate("Messages");
         navigation.push("ChatScreen",
             { profile:profile, id:profile.id, name:profile.name});
-
     } // sendMessage()
 
 

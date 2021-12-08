@@ -11,7 +11,6 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { collection, doc, setDoc, addDoc, getDocs, query, orderBy, QuerySnapshot } from 'firebase/firestore';
 import { rtdb, auth, app, firestore, firestoreDB} from  '../database/RTDB';
 import { getID } from '../database/ID';
-import { MessageUserContext } from '../context';
 
 
 /*
@@ -23,7 +22,9 @@ export default ({ navigation, route, props }) =>{
   const {id, profile } = route.params;
   const messagesRef = collection(firestoreDB,'chatroom','KU6bnqXVnKtuNsuVhFOX','messages');
   const [messages, setMessages] = useState([]);
-  const profile_picture = getDataFromPath("users/" + id + "/Profile/Images/profile_picture");
+  const profile_picture = getDataFromPath("users/" + getID(auth.currentUser.email) + "/Profile/Images/profile_picture");
+
+
 
 
   /*
@@ -37,7 +38,6 @@ export default ({ navigation, route, props }) =>{
       sentTo: id,
       createdAt: new Date(),
       sent: true,
-      avatar: profile_picture
     }
     console.log(messageArray)
     setMessages(previousMessages => GiftedChat.append(previousMessages,mymsg))
@@ -48,6 +48,8 @@ export default ({ navigation, route, props }) =>{
 
     createDocuments();
   } // onSend()
+
+
 
 
 

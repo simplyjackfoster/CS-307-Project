@@ -690,6 +690,7 @@ export const getUserData = async (ids) => {
 	var most_different_response_list = [];
 	var numMatches_list = [];
 	var num_reports_list = [];
+	var profile_picture_link_list = [];
 
 
 	for (const id of ids) {
@@ -733,6 +734,7 @@ export const getUserData = async (ids) => {
 			most_different_response, // 35
 			numMatches, // 36
 			num_reports, // 37
+			profile_picture_link, // 38
 		] = await Promise.all(
 		[
 			getDataFromPathAsync("users/" + id + "/Profile/Images/profile_picture"), // 1
@@ -772,6 +774,7 @@ export const getUserData = async (ids) => {
 			getMostDifferentResponseAsync(id, myQuestionnaire), // 35
 			getDataFromPathAsync("users/" + id + "/Match List/user_count"), //36
 			getDataFromPathAsync("reported/" + id + "/num_reports"), // 37
+			getDataFromPathAsync("users/" + id + "/Profile/Images/profile_picture"), // 38
 		]);
 	
 
@@ -812,6 +815,7 @@ export const getUserData = async (ids) => {
 		most_similar_response_list.push(most_similar_response);
 		most_different_response_list.push(most_different_response);
 		numMatches_list.push(numMatches);
+		profile_picture_link_list.push(profile_picture_link);
 
 		if (num_reports) {
 			num_reports_list.push(num_reports);
@@ -865,6 +869,7 @@ export const getUserData = async (ids) => {
 			most_different_response: most_different_response_list[i],
 			numMatches: numMatches_list[i],
 			num_reports: num_reports_list[i],
+			profile_picture_link: profile_picture_link_list[i],
 		};
 
 		// add profile to array
