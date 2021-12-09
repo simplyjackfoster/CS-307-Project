@@ -18,7 +18,7 @@
 
 ## Quick Video Demo
 <p>
-  <video src=https://user-images.githubusercontent.com/76804820/144997635-467bb597-141a-4834-8843-7ac6dedef9fb.mov autoplay>
+<video src=https://user-images.githubusercontent.com/76804820/145487332-a9144897-a04c-4610-a3ac-bab1a3a23d13.mov autoplay>
 </p>
 
 
@@ -34,7 +34,9 @@
   <img src="https://user-images.githubusercontent.com/76804820/145001801-3acd5c7c-f0f1-4123-a9da-678d42275e9d.png" width=200 height=430 >
   <img src="https://user-images.githubusercontent.com/76804820/145001793-f0cf1b81-a975-4d7a-8176-8126ec021790.png" width=200 height=430 >
   <img src="https://user-images.githubusercontent.com/76804820/145001809-a578a7b4-3631-4075-9a7d-8a9f75eca6b3.png" width=200 height=430 >
-</p>
+  <img src="https://user-images.githubusercontent.com/76804820/145487177-199a1f56-1ca9-41fb-b286-973c2b31147d.png" width=400 height=430 >
+ </p>
+
 
 ## How To Use
 
